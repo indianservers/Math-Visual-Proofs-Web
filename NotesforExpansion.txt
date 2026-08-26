@@ -76,6 +76,20 @@ Important files:
     proofs should build their unique scene geometry on this engine rather than
     reimplementing pointer handlers.
 
+  app/lib/geometry.ts
+    Pure, unit-tested geometry helpers for points, bounds, distances, rotation,
+    polygon area, vertex angles, SVG point strings, constraints, and magnetic
+    point snapping. Extend this module instead of embedding untested geometry
+    calculations inside React render functions.
+
+  app/lib/proofRegistry.ts
+    Zod-validated source of truth for proof IDs, dedicated routes, titles,
+    descriptions, difficulty, duration, and primary interaction type. Add every
+    new proof here before creating its route.
+
+  tests/geometry.test.ts and tests/proof-registry.test.ts
+    Vitest regression coverage for the reusable mathematical and routing base.
+
   app/proofs/<route>/page.tsx
     Dedicated route entry and route-specific metadata.
 
@@ -149,6 +163,39 @@ Canvas-engine rules:
     try again
   - show grab on hover/focus and grabbing while the pointer is held
   - make drop success update the proof step or success message immediately
+
+
+11. BASE JAVASCRIPT LIBRARIES
+-----------------------------
+
+The base intentionally stays small:
+
+  React + TypeScript
+    Scene rendering, state, pointer events, accessibility, and strict types.
+
+  KaTeX
+    Accessible mathematical typesetting for substantial formulas.
+
+  Zod
+    Runtime validation for proof definitions and future authored proof data.
+
+  clsx
+    Predictable active, dragging, snapped, disabled, and success class states.
+
+  Vitest
+    Fast unit tests for geometry, proof definitions, and future engine modules.
+
+Do not install a full generic diagram editor merely to gain dragging. Unique
+proofs need precise mathematical constraints and reference-specific SVG. Add a
+new dependency only when it solves a repeated requirement across multiple
+proofs, is compatible with the Sites runtime, and has automated coverage.
+
+Recommended future additions only when needed:
+
+  - d3-shape for repeated complex curve/path generation
+  - a spatial index when a proof contains many draggable objects
+  - an animation library when coordinated timelines exceed CSS transitions
+  - a symbolic algebra library only when live symbolic manipulation is required
 
 Use KaTeX for substantial formulas and accessible mathematical notation. SVG
 text may be used for short labels closely tied to diagram geometry.

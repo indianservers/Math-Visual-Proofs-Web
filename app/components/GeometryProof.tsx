@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import MathFormula from "./MathFormula";
 import { nearestSnap, useProofCanvas } from "./useProofCanvas";
 
 type Kind = "area" | "angles" | "exterior" | "similar";
@@ -157,7 +158,7 @@ function AreaSvg({
   );
   return (
     <svg
-      className={`proof-svg interactive-svg ${canvas.dragging ? "is-dragging" : ""}`}
+      className={canvas.canvasClassName("proof-svg", "interactive-svg")}
       viewBox="0 0 940 390"
       aria-label="Triangle duplicated and sheared into a rectangle"
       {...canvas.canvasProps}
@@ -310,7 +311,11 @@ function AnglesSvg({
   const snapped = lift > 190;
   return (
     <svg
-      className={`proof-svg angles-svg interactive-svg ${canvas.dragging ? "is-dragging" : ""}`}
+      className={canvas.canvasClassName(
+        "proof-svg",
+        "angles-svg",
+        "interactive-svg",
+      )}
       viewBox="0 0 940 420"
       aria-label="Three triangle angles lifted to a straight line"
       {...canvas.canvasProps}
@@ -385,11 +390,17 @@ function AnglesSvg({
         aria-label="Drag red angle to the straight line rail"
       >
         <path
-          d={snapped ? "M540 58a45 45 0 0 1 90 0" : "M700 330a58 58 0 0 0-38-54"}
+          d={
+            snapped ? "M540 58a45 45 0 0 1 90 0" : "M700 330a58 58 0 0 0-38-54"
+          }
           fill="#ff817f"
           stroke="#f04448"
         />
-        {!snapped && <text x="654" y="268" className="drag-callout">Drag me</text>}
+        {!snapped && (
+          <text x="654" y="268" className="drag-callout">
+            Drag me
+          </text>
+        )}
       </g>
       <rect
         x="230"
@@ -433,7 +444,7 @@ function ExteriorSvg({
   let d = 650 + extend;
   return (
     <svg
-      className={`proof-svg interactive-svg ${canvas.dragging ? "is-dragging" : ""}`}
+      className={canvas.canvasClassName("proof-svg", "interactive-svg")}
       viewBox="0 0 940 420"
       aria-label="Exterior angle equals the two remote interior angles"
       {...canvas.canvasProps}
@@ -593,7 +604,7 @@ function SimilarSvg({
     right = 610 + 165 * scale;
   return (
     <svg
-      className={`proof-svg interactive-svg ${canvas.dragging ? "is-dragging" : ""}`}
+      className={canvas.canvasClassName("proof-svg", "interactive-svg")}
       viewBox="0 0 940 430"
       aria-label="Similar triangles with proportional sides"
       {...canvas.canvasProps}
@@ -782,14 +793,14 @@ function Why({
               "Corresponding sides are scaled.",
               "All sides grow by the same factor.",
             ];
-  let formula =
+  const formula =
     kind === "area"
-      ? "A = ½bh"
+      ? "A=\\frac{1}{2}bh"
       : kind === "angles"
-        ? "A + B + C = 180°"
+        ? "A+B+C=180^\\circ"
         : kind === "exterior"
-          ? "m∠ACD = m∠A + m∠B"
-          : "A′B′/AB = B′C′/BC = k";
+          ? "m\\angle ACD=m\\angle A+m\\angle B"
+          : "\\frac{A'B'}{AB}=\\frac{B'C'}{BC}=k";
   return (
     <aside className="why-card generic-why">
       <h2 className="why-title">
@@ -851,7 +862,7 @@ function Why({
       </button>
       {revealed && (
         <div className="proof-output">
-          <div>{formula}</div>
+          <MathFormula latex={formula} />
           <span>✓　You proved it!</span>
         </div>
       )}

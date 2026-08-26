@@ -1,6 +1,7 @@
 "use client";
 
 import { PointerEvent, useState } from "react";
+import MathFormula from "./MathFormula";
 import { useProofCanvas, withinSnapZone } from "./useProofCanvas";
 
 function Sidebar() {
@@ -159,7 +160,7 @@ export default function PythagoreanProof() {
             ))}
           </div>
           <svg
-            className={`pyth-svg interactive-svg ${canvas.dragging ? "is-dragging" : ""}`}
+            className={canvas.canvasClassName("pyth-svg", "interactive-svg")}
             viewBox="0 0 790 470"
             role="img"
             aria-label="Four congruent right triangles rearranged to show that a squared plus b squared equals c squared"
@@ -424,7 +425,12 @@ export default function PythagoreanProof() {
           </button>
           {revealed && (
             <>
-              <div className="proof-result">a² + b² = c²</div>
+              <div className="proof-result">
+                <MathFormula
+                  latex="a^2+b^2=c^2"
+                  label="a squared plus b squared equals c squared"
+                />
+              </div>
               <div className="success">✓　You proved it!</div>
             </>
           )}

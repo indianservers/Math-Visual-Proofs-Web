@@ -1,0 +1,260 @@
+MATHS UNIVERSE — NOTES FOR EXPANDING VISUAL PROOFS
+===================================================
+
+Purpose
+-------
+Use this document as implementation guidance for AI tools or developers adding
+more Visual Proof pages to this project.
+
+Core rule: one proof, one authoritative reference image, one dedicated route.
+Never combine several proofs into one canvas, tab set, carousel, or page.
+
+
+1. REFERENCE-TO-ROUTE CONTRACT
+------------------------------
+
+Before writing code, record an explicit mapping:
+
+  Reference image -> proof name -> dedicated route -> implementation component
+
+Example:
+
+  006-circle-circumference-unwrapping.png
+  -> Circle Circumference
+  -> /proofs/circle-circumference
+  -> CircleCircumferenceProof
+
+Do not reuse another proof's canvas or display inactive proof content on the
+active route. Shared navigation and layout components are allowed; proof
+content and state must remain route-specific.
+
+
+2. THE REFERENCE IMAGE IS AUTHORITATIVE
+---------------------------------------
+
+Treat each supplied image as a strict visual specification, not inspiration.
+Match its exact reference viewport first. Reconstruct all visible elements with
+React, CSS, responsive SVG, KaTeX, and appropriate interactive rendering.
+
+Match, in particular:
+
+  - overall composition and panel placement
+  - header, breadcrumb, badges, sidebar, and navigation
+  - canvas size and aspect ratio
+  - typography, mathematical notation, weights, and hierarchy
+  - colors, gradients, borders, radii, shadows, and backgrounds
+  - spacing, alignment, padding, and object positions
+  - mathematical geometry, line widths, arcs, labels, and formulas
+  - control order, states, icons, helper cards, and proof steps
+
+Never insert the reference screenshot as a page background or static substitute
+for the interface. Do not add decoration that is absent from the reference.
+
+
+3. CURRENT PROJECT STRUCTURE
+----------------------------
+
+Important files:
+
+  app/layout.tsx
+    Site metadata and global layout.
+
+  app/globals.css
+    Shared visual language, responsive rules, cards, controls, and proof shell.
+
+  app/components/PythagoreanProof.tsx
+    Specialized implementation for the Pythagorean rearrangement page.
+
+  app/components/GeometryProof.tsx
+    Shared implementation patterns for triangle area, triangle angle sum,
+    exterior angle theorem, and similar triangles.
+
+  app/components/useProofCanvas.ts
+    Reusable interaction engine for all SVG proof scenes. It centralizes pointer
+    capture, responsive SVG coordinate mapping, drag state, touch behavior,
+    drop callbacks, magnetic snap helpers, and detach/re-dock behavior. New
+    proofs should build their unique scene geometry on this engine rather than
+    reimplementing pointer handlers.
+
+  app/proofs/<route>/page.tsx
+    Dedicated route entry and route-specific metadata.
+
+  .visual-verification/
+    Reference-size rendered screenshots, overlays, pixel differences, and the
+    comparison script.
+
+  public/fonts/
+    Local KaTeX font assets.
+
+New proofs may use GeometryProof only when its structure genuinely matches the
+new reference. Create a specialized component when forcing a proof into the
+generic component would weaken fidelity, geometry, or interaction.
+
+
+4. IMPLEMENTATION SEQUENCE
+--------------------------
+
+For every new proof:
+
+  1. Inspect the reference at original resolution and note width and height.
+  2. Identify the page shell, main canvas, controls, proof explanation, and
+     bottom activity or challenge areas.
+  3. Confirm the mathematical statement and derive all displayed values.
+  4. Add a dedicated app/proofs/<slug>/page.tsx route.
+  5. Add route-specific title, description, Open Graph, and X metadata.
+  6. Reuse the shared shell only where it visually matches the reference.
+  7. Build the proof geometry as responsive SVG or another live renderer.
+  8. Implement all visible controls and their selected, disabled, hover, focus,
+     active, and result states.
+  9. Add pointer, touch, and keyboard interaction where appropriate.
+ 10. Add responsive tablet and mobile adaptations without altering the exact
+     desktop reference layout.
+ 11. Run a production build and fix every blocking error.
+ 12. Perform the browser comparison workflow described below.
+
+
+5. MATHEMATICAL AND INTERACTION REQUIREMENTS
+--------------------------------------------
+
+Priority order:
+
+  1. Mathematical correctness
+  2. Visual fidelity
+  3. Working interaction
+  4. Accessibility
+  5. Responsive adaptation
+  6. Performance
+
+Mathematical objects should be live when appropriate. Depending on the proof,
+support dragging, resizing, rotating, snapping, cloning, shearing, folding,
+tracing, animation, or parameter changes.
+
+State rules:
+
+  - derive displayed measurements and formulas from the current geometry
+  - constrain dragging so the construction remains mathematically valid
+  - provide visible snap or success feedback
+  - make Reset restore the exact initial reference state
+  - make Reveal/Hide controls update the proof panel
+  - make Check buttons validate the entered mathematical answer
+  - avoid controls that look active but do nothing
+
+Canvas-engine rules:
+
+  - keep unique theorem geometry inside its proof scene
+  - use useProofCanvas for every draggable SVG scene
+  - define legal constraints and snap targets in the scene, not the engine
+  - use nearestSnap or withinSnapZone for block-like magnetic attachment
+  - attached pieces must remain draggable so learners can pull them away and
+    try again
+  - show grab on hover/focus and grabbing while the pointer is held
+  - make drop success update the proof step or success message immediately
+
+Use KaTeX for substantial formulas and accessible mathematical notation. SVG
+text may be used for short labels closely tied to diagram geometry.
+
+
+6. ACCESSIBILITY
+----------------
+
+Every proof must include:
+
+  - a descriptive page heading
+  - semantic buttons, inputs, ranges, and labels
+  - an accessible name for the proof canvas
+  - keyboard alternatives for drag-only actions
+  - visible focus styling
+  - sufficient contrast without changing the reference palette materially
+  - live or visible feedback for results and state changes
+  - reduced-motion handling for nonessential animation
+
+Do not rely on color alone to identify triangles, angles, states, or correctness.
+
+
+7. RESPONSIVE BEHAVIOR
+----------------------
+
+At the exact reference viewport, preserve the supplied composition precisely.
+For smaller screens, reflow rather than uniformly shrinking the whole desktop
+page. Keep diagrams readable, controls touch-friendly, and mathematical object
+relationships intact.
+
+Recommended behavior:
+
+  - collapse or hide the fixed sidebar at tablet/mobile widths
+  - stack the proof explanation below the canvas when necessary
+  - allow a deliberately wide mathematical workspace to scroll when reflow
+    would distort the proof
+  - keep buttons at least 44 CSS pixels in touch dimensions where possible
+
+
+8. REQUIRED VISUAL VERIFICATION LOOP
+------------------------------------
+
+Do not approve a proof by inspecting source code alone.
+
+For each route:
+
+  1. Run the application.
+  2. Open the route in a real browser.
+  3. Set the browser viewport to the reference dimensions.
+  4. Capture the rendered viewport.
+  5. Save it as .visual-verification/render-<number>.png.
+  6. Generate overlay-<number>.png and diff-<number>.png against the reference.
+  7. Inspect positioning, scale, spacing, typography, colors, geometry, formula
+     alignment, borders, shadows, and controls.
+  8. Correct material differences.
+  9. Repeat capture and comparison until the visible differences are small and
+     intentional.
+ 10. Test the controls after the final visual pass and capture the initial state
+     again if testing changed it.
+
+Update .visual-verification/compare.py when adding a new numbered reference.
+Normalized pixel error is useful as a regression signal, but visual inspection
+is still required because a low average error can hide a conspicuous local
+mismatch.
+
+
+9. COMPLETION CHECKLIST
+-----------------------
+
+A new Visual Proof is complete only when all answers below are YES:
+
+  [ ] Is there exactly one dedicated route for this proof?
+  [ ] Does the page show no other proof content?
+  [ ] Is the mathematics correct for all supported states?
+  [ ] Does the reference viewport closely match the supplied image?
+  [ ] Are all visible controls functional?
+  [ ] Do reset, reveal, animation, and checking behaviors work?
+  [ ] Are dragging and parameter changes constrained correctly?
+  [ ] Is the page usable with keyboard and touch input?
+  [ ] Does the mobile/tablet layout preserve the proof relationships?
+  [ ] Has a real-browser screenshot been captured?
+  [ ] Have overlay and pixel-difference images been inspected?
+  [ ] Have material visual differences been corrected?
+  [ ] Does the production build pass?
+  [ ] Does the direct route return successfully?
+
+
+10. AVOID THESE FAILURE MODES
+----------------------------
+
+  - generic dashboard UI replacing the reference design
+  - static screenshots used as backgrounds or proof canvases
+  - one generic diagram reused for mathematically different proofs
+  - all proofs shown together or converted into tabs
+  - inaccurate geometry or hard-coded values that do not follow interaction
+  - inert controls, decorative sliders, or fake drag handles
+  - desktop-only scaling that makes mobile diagrams unreadable
+  - declaring completion without browser screenshots and comparison artifacts
+  - adding attractive but unrequested decoration that weakens the match
+
+
+Final instruction to AI tools
+-----------------------------
+
+Preserve the established Maths Universe visual language, but let each new
+reference control the exact page composition. Favor mathematical correctness
+and evidence-backed browser comparison over assumptions. When a shared
+component conflicts with the reference, specialize the component instead of
+compromising the proof page.

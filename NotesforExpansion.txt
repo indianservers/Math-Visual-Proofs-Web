@@ -305,3 +305,33 @@ reference control the exact page composition. Favor mathematical correctness
 and evidence-backed browser comparison over assumptions. When a shared
 component conflicts with the reference, specialize the component instead of
 compromising the proof page.
+
+
+12. BLOCK-STYLE PROOF ENGINE (PYTHAGOREAN REFERENCE)
+----------------------------------------------------
+
+The Pythagorean page now provides the reusable reference implementation under
+app/proof-engine/. New theorem configurations should use the shared contracts
+in types.ts, pure compatibility/orientation/proximity checks in validation.ts,
+and reusable UI pieces in ProofUI.tsx. Keep theorem-specific geometry and the
+reasoning timeline in a separate configuration, as pythagoreanConfig.ts does.
+
+Required authored data for a new block-style proof:
+
+  - explicit proof state progression and completion conditions
+  - one config record per draggable object, including allowed transforms
+  - one config record per docking slot, including accepted IDs/type,
+    orientation, exact target transform, tolerance, and resulting proof event
+  - invariant statements and progressively unlocked reasoning cards
+  - an animation timeline that applies the same transforms as manual actions
+  - shuffled formula blocks with mathematically typed target slots, if needed
+
+Never decide correctness from screen position alone. Call the shared validation
+engine so object identity, allowed orientation, occupancy, and distance all
+agree. Invalid drops must restore the last valid transform and explain the next
+action. Keep direct pointer/touch dragging, but also provide arrow-key movement,
+R-to-rotate, and Enter-to-dock alternatives.
+
+Prefer extending these small, tested primitives over adding a generic diagram
+editor. Add a library only when at least two distinct proofs need it and its
+mathematical state can be tested independently of rendering.

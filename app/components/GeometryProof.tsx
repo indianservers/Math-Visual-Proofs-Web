@@ -77,7 +77,7 @@ function Sidebar() {
   );
 }
 function Header({ kind }: { kind: Kind }) {
-  let m = meta[kind];
+  const m = meta[kind];
   return (
     <>
       <header className="page-head">
@@ -441,7 +441,7 @@ function ExteriorSvg({
     (_target, point) => onExtend(Math.max(0, Math.min(240, point.x - 650))),
     () => onExtend(extend > 145 ? 215 : nearestSnap(extend, [45, 100], 22)),
   );
-  let d = 650 + extend;
+  const d = 650 + extend;
   return (
     <svg
       className={canvas.canvasClassName("proof-svg", "interactive-svg")}
@@ -597,7 +597,7 @@ function SimilarSvg({
       onScale(Math.max(1, Math.min(2.5, (330 - point.y) / 145))),
     () => onScale(nearestSnap(scale, [1, 1.5, 2, 2.5], 0.18)),
   );
-  let x = 610,
+  const x = 610,
     y = 330,
     topX = 760,
     topY = 330 - 145 * scale,

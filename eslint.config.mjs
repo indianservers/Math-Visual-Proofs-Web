@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "dist/**",
     "out/**",
     "build/**",
+    "work/**",
     "next-env.d.ts",
   ]),
   eslint.configs.recommended,
@@ -34,6 +35,12 @@ const eslintConfig = defineConfig([
       react: {
         version: "detect",
       },
+    },
+  },
+  {
+    files: ["app/components/GeometryProof.tsx"],
+    rules: {
+      "no-irregular-whitespace": "off",
     },
   },
 ]);

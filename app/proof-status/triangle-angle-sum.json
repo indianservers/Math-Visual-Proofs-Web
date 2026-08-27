@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "proofId": "triangle-angle-sum",
+  "categorySlug": "geometry",
+  "slug": "triangle-angle-sum",
+  "route": "/proofs/triangle-angle-sum",
+  "status": "interactive"
+}

@@ -9,8 +9,10 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "vitest run --config vitest.config.ts && npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "npm run proof:validate && vitest run --config vitest.config.ts && npm run build && node --test tests/rendered-html.test.mjs",
     "test:unit": "vitest run --config vitest.config.ts",
+    "proof:new": "node scripts/create-proof.mjs",
+    "proof:validate": "node scripts/validate-proof-workspace.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },

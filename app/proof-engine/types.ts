@@ -148,6 +148,15 @@ export type ProofCanvasConfig<Id extends string = string> = {
     keyboardStep?: number;
     rotationStep?: number;
   };
+  assist?: {
+    objectPicker?: boolean;
+    directionPad?: boolean;
+    oneTapDock?: boolean;
+    zoomControls?: boolean;
+    spokenFeedback?: boolean;
+    showProgress?: boolean;
+    helpSteps?: string[];
+  };
 };
 
 export type DockCandidate<Id extends string = string> = {

@@ -17,6 +17,97 @@ import type {
   Transform,
 } from "./types";
 
+export type CanvasDirection = "left" | "right" | "up" | "down";
+
+export type ViewBox = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+/** Keeps SVG zoom predictable and centered for every proof scene. */
+export function calculateViewBox(
+  width: number,
+  height: number,
+  zoom: number,
+  center: Point = { x: width / 2, y: height / 2 },
+): ViewBox {
+  const safeZoom = clamp(zoom, 1, 8);
+  const viewWidth = width / safeZoom;
+  const viewHeight = height / safeZoom;
+  const maxX = Math.max(0, width - viewWidth);
+  const maxY = Math.max(0, height - viewHeight);
+  return {
+    x: clamp(center.x - viewWidth / 2, 0, maxX),
+    y: clamp(center.y - viewHeight / 2, 0, maxY),
+    width: viewWidth,
+    height: viewHeight,
+  };
+}
+
+/** Spatial selection lets arrow navigation feel natural on any configured canvas. */
+export function findDirectionalNeighbor<Id extends string>(
+  currentId: Id,
+  objects: Record<Id, Pick<Transform, "x" | "y">>,
+  direction: CanvasDirection,
+): Id | null {
+  const current = objects[currentId];
+  if (!current) return null;
+  const vector = {
+    left: { x: -1, y: 0 },
+    right: { x: 1, y: 0 },
+    up: { x: 0, y: -1 },
+    down: { x: 0, y: 1 },
+  }[direction];
+  const candidates = Object.entries<Pick<Transform, "x" | "y">>(objects)
+    .filter(([id]) => id !== currentId)
+    .map(([id, point]) => {
+      const dx = point.x - current.x;
+      const dy = point.y - current.y;
+      const forward = dx * vector.x + dy * vector.y;
+      const sideways = Math.abs(dx * vector.y - dy * vector.x);
+      return {
+        id: id as Id,
+        forward,
+        score: forward + sideways * 2.5,
+      };
+    })
+    .filter((candidate) => candidate.forward > 0)
+    .sort((a, b) => a.score - b.score);
+  return candidates[0]?.id ?? null;
+}
+
+export function getDockGuidance<Id extends string>(options: {
+  object: ProofObjectState<Id>;
+  config: ProofObjectConfig<Id>;
+  slots: readonly DockingSlotConfig<Id>[];
+  objects: Record<Id, ProofObjectState<Id>>;
+}) {
+  const candidate = rankDockCandidates(
+    options.object,
+    options.config,
+    options.slots,
+    options.objects,
+  )[0];
+  if (!candidate) {
+    return { progress: 0, message: "No matching docking place is configured." };
+  }
+  const progress = clamp(
+    1 - candidate.distance / Math.max(options.config.snapTolerance * 3, 1),
+    0,
+    1,
+  );
+  const messages: Record<ValidationResult["reason"], string> = {
+    valid: "Perfect match. Release to attach!",
+    orientation: "You are close. Rotate until the corners line up.",
+    distance: progress > 0.45 ? "Getting warmer—keep moving toward the glow." : "Follow the glow to the matching outline.",
+    incompatible: "Choose the outline with the same number or color.",
+    occupied: "That place is filled. Try the next empty outline.",
+  };
+  return { progress, message: messages[candidate.validation.reason], candidate };
+}
+
 function closestPointOnSegment(point: Point, start: Point, end: Point): Point {
   const dx = end.x - start.x;
   const dy = end.y - start.y;

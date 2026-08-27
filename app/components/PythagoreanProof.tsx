@@ -15,7 +15,12 @@ import {
   InvariantIndicator,
   ProofStepNavigator,
 } from "../proof-engine/ProofUI";
-import { constrainTransform, resolveDrop } from "../proof-engine/canvasEngine";
+import { CanvasNavigator } from "../proof-engine/CanvasNavigator";
+import {
+  constrainTransform,
+  resolveDrop,
+  type CanvasDirection,
+} from "../proof-engine/canvasEngine";
 import {
   INITIAL_PYTHAGOREAN_SCENE,
   PYTHAGOREAN_PIECES,
@@ -31,7 +36,11 @@ import type {
 } from "../proof-engine/types";
 import { normalizeRotation } from "../proof-engine/validation";
 import MathFormula from "./MathFormula";
-import { useCanvasHistory, useProofCanvas } from "./useProofCanvas";
+import {
+  useCanvasHistory,
+  useCanvasViewport,
+  useProofCanvas,
+} from "./useProofCanvas";
 
 const ANIMATION_STEPS = [
   {
@@ -250,6 +259,11 @@ export default function PythagoreanProof() {
   const [speed, setSpeed] = useState(1);
   const [a, setA] = useState(3);
   const [b, setB] = useState(4);
+  const viewport = useCanvasViewport(820, 420, {
+    minZoom: 1,
+    maxZoom: 2.25,
+    step: 0.25,
+  });
 
   const scene = history.state;
   const objects = useMemo(
@@ -389,6 +403,71 @@ export default function PythagoreanProof() {
       `Triangle ${selected.at(-1)} rotated 90°. Its right-angle marker must match the slot.`,
     );
   };
+
+  const dockPiece = (id: PythagoreanPieceId) => {
+    const slot = PYTHAGOREAN_SLOTS.find((candidate) =>
+      candidate.accepts.includes(id),
+    )!;
+    history.commit((current) => {
+      const nextObjects = {
+        ...current.objects,
+        [id]: { id, ...slot.target, dockedSlotId: slot.id },
+      };
+      return {
+        ...current,
+        objects: nextObjects,
+        phase:
+          Object.values(nextObjects).filter((object) => object.dockedSlotId)
+            .length === 4
+            ? "ARRANGEMENT_COMPLETE"
+            : "PARTIALLY_DOCKED",
+      };
+    });
+    setSelected(id);
+    setPreviewValue(null);
+    setMessage(
+      `Triangle ${id.at(-1)} attached. Great work—choose the next triangle.`,
+    );
+    if (navigator.vibrate) navigator.vibrate(20);
+  };
+
+  const nudgeSelected = (direction: CanvasDirection) => {
+    if (!selected) {
+      setMessage("Choose a numbered triangle first.");
+      return;
+    }
+    const delta = 12;
+    const movement: Record<CanvasDirection, [number, number]> = {
+      left: [-delta, 0],
+      right: [delta, 0],
+      up: [0, -delta],
+      down: [0, delta],
+    };
+    const [dx, dy] = movement[direction];
+    const config = PYTHAGOREAN_PIECES.find((piece) => piece.id === selected)!;
+    history.commit((current) => ({
+      ...current,
+      phase: "BUILDING_ARRANGEMENT",
+      objects: {
+        ...current.objects,
+        [selected]: {
+          ...current.objects[selected],
+          ...constrainTransform(
+            {
+              ...current.objects[selected],
+              x: current.objects[selected].x + dx,
+              y: current.objects[selected].y + dy,
+            },
+            config.constraints,
+          ),
+          dockedSlotId: null,
+        },
+      },
+    }));
+    setMessage(
+      `Triangle ${selected.at(-1)} moved ${direction}. Keep going toward its glowing outline.`,
+    );
+  };
   const resetAll = useCallback(() => {
     history.reset(INITIAL_PYTHAGOREAN_SCENE);
     setPreviewValue(null);
@@ -482,24 +561,7 @@ export default function PythagoreanProof() {
       return;
     }
     if (event.key === "Enter") {
-      const slot = PYTHAGOREAN_SLOTS.find((candidate) =>
-        candidate.accepts.includes(id),
-      )!;
-      history.commit((current) => {
-        const nextObjects = {
-          ...current.objects,
-          [id]: { id, ...slot.target, dockedSlotId: slot.id },
-        };
-        return {
-          ...current,
-          objects: nextObjects,
-          phase:
-            Object.values(nextObjects).filter((object) => object.dockedSlotId)
-              .length === 4
-              ? "ARRANGEMENT_COMPLETE"
-              : "PARTIALLY_DOCKED",
-        };
-      });
+      dockPiece(id);
       return;
     }
     if (!movement[event.key]) return;
@@ -650,13 +712,39 @@ export default function PythagoreanProof() {
             <span className="grab-cue">✋</span>
             {message}
           </div>
+          <CanvasNavigator
+            items={PYTHAGOREAN_PIECES.map((piece) => ({
+              id: piece.id,
+              label: piece.label,
+              color: piece.color,
+              complete: Boolean(scene.objects[piece.id].dockedSlotId),
+            }))}
+            selectedId={selected}
+            onSelect={(id) => {
+              setSelected(id);
+              setMessage(
+                `Triangle ${id.at(-1)} selected. Drag it, use the arrows, or press Attach.`,
+              );
+            }}
+            onNudge={nudgeSelected}
+            onRotate={rotateSelected}
+            onDock={() => selected && dockPiece(selected)}
+            zoomPercent={viewport.zoomPercent}
+            canZoomIn={viewport.canZoomIn}
+            canZoomOut={viewport.canZoomOut}
+            onZoomIn={viewport.zoomIn}
+            onZoomOut={viewport.zoomOut}
+            onFit={viewport.fit}
+            completedCount={dockedCount}
+            instruction={message}
+          />
           <svg
             className={canvas.canvasClassName(
               "pyth-svg",
               "interactive-svg",
               canvas.dragging && "has-active-drag",
             )}
-            viewBox="0 0 820 420"
+            viewBox={viewport.viewBox}
             {...canvas.canvasProps}
             role="img"
             aria-label="Two identical square frames. Arrangement A is complete. Drag synchronized copies of its four numbered triangles into the dashed slots in empty Arrangement B."

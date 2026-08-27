@@ -136,6 +136,19 @@ export const PYTHAGOREAN_CANVAS_CONFIG: ProofCanvasConfig<PythagoreanPieceId> =
       keyboardStep: 4,
       rotationStep: 90,
     },
+    assist: {
+      objectPicker: true,
+      directionPad: true,
+      oneTapDock: true,
+      zoomControls: true,
+      spokenFeedback: true,
+      showProgress: true,
+      helpSteps: [
+        "Choose a numbered triangle.",
+        "Drag it or move it with the arrows.",
+        "Rotate and attach it to the matching outline.",
+      ],
+    },
   };
 
 export const INITIAL_PYTHAGOREAN_SCENE: ProofScene<PythagoreanPieceId> = {

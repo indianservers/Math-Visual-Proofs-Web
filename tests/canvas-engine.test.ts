@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   closestPointOnPath,
+  calculateViewBox,
   constrainTransform,
+  findDirectionalNeighbor,
   findMagneticSnap,
+  getDockGuidance,
   rankDockCandidates,
   resolveDrop,
 } from "../app/proof-engine/canvasEngine";
@@ -20,6 +23,32 @@ import type { ProofObjectState } from "../app/proof-engine/types";
 import { parseProofCanvasConfig } from "../app/proof-engine/configSchema";
 
 describe("intelligent proof canvas", () => {
+  it("creates bounded centered view boxes for child-friendly zoom", () => {
+    expect(calculateViewBox(800, 400, 2)).toEqual({
+      x: 200,
+      y: 100,
+      width: 400,
+      height: 200,
+    });
+    expect(calculateViewBox(800, 400, 2, { x: 0, y: 0 })).toEqual({
+      x: 0,
+      y: 0,
+      width: 400,
+      height: 200,
+    });
+  });
+
+  it("finds the visually nearest object in an arrow direction", () => {
+    const objects = {
+      a: { x: 10, y: 10 },
+      b: { x: 80, y: 12 },
+      c: { x: 40, y: 90 },
+    };
+    expect(findDirectionalNeighbor("a", objects, "right")).toBe("b");
+    expect(findDirectionalNeighbor("a", objects, "down")).toBe("c");
+    expect(findDirectionalNeighbor("a", objects, "left")).toBeNull();
+  });
+
   it("validates a complete theorem configuration before rendering", () => {
     expect(parseProofCanvasConfig(PYTHAGOREAN_CANVAS_CONFIG).id).toBe(
       "pythagorean-area-rearrangement",
@@ -107,6 +136,9 @@ describe("intelligent proof canvas", () => {
       slotId: slot.id,
       transform: slot.target,
     });
+    expect(
+      getDockGuidance({ object, config, slots: PYTHAGOREAN_SLOTS, objects }),
+    ).toMatchObject({ progress: 1, message: "Perfect match. Release to attach!" });
   });
 
   it("returns the last valid transform and a useful reason for a rejected drop", () => {

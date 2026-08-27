@@ -147,6 +147,17 @@ export const proofCanvasConfigSchema = z
         rotationStep: z.number().positive().optional(),
       })
       .optional(),
+    assist: z
+      .object({
+        objectPicker: z.boolean().optional(),
+        directionPad: z.boolean().optional(),
+        oneTapDock: z.boolean().optional(),
+        zoomControls: z.boolean().optional(),
+        spokenFeedback: z.boolean().optional(),
+        showProgress: z.boolean().optional(),
+        helpSteps: z.array(z.string().min(1)).max(6).optional(),
+      })
+      .optional(),
   })
   .superRefine((config, context) => {
     const objectIds = new Set(config.objects.map((object) => object.id));

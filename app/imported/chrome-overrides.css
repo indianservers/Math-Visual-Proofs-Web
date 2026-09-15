@@ -1,7 +1,7 @@
 /*
- * Keep the left app menu. Remove / compact the bulky side bars that
- * steal canvas space (tall action stacks, oversized mission strips,
- * duplicate page chrome). Tools move into a slim overlay rail.
+ * Keep the left Maths Universe app menu. Remove / compact the bulky
+ * side bars that steal canvas space (tall action stacks, oversized
+ * mission strips, duplicate page chrome). Tools move into a slim rail.
  */
 
 /* Prefer the in-proof left menu; hide only generic intern shells that
@@ -13,11 +13,54 @@
   display: none !important;
 }
 
+/* Force-keep the left menu even if the proof's own responsive CSS
+   tries to hide it — user asked to keep the left menu. */
+aside.app-sidebar,
+.app-sidebar,
+aside.sidebar.brand-sidebar,
+body > .app-sidebar,
+body > aside.app-sidebar {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 78px !important;
+  min-width: 78px !important;
+  max-width: 78px !important;
+  flex-shrink: 0 !important;
+}
+
+.app-sidebar .nav-label,
+.app-sidebar .brand-text,
+.app-sidebar .brand-sub,
+.app-sidebar .brand-title,
+.app-sidebar .nav-link span:not(.nav-link-icon),
+.app-sidebar .settings-btn span:not(.nav-link-icon) {
+  /* Compact icon rail: keep menu, drop long labels */
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+
 .sfp-shell {
   width: 100% !important;
   min-height: auto !important;
   display: block !important;
   grid-template-columns: none !important;
+}
+
+body {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.app-main,
+main.app-main,
+.main-wrapper {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
 }
 
 /* Collapse tall header action bars (Ask Guide / Notes / etc.) into a

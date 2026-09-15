@@ -39,7 +39,7 @@ export default function EvenOddPairingProofPage() {
 
   // Set document title
   useEffect(() => {
-    document.title = `${PROOF_META.title} — Maths Universe Visual Proofs`;
+    /* page title managed by host app */
   }, []);
 
   // Keyboard navigation

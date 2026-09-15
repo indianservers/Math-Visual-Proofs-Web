@@ -95,7 +95,7 @@ export default function MatrixLinearTransformationGridProofPage() {
   }, [state.isAnimating, state.animProgress, state.animSpeed]);
 
   useEffect(() => {
-    document.title = `${PROOF_META.title} — Maths Universe Visual Proofs`;
+    /* page title managed by host app */
   }, []);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

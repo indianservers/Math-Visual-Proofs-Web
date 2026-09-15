@@ -44,7 +44,7 @@ export default function EigenvectorsDirectionsDoNotTurnProofPage() {
   );
 
   useEffect(() => {
-    document.title = `${PROOF_META.title} — Maths Universe Visual Proofs`;
+    /* page title managed by host app */
   }, []);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

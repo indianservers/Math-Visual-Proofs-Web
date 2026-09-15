@@ -39,7 +39,7 @@ export default function RowOperationsPreserveSolutionsProofPage() {
   const [workflowStage, setWorkflowStage] = useState<"original" | "transformed" | "restored">("transformed");
 
   useEffect(() => {
-    document.title = `${PROOF_META.title} — Maths Universe Visual Proofs`;
+    /* page title managed by host app */
   }, []);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

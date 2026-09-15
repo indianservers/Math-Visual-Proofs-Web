@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "pyramid-volume-one-third",
+  "categorySlug": "mensuration",
+  "slug": "pyramid-volume-one-third",
+  "route": "/visual-proofs/mensuration/pyramid-volume-one-third",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/pyramid-volume-one-third)."
+}

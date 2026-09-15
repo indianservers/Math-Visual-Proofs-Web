@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "even-number-sum",
+  "categorySlug": "sequences-and-series",
+  "slug": "sum-first-n-even-numbers",
+  "route": "/visual-proofs/sequences-and-series/sum-first-n-even-numbers",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/even-number-sum)."
+}

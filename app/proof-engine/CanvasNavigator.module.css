@@ -7,7 +7,12 @@
   box-shadow: 0 8px 24px rgb(31 43 98 / 8%);
 }
 
+.collapsed {
+  padding: 8px 12px;
+}
+
 .topline,
+.toplineActions,
 .controls,
 .picker,
 .actions,
@@ -16,6 +21,8 @@
   display: flex;
   align-items: center;
 }
+
+.toplineActions { gap: 6px; flex-wrap: wrap; }
 
 .topline { justify-content: space-between; gap: 12px; }
 .topline div { display: grid; gap: 2px; }
@@ -61,7 +68,7 @@
 .moveGroup button { border: 1px solid #d7dcf1; border-radius: 7px; color: #3923a8; background: white; cursor: pointer; font-size: 16px; line-height: 1; }
 .moveGroup button:nth-child(1) { grid-area: 1 / 2; }
 .moveGroup button:nth-child(2) { grid-area: 2 / 1; }
-.moveGroup .center { grid-area: 2 / 2; color: #8677bd; background: #f2f0fb; }
+.center { grid-area: 2 / 2; color: #8677bd; background: #f2f0fb; }
 .moveGroup button:nth-child(4) { grid-area: 2 / 3; }
 .moveGroup button:nth-child(5) { grid-area: 3 / 2; }
 .moveGroup span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -69,8 +76,8 @@
 .actions { gap: 6px; }
 .actions button { min-height: 42px; padding: 7px 11px; border: 1px solid #d7dcf1; border-radius: 10px; color: #27356d; background: white; cursor: pointer; }
 .actions b { display: block; color: #6640ed; font-size: 17px; }
-.actions .attach { color: white; border-color: #6741ed; background: linear-gradient(135deg, #7f5cff, #5330df); }
-.actions .attach b { color: white; }
+.attach { color: white !important; border-color: #6741ed !important; background: linear-gradient(135deg, #7f5cff, #5330df) !important; }
+.attach b { color: white !important; }
 
 .zoom { gap: 3px; padding: 3px; border: 1px solid #d8ddef; border-radius: 10px; background: white; }
 .zoom button { min-width: 30px; min-height: 32px; border: 0; border-radius: 7px; color: #3d2cb0; background: #f3f1ff; cursor: pointer; font-weight: 800; }

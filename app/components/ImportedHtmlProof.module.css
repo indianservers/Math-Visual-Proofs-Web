@@ -1,8 +1,8 @@
 .wrap {
   width: 100%;
-  min-height: min(85vh, 1100px);
+  min-height: min(92vh, 1200px);
   border: 1px solid #dce1f4;
-  border-radius: 1.25rem;
+  border-radius: 1rem;
   overflow: hidden;
   background: #fff;
 }
@@ -10,7 +10,7 @@
 .frame {
   display: block;
   width: 100%;
-  height: min(85vh, 1100px);
+  height: min(92vh, 1200px);
   border: 0;
   background: #fff;
 }

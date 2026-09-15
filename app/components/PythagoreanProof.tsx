@@ -599,6 +599,7 @@ export default function PythagoreanProof() {
         <div>
           <div className="crumb">Visual Proofs / Geometry</div>
           <h1>Pythagorean Theorem</h1>
+          <code className="catalog-proof-id">ID: pythagorean-theorem</code>
           <div className="subtitle">Rearrange the evidence</div>
         </div>
         <div className="badges">

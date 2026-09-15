@@ -5,6 +5,12 @@ import MathFormula from "./MathFormula";
 import { nearestSnap, useProofCanvas } from "./useProofCanvas";
 
 type Kind = "area" | "angles" | "exterior" | "similar";
+const proofIds: Record<Kind, string> = {
+  area: "triangle-area",
+  angles: "triangle-angle-sum",
+  exterior: "exterior-angle-theorem",
+  similar: "similar-triangles",
+};
 const meta = {
   area: {
     title: "Area of a Triangle",
@@ -95,6 +101,7 @@ function Header({ kind }: { kind: Kind }) {
             {kind === "exterior" || kind === "similar" ? " Proofs" : ""}
           </div>
           <h1>{m.title}</h1>
+          <code className="catalog-proof-id">ID: {proofIds[kind]}</code>
           {m.subtitle && <div className="subtitle">{m.subtitle}</div>}
         </div>
         <div className="badges">

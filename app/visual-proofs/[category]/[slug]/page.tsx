@@ -67,6 +67,9 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
         <section className="catalog-detail-hero">
           <div className="catalog-detail-copy">
             <div className="catalog-detail-chips">
+              <span className="catalog-proof-id" title="Visual Proof ID">
+                ID: {proof.id}
+              </span>
               <span>{proof.difficulty}</span>
               <span>{proof.estimatedTime}</span>
               <span>{proof.level}</span>
@@ -161,7 +164,7 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
                 <Link key={item.id} href={catalogProofRoute(item)}>
                   <small>#{String(item.catalogNumber).padStart(3, "0")}</small>
                   <b>{item.title}</b>
-                  <span>View proof →</span>
+                  <span>{item.id}</span>
                 </Link>
               ))}
             </div>

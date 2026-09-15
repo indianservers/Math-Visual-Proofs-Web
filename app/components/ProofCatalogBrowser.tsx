@@ -12,6 +12,7 @@ export type CatalogBrowserCategory = {
 
 export type CatalogBrowserProof = {
   catalogNumber: number;
+  id: string;
   title: string;
   slug: string;
   categorySlug: string;
@@ -63,7 +64,7 @@ export default function ProofCatalogBrowser({
           category === "all" || proof.categorySlug === category;
         const queryMatches =
           !normalizedQuery ||
-          `${proof.title} ${proof.shortDescription} ${proof.tags.join(" ")}`
+          `${proof.id} ${proof.title} ${proof.shortDescription} ${proof.tags.join(" ")}`
             .toLowerCase()
             .includes(normalizedQuery);
         return categoryMatches && queryMatches;
@@ -144,6 +145,7 @@ export default function ProofCatalogBrowser({
                   <span>#{String(proof.catalogNumber).padStart(3, "0")}</span>
                   <i>{proof.difficulty}</i>
                 </div>
+                <code className="catalog-proof-id">{proof.id}</code>
                 <h3>{proof.title}</h3>
                 <p>{proof.shortDescription}</p>
                 <div className="catalog-proof-foot">

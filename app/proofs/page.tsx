@@ -136,6 +136,7 @@ export default function ProofsIndex() {
                     <span className="proof-number">{detail.number}</span>
                     <span className="difficulty-chip">{proof.difficulty}</span>
                   </div>
+                  <code className="catalog-proof-id">{proof.id}</code>
                   <div className="proof-card-visual" aria-hidden="true">
                     <span>{detail.icon}</span>
                     <i>{detail.equation}</i>
@@ -166,6 +167,7 @@ export default function ProofsIndex() {
           }))}
           proofs={ALL_VISUAL_PROOFS.map((proof) => ({
             catalogNumber: proof.catalogNumber,
+            id: proof.id,
             title: proof.title,
             slug: proof.slug,
             categorySlug: proof.categorySlug,

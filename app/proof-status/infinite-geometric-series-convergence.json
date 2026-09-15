@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "infinite-geometric-series-convergence",
+  "categorySlug": "sequences-and-series",
+  "slug": "infinite-geometric-series-convergence",
+  "route": "/visual-proofs/sequences-and-series/infinite-geometric-series-convergence",
+  "status": "interactive",
+  "owner": "Aditya",
+  "notes": "Integrated team-developed self-contained HTML proof (Aditya/lesson-11.html)."
+}

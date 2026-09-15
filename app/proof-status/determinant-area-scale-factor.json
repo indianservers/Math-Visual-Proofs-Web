@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "determinant-area-scale-factor",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "determinant-area-scale-factor",
+  "route": "/visual-proofs/matrices-linear-algebra/determinant-area-scale-factor",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/108-determinant-area-scale-factor)."
+}

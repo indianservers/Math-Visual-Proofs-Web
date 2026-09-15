@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "matrix-linear-transformation-grid",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "matrix-linear-transformation-grid",
+  "route": "/visual-proofs/matrices-linear-algebra/matrix-linear-transformation-grid",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/107-matrix-linear-transformation-grid)."
+}

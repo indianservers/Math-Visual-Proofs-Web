@@ -44,6 +44,25 @@ const eslintConfig = defineConfig([
       "no-irregular-whitespace": "off",
     },
   },
+  {
+    // Vendored team-developed proof sources are integrated verbatim to
+    // preserve their exact working logic; relax stylistic/a11y lint here.
+    files: ["app/visual-proofs/**/impl/**"],
+    rules: {
+      "react/no-unescaped-entities": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/no-noninteractive-tabindex": "off",
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "jsx-a11y/mouse-events-have-key-events": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

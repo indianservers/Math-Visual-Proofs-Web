@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "eigenvectors-directions-do-not-turn",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "eigenvectors-directions-do-not-turn",
+  "route": "/visual-proofs/matrices-linear-algebra/eigenvectors-directions-do-not-turn",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/111-eigenvectors-directions-do-not-turn)."
+}

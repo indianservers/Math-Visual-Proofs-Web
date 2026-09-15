@@ -28,19 +28,30 @@ export default function EmbeddedHtmlProof({
     if (!frame) return;
 
     let observer: ResizeObserver | null = null;
+    let rafId = 0;
+    let lastHeight = 0;
 
     const fit = () => {
-      try {
-        const doc = frame.contentDocument;
-        if (!doc) return;
-        const height = Math.max(
-          doc.documentElement?.scrollHeight ?? 0,
-          doc.body?.scrollHeight ?? 0,
-        );
-        if (height > 0) frame.style.height = `${Math.max(height, 560)}px`;
-      } catch {
-        /* cross-origin access should never happen for srcDoc, ignore */
-      }
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        try {
+          const doc = frame.contentDocument;
+          if (!doc) return;
+          const height = Math.max(
+            doc.documentElement?.scrollHeight ?? 0,
+            doc.body?.scrollHeight ?? 0,
+          );
+          const next = Math.max(height, 560);
+          // Only write when it actually changes to avoid ResizeObserver loops.
+          if (height > 0 && Math.abs(next - lastHeight) > 1) {
+            lastHeight = next;
+            frame.style.height = `${next}px`;
+          }
+        } catch {
+          /* cross-origin access should never happen for srcDoc, ignore */
+        }
+      });
     };
 
     const handleLoad = () => {
@@ -62,6 +73,7 @@ export default function EmbeddedHtmlProof({
     return () => {
       frame.removeEventListener("load", handleLoad);
       observer?.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [html]);
 

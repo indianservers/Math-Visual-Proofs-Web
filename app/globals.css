@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@source "../vendor";
+@source "./visual-proofs";
 @import "katex/dist/katex.min.css";
 
 :root { --ink:#07143e; --blue:#311bff; --violet:#7148f8; --line:#dfe3f4; --panel:rgba(255,255,255,.74); }

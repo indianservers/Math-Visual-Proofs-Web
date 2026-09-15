@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "transformation-matrices-2d",
+  "categorySlug": "transformations-symmetry",
+  "slug": "transformation-matrices-2d",
+  "route": "/visual-proofs/transformations-symmetry/transformation-matrices-2d",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof168)."
+}

@@ -17,6 +17,8 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "drizzle-orm": "0.45.2",
     "katex": "^0.18.4",

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "finite-geometric-series-sum",
+  "categorySlug": "sequences-and-series",
+  "slug": "finite-geometric-series-sum",
+  "route": "/visual-proofs/sequences-and-series/finite-geometric-series-sum",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof182)."
+}

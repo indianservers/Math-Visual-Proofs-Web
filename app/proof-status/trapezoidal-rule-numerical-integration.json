@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "trapezoidal-rule-numerical-integration",
+  "categorySlug": "engineering-mathematics",
+  "slug": "trapezoidal-rule-numerical-integration",
+  "route": "/visual-proofs/engineering-mathematics/trapezoidal-rule-numerical-integration",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof175)."
+}

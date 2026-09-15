@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "simple-harmonic-motion",
+  "categorySlug": "engineering-mathematics",
+  "slug": "simple-harmonic-motion",
+  "route": "/visual-proofs/engineering-mathematics/simple-harmonic-motion",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof170)."
+}

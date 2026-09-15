@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "geometric-progression-repeated-scaling",
+  "categorySlug": "sequences-and-series",
+  "slug": "geometric-progression-repeated-scaling",
+  "route": "/visual-proofs/sequences-and-series/geometric-progression-repeated-scaling",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof181)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "fourier-series-wave-building",
+  "categorySlug": "engineering-mathematics",
+  "slug": "fourier-series-wave-building",
+  "route": "/visual-proofs/engineering-mathematics/fourier-series-wave-building",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof171)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "sierpinski-retained-area",
+  "categorySlug": "sequences-and-series",
+  "slug": "sierpinski-retained-area",
+  "route": "/visual-proofs/sequences-and-series/sierpinski-retained-area",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof183)."
+}

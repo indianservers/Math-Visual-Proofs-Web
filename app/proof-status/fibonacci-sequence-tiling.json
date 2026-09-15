@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "fibonacci-sequence-tiling",
+  "categorySlug": "sequences-and-series",
+  "slug": "fibonacci-sequence-tiling",
+  "route": "/visual-proofs/sequences-and-series/fibonacci-sequence-tiling",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof188)."
+}

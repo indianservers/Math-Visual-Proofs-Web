@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "arithmetic-progression-equal-steps",
+  "categorySlug": "sequences-and-series",
+  "slug": "arithmetic-progression-equal-steps",
+  "route": "/visual-proofs/sequences-and-series/arithmetic-progression-equal-steps",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof177)."
+}

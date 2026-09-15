@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "circle-equation",
+  "categorySlug": "coordinate-geometry",
+  "slug": "circle-equation",
+  "route": "/visual-proofs/coordinate-geometry/circle-equation",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/052_circle_equation.html)."
+}

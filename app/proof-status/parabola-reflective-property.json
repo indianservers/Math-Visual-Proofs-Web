@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "parabola-reflective-property",
+  "categorySlug": "conic-sections",
+  "slug": "parabola-reflective-property",
+  "route": "/visual-proofs/conic-sections/parabola-reflective-property",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/143-parabola-reflective-property)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "point-slope-line-equation",
+  "categorySlug": "coordinate-geometry",
+  "slug": "point-slope-line-equation",
+  "route": "/visual-proofs/coordinate-geometry/point-slope-line-equation",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/048-point-slope-line-equation.html)."
+}

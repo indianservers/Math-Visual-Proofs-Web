@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "negative-exponent-rule",
+  "categorySlug": "logarithms-exponents",
+  "slug": "negative-exponent-rule",
+  "route": "/visual-proofs/logarithms-exponents/negative-exponent-rule",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/negative-exponent-rule)."
+}

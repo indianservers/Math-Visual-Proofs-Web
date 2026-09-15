@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "complementary-angle-identities",
+  "categorySlug": "trigonometry",
+  "slug": "complementary-angle-identities",
+  "route": "/visual-proofs/trigonometry/complementary-angle-identities",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/040_complementary_angle_identities.html)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "translation-of-points",
+  "categorySlug": "coordinate-geometry",
+  "slug": "translation-of-points",
+  "route": "/visual-proofs/coordinate-geometry/translation-of-points",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/053_translation_of_points.html)."
+}

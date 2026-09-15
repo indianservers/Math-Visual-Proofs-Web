@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "matrix-addition-cell-by-cell",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "matrix-addition-cell-by-cell",
+  "route": "/visual-proofs/matrices-linear-algebra/matrix-addition-cell-by-cell",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/105-matrix-addition-cell-by-cell)."
+}

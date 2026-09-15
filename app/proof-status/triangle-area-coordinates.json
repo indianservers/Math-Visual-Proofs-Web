@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "triangle-area-coordinates",
+  "categorySlug": "coordinate-geometry",
+  "slug": "triangle-area-coordinates",
+  "route": "/visual-proofs/coordinate-geometry/triangle-area-coordinates",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/051_triangle_area_coordinates.html)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "divisibility-by-11",
+  "categorySlug": "number-theory",
+  "slug": "divisibility-by-11",
+  "route": "/visual-proofs/number-theory/divisibility-by-11",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/divisibility-by-11)."
+}

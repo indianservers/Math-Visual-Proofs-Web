@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "row-operations-preserve-solutions",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "row-operations-preserve-solutions",
+  "route": "/visual-proofs/matrices-linear-algebra/row-operations-preserve-solutions",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/110-row-operations-preserve-solutions)."
+}

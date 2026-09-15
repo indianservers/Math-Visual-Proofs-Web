@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Euclid's Proof of Infinitely Many Primes - Visual Proofs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       CSS RESET & DESIGN SYSTEM
+       ========================================== */
+    :root {
+      --bg-main: #f6f8fc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-purple: #e0e7ff;
+      --text-main: #1e1b4b;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #eef2ff;
+      --purple-dark: #312e81;
+      
+      --prime-2-bg: #e9d5ff; --prime-2-txt: #581c87; --prime-2-border: #d8b4fe;
+      --prime-3-bg: #bfdbfe; --prime-3-txt: #1e40af; --prime-3-border: #93c5fd;
+      --prime-5-bg: #bbf7d0; --prime-5-txt: #14532d; --prime-5-border: #86efac;
+      --prime-7-bg: #fef08a; --prime-7-txt: #713f12; --prime-7-border: #fde047;
+      --prime-11-bg: #fecaca; --prime-11-txt: #7f1d1d; --prime-11-border: #fca5a5;
+      --prime-13-bg: #ddd6fe; --prime-13-txt: #4338ca; --prime-13-border: #c4b5fd;
+      --prime-default-bg: #f1f5f9; --prime-default-txt: #334155; --prime-default-border: #cbd5e1;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px -2px rgba(99, 102, 241, 0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================
+       SIDEBAR NAVIGATION
+       ========================================== */
+    .sidebar {
+      width: 100px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 36px;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    .brand-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary-hover);
+      letter-spacing: 0.5px;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      width: 80px;
+    }
+
+    .nav-item:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-bottom {
+      margin-top: auto;
+    }
+
+    /* ==========================================
+       MAIN CONTENT CONTAINER
+       ========================================== */
+    .main-wrapper {
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 1540px;
+      margin: 0 auto;
+    }
+
+    /* Top Breadcrumb & Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .breadcrumbs span {
+      color: var(--text-muted);
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .page-mission {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 10px;
+    }
+
+    .badge-pill {
+      background: #eef2ff;
+      color: #4f46e5;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-purple);
+    }
+
+    /* ==========================================
+       PROGRESS BAR CONTROL BAR
+       ========================================== */
+    .control-header {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+    }
+
+    .steps-indicator {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      position: relative;
+    }
+
+    .step-item.active {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .step-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    .step-item.active .step-number {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    }
+
+    .step-item.completed .step-number {
+      background: #10b981;
+      color: white;
+    }
+
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 2px;
+      background: #cbd5e1;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: white;
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+
+    .btn-outline:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    /* ==========================================
+       MAIN WORKSPACE GRID (2 COLUMNS)
+       ========================================== */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+
+    /* Left Construct Card */
+    .construct-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    /* Prime Counters Drawer */
+    .counters-wrapper {
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .prime-chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .prime-chip {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      position: relative;
+    }
+
+    .prime-chip:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    }
+    .prime-chip:active {
+      cursor: grabbing;
+    }
+
+    .prime-chip.p-2 { background: var(--prime-2-bg); color: var(--prime-2-txt); border-color: var(--prime-2-border); }
+    .prime-chip.p-3 { background: var(--prime-3-bg); color: var(--prime-3-txt); border-color: var(--prime-3-border); }
+    .prime-chip.p-5 { background: var(--prime-5-bg); color: var(--prime-5-txt); border-color: var(--prime-5-border); }
+    .prime-chip.p-7 { background: var(--prime-7-bg); color: var(--prime-7-txt); border-color: var(--prime-7-border); }
+    .prime-chip.p-11 { background: var(--prime-11-bg); color: var(--prime-11-txt); border-color: var(--prime-11-border); }
+    .prime-chip.p-13 { background: var(--prime-13-bg); color: var(--prime-13-txt); border-color: var(--prime-13-border); }
+    .prime-chip.p-other { background: var(--prime-default-bg); color: var(--prime-default-txt); border-color: var(--prime-default-border); }
+
+    .prime-chip.dashed {
+      border: 2px dashed #cbd5e1;
+      background: white;
+      color: #94a3b8;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Finite List Area */
+    .finite-list-section {
+      background: #fafafa;
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      min-height: 100px;
+      position: relative;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .finite-list-section.drag-over {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .slots-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .slot-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .slot-chip .remove-btn {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .slot-chip:hover .remove-btn {
+      opacity: 1;
+    }
+
+    .empty-slot {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 2px dashed #cbd5e1;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Formula Expression Row */
+    .construct-formula-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .formula-expression {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .multiply-op {
+      color: #94a3b8;
+      font-size: 16px;
+    }
+
+    .calc-result-badge {
+      background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+      color: #3730a3;
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 800;
+      border: 2px solid #c7d2fe;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    /* Right Sidebar Panel (Why it works & Predict) */
+    .sidebar-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .side-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .side-card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .why-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .why-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .why-step-content {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .why-step-content strong {
+      color: var(--text-main);
+      display: block;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .predict-box {
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .predict-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn-predict {
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: white;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-predict.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .reveal-card {
+      background: linear-gradient(135deg, #f5f3ff, #faf5ff);
+      border: 1px solid #e9d5ff;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reveal-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .proved-tag {
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ==========================================
+       MIDDLE ROW: TEST REMAINDERS & PATTERN
+       ========================================== */
+    .remainders-header {
+      margin-bottom: 16px;
+    }
+
+    .remainders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .remainder-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .remainder-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-top-badges {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .prime-badge-sm {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .div-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .clock-svg-container {
+      width: 120px;
+      height: 120px;
+      margin: 8px 0;
+    }
+
+    .mod-equation {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 8px;
+    }
+
+    .mod-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .check-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #dcfce7;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #86efac;
+    }
+
+    /* Pattern Box */
+    .pattern-card {
+      background: linear-gradient(135deg, #ffffff, #faf5ff);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 1px solid #e9d5ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .pattern-rem-box {
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 24px;
+      font-weight: 800;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+      border: 2px solid #c7d2fe;
+    }
+
+    .pattern-conclusion {
+      font-size: 15px;
+      font-weight: 800;
+      color: #4f46e5;
+      margin-top: 8px;
+    }
+
+    /* ==========================================
+       BOTTOM SECTIONS: ONE-LINE PROOF & CHALLENGE
+       ========================================== */
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .one-line-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .proof-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .proof-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .node-icon-box {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: #f1f5f9;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+
+    .proof-node.active .node-icon-box {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-purple);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
+    .node-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      max-width: 120px;
+      line-height: 1.3;
+    }
+
+    .flow-arrow {
+      color: #cbd5e1;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* Exact Challenge Card */
+    .challenge-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .challenge-controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .select-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .select-group label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .select-group select {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: white;
+      font-weight: 700;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .bubbles-preview {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Drag Ghost Element */
+    #drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%) scale(1.1);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+      border-radius: 50%;
+      opacity: 0.9;
+      display: none;
+    }
+
+    /* Custom Responsive Adjustments */
+    @media (max-width: 1200px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        padding: 12px 20px;
+        position: relative;
+      }
+      .nav-list {
+        flex-direction: row;
+        justify-content: center;
+      }
+      .main-wrapper {
+        padding: 20px;
+      }
+      .control-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       SIDEBAR NAVIGATION
+       ========================================== -->
+  <aside class="sidebar">
+    <a href="#" class="brand-logo">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <span class="brand-title">MATHS<br>UNIVERSE</span>
+    </a>
+
+    <nav class="nav-list">
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        Explore
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+        Proofs
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Practice
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+        Saved
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Progress
+      </div>
+    </nav>
+
+    <div class="nav-bottom">
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       MAIN CONTENT WRAPPER
+       ========================================== -->
+  <main class="main-wrapper">
+    
+    <!-- Top Header -->
+    <header class="top-header">
+      <div>
+        <div class="breadcrumbs">Visual Proofs <span>/</span> Number Theory</div>
+        <h1 class="page-title">Euclid's Proof of Infinitely Many Primes</h1>
+        <p class="page-mission">Mission: Challenge any finite list of primes. Construct N = p₁ p₂ ... pₖ + 1 and show a new prime must exist.</p>
+      </div>
+      <div class="header-badges">
+        <div class="badge-pill">Intermediate</div>
+        <div class="badge-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          15 min
+        </div>
+      </div>
+    </header>
+
+    <!-- Progress Indicator Bar -->
+    <div class="control-header">
+      <div class="steps-indicator">
+        <div class="step-item" id="step-1-indicator">
+          <div class="step-number">1</div>
+          <span>List primes</span>
+        </div>
+        <div class="step-item active" id="step-2-indicator">
+          <div class="step-number">2</div>
+          <span>Build N</span>
+        </div>
+        <div class="step-item" id="step-3-indicator">
+          <div class="step-number">3</div>
+          <span>Test remainders</span>
+        </div>
+        <div class="step-item" id="step-4-indicator">
+          <div class="step-number">4</div>
+          <span>Conclude</span>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="btn-new-challenge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+          New challenge
+        </button>
+        <button class="btn btn-outline" id="btn-reset">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Workspace Grid -->
+    <div class="workspace-grid">
+      
+      <!-- Left Column: Construct Card -->
+      <div class="construct-card">
+        
+        <!-- Prime Counters Drawer -->
+        <div>
+          <div class="section-title">Prime Counters</div>
+          <div class="section-subtitle">Drag primes into the list.</div>
+          <div class="counters-wrapper">
+            <div class="prime-chips-grid" id="counters-grid">
+              <!-- Draggable prime chips rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Finite Prime List Section -->
+        <div class="finite-list-section" id="finite-list-dropzone">
+          <div class="section-title">Your finite list of primes (p₁, p₂, ..., pₖ)</div>
+          <div class="slots-container" id="finite-list-slots">
+            <!-- Active prime chips & drop target slots rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Formula Construct Box -->
+        <div class="construct-formula-box">
+          <div class="section-title" style="color: #4f46e5;">Construct N = p₁ p₂ ... pₖ + 1</div>
+          <div class="formula-expression" id="formula-expression-container">
+            <!-- Expression rendered dynamically -->
+          </div>
+          <div class="section-subtitle">N is one more than the product of your listed primes.</div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Sidebar Panel (Why it works & Predict) -->
+      <div class="sidebar-panel">
+        
+        <!-- Why It Works -->
+        <div class="side-card">
+          <div class="side-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Why it works
+          </div>
+
+          <div class="why-step">
+            <div class="why-step-num">1</div>
+            <div class="why-step-content">
+              <strong>Construct</strong>
+              Multiply all listed primes and add 1 to build N.
+            </div>
+          </div>
+
+          <div class="why-step">
+            <div class="why-step-num">2</div>
+            <div class="why-step-content">
+              <strong>Remainder is 1</strong>
+              Dividing by any listed prime pᵢ leaves remainder 1.
+            </div>
+          </div>
+
+          <div class="why-step">
+            <div class="why-step-num">3</div>
+            <div class="why-step-content">
+              <strong>A new prime factor exists</strong>
+              So no listed prime divides N. By the Fundamental Theorem of Arithmetic, N has a prime factor not in the list.
+            </div>
+          </div>
+        </div>
+
+        <!-- Predict Card -->
+        <div class="side-card">
+          <div class="side-card-title" style="font-size: 14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2.5"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+            Predict before reveal
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);">Does N have a prime factor not in the list?</div>
+          
+          <div class="predict-box">
+            <div class="predict-options">
+              <button class="btn-predict" id="btn-predict-yes">Yes ✓</button>
+              <button class="btn-predict" id="btn-predict-no">No</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reveal Card -->
+        <div class="reveal-card" id="reveal-card">
+          <div class="reveal-status">
+            <span style="font-size: 12px; font-weight: 800; color: #4338ca;">Reveal</span>
+            <div class="proved-tag" id="proved-tag" style="display: none;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Proved!
+            </div>
+          </div>
+          <div id="reveal-content" style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+            Make a prediction above to reveal the proof conclusion.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Middle Row: Test Remainders -->
+    <div class="remainders-header">
+      <div class="section-title" style="font-size: 18px;">Test remainders: <span style="font-weight: 500; color: var(--text-muted);">Divide N by each listed prime.</span></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 240px; gap: 20px; align-items: start; margin-bottom: 28px;">
+      <div class="remainders-grid" id="remainders-grid">
+        <!-- Modular dynamic clock cards rendered here -->
+      </div>
+
+      <!-- Pattern Panel -->
+      <div class="pattern-card">
+        <div style="font-size: 14px; font-weight: 800; color: var(--text-main);">Pattern</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">N leaves remainder</div>
+        <div class="pattern-rem-box">1</div>
+        <div style="font-size: 12px; color: var(--text-muted);">when divided by every listed prime.</div>
+        <div class="pattern-conclusion">⇒ None divides N.</div>
+      </div>
+    </div>
+
+    <!-- Bottom Sections -->
+    <div class="bottom-section">
+      
+      <!-- One-Line Proof Visual -->
+      <div class="one-line-card">
+        <div class="section-title">One-line proof (visual)</div>
+        
+        <div class="proof-flow" id="proof-flow-container">
+          
+          <div class="proof-node active">
+            <div class="node-icon-box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </div>
+            <div class="node-label">Assume finitely many primes</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div class="proof-node active">
+            <div class="node-icon-box" style="background: #eef2ff; color: #4f46e5;">+ 1</div>
+            <div class="node-label">Let N = p₁ p₂ ... pₖ + 1</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div class="proof-node active">
+            <div class="node-icon-box" style="border-radius: 50%; width: 48px; height: 48px;">1</div>
+            <div class="node-label">N ≡ 1 (mod pᵢ) for all</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div class="proof-node" id="node-shield">
+            <div class="node-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div class="node-label">No listed prime divides N</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div class="proof-node" id="node-sparkle">
+            <div class="node-icon-box">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="node-label">N has a new prime factor</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <div class="proof-node" id="node-infinity">
+            <div class="node-icon-box">∞</div>
+            <div class="node-label">Infinitely many primes</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Exact Challenge Section -->
+      <div class="challenge-card">
+        <div>
+          <div class="section-title">Exact challenge</div>
+          <div class="section-subtitle">Try with your own list or generate a random one.</div>
+        </div>
+
+        <div class="challenge-controls">
+          <div class="select-group">
+            <label for="select-prime-count"># of primes</label>
+            <select id="select-prime-count">
+              <option value="3">3 primes</option>
+              <option value="4" selected>4 primes</option>
+              <option value="5">5 primes</option>
+              <option value="6">6 primes</option>
+            </select>
+          </div>
+
+          <div class="bubbles-preview" id="challenge-preview-bubbles">
+            <!-- Dynamic bubbles preview -->
+          </div>
+
+          <button class="btn btn-primary" id="btn-generate-n">Generate N</button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Element Ghost for Dragging -->
+  <div id="drag-ghost"></div>
+
+  <!-- ==========================================
+       JAVASCRIPT APP LOGIC
+       ========================================== -->
+  <script>
+    // APP STATE
+    const state = {
+      primes: [2, 3, 5, 7, 11],
+      availablePrimes: [2, 3, 5, 7, 11, 13, 17, 19, 23],
+      prediction: null, // 'yes' | 'no' | null
+      revealed: false,
+      currentStep: 2, // 1: List, 2: Build N, 3: Test remainders, 4: Conclude
+      challengePrimeCount: 4
+    };
+
+    // DOM ELEMENTS
+    const countersGrid = document.getElementById('counters-grid');
+    const finiteListSlots = document.getElementById('finite-list-slots');
+    const formulaContainer = document.getElementById('formula-expression-container');
+    const remaindersGrid = document.getElementById('remainders-grid');
+    const btnPredictYes = document.getElementById('btn-predict-yes');
+    const btnPredictNo = document.getElementById('btn-predict-no');
+    const revealContent = document.getElementById('reveal-content');
+    const provedTag = document.getElementById('proved-tag');
+    const btnNewChallenge = document.getElementById('btn-new-challenge');
+    const btnReset = document.getElementById('btn-reset');
+    const selectPrimeCount = document.getElementById('select-prime-count');
+    const challengePreviewBubbles = document.getElementById('challenge-preview-bubbles');
+    const btnGenerateN = document.getElementById('btn-generate-n');
+    const finiteListDropzone = document.getElementById('finite-list-dropzone');
+    const dragGhost = document.getElementById('drag-ghost');
+
+    // HELPER MATHEMATICAL FUNCTIONS
+    function getPrimeClass(p) {
+      if ([2, 3, 5, 7, 11, 13].includes(p)) return `p-${p}`;
+      return 'p-other';
+    }
+
+    function calculateN(primesArr) {
+      if (!primesArr.length) return 1;
+      return primesArr.reduce((acc, val) => acc * val, 1) + 1;
+    }
+
+    function getSmallestPrimeFactor(num) {
+      if (num < 2) return num;
+      for (let d = 2; d * d <= num; d++) {
+        if (num % d === 0) return d;
+      }
+      return num;
+    }
+
+    // UPDATE UI FROM STATE
+    function renderApp() {
+      const N = calculateN(state.primes);
+      
+      // Step calculation
+      if (state.revealed) {
+        state.currentStep = 4;
+      } else if (state.prediction) {
+        state.currentStep = 3;
+      } else {
+        state.currentStep = 2;
+      }
+
+      // Update Step Indicators
+      [1, 2, 3, 4].forEach(step => {
+        const el = document.getElementById(`step-${step}-indicator`);
+        if (!el) return;
+        el.classList.remove('active', 'completed');
+        if (step === state.currentStep) el.classList.add('active');
+        if (step < state.currentStep) el.classList.add('completed');
+      });
+
+      // 1. Render Prime Counters Drawer
+      countersGrid.innerHTML = '';
+      state.availablePrimes.forEach(p => {
+        const chip = document.createElement('div');
+        chip.className = `prime-chip ${getPrimeClass(p)}`;
+        chip.textContent = p;
+        chip.dataset.prime = p;
+        
+        // Add Pointer Events for genuine drag
+        setupPointerDrag(chip, p);
+        countersGrid.appendChild(chip);
+      });
+
+      // Ellipsis chip
+      const ellipsisChip = document.createElement('div');
+      ellipsisChip.className = 'prime-chip dashed';
+      ellipsisChip.textContent = '...';
+      ellipsisChip.title = 'More primes';
+      countersGrid.appendChild(ellipsisChip);
+
+      // 2. Render Finite List Slots
+      finiteListSlots.innerHTML = '';
+      state.primes.forEach((p, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'slot-chip';
+        
+        const chip = document.createElement('div');
+        chip.className = `prime-chip ${getPrimeClass(p)}`;
+        chip.textContent = p;
+        
+        const removeBtn = document.createElement('div');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = '×';
+        removeBtn.onclick = (e) => {
+          e.stopPropagation();
+          removePrimeFromList(idx);
+        };
+
+        wrapper.appendChild(chip);
+        wrapper.appendChild(removeBtn);
+        finiteListSlots.appendChild(wrapper);
+      });
+
+      // Empty target drop slot
+      const emptySlot = document.createElement('div');
+      emptySlot.className = 'empty-slot';
+      emptySlot.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+      finiteListSlots.appendChild(emptySlot);
+
+      // 3. Render Formula
+      formulaContainer.innerHTML = '';
+      if (state.primes.length === 0) {
+        formulaContainer.innerHTML = `<span style="color: var(--text-muted); font-size: 14px;">Select primes above to construct N.</span>`;
+      } else {
+        state.primes.forEach((p, idx) => {
+          const badge = document.createElement('span');
+          badge.className = `prime-chip ${getPrimeClass(p)}`;
+          badge.style.width = '36px';
+          badge.style.height = '36px';
+          badge.style.fontSize = '14px';
+          badge.textContent = p;
+          formulaContainer.appendChild(badge);
+
+          if (idx < state.primes.length - 1) {
+            const mult = document.createElement('span');
+            mult.className = 'multiply-op';
+            mult.textContent = '×';
+            formulaContainer.appendChild(mult);
+          }
+        });
+
+        const endPart = document.createElement('div');
+        endPart.style.display = 'flex';
+        endPart.style.alignItems = 'center';
+        endPart.style.gap = '10px';
+        endPart.innerHTML = `
+          <span style="font-size: 16px; font-weight: 800; color: var(--text-main); margin-left: 4px;">+ 1 =</span>
+          <span class="calc-result-badge">${N}</span>
+        `;
+        formulaContainer.appendChild(endPart);
+      }
+
+      // 4. Render Remainder Cards
+      remaindersGrid.innerHTML = '';
+      state.primes.forEach(p => {
+        const remCard = document.createElement('div');
+        remCard.className = 'remainder-card';
+
+        const rem = N % p;
+
+        remCard.innerHTML = `
+          <div class="card-top-badges">
+            <div class="prime-badge-sm ${getPrimeClass(p)}">${p}</div>
+            <div class="div-label">÷ ${p}</div>
+          </div>
+          <div class="clock-svg-container">${generateClockSVG(p, rem)}</div>
+          <div class="mod-equation">${N} ≡ ${rem}</div>
+          <div class="mod-subtext">(mod ${p})</div>
+          <div class="check-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        `;
+        remaindersGrid.appendChild(remCard);
+      });
+
+      // 5. Predict & Reveal UI State
+      btnPredictYes.className = `btn-predict ${state.prediction === 'yes' ? 'selected' : ''}`;
+      btnPredictNo.className = `btn-predict ${state.prediction === 'no' ? 'selected' : ''}`;
+
+      if (state.revealed) {
+        provedTag.style.display = 'flex';
+        const newFactor = getSmallestPrimeFactor(N);
+        const isPrime = (newFactor === N);
+        
+        revealContent.innerHTML = `
+          <div style="font-weight: 800; color: var(--text-main); font-size: 13px; margin-bottom: 4px;">Conclusion</div>
+          <div>Since N = ${N} leaves remainder 1 when divided by any listed prime, none of {${state.primes.join(', ')}} divides N.</div>
+          <div style="margin-top: 6px; font-weight: 700; color: #4f46e5;">
+            ${isPrime ? `N = ${N} is itself a new prime!` : `N = ${N} has a new prime factor ${newFactor} not in our list!`}
+          </div>
+          <div style="margin-top: 4px; font-weight: 800; color: #16a34a;">Therefore, there are infinitely many primes.</div>
+        `;
+      } else {
+        provedTag.style.display = 'none';
+        revealContent.innerHTML = `Make a prediction above to reveal the proof conclusion.`;
+      }
+
+      // 6. Update One-Line Proof Nodes
+      const nodeShield = document.getElementById('node-shield');
+      const nodeSparkle = document.getElementById('node-sparkle');
+      const nodeInfinity = document.getElementById('node-infinity');
+
+      if (state.prediction) nodeShield.classList.add('active');
+      else nodeShield.classList.remove('active');
+
+      if (state.revealed) {
+        nodeSparkle.classList.add('active');
+        nodeInfinity.classList.add('active');
+      } else {
+        nodeSparkle.classList.remove('active');
+        nodeInfinity.classList.remove('active');
+      }
+
+      // 7. Update Challenge Preview Bubbles
+      renderChallengeBubbles();
+    }
+
+    // GENERATE dynamic SVG Circular Modulo / Clock Diagram
+    function generateClockSVG(p, rem) {
+      const size = 120;
+      const center = size / 2;
+      const radius = 42;
+      
+      let ticksHTML = '';
+      
+      for (let i = 0; i < p; i++) {
+        // Angle starting at top (-pi/2)
+        const angle = -Math.PI / 2 + (2 * Math.PI * i) / p;
+        const x = center + radius * Math.cos(angle);
+        const y = center + radius * Math.sin(angle);
+        
+        const isTargetRem = (i === rem);
+
+        if (isTargetRem) {
+          ticksHTML += `
+            <circle cx="${x}" cy="${y}" r="11" fill="#6366f1" />
+            <text x="${x}" y="${y + 4}" fill="white" font-size="11" font-weight="800" text-anchor="middle">${i}</text>
+          `;
+        } else {
+          ticksHTML += `
+            <circle cx="${x}" cy="${y}" r="3" fill="#cbd5e1" />
+            <text x="${x + 12 * Math.cos(angle)}" y="${y + 12 * Math.sin(angle) + 4}" fill="#64748b" font-size="10" font-weight="700" text-anchor="middle">${i}</text>
+          `;
+        }
+      }
+
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+          <!-- Circular track line -->
+          <circle cx="${center}" cy="${center}" r="${radius}" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="4 4" />
+          ${ticksHTML}
+        </svg>
+      `;
+    }
+
+    // POINTER EVENTS GENUINE DRAG-AND-DROP MECHANICS
+    function setupPointerDrag(element, primeVal) {
+      element.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        
+        // Show Ghost
+        dragGhost.className = `prime-chip ${getPrimeClass(primeVal)}`;
+        dragGhost.textContent = primeVal;
+        dragGhost.style.display = 'flex';
+        dragGhost.style.left = `${e.clientX}px`;
+        dragGhost.style.top = `${e.clientY}px`;
+
+        const onPointerMove = (moveEvent) => {
+          dragGhost.style.left = `${moveEvent.clientX}px`;
+          dragGhost.style.top = `${moveEvent.clientY}px`;
+
+          // Hit test dropzone
+          const rect = finiteListDropzone.getBoundingClientRect();
+          if (
+            moveEvent.clientX >= rect.left &&
+            moveEvent.clientX <= rect.right &&
+            moveEvent.clientY >= rect.top &&
+            moveEvent.clientY <= rect.bottom
+          ) {
+            finiteListDropzone.classList.add('drag-over');
+          } else {
+            finiteListDropzone.classList.remove('drag-over');
+          }
+        };
+
+        const onPointerUp = (upEvent) => {
+          dragGhost.style.display = 'none';
+          finiteListDropzone.classList.remove('drag-over');
+          window.removeEventListener('pointermove', onPointerMove);
+          window.removeEventListener('pointerup', onPointerUp);
+
+          // Check if dropped inside dropzone
+          const rect = finiteListDropzone.getBoundingClientRect();
+          if (
+            upEvent.clientX >= rect.left &&
+            upEvent.clientX <= rect.right &&
+            upEvent.clientY >= rect.top &&
+            upEvent.clientY <= rect.bottom
+          ) {
+            addPrimeToList(primeVal);
+          }
+        };
+
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
+      });
+
+      // Quick click fallback
+      element.addEventListener('click', () => {
+        addPrimeToList(primeVal);
+      });
+    }
+
+    // STATE MUTATION FUNCTIONS
+    function addPrimeToList(primeVal) {
+      if (!state.primes.includes(primeVal)) {
+        state.primes.push(primeVal);
+        state.primes.sort((a, b) => a - b);
+        state.revealed = false;
+        renderApp();
+      }
+    }
+
+    function removePrimeFromList(index) {
+      if (state.primes.length > 1) {
+        state.primes.splice(index, 1);
+        state.revealed = false;
+        renderApp();
+      }
+    }
+
+    // PREDICTION & REVEAL HANDLERS
+    btnPredictYes.onclick = () => {
+      state.prediction = 'yes';
+      state.revealed = true;
+      renderApp();
+    };
+
+    btnPredictNo.onclick = () => {
+      state.prediction = 'no';
+      state.revealed = true;
+      renderApp();
+    };
+
+    // RESET & NEW CHALLENGE
+    btnReset.onclick = () => {
+      state.primes = [2, 3, 5, 7, 11];
+      state.prediction = null;
+      state.revealed = false;
+      renderApp();
+    };
+
+    btnNewChallenge.onclick = generateNewChallenge;
+    btnGenerateN.onclick = generateNewChallenge;
+
+    function generateNewChallenge() {
+      const count = parseInt(selectPrimeCount.value, 10);
+      const pools = [2, 3, 5, 7, 11, 13, 17, 19, 23];
+      // Pick first 'count' primes
+      state.primes = pools.slice(0, count);
+      state.prediction = null;
+      state.revealed = false;
+      renderApp();
+    }
+
+    selectPrimeCount.onchange = () => {
+      renderChallengeBubbles();
+    };
+
+    function renderChallengeBubbles() {
+      const count = parseInt(selectPrimeCount.value, 10);
+      const pools = [2, 3, 5, 7, 11, 13, 17, 19, 23].slice(0, count);
+      
+      challengePreviewBubbles.innerHTML = '';
+      pools.forEach(p => {
+        const bubble = document.createElement('div');
+        bubble.className = `prime-badge-sm ${getPrimeClass(p)}`;
+        bubble.style.width = '32px';
+        bubble.style.height = '32px';
+        bubble.style.fontSize = '14px';
+        bubble.textContent = p;
+        challengePreviewBubbles.appendChild(bubble);
+      });
+    }
+
+    // INITIAL RENDER
+    renderApp();
+  </script>
+</body>
+</html>

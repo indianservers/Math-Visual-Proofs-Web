@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Composite Solids and Units - Maths Universe</title>
+
+  <!-- Three.js CDN for Real 3D WebGL Rendering -->
+  <script src="/vendor/three/three.min.js"></script>
+
+  <style>
+    /* Reset & CSS Baseline */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f3f4fd;
+      color: #334155;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Outer Layout Grid */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    @media (max-width: 900px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Vertical Sidebar */
+    .sidebar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.5rem;
+      padding: 1.25rem 0.875rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.375rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border-radius: 0.625rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.125rem;
+      box-shadow: 0 3px 10px rgba(99, 102, 241, 0.25);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-name {
+      font-size: 0.8125rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: #1e1b4b;
+      text-transform: uppercase;
+    }
+
+    .brand-subname {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .brand-pill {
+      background: #eeeefd;
+      color: #4f46e5;
+      font-size: 0.625rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.625rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      border-radius: 0.875rem;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover {
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    .nav-item.active {
+      background: #eeeefd;
+      color: #4f46e5;
+    }
+
+    .nav-icon {
+      font-size: 1rem;
+    }
+
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 1rem;
+    }
+
+    .action-btn-sm {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.625rem;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn-sm:hover:not(:disabled) {
+      background: #f8fafc;
+      color: #334155;
+    }
+
+    .action-btn-sm:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Main Dashboard Workspace */
+    .main-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* Header Bar */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .breadcrumbs {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 0.25rem;
+    }
+
+    .header-title-area h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+    }
+
+    .header-title-area p {
+      font-size: 0.8125rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .header-right-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge-pill {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.45rem 0.875rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .progress-circle-wrap {
+      width: 2.25rem;
+      height: 2.25rem;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 50%;
+      border: 1px solid #cbd5e1;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      color: #4f46e5;
+    }
+
+    /* Top Card: Mission + Toolbar */
+    .top-mission-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.25rem;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .mission-left {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+
+    .mission-target-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: #eeeefd;
+      color: #4f46e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+    }
+
+    .mission-text-box .mission-tag {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      color: #4f46e5;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mission-text-box p {
+      font-size: 0.75rem;
+      color: #475569;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.125rem;
+    }
+
+    .dot-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-weight: 600;
+    }
+
+    .dot-cyan { width: 8px; height: 8px; border-radius: 50%; background: #2dd4bf; }
+    .dot-pink { width: 8px; height: 8px; border-radius: 50%; background: #f43f5e; }
+
+    .toolbar-group {
+      display: flex;
+      gap: 0.5rem;
+      background: #f8fafc;
+      padding: 0.25rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+    }
+
+    .tool-box-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 0.75rem;
+      border: 1px dashed transparent;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      gap: 0.125rem;
+    }
+
+    .tool-box-btn:hover {
+      background: #ffffff;
+      color: #4f46e5;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    .tool-box-btn.active {
+      background: #ffffff;
+      color: #4f46e5;
+      border-color: #c7d2fe;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.15);
+    }
+
+    .tool-box-icon {
+      font-size: 1.125rem;
+    }
+
+    /* Main Center Grid */
+    .center-main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 300px;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 1280px) {
+      .center-main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header-title {
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.125rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    /* CARD 1: 3D BUILD THE SOLID */
+    .build-stage-wrap {
+      background: #f5f6ff;
+      border: 1px solid #e0e7ff;
+      border-radius: 1.25rem;
+      min-height: 350px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    canvas#compositeCanvas {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    canvas#compositeCanvas:active {
+      cursor: grabbing;
+    }
+
+    /* Selection Tool Hover/Click Label */
+    #selectLabelPill {
+      position: absolute;
+      bottom: 0.875rem;
+      left: 0.875rem;
+      background: rgba(30,27,75,0.92);
+      color: white;
+      padding: 0.45rem 0.875rem;
+      border-radius: 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Draggable Dimension Overlay Handles */
+    .dim-overlay-panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .dim-handle-knob {
+      position: absolute;
+      width: 1.625rem;
+      height: 1.625rem;
+      background: #4f46e5;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 3px 8px rgba(79, 70, 229, 0.45);
+      cursor: ns-resize;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.6875rem;
+      transition: transform 0.15s ease;
+    }
+
+    .dim-handle-knob:hover {
+      transform: scale(1.2);
+    }
+
+    .dim-label-tag {
+      position: absolute;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.125rem 0.5rem;
+      font-size: 0.8125rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      font-family: monospace;
+      pointer-events: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    /* Inside Card Live Volume Sub-Panel */
+    .live-volume-subcard {
+      position: absolute;
+      top: 0.875rem;
+      right: 0.875rem;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e0e7ff;
+      border-radius: 1rem;
+      padding: 0.875rem 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      backdrop-filter: blur(4px);
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .live-vol-header {
+      font-size: 0.625rem;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .live-vol-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      font-family: monospace;
+      line-height: 1;
+    }
+
+    .live-vol-unit {
+      font-size: 0.6875rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .live-vol-row {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      padding-top: 0.25rem;
+      border-top: 1px stroke #f1f5f9;
+    }
+
+    .row-add { color: #0d9488; }
+    .row-sub { color: #be123c; }
+
+    /* CARD 2: UNROLL & CHECK 2D NET */
+    .net-stage-wrap {
+      background: #f5f6ff;
+      border: 1px solid #e0e7ff;
+      border-radius: 1.25rem;
+      min-height: 350px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      flex: 1;
+    }
+
+    .net-svg-box {
+      width: 100%;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .net-legend {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 0.5rem;
+      background: white;
+      padding: 0.375rem 0.875rem;
+      border-radius: 999px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* RIGHT SIDEBAR PANEL CARDS */
+    .right-column-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .why-card-title {
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: #4f46e5;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      margin-bottom: 0.875rem;
+    }
+
+    .step-explain-box {
+      display: flex;
+      gap: 0.625rem;
+      margin-bottom: 0.875rem;
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .step-explain-box:hover {
+      background: #f1f5f9;
+    }
+
+    .step-badge-num {
+      width: 1.375rem;
+      height: 1.375rem;
+      border-radius: 50%;
+      background: #4f46e5;
+      color: white;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .step-explain-content {
+      font-size: 0.75rem;
+      color: #475569;
+      line-height: 1.35;
+    }
+
+    .step-explain-content strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .eq-box-calc {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.625rem;
+      padding: 0.5rem 0.75rem;
+      font-family: monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin-top: 0.375rem;
+      text-align: center;
+    }
+
+    /* Prediction Card */
+    .prediction-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-row-unit {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .num-input-field {
+      width: 100%;
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.8125rem;
+      font-family: monospace;
+      font-weight: 700;
+      color: #0f172a;
+      outline: none;
+      transition: border 0.2s ease;
+    }
+
+    .num-input-field:focus {
+      border-color: #4f46e5;
+      background: white;
+    }
+
+    .unit-tag-label {
+      position: absolute;
+      right: 0.75rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .btn-reveal {
+      width: 100%;
+      background: #f1f5f9;
+      color: #94a3b8;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
+    }
+
+    .btn-reveal.active {
+      background: #eeeefd;
+      color: #4f46e5;
+    }
+
+    .btn-check-main {
+      background: #eeeefd;
+      color: #4f46e5;
+      border: 1px solid #c7d2fe;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      width: fit-content;
+      margin-top: 0.5rem;
+    }
+
+    .btn-check-main:hover {
+      background: #4f46e5;
+      color: white;
+    }
+
+    /* BOTTOM ROW: VISUAL PROOF & EXACT CHALLENGE */
+    .bottom-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 1100px) {
+      .bottom-row-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .proof-chain-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .proof-block-node {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.875rem;
+      padding: 0.625rem 0.875rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      min-width: 105px;
+    }
+
+    .proof-block-node.node-purple { border: 1.5px solid #818cf8; background: #f5f6ff; }
+    .proof-block-node.node-teal { border: 1.5px solid #2dd4bf; background: #f0fdf4; }
+    .proof-block-node.node-red { border: 1.5px dashed #f43f5e; background: #fff1f2; }
+    .proof-block-node.node-final { border: 2px solid #4f46e5; background: #eeeefd; }
+
+    .proof-node-eq {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      font-family: monospace;
+    }
+
+    .proof-node-val {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .proof-op {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    /* Challenge Box */
+    .challenge-box-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .chal-input-target {
+      width: 5.5rem;
+      height: 3.5rem;
+      border: 2px dashed #818cf8;
+      border-radius: 0.75rem;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem;
+    }
+
+    .chal-input-target input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: monospace;
+      color: #4f46e5;
+      outline: none;
+    }
+
+    /* Bottom Tip Bar */
+    .bottom-tip-bar {
+      background: #eeeefd;
+      border: 1px solid #c7d2fe;
+      border-radius: 1rem;
+      padding: 0.625rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      color: #312e81;
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .tip-pill-badge {
+      background: white;
+      color: #4f46e5;
+      font-weight: 800;
+      padding: 0.25rem 0.625rem;
+      border-radius: 999px;
+      font-size: 0.6875rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+  
+/* Responsive 3D viewport */
+.build-stage-wrap {
+  min-width: 0;
+}
+#compositeCanvas {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* Master shell safeguards */
+.app-layout,
+.main-workspace,
+.center-main-grid,
+.bottom-row-grid {
+  min-width: 0;
+}
+.main-workspace {
+  overflow-x: hidden;
+}
+.center-main-grid > *,
+.bottom-row-grid > * {
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-workspace {
+    width: 100%;
+  }
+}
+
+</style>
+<style>
+
+/* UNIFIED MATHS UNIVERSE APPLICATION SHELL STYLES */
+:root {
+  --bg-main: #f5f6fc;
+  --card-bg: #ffffff;
+  --text-main: #1e1b4b;
+  --text-muted: #6b7280;
+  --text-purple: #4c1d95;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #ede9fe;
+  --primary-dark: #4338ca;
+  --border-color: #e2e8f0;
+  --border-purple: #ddd6fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 220px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  margin-left: 8px;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-item.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  overflow-y: auto;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.main-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-purple {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.bookmark-btn {
+  background: white;
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-btn:hover, .bookmark-btn.active {
+  color: var(--primary);
+  border-color: var(--border-purple);
+  background-color: var(--primary-light);
+}
+
+/* Keep only genuinely dense educational panels independently scrollable. */
+.right-column-panel {
+  min-width: 0;
+}
+.right-column-panel .card {
+  min-width: 0;
+}
+
+
+.val-num, .counter-value, .stat-value, .value-num {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* REQUIREMENT 5: ZOOM VIEWPORT CONTAINMENT FIX */
+.canvas-container, .graph-container, .viewport-container, .svg-container, #canvas-container, .render-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-md, 14px);
+  z-index: 1;
+}
+
+.graph-tools, .zoom-controls, .floating-tools {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+/* Responsive queries */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-content {
+    padding: 16px;
+  }
+}
+
+</style>
+
+</head>
+<body>
+
+  <!-- App Layout -->
+  <div class="app-layout">
+
+    <!-- Left Vertical Sidebar -->
+    <aside class="sidebar">
+    <div class="brand">
+      <a href="#" class="brand-link" title="Return to All Visualizations">
+        <img src="/vendor/pavan-assets/logo.png" alt="Maths Universe Logo" class="brand-logo-img">
+      </a>
+      <div class="brand-text">
+        <span class="brand-title">MATHS</span>
+        <span class="brand-subtitle">UNIVERSE</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active" data-nav="explore">
+        <a href="#explore">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+          <span>Explore</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="proofs">
+        <a href="#proofs">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          <span>Proofs</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="practice">
+        <a href="#practice">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Practice</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="saved">
+        <a href="#saved">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+          <span>Saved</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+<!-- Main Workspace -->
+    <div class="main-workspace">
+
+      <!-- Top Header -->
+      <div class="top-header">
+        <div class="header-title-area">
+          <div class="breadcrumb"><a href="#" class="back-link">← All Visualizations</a> / Geometry & Solids</div>
+          <h1>Composite Solids and Units</h1>
+          <p>Build composite shapes. Add parts, subtract cutouts, and verify with square and cubic units.</p>
+        </div>
+
+        <div class="header-right-badges">
+          <div class="badge-pill">
+            Intermediate ▾
+          </div>
+          <div class="badge-pill">
+            ⏱️ 12 min
+          </div>
+          <div class="progress-circle-wrap" title="Learning Progress">
+            <span id="progressText">75%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission & Top Toolbar Card -->
+      <div class="top-mission-card">
+        <div class="mission-left">
+          <div class="mission-target-icon">🎯</div>
+          <div class="mission-text-box">
+            <div class="mission-tag">Mission</div>
+            <p>
+              Find the volume of the composite solid in two ways:
+              <span class="dot-indicator"><span class="dot-cyan"></span> Add known parts</span>
+              <span class="dot-indicator"><span class="dot-pink"></span> Subtract cutouts</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- 6 Interactive Tool Buttons -->
+        <div class="toolbar-group">
+          <button id="toolSelect" class="tool-box-btn active" onclick="setTool('select')">
+            <span class="tool-box-icon">☝️</span>
+            Select
+          </button>
+          <button id="toolRotate" class="tool-box-btn" onclick="setTool('rotate')">
+            <span class="tool-box-icon">🔄</span>
+            Rotate
+          </button>
+
+          <button id="toolAddPart" class="tool-box-btn active" onclick="toggleOption('addPart')">
+            <span class="tool-box-icon">🧊</span>
+            Add part
+          </button>
+          <button id="toolCutout" class="tool-box-btn active" onclick="toggleOption('cutout')">
+            <span class="tool-box-icon">✂️</span>
+            Cutout
+          </button>
+
+          <button id="toolUnits" class="tool-box-btn" onclick="toggleOption('units')">
+            <span class="tool-box-icon">🧱</span>
+            Units
+          </button>
+          <button id="toolUnroll" class="tool-box-btn" onclick="toggleOption('unroll')">
+            <span class="tool-box-icon">📜</span>
+            Unroll
+          </button>
+          <button id="toolSlice" class="tool-box-btn" onclick="toggleOption('slice')">
+            <span class="tool-box-icon">🔪</span>
+            Slice
+          </button>
+          <button id="toolInfo" class="tool-box-btn" onclick="toggleOption('info')">
+            <span class="tool-box-icon">ℹ️</span>
+            Info
+          </button>
+        </div>
+      </div>
+
+      <!-- Center Main Grid -->
+      <div class="center-main-grid">
+
+        <!-- CARD 1: 1. BUILD THE SOLID -->
+        <div class="card" id="explore">
+          <div class="card-header-title">1. Build the solid</div>
+          <div class="card-subtitle">Drag dimensions to resize.</div>
+
+          <div class="build-stage-wrap">
+            <!-- Three.js Real 3D WebGL Canvas -->
+            <canvas id="compositeCanvas"></canvas>
+
+            <!-- Selection Tool Hover/Click Label -->
+            <div id="selectLabelPill">
+              Selected: <span id="selectLabelText">Base Prism</span>
+            </div>
+
+            <!-- Live Volume Sub-Panel -->
+            <div class="live-volume-subcard">
+              <div class="live-vol-header">Live volume</div>
+              <div id="liveVolBigNum" class="live-vol-num">102</div>
+              <div class="live-vol-unit">cubic units</div>
+
+              <div class="live-vol-row row-add">
+                <span>🟢 Add parts</span>
+                <span id="liveVolAddCalc">72 + 36 = 108</span>
+              </div>
+              <div class="live-vol-row row-sub">
+                <span>🔴 Subtract cutout</span>
+                <span id="liveVolSubCalc">108 - 6 = 102</span>
+              </div>
+
+              <div style="font-size: 0.625rem; color: #94a3b8; margin-top: 0.125rem;">Read as</div>
+              <div id="readAsText" style="font-size: 0.75rem; font-weight: 800; color: #0f172a;">102 cubic units</div>
+            </div>
+
+            <!-- Draggable Dimension Overlay Handles -->
+            <div class="dim-overlay-panel">
+              <div id="knobTopH" class="dim-handle-knob" style="top: 24%; left: 74%;" title="Drag to adjust Top Height"></div>
+              <div id="labelTopH" class="dim-label-tag" style="top: 24%; left: 79%;">2</div>
+
+              <div id="labelBaseH" class="dim-label-tag" style="top: 48%; left: 12%;">4</div>
+              <div id="labelWidth" class="dim-label-tag" style="bottom: 12%; left: 34%;">6</div>
+              <div id="labelDepth" class="dim-label-tag" style="bottom: 22%; left: 66%;">3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: 2. UNROLL & CHECK NET -->
+        <div class="card">
+          <div class="card-header-title">2. Unroll & check</div>
+          <div class="card-subtitle">Unroll the solid to view the net.</div>
+
+          <div class="net-stage-wrap">
+            <div class="net-svg-box" id="netSvgBox"></div>
+
+            <div class="net-legend">
+              <span style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #c084fc;"></span> Existing faces</span>
+              <span style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></span> Added faces</span>
+              <span style="display: flex; align-items: center; gap: 0.25rem;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #fb7185;"></span> Cutout (removed)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR PANEL -->
+        <div class="right-column-panel">
+          
+          <!-- Card 1: Why it works -->
+          <div class="card" id="proofs">
+            <div class="why-card-title">✨ Why it works</div>
+
+            <div class="step-explain-box" onmouseenter="highlightHover('add')" onmouseleave="clearHover()">
+              <div class="step-badge-num">1</div>
+              <div class="step-explain-content">
+                <strong>Add parts</strong><br/>
+                Split the solid into two rectangular prisms and add their volumes.
+                <div id="explainEq1" class="eq-box-calc">6 × 4 × 3 + 6 × 2 × 3<br/>= 72 + 36 = 108</div>
+              </div>
+            </div>
+
+            <div class="step-explain-box" onmouseenter="highlightHover('sub')" onmouseleave="clearHover()">
+              <div class="step-badge-num">2</div>
+              <div class="step-explain-content">
+                <strong>Subtract cutout</strong><br/>
+                Remove the missing prism.
+                <div id="explainEq2" class="eq-box-calc">Cutout: 2 × 3 × 1 = 6<br/>108 - 6 = 102</div>
+              </div>
+            </div>
+
+            <div class="step-explain-box" onmouseenter="highlightHover('units')" onmouseleave="clearHover()">
+              <div class="step-badge-num">3</div>
+              <div class="step-explain-content">
+                <strong>Check with cubic units</strong><br/>
+                Fill the solid with 1×1×1 cubes.
+                <div id="explainEq3" class="eq-box-calc" style="background: #eeeefd; border-color: #c7d2fe; color: #4f46e5;">
+                  📦 = <span id="voxelCountText">102</span> cubes
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Your prediction -->
+          <div class="card">
+            <div class="card-header-title">✏️ Your prediction</div>
+            <div class="prediction-group" style="margin-top: 0.5rem;">
+              <div class="input-row-unit">
+                <input id="predictInput" type="number" placeholder="Enter your volume" class="num-input-field" oninput="onPredictInput()" />
+                <span class="unit-tag-label">cubic units</span>
+              </div>
+
+              <button id="btnReveal" class="btn-reveal" onclick="revealAnswer()">
+                👁️ Reveal answer
+              </button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button class="btn-check-main" onclick="checkPrediction()">
+                ✓ Check
+              </button>
+              <span id="predictFeedback" style="font-size: 0.6875rem; font-weight: 700; color: #10b981; display: none;">Correct!</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom Row: Visual Proof & Exact Challenge -->
+      <div class="bottom-row-grid">
+        
+        <!-- Bottom Card 1: Visual Proof -->
+        <div class="card">
+          <div class="card-header-title">📊 Visual proof</div>
+          
+          <div class="proof-chain-flex">
+            <div class="proof-block-node node-purple">
+              <div id="proofBaseEq" class="proof-node-eq">6×4×3</div>
+              <div id="proofBaseVal" class="proof-node-val">= 72</div>
+            </div>
+
+            <span class="proof-op">+</span>
+
+            <div class="proof-block-node node-teal">
+              <div id="proofTopEq" class="proof-node-eq">6×2×3</div>
+              <div id="proofTopVal" class="proof-node-val">= 36</div>
+            </div>
+
+            <span class="proof-op">-</span>
+
+            <div class="proof-block-node node-red">
+              <div id="proofCutEq" class="proof-node-eq">2×3×1</div>
+              <div id="proofCutVal" class="proof-node-val">= 6</div>
+            </div>
+
+            <span class="proof-op">=</span>
+
+            <div class="proof-block-node node-final">
+              <div id="proofFinalVal" class="proof-node-eq" style="font-size: 1.125rem; color: #4f46e5;">102</div>
+              <div class="proof-node-val" style="color: #4f46e5;">cubic units</div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.6875rem; color: #64748b; font-weight: 600; text-align: center; margin-top: 0.625rem;">
+            Same whole &nbsp;—&nbsp; add parts &nbsp;—&nbsp; subtract cutout &nbsp;=&nbsp; <b>final volume</b>
+          </div>
+        </div>
+
+        <!-- Bottom Card 2: Exact Challenge -->
+        <div class="card" id="practice">
+          <div class="card-header-title">🏆 Exact challenge</div>
+          <div class="card-subtitle" style="margin-bottom: 0.5rem;">Build a solid with these parts and find its volume exactly.</div>
+
+          <div class="challenge-box-flex">
+            <div class="proof-block-node node-purple">
+              <div class="proof-node-eq">4×3×2</div>
+              <div class="proof-node-val">Base (24)</div>
+            </div>
+
+            <span class="proof-op">+</span>
+
+            <div class="proof-block-node node-teal">
+              <div class="proof-node-eq">2×2×2</div>
+              <div class="proof-node-val">Top (8)</div>
+            </div>
+
+            <span class="proof-op">-</span>
+
+            <div class="proof-block-node node-red">
+              <div class="proof-node-eq">1×1×2</div>
+              <div class="proof-node-val">Cutout (2)</div>
+            </div>
+
+            <span class="proof-op">=</span>
+
+            <div class="chal-input-target">
+              <input id="chalInput" type="number" placeholder="?" oninput="checkChallenge()" />
+              <span style="font-size: 0.625rem; color: #64748b; font-weight: 600;">cubic units</span>
+            </div>
+          </div>
+
+          <div id="chalFeedback" style="font-size: 0.6875rem; font-weight: 700; color: #10b981; text-align: right; margin-top: 0.375rem; display: none;">
+            ✓ Challenge Complete! (24 + 8 - 2 = 30)
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Tip Bar -->
+      <div class="bottom-tip-bar">
+        <div class="tip-pill-badge">💡 Tip</div>
+        <div><b>Remember:</b> Area is measured in <b>square units (u²)</b>. Volume is measured in <b>cubic units (u³)</b>.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Single Source of Truth & Real 3D JavaScript -->
+  <script>
+    // CENTRAL SINGLE SOURCE OF TRUTH STATE (EXACT DEFAULT DIMENSIONS)
+    const geometryState = {
+      baseWidth: 6,
+      baseHeight: 4,
+      baseDepth: 3,
+
+      topWidth: 6,
+      topHeight: 2,
+      topDepth: 3,
+
+      cutoutWidth: 2,
+      cutoutHeight: 1,
+      cutoutDepth: 3,
+
+      mode: 'select',
+      options: {
+        addPart: true,
+        cutout: true,
+        units: false,
+        unroll: false,
+        slice: false,
+        info: false
+      }
+    };
+
+    // History Stacks for Full State Undo / Redo
+    const undoStack = [];
+    const redoStack = [];
+
+    function pushHistory() {
+      undoStack.push(JSON.parse(JSON.stringify(geometryState)));
+      redoStack.length = 0;
+      updateHistoryButtons();
+    }
+
+    function updateHistoryButtons() {
+      document.getElementById('btnUndo').disabled = (undoStack.length === 0);
+      document.getElementById('btnRedo').disabled = (redoStack.length === 0);
+    }
+
+    function undo() {
+      if (undoStack.length === 0) return;
+      redoStack.push(JSON.parse(JSON.stringify(geometryState)));
+      const prev = undoStack.pop();
+      Object.assign(geometryState, prev);
+      updateAll();
+      updateHistoryButtons();
+    }
+
+    function redo() {
+      if (redoStack.length === 0) return;
+      undoStack.push(JSON.parse(JSON.stringify(geometryState)));
+      const next = redoStack.pop();
+      Object.assign(geometryState, next);
+      updateAll();
+      updateHistoryButtons();
+    }
+
+    function resetAll() {
+      pushHistory();
+      geometryState.baseWidth = 6;
+      geometryState.baseHeight = 4;
+      geometryState.baseDepth = 3;
+
+      geometryState.topWidth = 6;
+      geometryState.topHeight = 2;
+      geometryState.topDepth = 3;
+
+      geometryState.cutoutWidth = 2;
+      geometryState.cutoutHeight = 1;
+      geometryState.cutoutDepth = 3;
+
+      geometryState.mode = 'select';
+      geometryState.options = { addPart: true, cutout: true, units: false, unroll: false, slice: false, info: false };
+      updateAll();
+    }
+
+    // Three.js 3D WebGL Variables
+    let scene, camera, renderer, raycaster, mouseVec;
+    let solidGroup, baseLeftMesh, baseRightTopMesh, topMesh, cutoutWireframeMesh, voxelGroup;
+    let isMouseDown = false, lastX = 0, lastY = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initThreeD();
+      updateAll();
+      setupHandleDragging();
+      window.addEventListener('resize', resizeCompositeCanvas);
+    });
+
+
+    function resizeCompositeCanvas() {
+      if (!renderer || !camera) return;
+      const canvas = document.getElementById('compositeCanvas');
+      const box = canvas ? canvas.parentElement : null;
+      if (!box) return;
+
+      const width = Math.max(260, box.clientWidth);
+      const height = Math.max(260, box.clientHeight);
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+
+    function initThreeD() {
+      const canvas = document.getElementById('compositeCanvas');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      scene = new THREE.Scene();
+
+      // OPTIMIZED ENLARGED CAMERA FRAMING (70% viewport height fill)
+      camera = new THREE.PerspectiveCamera(36, 1.4, 0.1, 1000);
+      camera.position.set(5.5, 4.8, 7.0);
+      camera.lookAt(0, 1.2, 0);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      resizeCompositeCanvas();
+
+      raycaster = new THREE.Raycaster();
+      mouseVec = new THREE.Vector2();
+
+      solidGroup = new THREE.Group();
+      scene.add(solidGroup);
+
+      const amb = new THREE.AmbientLight(0xffffff, 0.85);
+      scene.add(amb);
+      const dir = new THREE.DirectionalLight(0xffffff, 0.95);
+      dir.position.set(6, 10, 8);
+      scene.add(dir);
+
+      canvas.addEventListener('mousedown', (e) => {
+        if (geometryState.mode === 'rotate') {
+          isMouseDown = true;
+          lastX = e.clientX;
+          lastY = e.clientY;
+        } else if (geometryState.mode === 'select') {
+          onRaycastSelect(e, canvas);
+        }
+      });
+
+      window.addEventListener('mouseup', () => isMouseDown = false);
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (isMouseDown && geometryState.mode === 'rotate') {
+          const dx = e.clientX - lastX;
+          const dy = e.clientY - lastY;
+          solidGroup.rotation.y += dx * 0.01;
+          solidGroup.rotation.x += dy * 0.01;
+          lastX = e.clientX;
+          lastY = e.clientY;
+        }
+      });
+
+      function render() {
+        requestAnimationFrame(render);
+        renderer.render(scene, camera);
+      }
+      render();
+    }
+
+    function onRaycastSelect(e, canvas) {
+      const rect = canvas.getBoundingClientRect();
+      mouseVec.x = ((e.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+      mouseVec.y = -((e.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouseVec, camera);
+      const intersects = raycaster.intersectObjects(solidGroup.children, true);
+
+      const pill = document.getElementById('selectLabelPill');
+      const text = document.getElementById('selectLabelText');
+
+      if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        pill.style.display = 'block';
+        if (obj.userData.partName === 'top') {
+          text.innerText = `Top Added Prism (${geometryState.topWidth}×${geometryState.topHeight}×${geometryState.topDepth} = ${geometryState.topWidth*geometryState.topHeight*geometryState.topDepth})`;
+        } else if (obj.userData.partName === 'cutout') {
+          text.innerText = `Cutout Removed Prism (${geometryState.cutoutWidth}×${geometryState.cutoutHeight}×${geometryState.cutoutDepth} = ${geometryState.cutoutWidth*geometryState.cutoutHeight*geometryState.cutoutDepth})`;
+        } else {
+          text.innerText = `Base Prism (${geometryState.baseWidth}×${geometryState.baseHeight}×${geometryState.baseDepth} = ${geometryState.baseWidth*geometryState.baseHeight*geometryState.baseDepth})`;
+        }
+      } else {
+        pill.style.display = 'none';
+      }
+    }
+
+    // Rebuild CSG-Accurate 3D Composite Solid with Solid Translucent Materials
+    function build3DModel() {
+      if (!solidGroup) return;
+
+      while (solidGroup.children.length > 0) {
+        solidGroup.remove(solidGroup.children[0]);
+      }
+
+      const bw = geometryState.baseWidth * 0.5;
+      const bh = geometryState.baseHeight * 0.5;
+      const bd = geometryState.baseDepth * 0.5;
+
+      const tw = geometryState.topWidth * 0.5;
+      const th = geometryState.topHeight * 0.5;
+      const td = geometryState.topDepth * 0.5;
+
+      const cw = geometryState.cutoutWidth * 0.5;
+      const ch = geometryState.cutoutHeight * 0.5;
+      const cd = geometryState.cutoutDepth * 0.5;
+
+      // 1. BASE PRISM WITH REAL CSG BOOLEAN CUTOUT CAVITY
+      const leftW = bw - cw;
+      if (leftW > 0) {
+        const leftGeo = new THREE.BoxGeometry(leftW, bh, bd);
+        const leftMat = new THREE.MeshPhongMaterial({
+          color: 0x818cf8,
+          transparent: true,
+          opacity: geometryState.options.slice ? 0.45 : 0.85,
+          shininess: 80
+        });
+        baseLeftMesh = new THREE.Mesh(leftGeo, leftMat);
+        baseLeftMesh.position.set(-cw / 2, bh / 2, 0);
+        baseLeftMesh.userData.partName = 'base';
+
+        const wireGeo = new THREE.EdgesGeometry(leftGeo);
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x3730a3, linewidth: 1.5 });
+        baseLeftMesh.add(new THREE.LineSegments(wireGeo, wireMat));
+        solidGroup.add(baseLeftMesh);
+      }
+
+      const rightUpperH = bh - ch;
+      if (rightUpperH > 0 && cw > 0) {
+        const rightGeo = new THREE.BoxGeometry(cw, rightUpperH, bd);
+        const rightMat = new THREE.MeshPhongMaterial({
+          color: 0x818cf8,
+          transparent: true,
+          opacity: geometryState.options.slice ? 0.45 : 0.85,
+          shininess: 80
+        });
+        baseRightTopMesh = new THREE.Mesh(rightGeo, rightMat);
+        baseRightTopMesh.position.set(bw / 2 - cw / 2, ch + rightUpperH / 2, 0);
+        baseRightTopMesh.userData.partName = 'base';
+
+        const wireGeo = new THREE.EdgesGeometry(rightGeo);
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x3730a3, linewidth: 1.5 });
+        baseRightTopMesh.add(new THREE.LineSegments(wireGeo, wireMat));
+        solidGroup.add(baseRightTopMesh);
+      }
+
+      // 2. TOP ADDED PRISM (Teal Solid Translucent)
+      if (geometryState.options.addPart && th > 0) {
+        const topGeo = new THREE.BoxGeometry(tw, th, td);
+        const topMat = new THREE.MeshPhongMaterial({
+          color: 0x2dd4bf,
+          transparent: true,
+          opacity: geometryState.options.slice ? 0.45 : 0.85,
+          shininess: 80
+        });
+        topMesh = new THREE.Mesh(topGeo, topMat);
+        topMesh.position.set(0, bh + th / 2, 0);
+        topMesh.userData.partName = 'top';
+
+        const wireGeo = new THREE.EdgesGeometry(topGeo);
+        const wireMat = new THREE.LineBasicMaterial({ color: 0x0f766e, linewidth: 1.5 });
+        topMesh.add(new THREE.LineSegments(wireGeo, wireMat));
+        solidGroup.add(topMesh);
+      }
+
+      // 3. CUTOUT REMOVED PRISM (Red Solid Translucent when active/sliced)
+      if (geometryState.options.cutout && cw > 0 && ch > 0) {
+        const cutGeo = new THREE.BoxGeometry(cw, ch, cd);
+        const cutMat = new THREE.MeshPhongMaterial({
+          color: 0xf43f5e,
+          transparent: true,
+          opacity: 0.65,
+          wireframe: !geometryState.options.slice
+        });
+        cutoutWireframeMesh = new THREE.Mesh(cutGeo, cutMat);
+        cutoutWireframeMesh.position.set(bw / 2 - cw / 2, ch / 2, bd / 2 - cd / 2);
+        cutoutWireframeMesh.userData.partName = 'cutout';
+
+        solidGroup.add(cutoutWireframeMesh);
+      }
+
+      // 4. VOXEL CUBIC UNITS (3D Grid when UNITS active)
+      if (geometryState.options.units) {
+        voxelGroup = new THREE.Group();
+        const u = 0.45;
+        const vGeo = new THREE.BoxGeometry(u, u, u);
+        const vMat = new THREE.MeshBasicMaterial({ color: 0x4f46e5, wireframe: true });
+
+        for (let x = -bw/2 + u/2; x < bw/2; x += u) {
+          for (let y = u/2; y < bh; y += u) {
+            for (let z = -bd/2 + u/2; z < bd/2; z += u) {
+              if (x > bw/2 - cw && y < ch) continue;
+              const vMesh = new THREE.Mesh(vGeo, vMat);
+              vMesh.position.set(x, y, z);
+              voxelGroup.add(vMesh);
+            }
+          }
+        }
+        solidGroup.add(voxelGroup);
+      }
+    }
+
+    // Interactive Hover Linkage between Why-It-Works Panel and Main 3D Canvas
+    function highlightHover(type) {
+      if (type === 'add') {
+        if (baseLeftMesh) baseLeftMesh.material.opacity = 1.0;
+        if (baseRightTopMesh) baseRightTopMesh.material.opacity = 1.0;
+        if (topMesh) topMesh.material.opacity = 1.0;
+      } else if (type === 'sub') {
+        if (cutoutWireframeMesh) {
+          cutoutWireframeMesh.material.wireframe = false;
+          cutoutWireframeMesh.material.opacity = 0.95;
+        }
+      } else if (type === 'units') {
+        geometryState.options.units = true;
+        build3DModel();
+      }
+    }
+
+    function clearHover() {
+      geometryState.options.units = false;
+      build3DModel();
+    }
+
+    function updateAll() {
+      const bw = geometryState.baseWidth;
+      const bh = geometryState.baseHeight;
+      const bd = geometryState.baseDepth;
+
+      const tw = geometryState.topWidth;
+      const th = geometryState.topHeight;
+      const td = geometryState.topDepth;
+
+      const cw = geometryState.cutoutWidth;
+      const ch = geometryState.cutoutHeight;
+      const cd = geometryState.cutoutDepth;
+
+      const baseVol = bw * bh * bd; // 6 * 4 * 3 = 72
+      const topVol = geometryState.options.addPart ? (tw * th * td) : 0; // 6 * 2 * 3 = 36
+      const addedTotal = baseVol + topVol; // 72 + 36 = 108
+      const cutoutVol = geometryState.options.cutout ? (cw * ch * cd) : 0; // 2 * 3 * 1 = 6
+      const finalVol = addedTotal - cutoutVol; // 108 - 6 = 102
+
+      document.getElementById('labelWidth').innerText = bw;
+      document.getElementById('labelBaseH').innerText = bh;
+      document.getElementById('labelDepth').innerText = bd;
+      document.getElementById('labelTopH').innerText = th;
+
+      document.getElementById('liveVolBigNum').innerText = finalVol;
+      document.getElementById('liveVolAddCalc').innerText = `${baseVol} + ${topVol} = ${addedTotal}`;
+      document.getElementById('liveVolSubCalc').innerText = `${addedTotal} - ${cutoutVol} = ${finalVol}`;
+      document.getElementById('readAsText').innerText = `${finalVol} cubic units`;
+
+      document.getElementById('explainEq1').innerHTML = `${bw} × ${bh} × ${bd} + ${tw} × ${th} × ${td}<br/>= ${baseVol} + ${topVol} = ${addedTotal}`;
+      document.getElementById('explainEq2').innerHTML = `Cutout: ${cw} × ${cd} × ${ch} = ${cutoutVol}<br/>${addedTotal} - ${cutoutVol} = ${finalVol}`;
+      document.getElementById('explainEq3').innerHTML = `📦 = <span id="voxelCountText">${finalVol}</span> cubes`;
+
+      document.getElementById('proofBaseEq').innerText = `${bw}×${bh}×${bd}`;
+      document.getElementById('proofBaseVal').innerText = `= ${baseVol}`;
+      document.getElementById('proofTopEq').innerText = `${tw}×${th}×${td}`;
+      document.getElementById('proofTopVal').innerText = `= ${topVol}`;
+      document.getElementById('proofCutEq').innerText = `${cw}×${cd}×${ch}`;
+      document.getElementById('proofCutVal').innerText = `= ${cutoutVol}`;
+      document.getElementById('proofFinalVal').innerText = finalVol;
+
+      build3DModel();
+      render2DNet();
+    }
+
+    function render2DNet() {
+      const box = document.getElementById('netSvgBox');
+      if (!box) return;
+
+      const bw = geometryState.baseWidth;
+      const bh = geometryState.baseHeight;
+      const bd = geometryState.baseDepth;
+      const tw = geometryState.topWidth;
+      const th = geometryState.topHeight;
+      const cw = geometryState.cutoutWidth;
+      const ch = geometryState.cutoutHeight;
+
+      const isUnrolled = geometryState.options.unroll;
+
+      box.innerHTML = `
+        <svg width="280" height="230" viewBox="0 0 280 230">
+          <g transform="translate(140, 115) scale(${isUnrolled ? 1.05 : 0.95})" style="transition: all 0.5s ease;">
+            <rect x="-40" y="-85" width="80" height="30" fill="#d1fae5" stroke="#34d399" stroke-width="2" rx="3"/>
+            <text x="0" y="-65" font-size="10" font-weight="bold" fill="#047857" text-anchor="middle">${tw}×${th} = ${tw*th}</text>
+
+            <rect x="-40" y="-50" width="80" height="50" fill="#f3e8ff" stroke="#c084fc" stroke-width="2" rx="3"/>
+            <text x="0" y="-22" font-size="10" font-weight="bold" fill="#7e22ce" text-anchor="middle">${bw}×${bh} = ${bw*bh}</text>
+
+            <rect x="-40" y="5" width="80" height="40" fill="#eeeefd" stroke="#818cf8" stroke-width="2" rx="3"/>
+            <text x="0" y="30" font-size="10" font-weight="bold" fill="#4f46e5" text-anchor="middle">${bw}×${bd} = ${bw*bd}</text>
+
+            <rect x="-85" y="-50" width="40" height="50" fill="#f3e8ff" stroke="#c084fc" stroke-width="2" rx="3"/>
+            <text x="-65" y="-22" font-size="9" font-weight="bold" fill="#7e22ce" text-anchor="middle">${bd}×${bh}</text>
+
+            <rect x="45" y="-50" width="40" height="50" fill="#f3e8ff" stroke="#c084fc" stroke-width="2" rx="3"/>
+            <text x="65" y="-22" font-size="9" font-weight="bold" fill="#7e22ce" text-anchor="middle">${bd}×${bh}</text>
+
+            <rect x="0" y="-35" width="30" height="20" fill="#ffe4e6" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="3,3" rx="2"/>
+            <text x="15" y="-22" font-size="8" font-weight="bold" fill="#be123c" text-anchor="middle">${cw}×${ch}</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function setupHandleDragging() {
+      const knob = document.getElementById('knobTopH');
+      if (!knob) return;
+
+      let isDragging = false;
+      let startY = 0;
+      let startH = geometryState.topHeight;
+
+      knob.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startY = e.clientY;
+        startH = geometryState.topHeight;
+        pushHistory();
+        e.stopPropagation();
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dy = startY - e.clientY;
+        const newH = Math.max(1, Math.min(5, Math.round(startH + dy / 30)));
+        if (newH !== geometryState.topHeight) {
+          geometryState.topHeight = newH;
+          updateAll();
+        }
+      });
+
+      window.addEventListener('mouseup', () => isDragging = false);
+    }
+
+    function setTool(mode) {
+      geometryState.mode = mode;
+      document.getElementById('toolSelect').className = mode === 'select' ? 'tool-box-btn active' : 'tool-box-btn';
+      document.getElementById('toolRotate').className = mode === 'rotate' ? 'tool-box-btn active' : 'tool-box-btn';
+
+      if (mode === 'rotate') {
+        document.getElementById('selectLabelPill').style.display = 'none';
+      }
+    }
+
+    function toggleOption(opt) {
+      pushHistory();
+      geometryState.options[opt] = !geometryState.options[opt];
+      
+      const btnId = 'tool' + opt.charAt(0).toUpperCase() + opt.slice(1);
+      const btn = document.getElementById(btnId);
+      if (btn) {
+        if (geometryState.options[opt]) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+
+      if (opt === 'info') {
+        alert("Composite Solid = Base Prism (6×4×3 = 72) + Top Prism (6×2×3 = 36) - Cutout Prism (2×3×1 = 6) = 102 cubic units.");
+      }
+
+      updateAll();
+    }
+
+    function setNav(item) {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+
+    function onPredictInput() {
+      const val = document.getElementById('predictInput').value;
+      const btn = document.getElementById('btnReveal');
+      if (val) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+
+    function revealAnswer() {
+      const bw = geometryState.baseWidth;
+      const bh = geometryState.baseHeight;
+      const bd = geometryState.baseDepth;
+      const tw = geometryState.topWidth;
+      const th = geometryState.topHeight;
+      const td = geometryState.topDepth;
+      const cw = geometryState.cutoutWidth;
+      const ch = geometryState.cutoutHeight;
+      const cd = geometryState.cutoutDepth;
+
+      const finalVol = (bw*bh*bd) + (tw*th*td) - (cw*ch*cd);
+      document.getElementById('predictInput').value = finalVol;
+      onPredictInput();
+    }
+
+    function checkPrediction() {
+      const inputVal = parseInt(document.getElementById('predictInput').value);
+      const bw = geometryState.baseWidth;
+      const bh = geometryState.baseHeight;
+      const bd = geometryState.baseDepth;
+      const tw = geometryState.topWidth;
+      const th = geometryState.topHeight;
+      const td = geometryState.topDepth;
+      const cw = geometryState.cutoutWidth;
+      const ch = geometryState.cutoutHeight;
+      const cd = geometryState.cutoutDepth;
+
+      const finalVol = (bw*bh*bd) + (tw*th*td) - (cw*ch*cd);
+      const feedback = document.getElementById('predictFeedback');
+
+      if (inputVal === finalVol) {
+        feedback.innerText = "✓ Correct!";
+        feedback.style.color = "#10b981";
+        feedback.style.display = "inline";
+      } else {
+        feedback.innerText = "Try again!";
+        feedback.style.color = "#ef4444";
+        feedback.style.display = "inline";
+      }
+    }
+
+    function checkChallenge() {
+      const val = parseInt(document.getElementById('chalInput').value);
+      const feedback = document.getElementById('chalFeedback');
+      if (val === 30) {
+        feedback.style.display = 'block';
+      } else {
+        feedback.style.display = 'none';
+      }
+    }
+  </script>
+<script>
+
+/* UNIFIED NAVIGATION & SAVED SYSTEM JAVASCRIPT */
+(function() {
+  function getProjectId() {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || 'current-project';
+  }
+
+  function initShell() {
+    const pid = getProjectId();
+    
+    // Sidebar nav handlers
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = item.dataset.nav || item.querySelector('a')?.getAttribute('href')?.replace('#', '');
+        
+        document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        if (target === 'explore') {
+          const el = document.querySelector('.content-grid') || document.querySelector('.main-content') || document.querySelector('#explore') || document.querySelector('.canvas-container') || document.querySelector('.card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'proofs') {
+          const el = document.querySelector('.why-card') || document.querySelector('.why-panel') || document.querySelector('#proofs') || document.querySelector('.explanation-card') || document.querySelector('.proof-section') || document.querySelector('.card:nth-of-type(2)');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'practice') {
+          const el = document.querySelector('.challenge-card') || document.querySelector('#practice') || document.querySelector('#your-challenge') || document.querySelector('.practice-card') || document.querySelector('.score-card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'saved') {
+          toggleSaved(pid);
+        }
+      });
+    });
+
+    // Bookmark button
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) {
+      bkmkBtn.addEventListener('click', () => toggleSaved(pid));
+      updateSavedState(pid);
+    }
+  }
+
+  function toggleSaved(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const idx = saved.indexOf(pid);
+    let isSaved = false;
+    if (idx >= 0) {
+      saved.splice(idx, 1);
+      isSaved = false;
+    } else {
+      saved.push(pid);
+      isSaved = true;
+    }
+    localStorage.setItem('math_universe_saved', JSON.stringify(saved));
+    updateSavedState(pid);
+    showToast(isSaved ? '✓ Lesson saved to your favorites' : 'Removed from saved lessons');
+  }
+
+  function updateSavedState(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const isSaved = saved.includes(pid);
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) bkmkBtn.classList.toggle('active', isSaved);
+    const navSaved = document.querySelector('.sidebar .nav-item[data-nav="saved"]');
+    if (navSaved) navSaved.classList.toggle('active', isSaved);
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('math-toast-msg');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'math-toast-msg';
+      toast.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#1e1b4b; color:#ffffff; padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 14px rgba(0,0,0,0.2); z-index:9999; transition:all 0.3s ease; opacity:0; pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShell);
+  } else {
+    initShell();
+  }
+})();
+
+</script>
+
+</body>
+</html>

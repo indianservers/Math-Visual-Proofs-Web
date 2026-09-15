@@ -1,0 +1,2695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ellipse as Constant Sum of Distances | Interactive Math Visualization</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-pink: #ec4899;
+      --accent-pink-light: #fce7f3;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #f3e8ff;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Container Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout {
+        grid-template-columns: 100px 1fr;
+      }
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
+
+    /* Content Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Graph Card */
+    .graph-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Toolbar */
+    .graph-toolbar {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #fafafa;
+      flex-wrap: wrap;
+    }
+
+    .tool-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .tool-btn {
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .tool-btn:hover {
+      color: var(--text-dark);
+      background: rgba(255,255,255,0.6);
+    }
+
+    .tool-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tool-btn .dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    /* Switch styling */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 22px;
+    }
+
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-switch:before {
+      transform: translateX(16px);
+    }
+
+    /* Canvas / SVG Container */
+    .graph-viewport-container {
+      position: relative;
+      width: 100%;
+      height: 580px;
+      background: #ffffff;
+      overflow: hidden;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    .graph-viewport-container.mode-pan {
+      cursor: grab;
+    }
+
+    .graph-viewport-container.mode-pan:active {
+      cursor: grabbing;
+    }
+
+    svg.math-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Overlays on Graph */
+    .overlay-card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-md);
+      z-index: 5;
+    }
+
+    .overlay-parameters {
+      top: 16px;
+      left: 16px;
+      width: 230px;
+    }
+
+    .overlay-parameters h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .param-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .param-label {
+      font-family: var(--font-math);
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .param-input-box {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .param-input {
+      width: 64px;
+      padding: 4px 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .param-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-step {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+
+    .btn-step:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .slider-range {
+      width: 100%;
+      accent-color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .readout-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    .readout-item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .readout-item .label-f { color: var(--accent-blue); font-weight: 600; }
+    .readout-item .label-d { color: var(--accent-pink); font-weight: 600; }
+    .readout-item .label-e { color: var(--accent-purple); font-weight: 600; }
+
+    /* Distances Overlay */
+    .overlay-distances {
+      top: 16px;
+      right: 16px;
+      width: 190px;
+    }
+
+    .distances-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .distance-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .distance-row.pf1-val { color: var(--accent-blue); }
+    .distance-row.pf2-val { color: var(--accent-pink); }
+    .distance-row.sum-val { color: var(--accent-green); font-size: 14px; border-top: 1px dashed var(--border); padding-top: 4px; }
+
+    .status-badge {
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .status-badge.equal {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .status-badge.unequal {
+      background: var(--accent-pink-light);
+      color: #9f1239;
+    }
+
+    /* Inequality Shading Legend Overlay */
+    .overlay-inequality {
+      bottom: 16px;
+      left: 16px;
+      width: 220px;
+    }
+
+    .inequality-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .swatch-inside { background: rgba(16, 185, 129, 0.2); }
+    .swatch-outside { background: rgba(236, 72, 153, 0.2); }
+
+    /* Zoom Controls Overlay */
+    .overlay-zoom-controls {
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+    }
+
+    .btn-zoom {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+
+    .btn-zoom:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-zoom-text {
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .btn-zoom-text:hover {
+      color: var(--primary);
+    }
+
+    /* Bottom Live Status Bar */
+    .live-status-bar {
+      padding: 10px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Right Explanation Column: Independent Expandable Sections */
+    .explanation-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 850px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .learn-panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .learn-header-bar {
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .learn-header-bar h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .learn-select {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .learn-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 10px;
+    }
+
+    /* Independent Expandable Cards */
+    .accordion-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .accordion-card.active {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .accordion-header {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      user-select: none;
+      background: #ffffff;
+      transition: background 0.15s;
+    }
+
+    .accordion-header:hover {
+      background: #f8fafc;
+    }
+
+    .accordion-card.active .accordion-header {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .accordion-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .accordion-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .accordion-card.active .accordion-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .accordion-arrow {
+      font-size: 12px;
+      transition: transform 0.2s;
+      color: var(--text-muted);
+    }
+
+    .accordion-card.active .accordion-arrow {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .accordion-content {
+      padding: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      border-top: 1px solid #f1f5f9;
+      display: none;
+      background: #ffffff;
+    }
+
+    .accordion-card.active .accordion-content {
+      display: block;
+    }
+
+    .formula-badge {
+      background: #f8fafc;
+      border: 1px dashed var(--border-focus);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 16px;
+      text-align: center;
+      margin: 8px 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .mini-diagram-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .prediction-box {
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .prediction-box h5 {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .prediction-equation {
+      font-family: var(--font-math);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Bottom Section Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Visual Proof Card */
+    .proof-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .proof-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .proof-steps-flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .proof-step-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      min-width: 150px;
+      flex: 1;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .proof-step-box.highlight {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .proof-step-box.final {
+      border-color: var(--accent-green);
+      background: var(--accent-green-light);
+    }
+
+    .step-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .step-math {
+      font-family: var(--font-math);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .proof-arrow {
+      color: var(--text-light);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* Challenge & Test Point Cards */
+    .interactive-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .challenge-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-family: var(--font-math);
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .text-input {
+      width: 76px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .feedback-msg {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-msg.correct {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .feedback-msg.incorrect {
+      background: var(--accent-pink-light);
+      color: #9f1239;
+    }
+
+    /* Error Toast */
+    .error-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #ef4444;
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-toast.show {
+      display: flex;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SVG styling elements */
+    .axis-line { stroke: #64748b; stroke-width: 1.5; }
+    .grid-line { stroke: #e2e8f0; stroke-width: 1; }
+    .ellipse-curve { stroke: #635bff; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .directrix-dash { stroke: #ec4899; stroke-width: 2.5; stroke-dasharray: 6 5; }
+    .line-pf1 { stroke: #2563eb; stroke-width: 2; stroke-dasharray: 5 4; }
+    .line-pf2 { stroke: #ec4899; stroke-width: 2; stroke-dasharray: 5 4; }
+    .axis-major-line { stroke: #2563eb; stroke-width: 2.5; stroke-dasharray: 3 3; }
+    .axis-minor-line { stroke: #8b5cf6; stroke-width: 2.5; stroke-dasharray: 3 3; }
+    
+    .point-focus1 { fill: #2563eb; stroke: #ffffff; stroke-width: 2.5; cursor: pointer; }
+    .point-focus2 { fill: #ec4899; stroke: #ffffff; stroke-width: 2.5; cursor: pointer; }
+    .point-center { fill: #1e293b; stroke: #ffffff; stroke-width: 2; }
+    .point-locus { fill: #10b981; stroke: #ffffff; stroke-width: 3; cursor: grab; }
+    .point-locus:active { cursor: grabbing; }
+
+    .svg-text { font-family: var(--font-main); font-size: 12px; fill: #475569; user-select: none; }
+    .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
+    .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <ellipse cx="20" cy="20" rx="16" ry="10" stroke="currentColor" stroke-width="2.5"/>
+          <circle cx="12" cy="20" r="2.5" fill="currentColor"/>
+          <circle cx="28" cy="20" r="2.5" fill="currentColor"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Library">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            Library
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Conic Sections</a>
+          <h1>
+            Ellipse as Constant Sum of Distances
+            <span class="badge-tag">Analytic Geometry</span>
+          </h1>
+          <p class="header-subtitle">The locus of points where the sum of distances from two fixed foci is constant (PF₁ + PF₂ = 2a).</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 15 min</span>
+          <button class="btn-secondary" id="btn-reset" title="Reset all to default parameters">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Interactive Graph Area -->
+        <section class="graph-card">
+          <!-- Toolbar -->
+          <div class="graph-toolbar">
+            <div class="tool-group" role="radiogroup" aria-label="Interaction Modes">
+              <button class="tool-btn active" id="tool-select" data-mode="select" title="Select & Inspect">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+                Select
+              </button>
+              <button class="tool-btn" id="tool-pan" data-mode="pan" title="Pan Plane (Free Drag)">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m3-5.5V11m0-5.5a1.5 1.5 0 013 0V11"/></svg>
+                Pan
+              </button>
+              <button class="tool-btn" id="tool-locus" data-mode="locus" title="Drag Locus Point P">
+                <span class="dot-indicator" style="background:#10b981;"></span>
+                Locus Point
+              </button>
+              <button class="tool-btn" id="tool-focus-view" data-mode="focus-view" title="Highlight Focus View">
+                <span class="dot-indicator" style="background:#2563eb;"></span>
+                Focus View
+              </button>
+              <button class="tool-btn" id="tool-directrix-view" data-mode="directrix-view" title="Highlight Directrix View">
+                <span class="dot-indicator" style="background:#ec4899;"></span>
+                Directrix View
+              </button>
+            </div>
+
+            <div class="toggle-group">
+              <label class="toggle-label" title="Toggle Inequality Region Shading">
+                <span>Inequality Shading</span>
+                <span class="switch">
+                  <input type="checkbox" id="toggle-inequality">
+                  <span class="slider-switch"></span>
+                </span>
+              </label>
+              <label class="toggle-label" title="Toggle Coordinate Grid">
+                <span>Grid</span>
+                <span class="switch">
+                  <input type="checkbox" id="toggle-grid" checked>
+                  <span class="slider-switch"></span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Canvas / SVG Container -->
+          <div class="graph-viewport-container" id="viewport-container">
+            <!-- Overlay: Parameter Controls -->
+            <div class="overlay-card overlay-parameters">
+              <h4>Parameters</h4>
+              
+              <!-- Semi-major axis a -->
+              <div class="param-row">
+                <span class="param-label">a =</span>
+                <div class="param-input-box">
+                  <button class="btn-step" id="btn-a-dec" title="Decrease a">-</button>
+                  <input type="number" id="input-a" class="param-input" value="4.50" step="0.1" min="0.5" max="10.0" aria-label="Semi-major axis a">
+                  <button class="btn-step" id="btn-a-inc" title="Increase a">+</button>
+                </div>
+              </div>
+              <input type="range" id="slider-a" class="slider-range" value="4.5" min="1.0" max="8.0" step="0.1" aria-label="a slider">
+
+              <!-- Semi-minor axis b -->
+              <div class="param-row">
+                <span class="param-label">b =</span>
+                <div class="param-input-box">
+                  <button class="btn-step" id="btn-b-dec" title="Decrease b">-</button>
+                  <input type="number" id="input-b" class="param-input" value="3.60" step="0.1" min="0.2" max="9.9" aria-label="Semi-minor axis b">
+                  <button class="btn-step" id="btn-b-inc" title="Increase b">+</button>
+                </div>
+              </div>
+              <input type="range" id="slider-b" class="slider-range" value="3.6" min="0.5" max="7.5" step="0.1" aria-label="b slider">
+
+              <!-- Readouts -->
+              <div class="readout-list">
+                <div class="readout-item">
+                  <span>Focal Distance (c):</span>
+                  <span class="label-f" id="readout-c">c = 2.70</span>
+                </div>
+                <div class="readout-item">
+                  <span>Major Length (2a):</span>
+                  <strong id="readout-2a">9.00</strong>
+                </div>
+                <div class="readout-item">
+                  <span>Eccentricity (e):</span>
+                  <span class="label-e" id="readout-e">e = 0.60</span>
+                </div>
+                <div class="readout-item">
+                  <span>Directrices (x):</span>
+                  <span class="label-d" id="readout-directrices">x = ±7.50</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Overlay: Distances Inspection Card -->
+            <div class="overlay-card overlay-distances">
+              <div class="distances-header">Distance Sum</div>
+              <div class="distance-row pf1-val">
+                <span>PF₁ =</span>
+                <span id="dist-pf1-val">5.12</span>
+              </div>
+              <div class="distance-row pf2-val">
+                <span>PF₂ =</span>
+                <span id="dist-pf2-val">3.88</span>
+              </div>
+              <div class="distance-row sum-val">
+                <span>PF₁ + PF₂ =</span>
+                <span id="dist-sum-val">9.00</span>
+              </div>
+              <div class="status-badge equal" id="equality-badge">
+                ✓ Sum = 2a = 9.00
+              </div>
+            </div>
+
+            <!-- Overlay: Inequality Legend (when enabled) -->
+            <div class="overlay-card overlay-inequality" id="inequality-card" style="display: none;">
+              <div class="inequality-checkbox-row">
+                <input type="checkbox" id="chk-ineq-inside" checked>
+                <span class="color-swatch swatch-inside"></span>
+                <span style="font-family: var(--font-math); font-weight: bold;">x²/a² + y²/b² &le; 1 (Interior)</span>
+              </div>
+              <div class="inequality-checkbox-row">
+                <input type="checkbox" id="chk-ineq-outside">
+                <span class="color-swatch swatch-outside"></span>
+                <span style="font-family: var(--font-math); font-weight: bold;">x²/a² + y²/b² &gt; 1 (Exterior)</span>
+              </div>
+            </div>
+
+            <!-- Overlay: Zoom Controls -->
+            <div class="overlay-card overlay-zoom-controls">
+              <button class="btn-zoom" id="btn-zoom-in" title="Zoom In">+</button>
+              <button class="btn-zoom-text" id="btn-zoom-reset" title="Reset Viewport Zoom & Pan">100%</button>
+              <button class="btn-zoom" id="btn-zoom-out" title="Zoom Out">&minus;</button>
+            </div>
+
+            <!-- SVG Graph -->
+            <svg id="math-svg" class="math-svg">
+              <defs>
+                <marker id="arrow-x" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+                </marker>
+                <marker id="arrow-y" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
+                </marker>
+              </defs>
+
+              <g id="viewport-g">
+                <!-- Inequality Shading Paths -->
+                <path id="path-ineq-inside" fill="rgba(16, 185, 129, 0.18)" style="display:none;"></path>
+                <path id="path-ineq-outside" fill="rgba(236, 72, 153, 0.18)" style="display:none;"></path>
+
+                <!-- Grid Layer -->
+                <g id="grid-group"></g>
+
+                <!-- Axes Layer -->
+                <g id="axes-group">
+                  <line id="axis-x" class="axis-line" marker-end="url(#arrow-x)"/>
+                  <line id="axis-y" class="axis-line" marker-end="url(#arrow-y)"/>
+                  <text id="axis-x-label" class="svg-text-math">x</text>
+                  <text id="axis-y-label" class="svg-text-math">y</text>
+                </g>
+
+                <!-- Major and Minor Axis Lines -->
+                <line id="axis-major-line" class="axis-major-line"/>
+                <line id="axis-minor-line" class="axis-minor-line"/>
+
+                <!-- Directrices d1 and d2 -->
+                <line id="directrix-d1" class="directrix-dash"/>
+                <line id="directrix-d2" class="directrix-dash"/>
+                <g id="directrix-labels-g">
+                  <rect id="d1-bg" class="svg-label-bg" width="90" height="20"/>
+                  <text id="d1-text" class="svg-text-math" fill="#ec4899">d₁: x = -7.50</text>
+
+                  <rect id="d2-bg" class="svg-label-bg" width="90" height="20"/>
+                  <text id="d2-text" class="svg-text-math" fill="#ec4899">d₂: x = 7.50</text>
+                </g>
+
+                <!-- Ellipse Curve Path & Label -->
+                <path id="ellipse-path" class="ellipse-curve"/>
+                <g id="ellipse-label-g">
+                  <rect class="svg-label-bg" width="165" height="20"/>
+                  <text id="text-ellipse-eq" class="svg-text-math" fill="#635bff">x²/4.50² + y²/3.60² = 1</text>
+                </g>
+
+                <!-- Construction Distance Lines PF1 and PF2 -->
+                <line id="line-pf1" class="line-pf1"/>
+                <line id="line-pf2" class="line-pf2"/>
+
+                <!-- Distance Labels on Lines -->
+                <g id="label-pf1-g">
+                  <rect class="svg-label-bg" width="75" height="18"/>
+                  <text id="text-pf1-label" class="svg-text-math" fill="#2563eb">PF₁ = 5.12</text>
+                </g>
+                <g id="label-pf2-g">
+                  <rect class="svg-label-bg" width="75" height="18"/>
+                  <text id="text-pf2-label" class="svg-text-math" fill="#ec4899">PF₂ = 3.88</text>
+                </g>
+
+                <!-- Center Point (0,0) -->
+                <circle id="point-center" class="point-center" r="4.5"/>
+                <text id="label-center" class="svg-text" x="8" y="14">C(0,0)</text>
+
+                <!-- Foci F1 and F2 -->
+                <circle id="point-focus1" class="point-focus1" r="6"/>
+                <g id="label-focus1-g">
+                  <rect class="svg-label-bg" width="82" height="18"/>
+                  <text id="text-focus1-label" class="svg-text-math" fill="#2563eb">F₁(-2.70, 0)</text>
+                </g>
+
+                <circle id="point-focus2" class="point-focus2" r="6"/>
+                <g id="label-focus2-g">
+                  <rect class="svg-label-bg" width="82" height="18"/>
+                  <text id="text-focus2-label" class="svg-text-math" fill="#ec4899">F₂(2.70, 0)</text>
+                </g>
+
+                <!-- Locus Point P -->
+                <circle id="point-locus-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
+                <circle id="point-locus" class="point-locus" r="7"/>
+                <g id="label-locus-g">
+                  <rect class="svg-label-bg" width="125" height="22" rx="4"/>
+                  <text id="text-locus-label" class="svg-text-math" fill="#047857">P(2.70, 2.88)</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Bottom Live Status Bar -->
+          <div class="live-status-bar">
+            <div class="status-item">
+              <span>Live Sum:</span>
+              <strong id="bar-live-sum" style="color:var(--accent-blue);">PF₁ + PF₂ = 9.00</strong>
+            </div>
+            <div class="status-item">
+              <span>Target Length:</span>
+              <strong id="bar-target-sum" style="color:var(--primary);">2a = 9.00</strong>
+            </div>
+            <div class="status-item">
+              <span id="bar-badge-status" class="status-badge equal">✓ Constant Sum</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Explanation Column: Independent Expandable Sections -->
+        <aside class="explanation-column">
+          <div class="learn-panel-card">
+            <div class="learn-header-bar">
+              <h3>
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Learn About the Ellipse
+              </h3>
+              <select class="learn-select" id="learn-dropdown" aria-label="Select Learning Topic">
+                <option value="" disabled selected>Learn ▼</option>
+                <option value="1">1. What is an ellipse?</option>
+                <option value="2">2. Constant-sum property</option>
+                <option value="3">3. The two foci</option>
+                <option value="4">4. Semi-major axis a</option>
+                <option value="5">5. Semi-minor axis b</option>
+                <option value="6">6. Distance c between center and focus</option>
+                <option value="7">7. Eccentricity</option>
+                <option value="8">8. Deriving the equation</option>
+                <option value="9">9. Why the sum remains constant</option>
+                <option value="10">10. Directrices</option>
+              </select>
+            </div>
+
+            <div class="accordion-list">
+              <!-- Topic 1: What is an ellipse? -->
+              <div class="accordion-card active" id="acc-card-1">
+                <div class="accordion-header" data-topic="1">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">1</span>
+                    <span>What is an ellipse?</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>An <strong>ellipse</strong> is the locus of all points in a plane for which the sum of distances from two fixed points (called <strong>foci</strong>) is constant.</p>
+                  
+                  <div class="formula-badge">PF₁ + PF₂ = 2a</div>
+                  
+                  <p style="margin-top: 6px;">Key features:</p>
+                  <ul style="margin-left: 18px; margin-top: 4px;">
+                    <li><strong>P = (x, y)</strong> is any point on the ellipse.</li>
+                    <li><strong>F₁ = (-c, 0)</strong> and <strong>F₂ = (c, 0)</strong> are the two foci.</li>
+                    <li><strong>2a</strong> is the total length of the major axis.</li>
+                  </ul>
+
+                  <div class="mini-diagram-box">
+                    <svg width="220" height="100" viewBox="0 0 220 100">
+                      <!-- Mini Ellipse -->
+                      <ellipse cx="110" cy="50" rx="90" ry="40" stroke="#635bff" stroke-width="2" fill="none"/>
+                      
+                      <!-- Mini Foci -->
+                      <circle cx="56" cy="50" r="3.5" fill="#2563eb"/>
+                      <text x="46" y="65" font-size="10" fill="#2563eb" font-weight="bold">F₁(-c,0)</text>
+                      
+                      <circle cx="164" cy="50" r="3.5" fill="#ec4899"/>
+                      <text x="156" y="65" font-size="10" fill="#ec4899" font-weight="bold">F₂(c,0)</text>
+                      
+                      <!-- Mini Point P -->
+                      <circle cx="140" cy="22" r="4" fill="#10b981"/>
+                      <text x="146" y="18" font-size="10" fill="#10b981" font-weight="bold">P(x,y)</text>
+
+                      <!-- Lines PF1 & PF2 -->
+                      <line x1="140" y1="22" x2="56" y2="50" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="3 3"/>
+                      <line x1="140" y1="22" x2="164" y2="50" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="3 3"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 2: Constant-sum property -->
+              <div class="accordion-card" id="acc-card-2">
+                <div class="accordion-header" data-topic="2">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">2</span>
+                    <span>Constant-sum property</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>As point <strong>P</strong> moves anywhere around the ellipse, individual distance lengths <strong>PF₁</strong> and <strong>PF₂</strong> change continuously, but their sum remains perfectly equal to <strong>2a</strong>.</p>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:8px 0; font-weight:bold;">
+                    PF₁ = <span id="learn-pf1-val" style="color:var(--accent-blue);">5.12</span><br>
+                    PF₂ = <span id="learn-pf2-val" style="color:var(--accent-pink);">3.88</span><br>
+                    Sum = <span id="learn-sum-val" style="color:var(--accent-green);">9.00</span> (Target 2a = <span id="learn-2a-val">9.00</span>)
+                  </div>
+                  <p>When P moves towards F₁, PF₁ decreases while PF₂ increases by the exact same amount!</p>
+                </div>
+              </div>
+
+              <!-- Topic 3: The two foci -->
+              <div class="accordion-card" id="acc-card-3">
+                <div class="accordion-header" data-topic="3">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">3</span>
+                    <span>The two foci</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>foci</strong> F₁ and F₂ are symmetrically placed interior points along the major axis at distance <em>c</em> from the center:</p>
+                  <div class="formula-badge">F₁ = (-c, 0), &nbsp; F₂ = (c, 0)</div>
+                  <div style="background:#f8fafc; border:1px solid var(--border); padding:8px 12px; border-radius:6px; margin:6px 0;">
+                    Current Foci:<br>
+                    <strong style="color:var(--accent-blue);" id="learn-f1-str">F₁ = (-2.70, 0)</strong><br>
+                    <strong style="color:var(--accent-pink);" id="learn-f2-str">F₂ = (2.70, 0)</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 4: Semi-major axis a -->
+              <div class="accordion-card" id="acc-card-4">
+                <div class="accordion-header" data-topic="4">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">4</span>
+                    <span>Semi-major axis a</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>semi-major axis</strong> <em>a</em> is half the longest diameter of the ellipse. The full major axis extends horizontally from <strong>(-a, 0)</strong> to <strong>(a, 0)</strong> with length <strong>2a</strong>.</p>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;">
+                    a = <span id="learn-a-val">4.50</span> &nbsp;|&nbsp; Major Axis (2a) = <span id="learn-2a-val2">9.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 5: Semi-minor axis b -->
+              <div class="accordion-card" id="acc-card-5">
+                <div class="accordion-header" data-topic="5">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">5</span>
+                    <span>Semi-minor axis b</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>semi-minor axis</strong> <em>b</em> is half the shortest diameter of the ellipse. The minor axis extends vertically from <strong>(0, -b)</strong> to <strong>(0, b)</strong> with length <strong>2b</strong>.</p>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;">
+                    b = <span id="learn-b-val">3.60</span> &nbsp;|&nbsp; Minor Axis (2b) = <span id="learn-2b-val">7.20</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 6: Distance c between center and focus -->
+              <div class="accordion-card" id="acc-card-6">
+                <div class="accordion-header" data-topic="6">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">6</span>
+                    <span>Distance c</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The focal distance <em>c</em> satisfies the Pythagorean relationship for ellipses:</p>
+                  <div class="formula-badge">c² = a² - b² &nbsp;&rArr;&nbsp; c = &radic;(a² - b²)</div>
+                  <div style="background:#eeedfd; padding:8px 12px; border-radius:6px; margin:6px 0; color:var(--primary); font-weight:bold;" id="learn-c-calc">
+                    c = &radic;(4.50² - 3.60²) = &radic;(20.25 - 12.96) = 2.70
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 7: Eccentricity -->
+              <div class="accordion-card" id="acc-card-7">
+                <div class="accordion-header" data-topic="7">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">7</span>
+                    <span>Eccentricity</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>eccentricity</strong> <em>e</em> measures how "stretched" or non-circular the ellipse is:</p>
+                  <div class="formula-badge">e = c / a  (0 &lt; e &lt; 1)</div>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;" id="learn-e-calc">
+                    e = 2.70 / 4.50 = 0.60
+                  </div>
+                  <p>If <em>e &rarr; 0</em>, the ellipse becomes a perfect circle (a = b). As <em>e &rarr; 1</em>, the ellipse becomes flatter.</p>
+                </div>
+              </div>
+
+              <!-- Topic 8: Deriving the ellipse equation -->
+              <div class="accordion-card" id="acc-card-8">
+                <div class="accordion-header" data-topic="8">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">8</span>
+                    <span>Deriving the equation</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Starting from distance equality <strong>PF₁ + PF₂ = 2a</strong>:</p>
+                  <ol style="margin-left: 18px; margin-top: 6px; display:flex; flex-direction:column; gap:6px;">
+                    <li><strong>Step 1:</strong> Distance formula:<br><span style="font-family:var(--font-math);">&radic;((x+c)² + y²) + &radic;((x-c)² + y²) = 2a</span></li>
+                    <li><strong>Step 2:</strong> Isolate one radical &amp; square:<br><span style="font-family:var(--font-math);">(x+c)² + y² = (2a - &radic;((x-c)²+y²))²</span></li>
+                    <li><strong>Step 3:</strong> Simplify to isolate remaining radical:<br><span style="font-family:var(--font-math);">a&radic;((x-c)²+y²) = a² - cx</span></li>
+                    <li><strong>Step 4:</strong> Square again &amp; substitute b² = a² - c²:<br><span style="font-family:var(--font-math);">(a²-c²)x² + a²y² = a²(a²-c²) &rArr; b²x² + a²y² = a²b²</span></li>
+                    <li><strong>Step 5:</strong> Divide by a²b²:</li>
+                  </ol>
+                  <div class="formula-badge" style="background:#eeedfd; margin-top:8px;">
+                    x²/a² + y²/b² = 1
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 9: Why the sum remains constant -->
+              <div class="accordion-card" id="acc-card-9">
+                <div class="accordion-header" data-topic="9">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">9</span>
+                    <span>Why sum is constant</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Consider the vertex point at <strong>(a, 0)</strong>:</p>
+                  <ul style="margin-left: 18px; margin-top: 4px;">
+                    <li>Distance to F₁: <strong>a + c</strong></li>
+                    <li>Distance to F₂: <strong>a - c</strong></li>
+                    <li>Sum: <strong>(a + c) + (a - c) = 2a</strong></li>
+                  </ul>
+                  <p style="margin-top:6px;">Because the curve is defined by this invariant length, the sum <em>PF₁ + PF₂</em> is strictly conserved across all points.</p>
+                </div>
+              </div>
+
+              <!-- Topic 10: Directrices -->
+              <div class="accordion-card" id="acc-card-10">
+                <div class="accordion-header" data-topic="10">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">10</span>
+                    <span>Directrices</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>directrices</strong> of a horizontal ellipse are vertical lines located outside the ellipse at distance <em>a/e = a²/c</em> from the center:</p>
+                  <div class="formula-badge">x = &plusmn; a / e = &plusmn; a² / c</div>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;" id="learn-dir-calc">
+                    x = &plusmn; 4.50² / 2.70 = &plusmn; 7.50
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prediction-box">
+            <h5>Current Standard Equation</h5>
+            <div class="prediction-equation" id="prediction-eq">x² / 20.25 + y² / 12.96 = 1</div>
+          </div>
+
+          <button class="btn-primary" id="btn-toggle-proof">
+            Reveal Visual Proof Panel
+          </button>
+        </aside>
+      </div>
+
+      <!-- Bottom Grid Section: Proof, Challenge & Test Point -->
+      <div class="bottom-grid">
+        <!-- Visual Proof Step-by-Step Card -->
+        <section class="proof-card" id="proof-section" style="display: none;">
+          <h3>
+            Visual Proof Derivation
+            <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">
+              Constant Sum Property: PF₁ + PF₂ = 2a
+            </span>
+          </h3>
+
+          <div class="proof-steps-flow">
+            <div class="proof-step-box highlight">
+              <div class="step-tag">Step 1: Distance Sum</div>
+              <div class="step-math">PF₁ + PF₂ = 2a</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="pmath-step1-sub">
+                &radic;((x+2.70)²+y²) + &radic;((x-2.70)²+y²) = 9.00
+              </div>
+            </div>
+
+            <span class="proof-arrow">&rarr;</span>
+
+            <div class="proof-step-box">
+              <div class="step-tag">Step 2: Isolate Radical</div>
+              <div class="step-math">a&radic;((x-c)²+y²) = a² - cx</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="pmath-step2-sub">
+                4.50 &radic;((x-2.70)²+y²) = 20.25 - 2.70x
+              </div>
+            </div>
+
+            <span class="proof-arrow">&rarr;</span>
+
+            <div class="proof-step-box">
+              <div class="step-tag">Step 3: Substitute b² = a² - c²</div>
+              <div class="step-math">b²x² + a²y² = a²b²</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="pmath-step3-sub">
+                12.96x² + 20.25y² = 262.44
+              </div>
+            </div>
+
+            <span class="proof-arrow">&rarr;</span>
+
+            <div class="proof-step-box final">
+              <div class="step-tag">Step 4: Standard Form</div>
+              <div class="step-math">x²/a² + y²/b² = 1</div>
+              <div style="font-size: 12px; font-weight: bold; color: #047857; margin-top: 4px;" id="pmath-step4-sub">
+                x²/20.25 + y²/12.96 = 1 &#10004;
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive Challenge & Test Point -->
+        <section class="interactive-card">
+          <div class="card-title">Challenge Yourself</div>
+          <p style="font-size: 13px; color: var(--text-muted);" id="challenge-prompt-text">
+            Given an ellipse with <strong>2a = 12.00</strong> and eccentricity <strong>e = 0.70</strong>:
+          </p>
+
+          <div class="challenge-form">
+            <div class="input-group">
+              <label for="input-challenge-a">a =</label>
+              <input type="number" id="input-challenge-a" class="text-input" placeholder="e.g. 6.0">
+            </div>
+            <div class="input-group">
+              <label for="input-challenge-c">c =</label>
+              <input type="number" id="input-challenge-c" class="text-input" placeholder="e.g. 4.2">
+            </div>
+            <div class="input-group">
+              <label for="input-challenge-f1f2">F₁F₂ =</label>
+              <input type="number" id="input-challenge-f1f2" class="text-input" placeholder="e.g. 8.4">
+            </div>
+            <button class="btn-primary" id="btn-check-challenge" style="width: auto;">Check</button>
+            <button class="btn-secondary" id="btn-new-challenge">New Challenge</button>
+            <div id="challenge-feedback" class="feedback-msg" style="display: none;"></div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
+
+          <!-- Test Arbitrary Point Section -->
+          <div class="card-title" style="font-size: 14px;">Test a Custom Point</div>
+          <div class="challenge-form">
+            <div class="input-group">
+              <label for="input-test-x">x =</label>
+              <input type="number" id="input-test-x" class="text-input" value="2.70" step="0.1">
+            </div>
+            <div class="input-group">
+              <label for="input-test-y">y =</label>
+              <input type="number" id="input-test-y" class="text-input" value="2.88" step="0.1">
+            </div>
+            <button class="btn-secondary" id="btn-test-point">Test Point</button>
+            <div id="test-feedback" class="feedback-msg" style="display: none;"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="error-toast" id="error-toast">
+    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span id="error-msg">Invalid parameters. Semi-major axis 'a' must be strictly greater than semi-minor axis 'b' (a > b > 0).</span>
+  </div>
+
+  <script>
+    /**
+     * Ellipse as Constant Sum of Distances Engine
+     * Pure JavaScript - No external dependencies
+     */
+
+    // --- 1. Centralized Mathematical Engine ---
+    const MathEngine = {
+      calculateC(a, b) {
+        if (a <= b || b <= 0) return 0;
+        return Math.sqrt(a * a - b * b);
+      },
+      calculateFocus1(a, b) {
+        const c = this.calculateC(a, b);
+        return { x: -c, y: 0 };
+      },
+      calculateFocus2(a, b) {
+        const c = this.calculateC(a, b);
+        return { x: c, y: 0 };
+      },
+      calculateEccentricity(a, b) {
+        if (a <= 0) return 0;
+        return this.calculateC(a, b) / a;
+      },
+      calculatePF1(x, y, c) {
+        const dx = x + c;
+        return Math.sqrt(dx * dx + y * y);
+      },
+      calculatePF2(x, y, c) {
+        const dx = x - c;
+        return Math.sqrt(dx * dx + y * y);
+      },
+      calculateDistanceSum(x, y, c) {
+        return this.calculatePF1(x, y, c) + this.calculatePF2(x, y, c);
+      },
+      isOnEllipse(x, y, a, b, epsilon = 1e-4) {
+        if (a <= 0 || b <= 0) return false;
+        const val = (x * x) / (a * a) + (y * y) / (b * b);
+        return Math.abs(val - 1.0) < epsilon;
+      },
+      ellipsePointFromParameter(t, a, b) {
+        return {
+          x: a * Math.cos(t),
+          y: b * Math.sin(t)
+        };
+      }
+    };
+
+    // --- 2. Application State ---
+    const state = {
+      a: 4.5,
+      b: 3.6,
+      angleT: Math.PI / 4, // 45 degrees initial angle
+      mode: 'select', // 'select', 'pan', 'locus', 'focus-view', 'directrix-view'
+      showGrid: true,
+      showInequality: false,
+      ineqInside: true,
+      ineqOutside: false,
+      proofRevealed: false,
+      
+      // Dynamic Challenge State
+      challengeTarget2a: 12.0,
+      challengeTargetE: 0.70
+    };
+
+    // --- 3. View & Coordinate Transformation State ---
+    const view = {
+      width: 800,
+      height: 580,
+      originX: 400, // SVG canvas center X for math (0,0)
+      originY: 290, // SVG canvas Y for math (0,0)
+      scale: 45,    // Pixels per mathematical unit
+      isPanning: false,
+      dragStartScreen: { x: 0, y: 0 },
+      dragStartOrigin: { x: 0, y: 0 },
+
+      toScreen(mx, my) {
+        return {
+          sx: this.originX + mx * this.scale,
+          sy: this.originY - my * this.scale
+        };
+      },
+
+      toMath(sx, sy) {
+        return {
+          mx: (sx - this.originX) / this.scale,
+          my: (this.originY - sy) / this.scale
+        };
+      }
+    };
+
+    // --- 4. DOM Elements Cache ---
+    const elements = {
+      viewportContainer: document.getElementById('viewport-container'),
+      svg: document.getElementById('math-svg'),
+      viewportG: document.getElementById('viewport-g'),
+      gridGroup: document.getElementById('grid-group'),
+      axisX: document.getElementById('axis-x'),
+      axisY: document.getElementById('axis-y'),
+      axisXLabel: document.getElementById('axis-x-label'),
+      axisYLabel: document.getElementById('axis-y-label'),
+      axisMajorLine: document.getElementById('axis-major-line'),
+      axisMinorLine: document.getElementById('axis-minor-line'),
+      directrixD1: document.getElementById('directrix-d1'),
+      directrixD2: document.getElementById('directrix-d2'),
+      d1Bg: document.getElementById('d1-bg'),
+      d1Text: document.getElementById('d1-text'),
+      d2Bg: document.getElementById('d2-bg'),
+      d2Text: document.getElementById('d2-text'),
+      ellipsePath: document.getElementById('ellipse-path'),
+      ellipseLabelG: document.getElementById('ellipse-label-g'),
+      textEllipseEq: document.getElementById('text-ellipse-eq'),
+      linePf1: document.getElementById('line-pf1'),
+      linePf2: document.getElementById('line-pf2'),
+      labelPf1G: document.getElementById('label-pf1-g'),
+      labelPf2G: document.getElementById('label-pf2-g'),
+      textPf1Label: document.getElementById('text-pf1-label'),
+      textPf2Label: document.getElementById('text-pf2-label'),
+      pointCenter: document.getElementById('point-center'),
+      pointFocus1: document.getElementById('point-focus1'),
+      pointFocus2: document.getElementById('point-focus2'),
+      labelFocus1G: document.getElementById('label-focus1-g'),
+      labelFocus2G: document.getElementById('label-focus2-g'),
+      textFocus1Label: document.getElementById('text-focus1-label'),
+      textFocus2Label: document.getElementById('text-focus2-label'),
+      pointLocus: document.getElementById('point-locus'),
+      pointLocusHalo: document.getElementById('point-locus-halo'),
+      labelLocusG: document.getElementById('label-locus-g'),
+      textLocusLabel: document.getElementById('text-locus-label'),
+      pathIneqInside: document.getElementById('path-ineq-inside'),
+      pathIneqOutside: document.getElementById('path-ineq-outside'),
+
+      // UI Controls
+      inputA: document.getElementById('input-a'),
+      inputB: document.getElementById('input-b'),
+      sliderA: document.getElementById('slider-a'),
+      sliderB: document.getElementById('slider-b'),
+      btnADec: document.getElementById('btn-a-dec'),
+      btnAInc: document.getElementById('btn-a-inc'),
+      btnBDec: document.getElementById('btn-b-dec'),
+      btnBInc: document.getElementById('btn-b-inc'),
+      readoutC: document.getElementById('readout-c'),
+      readout2a: document.getElementById('readout-2a'),
+      readoutE: document.getElementById('readout-e'),
+      readoutDirectrices: document.getElementById('readout-directrices'),
+      distPf1Val: document.getElementById('dist-pf1-val'),
+      distPf2Val: document.getElementById('dist-pf2-val'),
+      distSumVal: document.getElementById('dist-sum-val'),
+      equalityBadge: document.getElementById('equality-badge'),
+      predictionEq: document.getElementById('prediction-eq'),
+
+      // Zoom
+      btnZoomIn: document.getElementById('btn-zoom-in'),
+      btnZoomOut: document.getElementById('btn-zoom-out'),
+      btnZoomReset: document.getElementById('btn-zoom-reset'),
+
+      // Bottom Status Bar
+      barLiveSum: document.getElementById('bar-live-sum'),
+      barTargetSum: document.getElementById('bar-target-sum'),
+      barBadgeStatus: document.getElementById('bar-badge-status'),
+
+      // Learning Panel
+      learnDropdown: document.getElementById('learn-dropdown'),
+      learnPf1Val: document.getElementById('learn-pf1-val'),
+      learnPf2Val: document.getElementById('learn-pf2-val'),
+      learnSumVal: document.getElementById('learn-sum-val'),
+      learn2aVal: document.getElementById('learn-2a-val'),
+      learn2aVal2: document.getElementById('learn-2a-val2'),
+      learnF1Str: document.getElementById('learn-f1-str'),
+      learnF2Str: document.getElementById('learn-f2-str'),
+      learnAVal: document.getElementById('learn-a-val'),
+      learnBVal: document.getElementById('learn-b-val'),
+      learn2bVal: document.getElementById('learn-2b-val'),
+      learnCCalc: document.getElementById('learn-c-calc'),
+      learnECalc: document.getElementById('learn-e-calc'),
+      learnDirCalc: document.getElementById('learn-dir-calc'),
+
+      // Toolbar and Toggles
+      toggleGrid: document.getElementById('toggle-grid'),
+      toggleInequality: document.getElementById('toggle-inequality'),
+      inequalityCard: document.getElementById('inequality-card'),
+      chkIneqInside: document.getElementById('chk-ineq-inside'),
+      chkIneqOutside: document.getElementById('chk-ineq-outside'),
+      toolBtns: document.querySelectorAll('.tool-btn'),
+
+      // Proof & Challenge
+      btnToggleProof: document.getElementById('btn-toggle-proof'),
+      proofSection: document.getElementById('proof-section'),
+      challengePromptText: document.getElementById('challenge-prompt-text'),
+      inputChallengeA: document.getElementById('input-challenge-a'),
+      inputChallengeC: document.getElementById('input-challenge-c'),
+      inputChallengeF1F2: document.getElementById('input-challenge-f1f2'),
+      btnCheckChallenge: document.getElementById('btn-check-challenge'),
+      btnNewChallenge: document.getElementById('btn-new-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback'),
+      inputTestX: document.getElementById('input-test-x'),
+      inputTestY: document.getElementById('input-test-y'),
+      btnTestPoint: document.getElementById('btn-test-point'),
+      testFeedback: document.getElementById('test-feedback'),
+      btnReset: document.getElementById('btn-reset'),
+      errorToast: document.getElementById('error-toast'),
+      errorMsg: document.getElementById('error-msg')
+    };
+
+    // --- 5. Rendering Pipeline ---
+
+    function updateViewportDimensions() {
+      const rect = elements.viewportContainer.getBoundingClientRect();
+      view.width = rect.width || 800;
+      view.height = rect.height || 580;
+      render();
+    }
+
+    function renderGrid() {
+      elements.gridGroup.innerHTML = '';
+      if (!state.showGrid) return;
+
+      const minMath = view.toMath(0, view.height);
+      const maxMath = view.toMath(view.width, 0);
+
+      const startX = Math.floor(minMath.mx) - 1;
+      const endX = Math.ceil(maxMath.mx) + 1;
+      const startY = Math.floor(minMath.my) - 1;
+      const endY = Math.ceil(maxMath.my) + 1;
+
+      const frag = document.createDocumentFragment();
+
+      // Grid vertical lines & tick labels
+      for (let x = startX; x <= endX; x++) {
+        const pt1 = view.toScreen(x, startY);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', pt1.sx);
+        line.setAttribute('y1', 0);
+        line.setAttribute('x2', pt1.sx);
+        line.setAttribute('y2', view.height);
+        line.setAttribute('class', 'grid-line');
+        frag.appendChild(line);
+
+        if (x !== 0) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const axisYPos = Math.min(Math.max(view.originY + 14, 20), view.height - 10);
+          text.setAttribute('x', pt1.sx);
+          text.setAttribute('y', axisYPos);
+          text.setAttribute('class', 'svg-text');
+          text.setAttribute('text-anchor', 'middle');
+          text.textContent = x;
+          frag.appendChild(text);
+        }
+      }
+
+      // Grid horizontal lines & tick labels
+      for (let y = startY; y <= endY; y++) {
+        const pt1 = view.toScreen(startX, y);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', 0);
+        line.setAttribute('y1', pt1.sy);
+        line.setAttribute('x2', view.width);
+        line.setAttribute('y2', pt1.sy);
+        line.setAttribute('class', 'grid-line');
+        frag.appendChild(line);
+
+        if (y !== 0) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const axisXPos = Math.min(Math.max(view.originX - 8, 15), view.width - 20);
+          text.setAttribute('x', axisXPos);
+          text.setAttribute('y', pt1.sy + 4);
+          text.setAttribute('class', 'svg-text');
+          text.setAttribute('text-anchor', 'end');
+          text.textContent = y;
+          frag.appendChild(text);
+        }
+      }
+
+      elements.gridGroup.appendChild(frag);
+    }
+
+    function renderAxes() {
+      // X-Axis
+      elements.axisX.setAttribute('x1', 0);
+      elements.axisX.setAttribute('y1', view.originY);
+      elements.axisX.setAttribute('x2', view.width - 10);
+      elements.axisX.setAttribute('y2', view.originY);
+
+      elements.axisXLabel.setAttribute('x', view.width - 15);
+      elements.axisXLabel.setAttribute('y', view.originY - 8);
+
+      // Y-Axis
+      elements.axisY.setAttribute('x1', view.originX);
+      elements.axisY.setAttribute('y1', view.height);
+      elements.axisY.setAttribute('x2', view.originX);
+      elements.axisY.setAttribute('y2', 15);
+
+      elements.axisYLabel.setAttribute('x', view.originX + 10);
+      elements.axisYLabel.setAttribute('y', 20);
+
+      // Major axis line: (-a,0) to (a,0)
+      const majorStart = view.toScreen(-state.a, 0);
+      const majorEnd = view.toScreen(state.a, 0);
+      elements.axisMajorLine.setAttribute('x1', majorStart.sx);
+      elements.axisMajorLine.setAttribute('y1', majorStart.sy);
+      elements.axisMajorLine.setAttribute('x2', majorEnd.sx);
+      elements.axisMajorLine.setAttribute('y2', majorEnd.sy);
+
+      // Minor axis line: (0,-b) to (0,b)
+      const minorStart = view.toScreen(0, -state.b);
+      const minorEnd = view.toScreen(0, state.b);
+      elements.axisMinorLine.setAttribute('x1', minorStart.sx);
+      elements.axisMinorLine.setAttribute('y1', minorStart.sy);
+      elements.axisMinorLine.setAttribute('x2', minorEnd.sx);
+      elements.axisMinorLine.setAttribute('y2', minorEnd.sy);
+
+      // Center C(0,0)
+      elements.pointCenter.setAttribute('cx', view.originX);
+      elements.pointCenter.setAttribute('cy', view.originY);
+    }
+
+    function renderEllipse() {
+      const a = state.a;
+      const b = state.b;
+
+      // Generate Ellipse Path Parametrically (x = a*cos(t), y = b*sin(t))
+      let pathD = '';
+      const steps = 120;
+      for (let i = 0; i <= steps; i++) {
+        const t = (i / steps) * 2 * Math.PI;
+        const mx = a * Math.cos(t);
+        const my = b * Math.sin(t);
+        const screenPt = view.toScreen(mx, my);
+
+        if (i === 0) {
+          pathD += `M ${screenPt.sx.toFixed(1)} ${screenPt.sy.toFixed(1)}`;
+        } else {
+          pathD += ` L ${screenPt.sx.toFixed(1)} ${screenPt.sy.toFixed(1)}`;
+        }
+      }
+      pathD += ' Z';
+
+      elements.ellipsePath.setAttribute('d', pathD);
+
+      // Equation Label near top of ellipse
+      const labelScreen = view.toScreen(0, b);
+      elements.textEllipseEq.textContent = `x²/${(a*a).toFixed(2)} + y²/${(b*b).toFixed(2)} = 1`;
+      elements.ellipseLabelG.setAttribute('transform', `translate(${labelScreen.sx - 80}, ${labelScreen.sy - 16})`);
+
+      // Inequality Shading
+      if (state.showInequality) {
+        if (state.ineqInside) {
+          elements.pathIneqInside.setAttribute('d', pathD);
+          elements.pathIneqInside.style.display = 'block';
+        } else {
+          elements.pathIneqInside.style.display = 'none';
+        }
+
+        if (state.ineqOutside) {
+          const outerBoxD = `M 0 0 L ${view.width} 0 L ${view.width} ${view.height} L 0 ${view.height} Z ` + pathD;
+          elements.pathIneqOutside.setAttribute('d', outerBoxD);
+          elements.pathIneqOutside.style.display = 'block';
+        } else {
+          elements.pathIneqOutside.style.display = 'none';
+        }
+      } else {
+        elements.pathIneqInside.style.display = 'none';
+        elements.pathIneqOutside.style.display = 'none';
+      }
+    }
+
+    function renderFociAndDirectrices() {
+      const a = state.a;
+      const b = state.b;
+      const c = MathEngine.calculateC(a, b);
+      const e = MathEngine.calculateEccentricity(a, b);
+
+      // Foci Screen Positions
+      const f1Screen = view.toScreen(-c, 0);
+      const f2Screen = view.toScreen(c, 0);
+
+      elements.pointFocus1.setAttribute('cx', f1Screen.sx);
+      elements.pointFocus1.setAttribute('cy', f1Screen.sy);
+
+      elements.pointFocus2.setAttribute('cx', f2Screen.sx);
+      elements.pointFocus2.setAttribute('cy', f2Screen.sy);
+
+      elements.textFocus1Label.textContent = `F₁(-${c.toFixed(2)}, 0)`;
+      elements.labelFocus1G.setAttribute('transform', `translate(${f1Screen.sx - 40}, ${f1Screen.sy + 12})`);
+
+      elements.textFocus2Label.textContent = `F₂(${c.toFixed(2)}, 0)`;
+      elements.labelFocus2G.setAttribute('transform', `translate(${f2Screen.sx - 40}, ${f2Screen.sy + 12})`);
+
+      // Directrices x = ± a / e = ± a² / c
+      if (c > 0 && e > 0) {
+        const directrixDistX = (a * a) / c;
+        const d1ScreenX = view.toScreen(-directrixDistX, 0).sx;
+        const d2ScreenX = view.toScreen(directrixDistX, 0).sx;
+
+        elements.directrixD1.setAttribute('x1', d1ScreenX);
+        elements.directrixD1.setAttribute('y1', 0);
+        elements.directrixD1.setAttribute('x2', d1ScreenX);
+        elements.directrixD1.setAttribute('y2', view.height);
+
+        elements.directrixD2.setAttribute('x1', d2ScreenX);
+        elements.directrixD2.setAttribute('y1', 0);
+        elements.directrixD2.setAttribute('x2', d2ScreenX);
+        elements.directrixD2.setAttribute('y2', view.height);
+
+        elements.d1Text.textContent = `d₁: x = -${directrixDistX.toFixed(2)}`;
+        elements.d1Bg.setAttribute('x', d1ScreenX - 45);
+        elements.d1Bg.setAttribute('y', 20);
+        elements.d1Text.setAttribute('x', d1ScreenX - 40);
+        elements.d1Text.setAttribute('y', 34);
+
+        elements.d2Text.textContent = `d₂: x = ${directrixDistX.toFixed(2)}`;
+        elements.d2Bg.setAttribute('x', d2ScreenX - 45);
+        elements.d2Bg.setAttribute('y', 20);
+        elements.d2Text.setAttribute('x', d2ScreenX - 40);
+        elements.d2Text.setAttribute('y', 34);
+
+        const showDir = state.mode === 'directrix-view' || document.getElementById('acc-card-10').classList.contains('active');
+        elements.directrixD1.style.display = showDir ? 'block' : 'none';
+        elements.directrixD2.style.display = showDir ? 'block' : 'none';
+        elements.d1Bg.style.display = showDir ? 'block' : 'none';
+        elements.d1Text.style.display = showDir ? 'block' : 'none';
+        elements.d2Bg.style.display = showDir ? 'block' : 'none';
+        elements.d2Text.style.display = showDir ? 'block' : 'none';
+      }
+
+      // Mode Highlights
+      if (state.mode === 'focus-view' || document.getElementById('acc-card-3').classList.contains('active')) {
+        elements.pointFocus1.setAttribute('r', '9');
+        elements.pointFocus1.setAttribute('stroke', '#818cf8');
+        elements.pointFocus1.setAttribute('stroke-width', '4');
+
+        elements.pointFocus2.setAttribute('r', '9');
+        elements.pointFocus2.setAttribute('stroke', '#f472b6');
+        elements.pointFocus2.setAttribute('stroke-width', '4');
+      } else {
+        elements.pointFocus1.setAttribute('r', '6');
+        elements.pointFocus1.setAttribute('stroke', '#ffffff');
+        elements.pointFocus1.setAttribute('stroke-width', '2.5');
+
+        elements.pointFocus2.setAttribute('r', '6');
+        elements.pointFocus2.setAttribute('stroke', '#ffffff');
+        elements.pointFocus2.setAttribute('stroke-width', '2.5');
+      }
+    }
+
+    function renderLocusConstruction() {
+      const a = state.a;
+      const b = state.b;
+      const c = MathEngine.calculateC(a, b);
+
+      // Point P on Ellipse (x = a*cos(t), y = b*sin(t))
+      const P = MathEngine.ellipsePointFromParameter(state.angleT, a, b);
+      const Pscreen = view.toScreen(P.x, P.y);
+
+      elements.pointLocus.setAttribute('cx', Pscreen.sx);
+      elements.pointLocus.setAttribute('cy', Pscreen.sy);
+      elements.pointLocusHalo.setAttribute('cx', Pscreen.sx);
+      elements.pointLocusHalo.setAttribute('cy', Pscreen.sy);
+
+      elements.textLocusLabel.textContent = `P(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+      const labelOffsetX = P.x >= 0 ? 12 : -135;
+      const labelOffsetY = P.y >= 0 ? -12 : 24;
+      elements.labelLocusG.setAttribute('transform', `translate(${Pscreen.sx + labelOffsetX}, ${Pscreen.sy + labelOffsetY})`);
+
+      // Foci Screen Coordinates
+      const f1Screen = view.toScreen(-c, 0);
+      const f2Screen = view.toScreen(c, 0);
+
+      // Dashed Line PF1 (P -> Focus 1)
+      elements.linePf1.setAttribute('x1', Pscreen.sx);
+      elements.linePf1.setAttribute('y1', Pscreen.sy);
+      elements.linePf1.setAttribute('x2', f1Screen.sx);
+      elements.linePf1.setAttribute('y2', f1Screen.sy);
+
+      // Dashed Line PF2 (P -> Focus 2)
+      elements.linePf2.setAttribute('x1', Pscreen.sx);
+      elements.linePf2.setAttribute('y1', Pscreen.sy);
+      elements.linePf2.setAttribute('x2', f2Screen.sx);
+      elements.linePf2.setAttribute('y2', f2Screen.sy);
+
+      // Distance Calculations
+      const pf1 = MathEngine.calculatePF1(P.x, P.y, c);
+      const pf2 = MathEngine.calculatePF2(P.x, P.y, c);
+      const sum = pf1 + pf2;
+      const target2a = 2 * a;
+
+      elements.distPf1Val.textContent = pf1.toFixed(2);
+      elements.distPf2Val.textContent = pf2.toFixed(2);
+      elements.distSumVal.textContent = sum.toFixed(2);
+
+      // Check Constant-Sum Equality (|Sum - 2a| < 1e-4)
+      const isEqual = Math.abs(sum - target2a) < 1e-4;
+      if (isEqual) {
+        elements.equalityBadge.className = 'status-badge equal';
+        elements.equalityBadge.innerHTML = `✓ Sum = 2a = ${target2a.toFixed(2)}`;
+
+        elements.barBadgeStatus.className = 'status-badge equal';
+        elements.barBadgeStatus.innerHTML = '✓ Constant Sum';
+      } else {
+        elements.equalityBadge.className = 'status-badge unequal';
+        elements.equalityBadge.innerHTML = `✗ Sum ≠ 2a (${sum.toFixed(2)})`;
+
+        elements.barBadgeStatus.className = 'status-badge unequal';
+        elements.barBadgeStatus.innerHTML = '✗ Not on Ellipse';
+      }
+
+      elements.barLiveSum.textContent = `PF₁ + PF₂ = ${sum.toFixed(2)}`;
+      elements.barTargetSum.textContent = `2a = ${target2a.toFixed(2)}`;
+
+      // Line Labels
+      const midPf1X = (Pscreen.sx + f1Screen.sx) / 2;
+      const midPf1Y = (Pscreen.sy + f1Screen.sy) / 2;
+      elements.textPf1Label.textContent = `PF₁ = ${pf1.toFixed(2)}`;
+      elements.labelPf1G.setAttribute('transform', `translate(${midPf1X - 35}, ${midPf1Y - 14})`);
+
+      const midPf2X = (Pscreen.sx + f2Screen.sx) / 2;
+      const midPf2Y = (Pscreen.sy + f2Screen.sy) / 2;
+      elements.textPf2Label.textContent = `PF₂ = ${pf2.toFixed(2)}`;
+      elements.labelPf2G.setAttribute('transform', `translate(${midPf2X - 35}, ${midPf2Y - 14})`);
+    }
+
+    function updateReadouts() {
+      const a = state.a;
+      const b = state.b;
+      const c = MathEngine.calculateC(a, b);
+      const e = MathEngine.calculateEccentricity(a, b);
+      const twoA = 2 * a;
+      const twoB = 2 * b;
+      const directrixDistX = c > 0 ? (a * a) / c : 0;
+
+      elements.inputA.value = a.toFixed(2);
+      elements.inputB.value = b.toFixed(2);
+      elements.sliderA.value = a;
+      elements.sliderB.value = b;
+
+      elements.readoutC.textContent = `c = ${c.toFixed(2)}`;
+      elements.readout2a.textContent = twoA.toFixed(2);
+      elements.readoutE.textContent = `e = ${e.toFixed(2)}`;
+      elements.readoutDirectrices.textContent = `x = ±${directrixDistX.toFixed(2)}`;
+
+      elements.predictionEq.textContent = `x² / ${(a*a).toFixed(2)} + y² / ${(b*b).toFixed(2)} = 1`;
+
+      // Update Learning Panel Values
+      const P = MathEngine.ellipsePointFromParameter(state.angleT, a, b);
+      const pf1 = MathEngine.calculatePF1(P.x, P.y, c);
+      const pf2 = MathEngine.calculatePF2(P.x, P.y, c);
+
+      if (elements.learnPf1Val) elements.learnPf1Val.textContent = pf1.toFixed(2);
+      if (elements.learnPf2Val) elements.learnPf2Val.textContent = pf2.toFixed(2);
+      if (elements.learnSumVal) elements.learnSumVal.textContent = (pf1 + pf2).toFixed(2);
+      if (elements.learn2aVal) elements.learn2aVal.textContent = twoA.toFixed(2);
+      if (elements.learn2aVal2) elements.learn2aVal2.textContent = twoA.toFixed(2);
+      if (elements.learnF1Str) elements.learnF1Str.textContent = `F₁ = (-${c.toFixed(2)}, 0)`;
+      if (elements.learnF2Str) elements.learnF2Str.textContent = `F₂ = (${c.toFixed(2)}, 0)`;
+      if (elements.learnAVal) elements.learnAVal.textContent = a.toFixed(2);
+      if (elements.learnBVal) elements.learnBVal.textContent = b.toFixed(2);
+      if (elements.learn2bVal) elements.learn2bVal.textContent = twoB.toFixed(2);
+      if (elements.learnCCalc) elements.learnCCalc.textContent = `c = √(${a.toFixed(2)}² - ${b.toFixed(2)}²) = √(${(a*a).toFixed(2)} - ${(b*b).toFixed(2)}) = ${c.toFixed(2)}`;
+      if (elements.learnECalc) elements.learnECalc.textContent = `e = ${c.toFixed(2)} / ${a.toFixed(2)} = ${e.toFixed(2)}`;
+      if (elements.learnDirCalc) elements.learnDirCalc.textContent = `x = ± ${a.toFixed(2)}² / ${c.toFixed(2)} = ± ${directrixDistX.toFixed(2)}`;
+
+      // Update Visual Proof Step Text
+      document.getElementById('pmath-step1-sub').textContent = `\u221A((x+${c.toFixed(2)})\u00B2+y\u00B2) + \u221A((x-${c.toFixed(2)})\u00B2+y\u00B2) = ${twoA.toFixed(2)}`;
+      document.getElementById('pmath-step2-sub').textContent = `${a.toFixed(2)}\u221A((x-${c.toFixed(2)})\u00B2+y\u00B2) = ${(a*a).toFixed(2)} - ${c.toFixed(2)}x`;
+      document.getElementById('pmath-step3-sub').textContent = `${(b*b).toFixed(2)}x\u00B2 + ${(a*a).toFixed(2)}y\u00B2 = ${(a*a*b*b).toFixed(2)}`;
+      document.getElementById('pmath-step4-sub').innerHTML = `x\u00B2/${(a*a).toFixed(2)} + y\u00B2/${(b*b).toFixed(2)} = 1 &#10004;`;
+    }
+
+    function render() {
+      renderGrid();
+      renderAxes();
+      renderEllipse();
+      renderFociAndDirectrices();
+      renderLocusConstruction();
+      updateReadouts();
+    }
+
+    // --- 6. Event Handlers & User Interactions ---
+
+    function showError(msg) {
+      elements.errorMsg.textContent = msg;
+      elements.errorToast.classList.add('show');
+      setTimeout(() => {
+        elements.errorToast.classList.remove('show');
+      }, 3500);
+    }
+
+    function setAandB(newA, newB) {
+      const parsedA = parseFloat(newA);
+      const parsedB = parseFloat(newB);
+
+      if (isNaN(parsedA) || isNaN(parsedB)) {
+        showError('Please enter valid numerical values for semi-axes a and b.');
+        return;
+      }
+
+      if (parsedA <= parsedB) {
+        showError(`Semi-major axis 'a' (${parsedA.toFixed(2)}) must be strictly greater than semi-minor axis 'b' (${parsedB.toFixed(2)}).`);
+        elements.inputA.value = state.a.toFixed(2);
+        elements.inputB.value = state.b.toFixed(2);
+        return;
+      }
+
+      if (parsedB <= 0) {
+        showError('Semi-minor axis \'b\' must be strictly positive (b > 0).');
+        elements.inputA.value = state.a.toFixed(2);
+        elements.inputB.value = state.b.toFixed(2);
+        return;
+      }
+
+      state.a = parsedA;
+      state.b = parsedB;
+      render();
+    }
+
+    // Parameter Controls
+    elements.inputA.addEventListener('change', (e) => setAandB(e.target.value, state.b));
+    elements.inputB.addEventListener('change', (e) => setAandB(state.a, e.target.value));
+
+    elements.sliderA.addEventListener('input', (e) => setAandB(e.target.value, state.b));
+    elements.sliderB.addEventListener('input', (e) => setAandB(state.a, e.target.value));
+
+    elements.btnADec.addEventListener('click', () => {
+      if (state.a - 0.25 > state.b) setAandB(state.a - 0.25, state.b);
+    });
+
+    elements.btnAInc.addEventListener('click', () => {
+      setAandB(state.a + 0.25, state.b);
+    });
+
+    elements.btnBDec.addEventListener('click', () => {
+      if (state.b > 0.25) setAandB(state.a, state.b - 0.25);
+    });
+
+    elements.btnBInc.addEventListener('click', () => {
+      if (state.b + 0.25 < state.a) setAandB(state.a, state.b + 0.25);
+    });
+
+    // Zoom Controls
+    elements.btnZoomIn.addEventListener('click', () => {
+      view.scale = Math.min(160, view.scale * 1.15);
+      render();
+    });
+
+    elements.btnZoomOut.addEventListener('click', () => {
+      view.scale = Math.max(15, view.scale / 1.15);
+      render();
+    });
+
+    elements.btnZoomReset.addEventListener('click', () => {
+      view.originX = view.width / 2;
+      view.originY = view.height / 2;
+      view.scale = 45;
+      render();
+    });
+
+    // Toolbar Modes
+    elements.toolBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        elements.toolBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.mode = btn.dataset.mode;
+
+        if (state.mode === 'pan') {
+          elements.viewportContainer.className = 'graph-viewport-container mode-pan';
+        } else {
+          elements.viewportContainer.className = 'graph-viewport-container';
+        }
+        render();
+      });
+    });
+
+    // Toggles
+    elements.toggleGrid.addEventListener('change', (e) => {
+      state.showGrid = e.target.checked;
+      render();
+    });
+
+    elements.toggleInequality.addEventListener('change', (e) => {
+      state.showInequality = e.target.checked;
+      elements.inequalityCard.style.display = state.showInequality ? 'block' : 'none';
+      render();
+    });
+
+    elements.chkIneqInside.addEventListener('change', (e) => {
+      state.ineqInside = e.target.checked;
+      render();
+    });
+
+    elements.chkIneqOutside.addEventListener('change', (e) => {
+      state.ineqOutside = e.target.checked;
+      render();
+    });
+
+    // Independent Expandable Accordion Cards
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const card = header.closest('.accordion-card');
+        if (card) {
+          card.classList.toggle('active');
+          render();
+        }
+      });
+    });
+
+    // Dropdown Jump / Expand Selector
+    elements.learnDropdown.addEventListener('change', (e) => {
+      const topicId = e.target.value;
+      const targetCard = document.getElementById(`acc-card-${topicId}`);
+      if (targetCard) {
+        targetCard.classList.add('active');
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        render();
+      }
+    });
+
+    // Proof Toggle
+    elements.btnToggleProof.addEventListener('click', () => {
+      state.proofRevealed = !state.proofRevealed;
+      elements.proofSection.style.display = state.proofRevealed ? 'block' : 'none';
+      elements.btnToggleProof.textContent = state.proofRevealed ? 'Hide Visual Proof Panel' : 'Reveal Visual Proof Panel';
+    });
+
+    // Challenge Logic
+    function generateNewChallenge() {
+      const possible2a = [10.0, 12.0, 14.0, 16.0, 20.0];
+      const possibleE = [0.50, 0.60, 0.70, 0.80];
+
+      const target2a = possible2a[Math.floor(Math.random() * possible2a.length)];
+      const targetE = possibleE[Math.floor(Math.random() * possibleE.length)];
+
+      state.challengeTarget2a = target2a;
+      state.challengeTargetE = targetE;
+
+      elements.challengePromptText.innerHTML = `Given an ellipse with <strong>2a = ${target2a.toFixed(2)}</strong> and eccentricity <strong>e = ${targetE.toFixed(2)}</strong>:`;
+      elements.inputChallengeA.value = '';
+      elements.inputChallengeC.value = '';
+      elements.inputChallengeF1F2.value = '';
+      elements.challengeFeedback.style.display = 'none';
+    }
+
+    elements.btnNewChallenge.addEventListener('click', generateNewChallenge);
+
+    elements.btnCheckChallenge.addEventListener('click', () => {
+      const userA = parseFloat(elements.inputChallengeA.value);
+      const userC = parseFloat(elements.inputChallengeC.value);
+      const userF1F2 = parseFloat(elements.inputChallengeF1F2.value);
+
+      if (isNaN(userA) || isNaN(userC) || isNaN(userF1F2)) {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = '&#10008; Please enter valid numbers for a, c, and F₁F₂.';
+        elements.challengeFeedback.style.display = 'inline-flex';
+        return;
+      }
+
+      const expectedA = state.challengeTarget2a / 2;
+      const expectedC = state.challengeTargetE * expectedA;
+      const expectedF1F2 = 2 * expectedC;
+
+      const diffA = Math.abs(userA - expectedA);
+      const diffC = Math.abs(userC - expectedC);
+      const diffF = Math.abs(userF1F2 - expectedF1F2);
+
+      if (diffA < 0.05 && diffC < 0.05 && diffF < 0.05) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = `&#10004; Excellent! a=${expectedA.toFixed(2)}, c=${expectedC.toFixed(2)}, F₁F₂=${expectedF1F2.toFixed(2)}.`;
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = `&#10008; Try again. Expected: a = ${expectedA.toFixed(2)}, c = ${expectedC.toFixed(2)}, F₁F₂ = ${expectedF1F2.toFixed(2)}.`;
+      }
+      elements.challengeFeedback.style.display = 'inline-flex';
+    });
+
+    // Test Arbitrary Custom Point
+    elements.btnTestPoint.addEventListener('click', () => {
+      const tx = parseFloat(elements.inputTestX.value);
+      const ty = parseFloat(elements.inputTestY.value);
+
+      if (isNaN(tx) || isNaN(ty)) {
+        showError('Please enter valid numeric coordinates for x and y.');
+        return;
+      }
+
+      const c = MathEngine.calculateC(state.a, state.b);
+      const pf1 = MathEngine.calculatePF1(tx, ty, c);
+      const pf2 = MathEngine.calculatePF2(tx, ty, c);
+      const sum = pf1 + pf2;
+      const target2a = 2 * state.a;
+
+      const onEq = MathEngine.isOnEllipse(tx, ty, state.a, state.b);
+      const onDist = Math.abs(sum - target2a) < 1e-4;
+
+      if (onEq && onDist) {
+        elements.testFeedback.className = 'feedback-msg correct';
+        elements.testFeedback.innerHTML = `&#10004; Point P(${tx}, ${ty}) lies ON the ellipse! (PF₁ + PF₂ = ${sum.toFixed(2)} = 2a)`;
+      } else {
+        elements.testFeedback.className = 'feedback-msg incorrect';
+        elements.testFeedback.innerHTML = `&#10008; Point P(${tx}, ${ty}) is NOT on the ellipse. (PF₁ + PF₂ = ${sum.toFixed(2)} ≠ ${target2a.toFixed(2)})`;
+      }
+      elements.testFeedback.style.display = 'inline-flex';
+
+      // Update angleT to nearest point for visual convenience if desired
+      state.angleT = Math.atan2(ty / state.b, tx / state.a);
+      render();
+    });
+
+    // Reset Button
+    elements.btnReset.addEventListener('click', () => {
+      state.a = 4.5;
+      state.b = 3.6;
+      state.angleT = Math.PI / 4;
+      state.mode = 'select';
+      state.showGrid = true;
+      state.showInequality = false;
+      state.ineqInside = true;
+      state.ineqOutside = false;
+      state.proofRevealed = false;
+
+      view.originX = 400;
+      view.originY = 290;
+      view.scale = 45;
+
+      elements.toggleGrid.checked = true;
+      elements.toggleInequality.checked = false;
+      elements.inequalityCard.style.display = 'none';
+      elements.proofSection.style.display = 'none';
+      elements.btnToggleProof.textContent = 'Reveal Visual Proof Panel';
+      elements.challengeFeedback.style.display = 'none';
+      elements.testFeedback.style.display = 'none';
+
+      elements.toolBtns.forEach(b => b.classList.remove('active'));
+      document.getElementById('tool-select').classList.add('active');
+      elements.viewportContainer.className = 'graph-viewport-container';
+
+      render();
+    });
+
+    // --- 7. Mouse/Touch Dragging & Panning Engine ---
+    let isDraggingP = false;
+
+    function getSVGCoordinates(e) {
+      const rect = elements.svg.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        sx: clientX - rect.left,
+        sy: clientY - rect.top
+      };
+    }
+
+    elements.viewportContainer.addEventListener('mousedown', (e) => {
+      const coords = getSVGCoordinates(e);
+      const mathPt = view.toMath(coords.sx, coords.sy);
+      const Ppt = MathEngine.ellipsePointFromParameter(state.angleT, state.a, state.b);
+      const Pscreen = view.toScreen(Ppt.x, Ppt.y);
+
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      // Dragging Point P handle along ellipse
+      if (distToP < 24 && state.mode !== 'pan') {
+        isDraggingP = true;
+        updateAngleFromMouse(mathPt);
+        return;
+      }
+
+      // Free 2D Panning
+      if (state.mode === 'pan' || state.mode === 'locus' || distToP >= 24) {
+        if (state.mode !== 'locus' || distToP >= 24) {
+          view.isPanning = true;
+          view.dragStartScreen = { x: coords.sx, y: coords.sy };
+          view.dragStartOrigin = { x: view.originX, y: view.originY };
+        }
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingP) {
+        const coords = getSVGCoordinates(e);
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updateAngleFromMouse(mathPt);
+      } else if (view.isPanning) {
+        const coords = getSVGCoordinates(e);
+        const dx = coords.sx - view.dragStartScreen.x;
+        const dy = coords.sy - view.dragStartScreen.y;
+        view.originX = view.dragStartOrigin.x + dx;
+        view.originY = view.dragStartOrigin.y + dy;
+        render();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingP = false;
+      view.isPanning = false;
+    });
+
+    // Touch Handling for Tablet / Mobile
+    elements.viewportContainer.addEventListener('touchstart', (e) => {
+      const coords = getSVGCoordinates(e);
+      const Ppt = MathEngine.ellipsePointFromParameter(state.angleT, state.a, state.b);
+      const Pscreen = view.toScreen(Ppt.x, Ppt.y);
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      if (distToP < 30 && state.mode !== 'pan') {
+        isDraggingP = true;
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updateAngleFromMouse(mathPt);
+        e.preventDefault();
+      } else {
+        view.isPanning = true;
+        view.dragStartScreen = { x: coords.sx, y: coords.sy };
+        view.dragStartOrigin = { x: view.originX, y: view.originY };
+      }
+    }, { passive: false });
+
+    elements.viewportContainer.addEventListener('touchmove', (e) => {
+      const coords = getSVGCoordinates(e);
+      if (isDraggingP) {
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updateAngleFromMouse(mathPt);
+        e.preventDefault();
+      } else if (view.isPanning) {
+        const dx = coords.sx - view.dragStartScreen.x;
+        const dy = coords.sy - view.dragStartScreen.y;
+        view.originX = view.dragStartOrigin.x + dx;
+        view.originY = view.dragStartOrigin.y + dy;
+        render();
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    elements.viewportContainer.addEventListener('touchend', () => {
+      isDraggingP = false;
+      view.isPanning = false;
+    });
+
+    function updateAngleFromMouse(mathPt) {
+      // Calculate parametric angle t = atan2(y/b, x/a)
+      state.angleT = Math.atan2(mathPt.my / state.b, mathPt.mx / state.a);
+      render();
+    }
+
+    // Scroll Zooming
+    elements.viewportContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      const mouseCoords = getSVGCoordinates(e);
+      const mathBefore = view.toMath(mouseCoords.sx, mouseCoords.sy);
+
+      const newScale = Math.min(Math.max(15, view.scale * zoomFactor), 160);
+      view.scale = newScale;
+
+      view.originX = mouseCoords.sx - mathBefore.mx * view.scale;
+      view.originY = mouseCoords.sy + mathBefore.my * view.scale;
+
+      render();
+    }, { passive: false });
+
+    // Window Resize Handling
+    window.addEventListener('resize', updateViewportDimensions);
+
+    // Initial Setup
+    updateViewportDimensions();
+    render();
+  </script>
+</body>
+</html>

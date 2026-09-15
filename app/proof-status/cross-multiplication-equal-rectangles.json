@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "cross-multiplication-equal-rectangles",
+  "categorySlug": "ratios",
+  "slug": "cross-multiplication-equal-rectangles",
+  "route": "/visual-proofs/ratios/cross-multiplication-equal-rectangles",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/85/index.html)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "fundamental-theorem-of-calculus",
+  "categorySlug": "calculus",
+  "slug": "fundamental-theorem-of-calculus",
+  "route": "/visual-proofs/calculus/fundamental-theorem-of-calculus",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/67-fundamental-theorem-of-calculus)."
+}

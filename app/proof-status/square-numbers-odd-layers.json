@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "square-numbers-odd-layers",
+  "categorySlug": "sequences-and-series",
+  "slug": "square-numbers-odd-layers",
+  "route": "/visual-proofs/sequences-and-series/square-numbers-odd-layers",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof187)."
+}

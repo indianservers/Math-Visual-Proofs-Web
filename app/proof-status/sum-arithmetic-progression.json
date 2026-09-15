@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "sum-arithmetic-progression",
+  "categorySlug": "sequences-and-series",
+  "slug": "sum-arithmetic-progression",
+  "route": "/visual-proofs/sequences-and-series/sum-arithmetic-progression",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof180)."
+}

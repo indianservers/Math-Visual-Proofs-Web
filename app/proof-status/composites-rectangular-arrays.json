@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "composites-rectangular-arrays",
+  "categorySlug": "number-theory",
+  "slug": "composites-rectangular-arrays",
+  "route": "/visual-proofs/number-theory/composites-rectangular-arrays",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/76-code/index.html)."
+}

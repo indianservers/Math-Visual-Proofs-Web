@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "sierpinski-removed-square-sum",
+  "categorySlug": "sequences-and-series",
+  "slug": "sierpinski-removed-square-sum",
+  "route": "/visual-proofs/sequences-and-series/sierpinski-removed-square-sum",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof184)."
+}

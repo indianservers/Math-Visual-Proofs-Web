@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "euclid-infinitely-many-primes",
+  "categorySlug": "number-theory",
+  "slug": "euclid-infinitely-many-primes",
+  "route": "/visual-proofs/number-theory/euclid-infinitely-many-primes",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/78-code/index.html)."
+}

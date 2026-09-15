@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "even-odd-pairing",
+  "categorySlug": "number-theory",
+  "slug": "even-odd-pairing",
+  "route": "/visual-proofs/number-theory/even-odd-pairing",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/073-even-odd-pairing)."
+}

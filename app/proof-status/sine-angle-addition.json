@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "sine-angle-addition",
+  "categorySlug": "trigonometry",
+  "slug": "sine-angle-addition",
+  "route": "/visual-proofs/trigonometry/sine-angle-addition",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/035_sine_angle_addition_single_page.html)."
+}

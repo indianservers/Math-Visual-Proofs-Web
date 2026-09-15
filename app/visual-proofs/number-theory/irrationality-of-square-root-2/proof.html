@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why √2 is Irrational - Standalone Visual Proof</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #F4F5FB;
+      --bg-card: #FFFFFF;
+      --bg-sidebar: #FFFFFF;
+      
+      --primary: #635BFF;
+      --primary-hover: #4F46E5;
+      --primary-light: #EEEDFF;
+      --primary-glow: rgba(99, 91, 255, 0.18);
+      
+      --counter-purple-start: #9D7BFF;
+      --counter-purple-end: #7C5CFC;
+      --counter-green-start: #6EE7B7;
+      --counter-green-end: #10B981;
+      
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --text-light: #94A3B8;
+      
+      --border-color: #E2E8F0;
+      --border-focus: #818CF8;
+      
+      --red-bg: #FEF2F2;
+      --red-border: #FCA5A5;
+      --red-text: #DC2626;
+      
+      --green-bg: #ECFDF5;
+      --green-border: #A7F3D0;
+      --green-text: #059669;
+      
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 14px rgba(99, 91, 255, 0.08);
+      --shadow-lg: 0 10px 25px rgba(99, 91, 255, 0.12);
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ----------------------------------------------------
+       LAYOUT STRUCTURE
+    ---------------------------------------------------- */
+    .app-container {
+      display: flex;
+      width: 100%;
+      max-width: 100vw;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 80px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 24px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #EEEDFF 0%, #E0E0FF 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 60px;
+      padding: 8px 0;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      flex: 1;
+      min-width: 0;
+      width: calc(100vw - 80px);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 24px;
+      gap: 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .breadcrumb span {
+      color: var(--text-light);
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+
+    .badge-primary {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: rgba(99, 91, 255, 0.2);
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0F172A;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .mission-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .mission-icon {
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+
+    /* Grid Layouts */
+    .grid-main {
+      display: grid;
+      grid-template-columns: 290px 1fr 290px;
+      gap: 16px;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .grid-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+    }
+
+    /* Card Base */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .step-number {
+      width: 22px;
+      height: 22px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: -6px;
+      font-weight: 500;
+    }
+
+    /* ----------------------------------------------------
+       PANEL 1: GEOMETRY (UNIT SQUARE)
+    ---------------------------------------------------- */
+    .unit-square-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .square-container {
+      width: 190px;
+      height: 190px;
+      position: relative;
+      margin: 4px 0 12px 0;
+    }
+
+    .unit-square-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .square-box-bg {
+      fill: rgba(99, 91, 255, 0.04);
+      stroke: #818CF8;
+      stroke-width: 2;
+    }
+
+    .square-diagonal-anim {
+      stroke: var(--primary);
+      stroke-width: 2.5;
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      animation: drawDiagonal 1.5s ease-out forwards;
+    }
+
+    @keyframes drawDiagonal {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .right-angle-marker {
+      fill: none;
+      stroke: #818CF8;
+      stroke-width: 1.5;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease;
+      cursor: pointer;
+    }
+
+    .right-angle-marker:hover {
+      stroke: var(--primary);
+      stroke-width: 3;
+    }
+
+    .label-dimension {
+      font-size: 14px;
+      font-weight: 700;
+      fill: #334155;
+    }
+
+    .label-diagonal {
+      font-size: 15px;
+      font-weight: 800;
+      fill: var(--primary);
+    }
+
+    .calc-card {
+      width: 100%;
+      background: var(--bg-main);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .calc-row {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .calc-highlight {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 14px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    /* ----------------------------------------------------
+       PANEL 2: PARITY CONTRADICTION (CENTER WORKSPACE)
+    ---------------------------------------------------- */
+    .parity-panel {
+      grid-column: 2;
+      justify-content: space-between;
+    }
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-reset:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .workspace-columns {
+      display: grid;
+      grid-template-columns: 85px 125px 1fr 165px;
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .column-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    /* Counter Source Pool */
+    .counters-pool {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 4px;
+      background: rgba(244, 245, 251, 0.6);
+      border-radius: var(--radius-lg);
+      min-height: 240px;
+    }
+
+    .counters-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      justify-items: center;
+    }
+
+    .counter-item {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: #FFFFFF;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+    }
+
+    .counter-item:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+    }
+
+    .counter-item:active, .counter-item.dragging {
+      cursor: grabbing;
+      transform: scale(1.15);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      z-index: 1000 !important;
+    }
+
+    .counter-purple {
+      background: linear-gradient(135deg, var(--counter-purple-start), var(--counter-purple-end));
+    }
+
+    .counter-green {
+      background: linear-gradient(135deg, var(--counter-green-start), var(--counter-green-end));
+    }
+
+    .hand-drag-hint {
+      position: absolute;
+      bottom: -6px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
+
+    /* Group into pairs Column */
+    .pairs-column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .drop-zone {
+      border: 2px dashed #C7D2FE;
+      background: rgba(238, 237, 255, 0.4);
+      border-radius: var(--radius-md);
+      padding: 10px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
+      min-height: 52px;
+      transition: all 0.2s ease;
+    }
+
+    .drop-zone.hovered {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    .paired-slots-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pair-slot {
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      background: #FFFFFF;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 2px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .pair-slot.filled {
+      border-style: solid;
+      border-color: #C7D2FE;
+      background: var(--primary-light);
+      box-shadow: 0 0 8px var(--primary-glow);
+    }
+
+    .pair-footer-hint {
+      background: rgba(244, 245, 251, 0.8);
+      border-radius: var(--radius-sm);
+      padding: 6px 4px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    /* Arrays reveal parity Column */
+    .arrays-column {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-around;
+    }
+
+    .array-row {
+      background: var(--bg-main);
+      border-radius: var(--radius-md);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .array-label {
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-main);
+      min-width: 55px;
+    }
+
+    .array-dots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 12px);
+      gap: 5px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .dot-purple {
+      background: var(--counter-purple-end);
+    }
+
+    .dot-green {
+      background: var(--counter-green-end);
+    }
+
+    .array-parity-tag {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Contradiction Box Column */
+    .contradiction-box {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      border-radius: var(--radius-lg);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: center;
+      justify-content: space-between;
+    }
+
+    .contradiction-header {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--red-text);
+    }
+
+    .contradiction-step {
+      font-size: 10px;
+      font-weight: 600;
+      color: #791F1F;
+      line-height: 1.25;
+      opacity: 0.4;
+      transition: opacity 0.3s ease;
+    }
+
+    .contradiction-step.unlocked {
+      opacity: 1;
+      font-weight: 700;
+    }
+
+    .contradiction-arrow {
+      color: var(--red-text);
+      font-weight: 800;
+      font-size: 12px;
+      margin: -3px 0;
+    }
+
+    .contradiction-conclusion {
+      border-top: 1px dashed var(--red-border);
+      padding-top: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--red-text);
+      line-height: 1.25;
+    }
+
+    .workspace-info-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      width: 100%;
+    }
+
+    .info-circle {
+      width: 15px;
+      height: 15px;
+      background: var(--primary);
+      color: #FFFFFF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* ----------------------------------------------------
+       PANEL 3: RIGHT SIDEBAR (WHY IT WORKS, PREDICTION, REVEAL)
+    ---------------------------------------------------- */
+    .right-sidebar-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .section-icon {
+      color: var(--primary);
+    }
+
+    /* Accordion Expandable Cards */
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .accordion-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-main);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .accordion-header {
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .accordion-header:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .accordion-body {
+      padding: 0 10px 8px 10px;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      display: none;
+    }
+
+    .accordion-card.open .accordion-body {
+      display: block;
+    }
+
+    /* Prediction Card */
+    .prediction-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .prediction-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .prediction-question {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .prediction-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-pred {
+      padding: 7px 0;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn-pred:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-pred.correct {
+      background: var(--green-text) !important;
+      color: #FFFFFF !important;
+      border-color: var(--green-text) !important;
+    }
+
+    .btn-pred.incorrect {
+      background: var(--red-text) !important;
+      color: #FFFFFF !important;
+      border-color: var(--red-text) !important;
+    }
+
+    .btn-pred:disabled {
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+
+    .prediction-feedback {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+
+    .prediction-feedback.show {
+      display: block;
+    }
+
+    /* Reveal Card */
+    .reveal-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0.6;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .reveal-card.unlocked {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .reveal-body {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      line-height: 1.35;
+    }
+
+    .reveal-conclusion {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .badge-success {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border: 1px solid var(--green-border);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+    }
+
+    /* ----------------------------------------------------
+       BOTTOM ROW (ONE-LINE PROOF & PARITY SPIRAL CHALLENGE)
+    ---------------------------------------------------- */
+    .one-line-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .proof-chain {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      box-sizing: border-box;
+    }
+
+    .chain-node {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+      border-radius: var(--radius-md);
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .chain-node.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 8px var(--primary-glow);
+    }
+
+    .chain-node.highlight-purple {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+    }
+
+    .chain-node.highlight-red {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border-color: var(--red-border);
+    }
+
+    .chain-arrow {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .proof-legend {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-light);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Challenge Card */
+    .challenge-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .spiral-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      box-sizing: border-box;
+    }
+
+    .spiral-step-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .spiral-node {
+      padding: 5px 8px;
+      border-radius: var(--radius-md);
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .spiral-why-select {
+      appearance: none;
+      background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%20635BFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 6px center;
+      border: 1px dashed var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 3px 18px 3px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
+      cursor: pointer;
+      max-width: 95px;
+      text-overflow: ellipsis;
+    }
+
+    .spiral-why-select:focus {
+      outline: none;
+      border-style: solid;
+    }
+
+    .btn-check-reasoning {
+      align-self: center;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 8px rgba(99, 91, 255, 0.2);
+    }
+
+    .btn-check-reasoning:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .challenge-feedback {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .challenge-feedback.show {
+      display: block;
+    }
+
+    .challenge-feedback.correct {
+      color: var(--green-text);
+    }
+
+    .challenge-feedback.incorrect {
+      color: var(--red-text);
+    }
+
+    /* RESPONSIVE MEDIA QUERIES TO PREVENT HORIZONTAL SCROLL ENTIRELY */
+    @media (max-width: 1200px) {
+      .grid-main {
+        grid-template-columns: 260px 1fr 260px;
+        gap: 12px;
+      }
+      .workspace-columns {
+        grid-template-columns: 75px 110px 1fr 150px;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .sidebar {
+        width: 60px;
+      }
+      .main-wrapper {
+        width: calc(100vw - 60px);
+        padding: 16px;
+      }
+      .grid-main {
+        grid-template-columns: 1fr;
+      }
+      .right-sidebar-panel {
+        grid-column: span 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+      }
+      .grid-bottom {
+        grid-template-columns: 1fr;
+      }
+      .workspace-columns {
+        grid-template-columns: 80px 120px 1fr 160px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .right-sidebar-panel {
+        grid-template-columns: 1fr;
+      }
+      .workspace-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- 1. LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <a href="#" class="brand-logo">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      MATHS<br>UNIVERSE
+    </a>
+
+    <ul class="nav-list">
+      <li class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        Explore
+      </li>
+      <li class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        Steps
+      </li>
+      <li class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line x1="16" y1="13" x2="8" y2="13"></line>
+          <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        Proofs
+      </li>
+      <li class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        Practice
+      </li>
+      <li class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        Naved
+      </li>
+    </ul>
+
+    <div class="sidebar-bottom">
+      <li class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Settings
+      </li>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE CONTENT -->
+  <main class="main-wrapper">
+    
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <div class="header-bar">
+        <div class="breadcrumb">
+          Visual Proofs <span>/</span> Number Theory
+        </div>
+        <div class="header-meta">
+          <span class="badge badge-primary">Intermediate</span>
+          <span class="badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            12 min
+          </span>
+        </div>
+      </div>
+
+      <h1 class="page-title">Why √2 is Irrational</h1>
+
+      <div class="mission-banner">
+        <span class="mission-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="12" r="6"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+          </svg>
+        </span>
+        <strong>Mission:</strong> Pair the unit-square diagonal with a parity contradiction.
+      </div>
+    </header>
+
+    <!-- MAIN 3-COLUMN WORKSPACE GRID -->
+    <section class="grid-main">
+      
+      <!-- CARD 1: GEOMETRY - THE UNIT SQUARE -->
+      <article class="card unit-square-panel">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="step-number">1</span>
+            Geometry: The Unit Square
+          </h2>
+        </div>
+        <p class="card-subtitle">The diagonal of a unit square has length √2.</p>
+
+        <!-- SVG Unit Square Diagram -->
+        <div class="square-container">
+          <svg class="unit-square-svg" viewBox="0 0 200 200">
+            <defs>
+              <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(99,91,255,0.06)" stroke-width="1"/>
+              </pattern>
+            </defs>
+            
+            <rect x="25" y="25" width="150" height="150" class="square-box-bg" />
+            <rect x="25" y="25" width="150" height="150" fill="url(#gridPattern)" />
+
+            <!-- Right Angle Corner Markers -->
+            <path class="right-angle-marker" d="M 25 35 L 35 35 L 35 25" />
+            <path class="right-angle-marker" d="M 165 35 L 165 45 L 175 45" />
+            <path class="right-angle-marker" d="M 25 165 L 35 165 L 35 175" />
+            <path class="right-angle-marker" d="M 165 165 L 165 155 L 155 155" />
+
+            <!-- Dimension Labels -->
+            <text x="100" y="15" text-anchor="middle" class="label-dimension">1</text>
+            <line x1="25" y1="20" x2="175" y2="20" stroke="#CBD5E1" stroke-width="1" />
+
+            <text x="12" y="105" text-anchor="middle" class="label-dimension">1</text>
+            <line x1="18" y1="25" x2="18" y2="175" stroke="#CBD5E1" stroke-width="1" />
+
+            <!-- Animated Diagonal line -->
+            <line x1="25" y1="175" x2="175" y2="25" class="square-diagonal-anim" />
+
+            <!-- Diagonal Label -->
+            <rect x="85" y="85" width="36" height="26" rx="6" fill="#FFFFFF" stroke="#818CF8" stroke-width="1.5"/>
+            <text x="103" y="103" text-anchor="middle" class="label-diagonal">√2</text>
+          </svg>
+        </div>
+
+        <!-- Calculations Card -->
+        <div class="calc-card">
+          <div class="calc-row">Area = 1</div>
+          <div class="calc-row">Diagonal² = 1² + 1² = 2</div>
+          <div class="calc-highlight">Diagonal = √2</div>
+        </div>
+      </article>
+
+      <!-- CARD 2: PARITY CONTRADICTION WORKSPACE -->
+      <article class="card parity-panel">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="step-number">2</span>
+            Parity Contradiction: Assume √2 = p/q in Lowest Terms
+          </h2>
+          <button class="btn-reset" id="btnResetProof">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6"></path>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            Reset proof
+          </button>
+        </div>
+        <p class="card-subtitle">Build equal groups to expose an even-even spiral.</p>
+
+        <!-- 4 Column Layout Inside Center Panel -->
+        <div class="workspace-columns">
+          
+          <!-- Column 1: Counters -->
+          <div class="counters-pool">
+            <div class="column-title">Counters</div>
+            <div class="counters-grid" id="countersGrid"></div>
+          </div>
+
+          <!-- Column 2: Group into pairs -->
+          <div class="pairs-column">
+            <div class="column-title">Group into pairs</div>
+            <div class="drop-zone" id="pairDropZone">
+              Drop here to make a pair
+            </div>
+            
+            <div class="paired-slots-container" id="pairedSlotsContainer">
+              <div class="pair-slot" data-slot="1"></div>
+              <div class="pair-slot" data-slot="2"></div>
+              <div class="pair-slot" data-slot="3"></div>
+              <div class="pair-slot" data-slot="4"></div>
+            </div>
+
+            <div class="pair-footer-hint">Pairs show an even number.</div>
+          </div>
+
+          <!-- Column 3: Arrays reveal parity -->
+          <div class="arrays-column">
+            <div class="column-title">Arrays reveal parity</div>
+            
+            <div class="array-row">
+              <span class="array-label">2 p² =</span>
+              <div class="array-dots-grid" id="arrayDotsP">
+                <div class="dot dot-purple"></div><div class="dot dot-purple"></div><div class="dot dot-purple"></div>
+                <div class="dot dot-purple"></div><div class="dot dot-purple"></div><div class="dot dot-purple"></div>
+              </div>
+              <span class="array-parity-tag">(even)</span>
+            </div>
+
+            <div class="array-row">
+              <span class="array-label">2 pq =</span>
+              <div class="array-dots-grid" id="arrayDotsPQ">
+                <div class="dot dot-purple"></div><div class="dot dot-purple"></div><div class="dot dot-purple"></div>
+                <div class="dot dot-green"></div><div class="dot dot-green"></div><div class="dot dot-green"></div>
+              </div>
+              <span class="array-parity-tag">(even)</span>
+            </div>
+
+            <div class="array-row">
+              <span class="array-label">2 q² =</span>
+              <div class="array-dots-grid" id="arrayDotsQ">
+                <div class="dot dot-green"></div><div class="dot dot-green"></div><div class="dot dot-green"></div>
+                <div class="dot dot-green"></div><div class="dot dot-green"></div><div class="dot dot-green"></div>
+              </div>
+              <span class="array-parity-tag">(even)</span>
+            </div>
+          </div>
+
+          <!-- Column 4: Contradiction Box -->
+          <div class="contradiction-box">
+            <div class="contradiction-header">Contradiction</div>
+            <div class="contradiction-step unlocked" id="cStep1">
+              If <strong>2 q²</strong> is even,<br>then <strong>q</strong> is even.
+            </div>
+            <div class="contradiction-arrow">↓</div>
+            <div class="contradiction-step" id="cStep2">
+              If <strong>2 pq</strong> is even with <strong>q</strong> even,<br>then <strong>p</strong> is even.
+            </div>
+            <div class="contradiction-arrow">↓</div>
+            <div class="contradiction-step" id="cStep3">
+              Then <strong>2 p²</strong> is even.
+            </div>
+            <div class="contradiction-conclusion">
+              But <strong>p</strong> and <strong>q</strong> cannot both be even in lowest terms.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="workspace-info-footer">
+          <span class="info-circle">i</span>
+          Drag counters into pairs. Arrays update automatically.
+        </div>
+      </article>
+
+      <!-- CARD 3: RIGHT SIDEBAR (WHY IT WORKS, PREDICTION, REVEAL) -->
+      <aside class="right-sidebar-panel">
+        
+        <!-- Why it works (Accordion) -->
+        <article class="card">
+          <div class="section-header">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15 8 22 9 17 14 18 21 12 17 6 21 7 14 2 9 9 8 12 2"></polygon>
+              </svg>
+            </span>
+            Why it works
+          </div>
+
+          <div class="accordion-list">
+            <div class="accordion-card open">
+              <div class="accordion-header">
+                1. Unit square diagonal
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="accordion-body">
+                By Pythagorean theorem, diagonal of 1x1 square is √2.
+              </div>
+            </div>
+
+            <div class="accordion-card">
+              <div class="accordion-header">
+                2. Assume √2 = p/q
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="accordion-body">
+                Assume p/q is in lowest terms with no common factor > 1.
+              </div>
+            </div>
+
+            <div class="accordion-card">
+              <div class="accordion-header">
+                3. Parity contradiction
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </div>
+              <div class="accordion-body">
+                2q² = p² forces both p & q to be even, violating lowest terms!
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Prediction -->
+        <article class="prediction-card">
+          <div class="section-header">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </span>
+            Prediction
+          </div>
+
+          <div class="prediction-title">What happens next?</div>
+          <div class="prediction-question">If q is even, then p must be even.</div>
+
+          <div class="prediction-buttons">
+            <button class="btn-pred" id="btnPredTrue">✓ True</button>
+            <button class="btn-pred" id="btnPredFalse">False</button>
+          </div>
+
+          <div class="prediction-feedback" id="predictionFeedback"></div>
+        </article>
+
+        <!-- Reveal Card -->
+        <article class="reveal-card" id="revealCard">
+          <div class="section-header">
+            <span class="section-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </span>
+            Reveal
+          </div>
+
+          <p class="reveal-body">
+            Since <strong>p, q</strong> can't both be even in lowest terms, the assumption is impossible.
+          </p>
+          <div class="reveal-conclusion">
+            Therefore, √2 is irrational.
+          </div>
+
+          <span class="badge-success">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            You proved it!
+          </span>
+        </article>
+
+      </aside>
+
+    </section>
+
+    <!-- BOTTOM ROW: ONE-LINE PROOF & CHALLENGE -->
+    <section class="grid-bottom">
+      
+      <!-- CARD 4: ONE-LINE PROOF -->
+      <article class="card one-line-card">
+        <div class="card-header">
+          <h2 class="card-title">One-line proof (visual)</h2>
+        </div>
+
+        <div class="proof-chain" id="proofChainNodes">
+          <div class="chain-node active" data-step="1">
+            <svg width="14" height="14" viewBox="0 0 20 20" style="margin-right:2px;">
+              <rect x="2" y="2" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="2" y1="18" x2="18" y2="2" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2"/>
+            </svg>
+            √2
+          </div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node" data-step="2">Assume √2 = p/q</div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node" data-step="3">2p² even</div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node" data-step="4">q even</div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node" data-step="5">2pq even</div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node" data-step="6">p even</div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node highlight-red" data-step="7">Both even ✕ Impossible</div>
+          <span class="chain-arrow">→</span>
+
+          <div class="chain-node highlight-purple" data-step="8">√2 is irrational</div>
+        </div>
+
+        <div class="proof-legend">
+          <div class="legend-item"><span style="color:var(--primary)">Unit-square diagonal.</span> Geometry</div>
+          <span>→</span>
+          <div class="legend-item"><span style="color:var(--primary)">Assume rational.</span> Assumption</div>
+          <span>→</span>
+          <div class="legend-item"><span style="color:var(--green-text)">Parity cascade.</span> Parity</div>
+          <span>→</span>
+          <div class="legend-item"><span style="color:var(--red-text)">Contradiction.</span></div>
+        </div>
+      </article>
+
+      <!-- CARD 5: CHALLENGE PARITY SPIRAL -->
+      <article class="card challenge-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+              <path d="M15 4V2M15 16v-2M8 9h2M20 9h-2M17.8 5.2l-1.4 1.4M6.6 16.4l-1.4 1.4M6.6 5.2l1.4 1.4M17.8 16.4l1.4 1.4"></path>
+            </svg>
+            Challenge: Complete the parity spiral
+          </h2>
+        </div>
+        <p class="card-subtitle">Start from 2q² even and fill the missing reasons.</p>
+
+        <div class="spiral-flow">
+          
+          <div class="spiral-step-group">
+            <div class="spiral-node">2q² even</div>
+            <select class="spiral-why-select" data-challenge="1">
+              <option value="">Why?</option>
+              <option value="def_even">Factor 2 means even</option>
+              <option value="square_even">Square is even</option>
+              <option value="lowest_terms">Lowest terms</option>
+            </select>
+          </div>
+
+          <span class="chain-arrow">→</span>
+
+          <div class="spiral-step-group">
+            <div class="spiral-node">q even</div>
+            <select class="spiral-why-select" data-challenge="2">
+              <option value="">Why?</option>
+              <option value="square_root_parity">Square of even is even</option>
+              <option value="def_even">Factor 2 means even</option>
+              <option value="substitution">Sub p = 2k</option>
+            </select>
+          </div>
+
+          <span class="chain-arrow">→</span>
+
+          <div class="spiral-step-group">
+            <div class="spiral-node">2pq even</div>
+            <select class="spiral-why-select" data-challenge="3">
+              <option value="">Why?</option>
+              <option value="product_even">Product with even q</option>
+              <option value="square_even">Square is even</option>
+              <option value="lowest_terms">Lowest terms</option>
+            </select>
+          </div>
+
+          <span class="chain-arrow">→</span>
+
+          <div class="spiral-step-group">
+            <div class="spiral-node">p even</div>
+            <select class="spiral-why-select" data-challenge="4">
+              <option value="">Why?</option>
+              <option value="derived_parity">2q² = p² forces p even</option>
+              <option value="def_even">Factor 2 means even</option>
+              <option value="product_even">Product with even q</option>
+            </select>
+          </div>
+
+          <span class="chain-arrow">→</span>
+
+          <div class="spiral-step-group">
+            <div class="spiral-node">2p² even</div>
+            <select class="spiral-why-select" data-challenge="5">
+              <option value="">Why?</option>
+              <option value="sub_and_square">p = 2k gives 2(2k)²</option>
+              <option value="lowest_terms">Lowest terms</option>
+              <option value="def_even">Factor 2 means even</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button class="btn-check-reasoning" id="btnCheckChallenge">Check my reasoning</button>
+
+        <div class="challenge-feedback" id="challengeFeedback"></div>
+      </article>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+  /* ==========================================================================
+     SHARED MATHEMATICAL STATE ENGINE & REACTIVITY SYSTEM
+     ========================================================================== */
+  const state = {
+    proofStep: 1,
+    countersPool: [
+      { id: 'c1', type: 'purple', val: 2 },
+      { id: 'c2', type: 'purple', val: 2 },
+      { id: 'c3', type: 'purple', val: 2 },
+      { id: 'c4', type: 'purple', val: 2 },
+      { id: 'c5', type: 'purple', val: 2 },
+      { id: 'c6', type: 'purple', val: 2 },
+      { id: 'c7', type: 'green', val: 1 },
+      { id: 'c8', type: 'green', val: 1 },
+      { id: 'c9', type: 'green', val: 1 },
+      { id: 'c10', type: 'green', val: 1 }
+    ],
+    pairs: [
+      { id: 'pair-1', type: 'purple', val: 2, c1: 'c1', c2: 'c2', slot: 1 },
+      { id: 'pair-2', type: 'green', val: 1, c1: 'c7', c2: 'c8', slot: 2 }
+    ],
+    pendingCounter: null,
+    predictionAnswered: false,
+    revealUnlocked: false
+  };
+
+  /* DOM ELEMENTS */
+  const countersGrid = document.getElementById('countersGrid');
+  const pairDropZone = document.getElementById('pairDropZone');
+  const pairedSlotsContainer = document.getElementById('pairedSlotsContainer');
+  const btnResetProof = document.getElementById('btnResetProof');
+  const btnPredTrue = document.getElementById('btnPredTrue');
+  const btnPredFalse = document.getElementById('btnPredFalse');
+  const predictionFeedback = document.getElementById('predictionFeedback');
+  const revealCard = document.getElementById('revealCard');
+  const proofChainNodes = document.getElementById('proofChainNodes');
+  const btnCheckChallenge = document.getElementById('btnCheckChallenge');
+  const challengeFeedback = document.getElementById('challengeFeedback');
+  const cStep1 = document.getElementById('cStep1');
+  const cStep2 = document.getElementById('cStep2');
+  const cStep3 = document.getElementById('cStep3');
+
+  function renderAll() {
+    renderCountersPool();
+    renderPairs();
+    renderParityArrays();
+    renderContradictionSteps();
+    renderOneLineProofChain();
+  }
+
+  function renderCountersPool() {
+    countersGrid.innerHTML = '';
+    const pairedCounterIds = new Set();
+    state.pairs.forEach(p => {
+      if (p.c1) pairedCounterIds.add(p.c1);
+      if (p.c2) pairedCounterIds.add(p.c2);
+    });
+
+    state.countersPool.forEach((item) => {
+      if (pairedCounterIds.has(item.id)) return;
+
+      const el = document.createElement('div');
+      el.className = `counter-item counter-${item.type}`;
+      el.textContent = item.val;
+      el.dataset.id = item.id;
+      el.dataset.val = item.val;
+      el.dataset.type = item.type;
+
+      if (item.id === 'c4') {
+        const hand = document.createElement('div');
+        hand.className = 'hand-drag-hint';
+        hand.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#4F46E5" stroke-width="1.5">
+            <path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V2a2 2 0 0 0-4 0v9"></path>
+            <path d="M18 11a2 2 0 0 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.8-5.7-2.3L3.2 15c-.4-.5-.4-1.2 0-1.7l.6-.6c.4-.4 1.1-.4 1.5 0L8 15V6a2 2 0 0 1 4 0v5"></path>
+          </svg>`;
+        el.appendChild(hand);
+      }
+
+      attachPointerDragEvents(el);
+      countersGrid.appendChild(el);
+    });
+  }
+
+  function renderPairs() {
+    const slots = pairedSlotsContainer.querySelectorAll('.pair-slot');
+    slots.forEach((slotEl, idx) => {
+      const slotNum = idx + 1;
+      const pair = state.pairs.find(p => p.slot === slotNum);
+      slotEl.innerHTML = '';
+      if (pair) {
+        slotEl.classList.add('filled');
+        const c1 = document.createElement('div');
+        c1.className = `counter-item counter-${pair.type}`;
+        c1.style.width = '28px';
+        c1.style.height = '28px';
+        c1.style.fontSize = '12px';
+        c1.textContent = pair.val;
+
+        const c2 = document.createElement('div');
+        c2.className = `counter-item counter-${pair.type}`;
+        c2.style.width = '28px';
+        c2.style.height = '28px';
+        c2.style.fontSize = '12px';
+        c2.textContent = pair.val;
+
+        slotEl.appendChild(c1);
+        slotEl.appendChild(c2);
+
+        slotEl.onclick = () => {
+          state.pairs = state.pairs.filter(p => p.slot !== slotNum);
+          renderAll();
+        };
+      } else {
+        slotEl.classList.remove('filled');
+        slotEl.onclick = null;
+      }
+    });
+  }
+
+  function renderParityArrays() {
+    const dotsP = document.querySelectorAll('#arrayDotsP .dot');
+    const dotsPQ = document.querySelectorAll('#arrayDotsPQ .dot');
+    const dotsQ = document.querySelectorAll('#arrayDotsQ .dot');
+
+    const totalPairs = state.pairs.length;
+    dotsP.forEach((d, i) => {
+      d.style.opacity = i < 4 + totalPairs ? '1' : '0.3';
+      d.style.transform = i < 4 + totalPairs ? 'scale(1)' : 'scale(0.8)';
+    });
+    dotsPQ.forEach((d, i) => {
+      d.style.opacity = i < 4 + totalPairs ? '1' : '0.3';
+      d.style.transform = i < 4 + totalPairs ? 'scale(1)' : 'scale(0.8)';
+    });
+    dotsQ.forEach((d, i) => {
+      d.style.opacity = i < 4 + totalPairs ? '1' : '0.3';
+      d.style.transform = i < 4 + totalPairs ? 'scale(1)' : 'scale(0.8)';
+    });
+  }
+
+  function renderContradictionSteps() {
+    const pCount = state.pairs.length;
+    cStep1.classList.toggle('unlocked', pCount >= 1);
+    cStep2.classList.toggle('unlocked', pCount >= 2);
+    cStep3.classList.toggle('unlocked', pCount >= 3);
+  }
+
+  function renderOneLineProofChain() {
+    const nodes = proofChainNodes.querySelectorAll('.chain-node');
+    nodes.forEach(node => {
+      const step = parseInt(node.dataset.step);
+      node.classList.toggle('active', step <= state.proofStep);
+    });
+  }
+
+  /* ACCORDION CARDS */
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const card = header.parentElement;
+      card.classList.toggle('open');
+    });
+  });
+
+  /* REAL DRAG AND DROP ENGINE */
+  let activeDrag = null;
+
+  function attachPointerDragEvents(el) {
+    el.addEventListener('pointerdown', onPointerDown);
+  }
+
+  function onPointerDown(e) {
+    e.preventDefault();
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+
+    const clone = el.cloneNode(true);
+    clone.classList.add('dragging');
+    clone.style.position = 'fixed';
+    clone.style.left = `${rect.left}px`;
+    clone.style.top = `${rect.top}px`;
+    clone.style.width = `${rect.width}px`;
+    clone.style.height = `${rect.height}px`;
+    clone.style.pointerEvents = 'none';
+    clone.style.zIndex = '9999';
+
+    document.body.appendChild(clone);
+    el.style.opacity = '0.3';
+
+    activeDrag = {
+      originalEl: el,
+      cloneEl: clone,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+      id: el.dataset.id,
+      val: parseInt(el.dataset.val),
+      type: el.dataset.type,
+      pointerId: e.pointerId
+    };
+
+    el.setPointerCapture(e.pointerId);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointercancel', onPointerUp);
+  }
+
+  function onPointerMove(e) {
+    if (!activeDrag) return;
+    const x = e.clientX - activeDrag.offsetX;
+    const y = e.clientY - activeDrag.offsetY;
+    activeDrag.cloneEl.style.left = `${x}px`;
+    activeDrag.cloneEl.style.top = `${y}px`;
+
+    const dropRect = pairDropZone.getBoundingClientRect();
+    if (e.clientX >= dropRect.left && e.clientX <= dropRect.right &&
+        e.clientY >= dropRect.top && e.clientY <= dropRect.bottom) {
+      pairDropZone.classList.add('hovered');
+    } else {
+      pairDropZone.classList.remove('hovered');
+    }
+  }
+
+  function onPointerUp(e) {
+    if (!activeDrag) return;
+    const { originalEl, cloneEl, id, val, type, pointerId } = activeDrag;
+
+    const dropRect = pairDropZone.getBoundingClientRect();
+    const isInsideDropZone = (
+      e.clientX >= dropRect.left && e.clientX <= dropRect.right &&
+      e.clientY >= dropRect.top && e.clientY <= dropRect.bottom
+    );
+
+    pairDropZone.classList.remove('hovered');
+
+    if (isInsideDropZone) {
+      handleDropInPairZone(id, val, type);
+    }
+
+    originalEl.style.opacity = '1';
+    if (cloneEl && cloneEl.parentNode) {
+      cloneEl.parentNode.removeChild(cloneEl);
+    }
+
+    try { originalEl.releasePointerCapture(pointerId); } catch(err) {}
+
+    originalEl.removeEventListener('pointermove', onPointerMove);
+    originalEl.removeEventListener('pointerup', onPointerUp);
+    originalEl.removeEventListener('pointercancel', onPointerUp);
+
+    activeDrag = null;
+  }
+
+  function handleDropInPairZone(id, val, type) {
+    if (!state.pendingCounter) {
+      state.pendingCounter = { id, val, type };
+      pairDropZone.innerHTML = `Pairing <strong>${val}</strong>... Drop another <strong>${val}</strong>!`;
+      pairDropZone.style.background = 'var(--primary-light)';
+    } else {
+      if (state.pendingCounter.type === type && state.pendingCounter.id !== id) {
+        const nextSlot = state.pairs.length + 1;
+        if (nextSlot <= 4) {
+          state.pairs.push({
+            id: `pair-${Date.now()}`,
+            type: type,
+            val: val,
+            c1: state.pendingCounter.id,
+            c2: id,
+            slot: nextSlot
+          });
+        }
+        state.pendingCounter = null;
+        pairDropZone.innerHTML = `Pair Created! Drop here to make a pair`;
+        pairDropZone.style.background = 'rgba(238, 237, 255, 0.4)';
+        
+        if (state.proofStep < 8) state.proofStep += 1;
+        renderAll();
+      } else {
+        pairDropZone.innerHTML = `Must drop matching counter! Try again.`;
+        pairDropZone.style.borderColor = 'var(--red-border)';
+        setTimeout(() => {
+          pairDropZone.innerHTML = `Drop here to make a pair`;
+          pairDropZone.style.borderColor = '#C7D2FE';
+          state.pendingCounter = null;
+        }, 1200);
+      }
+    }
+  }
+
+  /* PREDICTION SELECTION & REVEAL UNLOCK */
+  btnPredTrue.addEventListener('click', () => {
+    if (state.predictionAnswered) return;
+    state.predictionAnswered = true;
+    btnPredTrue.classList.add('correct');
+    btnPredFalse.disabled = true;
+    predictionFeedback.className = 'prediction-feedback show';
+    predictionFeedback.style.background = 'var(--green-bg)';
+    predictionFeedback.style.color = 'var(--green-text)';
+    predictionFeedback.textContent = '✓ Correct! Since 2q² = p², p² is even so p must be even.';
+    
+    revealCard.classList.add('unlocked');
+  });
+
+  btnPredFalse.addEventListener('click', () => {
+    if (state.predictionAnswered) return;
+    state.predictionAnswered = true;
+    btnPredFalse.classList.add('incorrect');
+    btnPredTrue.disabled = true;
+    predictionFeedback.className = 'prediction-feedback show';
+    predictionFeedback.style.background = 'var(--red-bg)';
+    predictionFeedback.style.color = 'var(--red-text)';
+    predictionFeedback.textContent = '✕ Incorrect. If 2q² = p², then p² is even, forcing p to be even.';
+
+    revealCard.classList.add('unlocked');
+  });
+
+  /* CHALLENGE SPIRAL CHECKER */
+  btnCheckChallenge.addEventListener('click', () => {
+    const selects = document.querySelectorAll('.spiral-why-select');
+    let correctCount = 0;
+
+    const answers = {
+      1: 'def_even',
+      2: 'square_root_parity',
+      3: 'product_even',
+      4: 'derived_parity',
+      5: 'sub_and_square'
+    };
+
+    selects.forEach(select => {
+      const step = select.dataset.challenge;
+      if (select.value === answers[step]) {
+        correctCount++;
+        select.style.borderColor = 'var(--green-text)';
+      } else {
+        select.style.borderColor = 'var(--red-border)';
+      }
+    });
+
+    challengeFeedback.classList.add('show');
+    if (correctCount === 5) {
+      challengeFeedback.className = 'challenge-feedback correct show';
+      challengeFeedback.textContent = '✓ Perfect! Complete parity spiral logically proven.';
+    } else {
+      challengeFeedback.className = 'challenge-feedback incorrect show';
+      challengeFeedback.textContent = `You got ${correctCount}/5 correct. Adjust highlighted dropdowns!`;
+    }
+  });
+
+  /* RESET PROOF BUTTON */
+  btnResetProof.addEventListener('click', () => {
+    state.proofStep = 1;
+    state.pairs = [
+      { id: 'pair-1', type: 'purple', val: 2, c1: 'c1', c2: 'c2', slot: 1 },
+      { id: 'pair-2', type: 'green', val: 1, c1: 'c7', c2: 'c8', slot: 2 }
+    ];
+    state.pendingCounter = null;
+    state.predictionAnswered = false;
+
+    btnPredTrue.classList.remove('correct', 'incorrect');
+    btnPredFalse.classList.remove('correct', 'incorrect');
+    btnPredTrue.disabled = false;
+    btnPredFalse.disabled = false;
+    predictionFeedback.classList.remove('show');
+
+    revealCard.classList.remove('unlocked');
+
+    pairDropZone.innerHTML = `Drop here to make a pair`;
+    pairDropZone.style.background = 'rgba(238, 237, 255, 0.4)';
+    challengeFeedback.classList.remove('show');
+    
+    document.querySelectorAll('.spiral-why-select').forEach(s => {
+      s.value = '';
+      s.style.borderColor = 'var(--primary)';
+    });
+
+    renderAll();
+  });
+
+  renderAll();
+</script>
+
+</body>
+</html>

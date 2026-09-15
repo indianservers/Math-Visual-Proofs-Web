@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compound Inequalities and Intervals | Interactive Mathematics</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #f3e8ff;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-red: #ef4444;
+      --accent-red-light: #fee2e2;
+      --accent-orange: #f59e0b;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Layout Structure */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout { grid-template-columns: 100px 1fr; }
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .brand-logo svg { width: 36px; height: 36px; }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover { color: var(--primary); background: var(--primary-light); }
+    .nav-item.active button { color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-item svg { width: 22px; height: 22px; }
+    .sidebar-footer { margin-top: auto; }
+
+    /* Main Content Wrapper */
+    .main-wrapper {
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1850px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-subtitle { color: var(--text-muted); font-size: 14px; margin-top: 2px; }
+
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon-action {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-icon-action:hover { background: #f8fafc; border-color: var(--border-focus); color: var(--primary); }
+
+    /* Mission Banner */
+    .mission-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .icon-rocket-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Custom Inequality Input Card */
+    .custom-input-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .natural-input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .text-compound-input {
+      flex: 1;
+      min-width: 280px;
+      padding: 10px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-math);
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .text-compound-input:focus { outline: none; border-color: var(--primary); }
+
+    .btn-solve-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-solve-primary:hover { background: var(--primary-hover); }
+
+    .preset-chips-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .preset-chip-btn {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-family: var(--font-math);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-chip-btn:hover { background: var(--primary-light); color: var(--primary); border-color: var(--border-focus); }
+
+    .error-alert-banner {
+      background: #fce7f3;
+      color: #9f1239;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Dashboard Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(360px, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    .workspace-main-col { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Card 1: Primary Interactive Area (Bounds + Connect + Graph) */
+    .card-primary-interactive {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card-stage-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stage-num-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .bounds-and-graph-split {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .bounds-and-graph-split { grid-template-columns: 1fr; }
+    }
+
+    .bounds-control-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .stepper-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .bound-lbl {
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+      width: 20px;
+    }
+
+    .bound-lbl-a { color: var(--accent-blue); }
+    .bound-lbl-b { color: var(--accent-green); }
+    .bound-lbl-c { color: var(--accent-red); }
+
+    .stepper-unit {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+    }
+
+    .btn-step {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: transparent;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-step:hover { background: var(--primary-light); color: var(--primary); border-radius: 4px; }
+
+    .step-val-input {
+      width: 44px;
+      text-align: center;
+      border: none;
+      font-family: var(--font-math);
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .endpoint-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .toggle-pill-btn {
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .toggle-pill-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .graph-viewport-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .top-equation-badges-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .ineq-badge-pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .select-connect-dropdown {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 2px solid var(--primary);
+      background: var(--primary-light);
+      font-family: var(--font-math);
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .svg-main-nl-canvas {
+      width: 100%;
+      height: 120px;
+      display: block;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    .target-result-pill {
+      align-self: center;
+      background: #f8fafc;
+      border: 1px solid var(--border-focus);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Card 2: Inequality Pieces (3 Columns) */
+    .inequality-pieces-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 850px) {
+      .inequality-pieces-grid { grid-template-columns: 1fr; }
+    }
+
+    .piece-card-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .piece-card-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .svg-piece-mini { width: 100%; height: 50px; display: block; }
+
+    .piece-interval-footer {
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    /* Card 3: Visual Proof Bottom Left */
+    .visual-proof-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .proof-equation-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-family: var(--font-math);
+      font-size: 17px;
+      font-weight: bold;
+      flex-wrap: wrap;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .proved-badge {
+      background: var(--accent-green-light);
+      color: #065f46;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Right Panel (Why it works) */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      max-height: 880px;
+      min-width: 360px;
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 18px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-panel-header h2 { font-size: 17px; font-weight: 800; color: var(--text-dark); }
+
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar { width: 8px; }
+    .why-panel-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .why-panel-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .why-section-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .why-num-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .boxed-formula {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 15px;
+      text-align: center;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Prediction Card */
+    .prediction-card-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .predict-choices-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .predict-choice-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .predict-choice-btn.selected { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+
+    .feedback-msg {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feedback-msg.correct { background: var(--accent-green-light); color: #065f46; }
+    .feedback-msg.incorrect { background: #fce7f3; color: #9f1239; }
+
+    /* Challenge Bottom Card */
+    .challenge-bottom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .challenge-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Footer Stats Bar */
+    .footer-stats-bar {
+      margin-top: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Saved">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Saved
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="History">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            History
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <h1>Compound Inequalities and Intervals</h1>
+          <p class="header-subtitle">See why compound inequalities become overlap intervals or outside unions.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 12 min</span>
+          <button class="btn-icon-action" id="btn-reset-all" title="Reset lesson">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <!-- Mission Banner -->
+      <section class="mission-bar">
+        <div class="icon-rocket-badge">🚀</div>
+        <div><strong>Mission:</strong> Build intuition by moving bounds and seeing how inequality regions overlap on the number line.</div>
+      </section>
+
+      <!-- Custom Inequality Input Card -->
+      <section class="custom-input-card">
+        <div style="font-size:14px; font-weight:800; color:var(--text-dark);">
+          Create your own compound inequality
+        </div>
+        <div class="natural-input-row">
+          <input type="text" id="input-natural-compound" class="text-compound-input" value="x > -2 AND x < 4" placeholder="Enter e.g. y >= 1 AND y < 6, z < -3 OR z > 5, -2 < x < 4...">
+          <button class="btn-solve-primary" id="btn-solve-compound">Solve &amp; Graph</button>
+        </div>
+
+        <div class="preset-chips-row">
+          <span>Presets:</span>
+          <button class="preset-chip-btn" data-preset="x > -2 AND x < 4">x &gt; -2 AND x &lt; 4</button>
+          <button class="preset-chip-btn" data-preset="y >= 1 AND y < 6">y &ge; 1 AND y &lt; 6</button>
+          <button class="preset-chip-btn" data-preset="z < -3 OR z > 5">z &lt; -3 OR z &gt; 5</button>
+          <button class="preset-chip-btn" data-preset="a <= 2 OR a >= 7">a &le; 2 OR a &ge; 7</button>
+          <button class="preset-chip-btn" data-preset="m > 1.5 AND m <= 4.75">m &gt; 1.5 AND m &le; 4.75</button>
+        </div>
+
+        <div id="parse-error-banner" class="error-alert-banner" style="display:none;"></div>
+      </section>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Main Workspace Column -->
+        <div class="workspace-main-col">
+          <!-- Card 1: Primary Interactive Area -->
+          <section class="card-primary-interactive">
+            <div class="card-stage-title">
+              <span class="stage-num-badge">1</span>
+              <span>Drag the bounds &amp; change inequalities</span>
+            </div>
+
+            <div class="bounds-and-graph-split">
+              <!-- Left Control Box -->
+              <div class="bounds-control-card">
+                <!-- Bound a -->
+                <div class="stepper-row">
+                  <span class="bound-lbl bound-lbl-a" id="lbl-var-a">a</span>
+                  <div class="stepper-unit">
+                    <button class="btn-step" id="btn-dec-a">&lt;</button>
+                    <input type="number" id="input-val-a" class="step-val-input" value="-2" step="1">
+                    <button class="btn-step" id="btn-inc-a">&gt;</button>
+                  </div>
+                  <select id="select-op1" class="toggle-pill-btn">
+                    <option value=">">&gt;</option>
+                    <option value=">=">&ge;</option>
+                    <option value="<">&lt;</option>
+                    <option value="<=">&le;</option>
+                  </select>
+                </div>
+
+                <!-- Bound b (middle reference) -->
+                <div class="stepper-row">
+                  <span class="bound-lbl bound-lbl-b" id="lbl-var-b">b</span>
+                  <div class="stepper-unit">
+                    <button class="btn-step" id="btn-dec-b">&lt;</button>
+                    <input type="number" id="input-val-b" class="step-val-input" value="1" step="1">
+                    <button class="btn-step" id="btn-inc-b">&gt;</button>
+                  </div>
+                </div>
+
+                <!-- Bound c -->
+                <div class="stepper-row">
+                  <span class="bound-lbl bound-lbl-c" id="lbl-var-c">c</span>
+                  <div class="stepper-unit">
+                    <button class="btn-step" id="btn-dec-c">&lt;</button>
+                    <input type="number" id="input-val-c" class="step-val-input" value="4" step="1">
+                    <button class="btn-step" id="btn-inc-c">&gt;</button>
+                  </div>
+                  <select id="select-op2" class="toggle-pill-btn">
+                    <option value="<">&lt;</option>
+                    <option value="<=">&le;</option>
+                    <option value=">">&gt;</option>
+                    <option value=">=">&ge;</option>
+                  </select>
+                </div>
+
+                <!-- Endpoint open/closed toggle -->
+                <div class="endpoint-toggle-row">
+                  <span>Endpoints:</span>
+                  <div style="display:flex; gap:4px;">
+                    <button class="toggle-pill-btn active" id="btn-toggle-open">Open &#9675;</button>
+                    <button class="toggle-pill-btn" id="btn-toggle-closed">Closed &#9679;</button>
+                  </div>
+                </div>
+
+                <!-- Animate Button -->
+                <button class="btn-icon-action" id="btn-animate-bounds" style="width:100%; justify-content:center; margin-top:4px;">
+                  ▶ Animate Bounds
+                </button>
+              </div>
+
+              <!-- Right Graph Viewport Box -->
+              <div class="graph-viewport-box" id="graph-viewport-box">
+                <!-- Top Badges & Connection Dropdown -->
+                <div class="top-equation-badges-row">
+                  <span class="ineq-badge-pill" id="badge-ineq1">x &gt; -2</span>
+                  <select id="select-connection" class="select-connect-dropdown">
+                    <option value="AND">AND (Intersection)</option>
+                    <option value="OR">OR (Union)</option>
+                  </select>
+                  <span class="ineq-badge-pill" id="badge-ineq2">x &lt; 4</span>
+                </div>
+
+                <!-- SVG Number Line Canvas -->
+                <svg id="svg-main-nl" class="svg-main-nl-canvas"></svg>
+
+                <div class="target-result-pill" id="badge-target-result">
+                  Target: -2 &lt; x &lt; 4
+                </div>
+
+                <div style="font-size:12px; color:var(--text-muted); text-align:center;">
+                  💡 Tip: Try OR to see the outside regions or drag handles along the number line.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Card 2: Inequality Pieces (3 Columns) -->
+          <section style="display:flex; flex-direction:column; gap:8px;">
+            <div class="card-stage-title">
+              <span class="stage-num-badge">2</span>
+              <span>Inequality pieces (See each piece as an interval)</span>
+            </div>
+
+            <div class="inequality-pieces-grid">
+              <!-- Piece 1 -->
+              <div class="piece-card-box">
+                <div class="piece-card-title">
+                  <span id="title-piece-1">x &gt; -2</span>
+                  <span style="font-size:11px; color:var(--accent-blue);">Region 1</span>
+                </div>
+                <svg id="svg-piece-1" class="svg-piece-mini"></svg>
+                <div class="piece-interval-footer" id="interval-piece-1">(-2, &infty;)</div>
+              </div>
+
+              <!-- Piece 2 -->
+              <div class="piece-card-box">
+                <div class="piece-card-title">
+                  <span id="title-piece-2">x &lt; 4</span>
+                  <span style="font-size:11px; color:var(--accent-red);">Region 2</span>
+                </div>
+                <svg id="svg-piece-2" class="svg-piece-mini"></svg>
+                <div class="piece-interval-footer" id="interval-piece-2">(-&infty;, 4)</div>
+              </div>
+
+              <!-- Result Piece -->
+              <div class="piece-card-box" style="border-color:var(--primary); background:var(--primary-light);">
+                <div class="piece-card-title">
+                  <span id="title-piece-res">Overlap (AND)</span>
+                  <span style="font-size:11px; color:var(--primary);">Combined</span>
+                </div>
+                <svg id="svg-piece-res" class="svg-piece-mini"></svg>
+                <div class="piece-interval-footer" id="interval-piece-res">(-2, 4)</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Card 3: Visual Proof Bottom Left -->
+          <section class="visual-proof-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="card-stage-title">
+                <span class="stage-num-badge">3</span>
+                <span>Visual Proof (Equation of sets)</span>
+              </div>
+              <span class="proved-badge">✔ Proved</span>
+            </div>
+
+            <div class="proof-equation-row" id="proof-equation-display">
+              (-2, &infty;) &cap; (-&infty;, 4) = (-2, 4)
+            </div>
+
+            <div style="font-family:var(--font-math); font-size:14px; text-align:center; color:var(--text-muted);" id="proof-set-notation">
+              In set notation: { x | -2 &lt; x &lt; 4 } = (-2, 4)
+            </div>
+          </section>
+        </div>
+
+        <!-- Viewport 3: Right Educational Panel (Why it works) -->
+        <aside class="why-panel" id="why-panel">
+          <div class="why-panel-header">
+            <span style="color:var(--primary); font-size:18px;">&#9672;</span>
+            <h2>Why it works</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- Section 1 -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">1</span>
+                <span>First inequality</span>
+              </div>
+              <p style="font-size:12px; color:var(--text-dark);" id="why-text-1">
+                x &gt; a includes all numbers to the right of a.
+              </p>
+              <div style="width:100%; height:45px; background:white; border-radius:6px; border:1px solid var(--border);">
+                <svg id="svg-mini-why-1" style="width:100%; height:100%;"></svg>
+              </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">2</span>
+                <span>Second inequality</span>
+              </div>
+              <p style="font-size:12px; color:var(--text-dark);" id="why-text-2">
+                x &lt; c includes all numbers to the left of c.
+              </p>
+              <div style="width:100%; height:45px; background:white; border-radius:6px; border:1px solid var(--border);">
+                <svg id="svg-mini-why-2" style="width:100%; height:100%;"></svg>
+              </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">3</span>
+                <span id="why-title-3">Overlap (AND)</span>
+              </div>
+              <p style="font-size:12px; color:var(--text-dark);" id="why-text-3">
+                Numbers satisfying both simultaneously are between a and c.
+              </p>
+              <div class="boxed-formula" id="why-box-3">(-2, &infty;) &cap; (-&infty;, 4) = (-2, 4)</div>
+            </section>
+
+            <!-- Prediction Section -->
+            <div class="prediction-card-box">
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Predict the result</h4>
+              <p style="font-size:12px; color:var(--text-muted);">Before revealing, what is the solution interval?</p>
+
+              <div class="predict-choices-row" id="predict-choices-container">
+                <!-- Buttons rendered dynamically -->
+              </div>
+
+              <button class="btn-primary" id="btn-reveal-predict">👁 Reveal</button>
+              <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Challenge Bottom Card -->
+      <section class="challenge-bottom-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h3 style="font-size:16px; font-weight:800;">Challenge</h3>
+            <p style="font-size:12.5px; color:var(--text-muted);">Set your own bounds and prove it on the number line.</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div class="challenge-controls-row">
+              <label style="font-size:12px; font-weight:bold;">a:</label>
+              <input type="number" id="ch-val-a" class="step-val-input" style="width:48px; border:1px solid var(--border);" value="-3">
+              <label style="font-size:12px; font-weight:bold;">b:</label>
+              <input type="number" id="ch-val-b" class="step-val-input" style="width:48px; border:1px solid var(--border);" value="2">
+              <label style="font-size:12px; font-weight:bold;">c:</label>
+              <input type="number" id="ch-val-c" class="step-val-input" style="width:48px; border:1px solid var(--border);" value="5">
+              <select id="ch-select-conn" class="toggle-pill-btn">
+                <option value="OR">OR</option>
+                <option value="AND">AND</option>
+              </select>
+            </div>
+            <button class="btn-primary" id="btn-check-challenge" style="width:auto; padding:8px 20px;">Check my result</button>
+          </div>
+        </div>
+
+        <div id="challenge-result-display" style="font-family:var(--font-math); font-size:15px; font-weight:bold; background:#f8fafc; border:1px dashed var(--primary); padding:10px 16px; border-radius:var(--radius-md); text-align:center; color:var(--primary);">
+          Your result: (-\infty, -3) \cup (5, \infty)
+        </div>
+        <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+      </section>
+
+      <!-- Footer Stats Bar -->
+      <footer class="footer-stats-bar">
+        <div>💡 You're building powerful math intuition.</div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <span>5 proofs explored</span>
+          <span>8 challenges solved</span>
+          <span>🔥 3 day streak</span>
+          <span>⭐ Level 7 (720 / 900 XP)</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * Single Source of Truth Mathematical Engine
+     * Compound Inequalities and Intervals
+     */
+
+    // --- 0. Central Mathematical State ---
+    const state = {
+      variable: 'x',
+      a: -2,
+      b: 1,
+      c: 4,
+
+      op1: '>',   // '>', '>=', '<', '<='
+      op2: '<',   // '<', '<=', '>', '>='
+      connection: 'AND', // 'AND' (intersection) or 'OR' (union)
+
+      predictionSelected: null,
+      isAnimating: false,
+      animationTimer: null
+    };
+
+    // --- 1. Natural Expression Parser ---
+    function parseCompoundInput(inputStr) {
+      if (!inputStr || typeof inputStr !== 'string') return { error: 'Please enter a compound inequality.' };
+
+      let str = inputStr.trim().replace(/≤/g, '<=').replace(/≥/g, '>=');
+
+      // Detect variable [a-zA-Z]
+      const vars = str.match(/[a-zA-Z]/g);
+      const filteredVars = vars ? vars.filter(v => v !== 'AND' && v !== 'OR' && v !== 'and' && v !== 'or') : [];
+      const uniqueVars = Array.from(new Set(filteredVars));
+      const vName = uniqueVars.length > 0 ? uniqueVars[0] : 'x';
+
+      let conn = 'AND';
+      if (/\bOR\b/i.test(str)) conn = 'OR';
+
+      // Compound form e.g. "-2 < x < 4" or "-2 <= y < 5"
+      const chainRegex = /(-?\d+\.?\d*)\s*(<|<=)\s*([a-zA-Z])\s*(<|<=)\s*(-?\d+\.?\d*)/;
+      const chainMatch = str.match(chainRegex);
+      if (chainMatch) {
+        const b1 = parseFloat(chainMatch[1]);
+        const o1 = chainMatch[2] === '<' ? '>' : '>=';
+        const v = chainMatch[3];
+        const o2 = chainMatch[4];
+        const b2 = parseFloat(chainMatch[5]);
+        return { variable: v, a: b1, op1: o1, c: b2, op2: o2, connection: 'AND' };
+      }
+
+      // Explicit form e.g. "x > -2 AND x < 4"
+      const parts = str.split(/\bAND\b|\bOR\b/i);
+      if (parts.length === 2) {
+        const p1 = parts[0].trim();
+        const p2 = parts[1].trim();
+
+        const match1 = p1.match(/([a-zA-Z])\s*(>|>=|<|<=)\s*(-?\d+\.?\d*)/);
+        const match2 = p2.match(/([a-zA-Z])\s*(>|>=|<|<=)\s*(-?\d+\.?\d*)/);
+
+        if (match1 && match2) {
+          return {
+            variable: match1[1],
+            a: parseFloat(match1[3]),
+            op1: match1[2],
+            c: parseFloat(match2[3]),
+            op2: match2[2],
+            connection: conn
+          };
+        }
+      }
+
+      return { error: 'Could not parse compound inequality. Try format: x > -2 AND x < 4' };
+    }
+
+    // --- 2. Mathematical Solver & Interval Calculations ---
+    function calculateCompoundSolution(st) {
+      const v = st.variable;
+      const a = st.a;
+      const c = st.c;
+      const op1 = st.op1;
+      const op2 = st.op2;
+      const conn = st.connection;
+
+      const inc1 = (op1 === '>=' || op1 === '<=');
+      const isRight1 = (op1 === '>' || op1 === '>=');
+
+      const inc2 = (op2 === '>=' || op2 === '<=');
+      const isRight2 = (op2 === '>' || op2 === '>=');
+
+      // Individual Interval 1
+      const int1Str = isRight1 ? `${inc1 ? '[' : '('}${a}, \\infty)` : `(-\\infty, ${a}${inc1 ? ']' : ')'}`;
+      // Individual Interval 2
+      const int2Str = isRight2 ? `${inc2 ? '[' : '('}${c}, \\infty)` : `(-\\infty, ${c}${inc2 ? ']' : ')'}`;
+
+      // Calculate Combined Interval & Set Notation
+      let combinedInt = '';
+      let setNotation = '';
+      let isNoSolution = false;
+      let isAllReal = false;
+
+      if (conn === 'AND') {
+        // Intersection of Ray 1 & Ray 2
+        if (isRight1 && !isRight2) { // e.g. x > a AND x < c
+          if (a < c) {
+            combinedInt = `${inc1 ? '[' : '('}${a}, ${c}${inc2 ? ']' : ')'}`;
+            setNotation = `{ ${v} | ${a} ${inc1?'\\le':'<'} ${v} ${inc2?'\\le':'<'} ${c} }`;
+          } else if (a === c) {
+            if (inc1 && inc2) { combinedInt = `[${a}, ${a}]`; setNotation = `{ ${v} | ${v} = ${a} }`; }
+            else { isNoSolution = true; combinedInt = '\\varnothing'; setNotation = '\\varnothing'; }
+          } else {
+            isNoSolution = true; combinedInt = '\\varnothing'; setNotation = '\\varnothing';
+          }
+        } else if (!isRight1 && isRight2) { // e.g. x < a AND x > c
+          if (c < a) {
+            combinedInt = `${inc2 ? '[' : '('}${c}, ${a}${inc1 ? ']' : ')'}`;
+            setNotation = `{ ${v} | ${c} ${inc2?'\\le':'<'} ${v} ${inc1?'\\le':'<'} ${a} }`;
+          } else {
+            isNoSolution = true; combinedInt = '\\varnothing'; setNotation = '\\varnothing';
+          }
+        } else if (isRight1 && isRight2) { // both right
+          const maxVal = Math.max(a, c);
+          combinedInt = `(${maxVal}, \\infty)`;
+          setNotation = `{ ${v} | ${v} > ${maxVal} }`;
+        } else { // both left
+          const minVal = Math.min(a, c);
+          combinedInt = `(-\\infty, ${minVal})`;
+          setNotation = `{ ${v} | ${v} < ${minVal} }`;
+        }
+      } else { // OR (Union)
+        if (isRight1 && !isRight2) { // x > a OR x < c
+          if (a <= c) {
+            isAllReal = true; combinedInt = '(-\\infty, \\infty)'; setNotation = '\\mathbb{R}';
+          } else {
+            combinedInt = `(-\\infty, ${c}${inc2?']':')'}) \\cup (${inc1?'[':'('}${a}, \\infty)`;
+            setNotation = `{ ${v} | ${v} < ${c} \\text{ or } ${v} > ${a} }`;
+          }
+        } else if (!isRight1 && isRight2) { // x < a OR x > c
+          if (c <= a) {
+            isAllReal = true; combinedInt = '(-\\infty, \\infty)'; setNotation = '\\mathbb{R}';
+          } else {
+            combinedInt = `(-\\infty, ${a}${inc1?']':')'}) \\cup (${inc2?'[':'('}${c}, \\infty)`;
+            setNotation = `{ ${v} | ${v} < ${a} \\text{ or } ${v} > ${c} }`;
+          }
+        } else {
+          combinedInt = `(-\\infty, \\infty)`; setNotation = '\\mathbb{R}';
+        }
+      }
+
+      return {
+        v, a, b: st.b, c, op1, op2, conn,
+        inc1, isRight1, inc2, isRight2,
+        int1Str, int2Str, combinedInt, setNotation,
+        isNoSolution, isAllReal
+      };
+    }
+
+    function formatOp(op) {
+      switch (op) {
+        case '<=': return '\u2264';
+        case '>=': return '\u2265';
+        default: return op;
+      }
+    }
+
+    // --- 3. Dynamic Scaling SVG Canvas Renderer ---
+    function renderMainNumberLine(svgElem, model, options = {}) {
+      if (!svgElem) return;
+      const width = svgElem.clientWidth || svgElem.parentNode.clientWidth || 500;
+      const height = svgElem.clientHeight || 120;
+      const padding = 45;
+      const usableW = width - 2 * padding;
+      const centerY = height / 2 + 10;
+
+      // Auto-scale bounds
+      const minVal = Math.min(model.a, model.b, model.c) - 3;
+      const maxVal = Math.max(model.a, model.b, model.c) + 3;
+      const range = maxVal - minVal;
+
+      const mapX = (val) => padding + ((val - minVal) / range) * usableW;
+
+      let html = `<defs>
+        <marker id="arr-left" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 10 1 L 0 5 L 10 9 z" fill="#64748b"/>
+        </marker>
+        <marker id="arr-right" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 10 9 z" fill="#64748b"/>
+        </marker>
+      </defs>`;
+
+      // Base Axis
+      html += `<line x1="${padding - 15}" y1="${centerY}" x2="${width - padding + 15}" y2="${centerY}" stroke="#94a3b8" stroke-width="2" marker-start="url(#arr-left)" marker-end="url(#arr-right)"/>`;
+
+      // Ticks & Labels
+      const step = range > 20 ? 5 : (range > 10 ? 2 : 1);
+      for (let v = Math.ceil(minVal); v <= Math.floor(maxVal); v += step) {
+        const tx = mapX(v);
+        html += `<line x1="${tx}" y1="${centerY - 4}" x2="${tx}" y2="${centerY + 4}" stroke="#cbd5e1" stroke-width="1.5"/>`;
+        if (!options.hideLabels) {
+          html += `<text x="${tx}" y="${centerY + 18}" font-family="var(--font-math)" font-size="11" font-weight="600" fill="#64748b" text-anchor="middle">${v}</text>`;
+        }
+      }
+
+      const xA = mapX(model.a);
+      const xB = mapX(model.b);
+      const xC = mapX(model.c);
+
+      // Shaded Ray 1 (Blue)
+      if (model.isRight1) {
+        html += `<line x1="${xA}" y1="${centerY - 18}" x2="${width - padding}" y2="${centerY - 18}" stroke="#2563eb" stroke-width="3" opacity="0.7"/>`;
+        html += `<path d="M ${width - padding - 6} ${centerY - 22} L ${width - padding + 2} ${centerY - 18} L ${width - padding - 6} ${centerY - 14}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+      } else {
+        html += `<line x1="${padding}" y1="${centerY - 18}" x2="${xA}" y2="${centerY - 18}" stroke="#2563eb" stroke-width="3" opacity="0.7"/>`;
+        html += `<path d="M ${padding + 6} ${centerY - 22} L ${padding - 2} ${centerY - 18} L ${padding + 6} ${centerY - 14}" fill="none" stroke="#2563eb" stroke-width="2.5"/>`;
+      }
+
+      // Shaded Ray 2 (Red)
+      if (model.isRight2) {
+        html += `<line x1="${xC}" y1="${centerY - 28}" x2="${width - padding}" y2="${centerY - 28}" stroke="#ef4444" stroke-width="3" opacity="0.7"/>`;
+        html += `<path d="M ${width - padding - 6} ${centerY - 32} L ${width - padding + 2} ${centerY - 28} L ${width - padding - 6} ${centerY - 24}" fill="none" stroke="#ef4444" stroke-width="2.5"/>`;
+      } else {
+        html += `<line x1="${padding}" y1="${centerY - 28}" x2="${xC}" y2="${centerY - 28}" stroke="#ef4444" stroke-width="3" opacity="0.7"/>`;
+        html += `<path d="M ${padding + 6} ${centerY - 32} L ${padding - 2} ${centerY - 28} L ${padding + 6} ${centerY - 24}" fill="none" stroke="#ef4444" stroke-width="2.5"/>`;
+      }
+
+      // Combined Result Region (Purple)
+      if (!model.isNoSolution) {
+        if (model.conn === 'AND') {
+          if (xA < xC) {
+            html += `<line x1="${xA}" y1="${centerY}" x2="${xC}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+          }
+        } else { // OR
+          if (model.isAllReal) {
+            html += `<line x1="${padding - 10}" y1="${centerY}" x2="${width - padding + 10}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+          } else {
+            html += `<line x1="${padding}" y1="${centerY}" x2="${xA}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+            html += `<line x1="${xC}" y1="${centerY}" x2="${width - padding}" y2="${centerY}" stroke="#635bff" stroke-width="6"/>`;
+          }
+        }
+      }
+
+      // Circles for a, b, c
+      // Circle a (Blue)
+      html += `<circle cx="${xA}" cy="${centerY}" r="6.5" fill="${model.inc1 ? '#2563eb' : '#ffffff'}" stroke="#2563eb" stroke-width="2.5"/>`;
+      html += `<text x="${xA}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#2563eb" text-anchor="middle">a</text>`;
+
+      // Circle b (Green)
+      html += `<circle cx="${xB}" cy="${centerY}" r="5.5" fill="#10b981" stroke="#ffffff" stroke-width="2"/>`;
+      html += `<text x="${xB}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#10b981" text-anchor="middle">b</text>`;
+
+      // Circle c (Red)
+      html += `<circle cx="${xC}" cy="${centerY}" r="6.5" fill="${model.inc2 ? '#ef4444' : '#ffffff'}" stroke="#ef4444" stroke-width="2.5"/>`;
+      html += `<text x="${xC}" y="${centerY + 34}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#ef4444" text-anchor="middle">c</text>`;
+
+      svgElem.innerHTML = html;
+    }
+
+    // Mini Piece Renderer
+    function renderMiniPieceSVG(svgElem, bound, isRight, isIncluded, colorHex) {
+      if (!svgElem) return;
+      const width = svgElem.clientWidth || 160;
+      const height = 50;
+      const padding = 25;
+      const usableW = width - 2 * padding;
+      const centerY = height / 2;
+
+      const mapX = (val) => padding + ((val - (-5)) / 10) * usableW;
+      const bX = mapX(bound);
+
+      let html = `<line x1="${padding - 5}" y1="${centerY}" x2="${width - padding + 5}" y2="${centerY}" stroke="#cbd5e1" stroke-width="1.5"/>`;
+      if (isRight) {
+        html += `<line x1="${bX}" y1="${centerY}" x2="${width - padding + 5}" y2="${centerY}" stroke="${colorHex}" stroke-width="4.5"/>`;
+        html += `<circle cx="${bX}" cy="${centerY}" r="5" fill="${isIncluded ? colorHex : '#ffffff'}" stroke="${colorHex}" stroke-width="2"/>`;
+      } else {
+        html += `<line x1="${padding - 5}" y1="${centerY}" x2="${bX}" y2="${centerY}" stroke="${colorHex}" stroke-width="4.5"/>`;
+        html += `<circle cx="${bX}" cy="${centerY}" r="5" fill="${isIncluded ? colorHex : '#ffffff'}" stroke="${colorHex}" stroke-width="2"/>`;
+      }
+      svgElem.innerHTML = html;
+    }
+
+    // --- 4. DOM Cache ---
+    const elements = {
+      inputNaturalCompound: document.getElementById('input-natural-compound'),
+      btnSolveCompound: document.getElementById('btn-solve-compound'),
+      parseErrorBanner: document.getElementById('parse-error-banner'),
+
+      lblVarA: document.getElementById('lbl-var-a'), inputValA: document.getElementById('input-val-a'), btnDecA: document.getElementById('btn-dec-a'), btnIncA: document.getElementById('btn-inc-a'), selectOp1: document.getElementById('select-op1'),
+      lblVarB: document.getElementById('lbl-var-b'), inputValB: document.getElementById('input-val-b'), btnDecB: document.getElementById('btn-dec-b'), btnIncB: document.getElementById('btn-inc-b'),
+      lblVarC: document.getElementById('lbl-var-c'), inputValC: document.getElementById('input-val-c'), btnDecC: document.getElementById('btn-dec-c'), btnIncC: document.getElementById('btn-inc-c'), selectOp2: document.getElementById('select-op2'),
+
+      btnToggleOpen: document.getElementById('btn-toggle-open'), btnToggleClosed: document.getElementById('btn-toggle-closed'),
+      btnAnimateBounds: document.getElementById('btn-animate-bounds'),
+
+      badgeIneq1: document.getElementById('badge-ineq1'), selectConnection: document.getElementById('select-connection'), badgeIneq2: document.getElementById('badge-ineq2'),
+      svgMainNl: document.getElementById('svg-main-nl'), graphViewportBox: document.getElementById('graph-viewport-box'),
+      badgeTargetResult: document.getElementById('badge-target-result'),
+
+      titlePiece1: document.getElementById('title-piece-1'), intervalPiece1: document.getElementById('interval-piece-1'), svgPiece1: document.getElementById('svg-piece-1'),
+      titlePiece2: document.getElementById('title-piece-2'), intervalPiece2: document.getElementById('interval-piece-2'), svgPiece2: document.getElementById('svg-piece-2'),
+      titlePieceRes: document.getElementById('title-piece-res'), intervalPieceRes: document.getElementById('interval-piece-res'), svgPieceRes: document.getElementById('svg-piece-res'),
+
+      proofEquationDisplay: document.getElementById('proof-equation-display'), proofSetNotation: document.getElementById('proof-set-notation'),
+
+      whyText1: document.getElementById('why-text-1'), whyText2: document.getElementById('why-text-2'), whyTitle3: document.getElementById('why-title-3'), whyText3: document.getElementById('why-text-3'), whyBox3: document.getElementById('why-box-3'),
+      svgMiniWhy1: document.getElementById('svg-mini-why-1'), svgMiniWhy2: document.getElementById('svg-mini-why-2'),
+
+      predictChoicesContainer: document.getElementById('predict-choices-container'), btnRevealPredict: document.getElementById('btn-reveal-predict'), predictFeedback: document.getElementById('predict-feedback'),
+
+      chValA: document.getElementById('ch-val-a'), chValB: document.getElementById('ch-val-b'), chValC: document.getElementById('ch-val-c'), chSelectConn: document.getElementById('ch-select-conn'),
+      btnCheckChallenge: document.getElementById('btn-check-challenge'), challengeResultDisplay: document.getElementById('challenge-result-display'), challengeFeedback: document.getElementById('challenge-feedback'),
+
+      btnResetAll: document.getElementById('btn-reset-all')
+    };
+
+    // --- 5. Central UI Update Dispatcher ---
+    function renderUI() {
+      const model = calculateCompoundSolution(state);
+
+      // Input controls sync
+      elements.inputValA.value = state.a;
+      elements.inputValB.value = state.b;
+      elements.inputValC.value = state.c;
+      elements.selectOp1.value = state.op1;
+      elements.selectOp2.value = state.op2;
+      elements.selectConnection.value = state.connection;
+
+      elements.btnToggleOpen.classList.toggle('active', !model.inc1 && !model.inc2);
+      elements.btnToggleClosed.classList.toggle('active', model.inc1 && model.inc2);
+
+      // Top Badges
+      elements.badgeIneq1.textContent = `${model.v} ${formatOp(model.op1)} ${model.a}`;
+      elements.badgeIneq2.textContent = `${model.v} ${formatOp(model.op2)} ${model.c}`;
+      elements.badgeTargetResult.textContent = `Target: ${model.v} \u21D2 ${model.combinedInt}`;
+
+      // Render Primary Number Line Canvas
+      renderMainNumberLine(elements.svgMainNl, model);
+
+      // Card 2: 3 Piece Columns Sync
+      elements.titlePiece1.textContent = `${model.v} ${formatOp(model.op1)} ${model.a}`;
+      elements.intervalPiece1.textContent = model.int1Str;
+      renderMiniPieceSVG(elements.svgPiece1, model.a, model.isRight1, model.inc1, '#2563eb');
+
+      elements.titlePiece2.textContent = `${model.v} ${formatOp(model.op2)} ${model.c}`;
+      elements.intervalPiece2.textContent = model.int2Str;
+      renderMiniPieceSVG(elements.svgPiece2, model.c, model.isRight2, model.inc2, '#ef4444');
+
+      elements.titlePieceRes.textContent = `${model.conn === 'AND' ? 'Overlap (AND)' : 'Union (OR)'}`;
+      elements.intervalPieceRes.textContent = model.combinedInt;
+      renderMiniPieceSVG(elements.svgPieceRes, (model.a + model.c)/2, true, true, '#635bff');
+
+      // Card 3: Visual Proof Display
+      const symbolConn = model.conn === 'AND' ? '\\cap' : '\\cup';
+      elements.proofEquationDisplay.textContent = `${model.int1Str} ${model.conn === 'AND' ? '\u2229' : '\u222A'} ${model.int2Str} = ${model.combinedInt}`;
+      elements.proofSetNotation.textContent = `In set notation: ${model.setNotation} = ${model.combinedInt}`;
+
+      // Right Panel Explanations
+      elements.whyText1.textContent = `${model.v} ${formatOp(model.op1)} ${model.a} includes all numbers to the ${model.isRight1?'right':'left'} of ${model.a}.`;
+      elements.whyText2.textContent = `${model.v} ${formatOp(model.op2)} ${model.c} includes all numbers to the ${model.isRight2?'right':'left'} of ${model.c}.`;
+      renderMiniPieceSVG(elements.svgMiniWhy1, model.a, model.isRight1, model.inc1, '#2563eb');
+      renderMiniPieceSVG(elements.svgMiniWhy2, model.c, model.isRight2, model.inc2, '#ef4444');
+
+      elements.whyTitle3.textContent = model.conn === 'AND' ? 'Overlap (AND)' : 'Union (OR)';
+      elements.whyText3.textContent = model.conn === 'AND'
+        ? `Numbers satisfying both conditions simultaneously are between ${model.a} and ${model.c}.`
+        : `Numbers satisfying either condition belong to the union.`;
+      elements.whyBox3.textContent = `${model.int1Str} ${model.conn === 'AND' ? '\u2229' : '\u222A'} ${model.int2Str} = ${model.combinedInt}`;
+
+      // Prediction Choices Rendering
+      const choices = [
+        model.combinedInt,
+        `(${model.a}, ${model.c})`,
+        `(-\\infty, ${model.c})`
+      ];
+      const uniqueChoices = Array.from(new Set(choices));
+
+      let choicesHtml = '';
+      uniqueChoices.forEach(ch => {
+        const isSel = state.predictionSelected === ch;
+        choicesHtml += `<button class="predict-choice-btn ${isSel?'selected':''}" data-choice="${ch}">${ch}</button>`;
+      });
+      elements.predictChoicesContainer.innerHTML = choicesHtml;
+
+      document.querySelectorAll('.predict-choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.predictionSelected = btn.dataset.choice;
+          renderUI();
+        });
+      });
+
+      // Challenge readout
+      const chModel = calculateCompoundSolution({
+        variable: state.variable,
+        a: parseFloat(elements.chValA.value)|| -3,
+        b: parseFloat(elements.chValB.value)|| 2,
+        c: parseFloat(elements.chValC.value)|| 5,
+        op1: '<', op2: '>',
+        connection: elements.chSelectConn.value
+      });
+      elements.challengeResultDisplay.textContent = `Your result: ${chModel.combinedInt}`;
+    }
+
+    // --- 6. Interaction Event Handlers ---
+
+    function handleCustomInput(str) {
+      const parsed = parseCompoundInput(str);
+      if (parsed.error) {
+        elements.parseErrorBanner.textContent = `⚠️ ${parsed.error}`;
+        elements.parseErrorBanner.style.display = 'flex';
+        return;
+      }
+      elements.parseErrorBanner.style.display = 'none';
+
+      state.variable = parsed.variable;
+      state.a = parsed.a;
+      state.c = parsed.c;
+      state.op1 = parsed.op1;
+      state.op2 = parsed.op2;
+      state.connection = parsed.connection;
+      state.predictionSelected = null;
+      renderUI();
+    }
+
+    elements.btnSolveCompound.addEventListener('click', () => handleCustomInput(elements.inputNaturalCompound.value));
+    elements.inputNaturalCompound.addEventListener('keydown', e => { if (e.key === 'Enter') handleCustomInput(elements.inputNaturalCompound.value); });
+
+    document.querySelectorAll('.preset-chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        elements.inputNaturalCompound.value = btn.dataset.preset;
+        handleCustomInput(btn.dataset.preset);
+      });
+    });
+
+    // Steppers A, B, C
+    elements.btnDecA.addEventListener('click', () => { state.a -= 1; renderUI(); });
+    elements.btnIncA.addEventListener('click', () => { state.a += 1; renderUI(); });
+    elements.inputValA.addEventListener('change', e => { state.a = parseFloat(e.target.value)||0; renderUI(); });
+
+    elements.btnDecB.addEventListener('click', () => { state.b -= 1; renderUI(); });
+    elements.btnIncB.addEventListener('click', () => { state.b += 1; renderUI(); });
+    elements.inputValB.addEventListener('change', e => { state.b = parseFloat(e.target.value)||0; renderUI(); });
+
+    elements.btnDecC.addEventListener('click', () => { state.c -= 1; renderUI(); });
+    elements.btnIncC.addEventListener('click', () => { state.c += 1; renderUI(); });
+    elements.inputValC.addEventListener('change', e => { state.c = parseFloat(e.target.value)||0; renderUI(); });
+
+    elements.selectOp1.addEventListener('change', e => { state.op1 = e.target.value; renderUI(); });
+    elements.selectOp2.addEventListener('change', e => { state.op2 = e.target.value; renderUI(); });
+    elements.selectConnection.addEventListener('change', e => { state.connection = e.target.value; renderUI(); });
+
+    // Endpoint Toggles
+    elements.btnToggleOpen.addEventListener('click', () => {
+      state.op1 = state.op1.replace('=', '');
+      state.op2 = state.op2.replace('=', '');
+      renderUI();
+    });
+
+    elements.btnToggleClosed.addEventListener('click', () => {
+      if (!state.op1.includes('=')) state.op1 += '=';
+      if (!state.op2.includes('=')) state.op2 += '=';
+      renderUI();
+    });
+
+    // Animate Bounds
+    elements.btnAnimateBounds.addEventListener('click', () => {
+      if (state.isAnimating) {
+        clearInterval(state.animationTimer);
+        state.isAnimating = false;
+        elements.btnAnimateBounds.textContent = '▶ Animate Bounds';
+      } else {
+        state.isAnimating = true;
+        elements.btnAnimateBounds.textContent = '⏸ Pause Animation';
+        let dir = 1;
+        state.animationTimer = setInterval(() => {
+          state.c += dir * 0.5;
+          if (state.c > 8 || state.c < -1) dir *= -1;
+          renderUI();
+        }, 200);
+      }
+    });
+
+    // Prediction Reveal
+    elements.btnRevealPredict.addEventListener('click', () => {
+      const model = calculateCompoundSolution(state);
+      if (!state.predictionSelected) {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.textContent = 'Please select a prediction option first.';
+        elements.predictFeedback.style.display = 'flex';
+        return;
+      }
+      if (state.predictionSelected === model.combinedInt) {
+        elements.predictFeedback.className = 'feedback-msg correct';
+        elements.predictFeedback.innerHTML = `&#10004; Correct! The compound interval is ${model.combinedInt}.`;
+      } else {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.innerHTML = `&#10008; Solution is ${model.combinedInt}.`;
+      }
+      elements.predictFeedback.style.display = 'flex';
+    });
+
+    // Challenge Verification
+    elements.btnCheckChallenge.addEventListener('click', () => {
+      const chModel = calculateCompoundSolution({
+        variable: state.variable,
+        a: parseFloat(elements.chValA.value)|| -3,
+        b: parseFloat(elements.chValB.value)|| 2,
+        c: parseFloat(elements.chValC.value)|| 5,
+        op1: '<', op2: '>',
+        connection: elements.chSelectConn.value
+      });
+      elements.challengeFeedback.className = 'feedback-msg correct';
+      elements.challengeFeedback.innerHTML = `&#10004; Correct result calculated: ${chModel.combinedInt}.`;
+      elements.challengeFeedback.style.display = 'flex';
+    });
+
+    // Reset All Button
+    elements.btnResetAll.addEventListener('click', () => {
+      elements.inputNaturalCompound.value = "x > -2 AND x < 4";
+      handleCustomInput("x > -2 AND x < 4");
+    });
+
+    // Direct Dragging on Main SVG Canvas
+    let isDraggingBound = null;
+    function updateBoundFromMouse(e) {
+      const rect = elements.svgMainNl.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const relX = clientX - rect.left;
+      const padding = 45;
+      const usableW = rect.width - 2 * padding;
+      const pct = Math.max(0, Math.min(1, (relX - padding) / usableW));
+
+      const minVal = Math.min(state.a, state.b, state.c) - 3;
+      const maxVal = Math.max(state.a, state.b, state.c) + 3;
+      const range = maxVal - minVal;
+
+      const newBound = Math.round(minVal + pct * range);
+      if (isDraggingBound === 'a') state.a = newBound;
+      else if (isDraggingBound === 'b') state.b = newBound;
+      else if (isDraggingBound === 'c') state.c = newBound;
+
+      renderUI();
+    }
+
+    elements.svgMainNl.addEventListener('mousedown', (e) => {
+      isDraggingBound = 'c'; // default handle drag
+      updateBoundFromMouse(e);
+    });
+
+    window.addEventListener('mousemove', (e) => { if (isDraggingBound) updateBoundFromMouse(e); });
+    window.addEventListener('mouseup', () => { isDraggingBound = null; });
+
+    // Initial Execution
+    handleCustomInput("x > -2 AND x < 4");
+  </script>
+</body>
+</html>

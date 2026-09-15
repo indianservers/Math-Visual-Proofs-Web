@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "compound-inequalities-intervals",
+  "categorySlug": "inequalities",
+  "slug": "compound-inequalities-intervals",
+  "route": "/visual-proofs/inequalities/compound-inequalities-intervals",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/147-compound-inequalities-intervals)."
+}

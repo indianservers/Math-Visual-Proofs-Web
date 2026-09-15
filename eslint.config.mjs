@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "work/**",
+    "public/**",
+    "vendor/**",
     "next-env.d.ts",
   ]),
   eslint.configs.recommended,
@@ -41,6 +43,27 @@ const eslintConfig = defineConfig([
     files: ["app/components/GeometryProof.tsx"],
     rules: {
       "no-irregular-whitespace": "off",
+    },
+  },
+  {
+    // Vendored team-developed proof sources are integrated verbatim to
+    // preserve their exact working logic; relax stylistic/a11y lint here.
+    files: ["app/visual-proofs/**/impl/**"],
+    rules: {
+      "react/no-unescaped-entities": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/refs": "off",
+      "jsx-a11y/anchor-is-valid": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/no-noninteractive-tabindex": "off",
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "jsx-a11y/mouse-events-have-key-events": "off",
     },
   },
 ]);

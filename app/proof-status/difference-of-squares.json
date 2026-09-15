@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "difference-of-squares",
+  "categorySlug": "algebraic-identities",
+  "slug": "difference-of-squares",
+  "route": "/visual-proofs/algebraic-identities/difference-of-squares",
+  "status": "interactive",
+  "owner": "Aditya",
+  "notes": "Integrated team-developed self-contained HTML proof (Aditya/lesson-10.html)."
+}

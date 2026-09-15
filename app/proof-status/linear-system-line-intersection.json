@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "linear-system-line-intersection",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "linear-system-line-intersection",
+  "route": "/visual-proofs/matrices-linear-algebra/linear-system-line-intersection",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/109-linear-system-line-intersection)."
+}

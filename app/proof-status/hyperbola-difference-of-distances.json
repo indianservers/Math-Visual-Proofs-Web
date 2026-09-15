@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "hyperbola-difference-of-distances",
+  "categorySlug": "conic-sections",
+  "slug": "hyperbola-difference-of-distances",
+  "route": "/visual-proofs/conic-sections/hyperbola-difference-of-distances",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/140-hyperbola-difference-of-distances)."
+}

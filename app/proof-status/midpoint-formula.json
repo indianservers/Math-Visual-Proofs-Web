@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "midpoint-formula",
+  "categorySlug": "coordinate-geometry",
+  "slug": "midpoint-formula",
+  "route": "/visual-proofs/coordinate-geometry/midpoint-formula",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/044-midpoint-formula.html)."
+}

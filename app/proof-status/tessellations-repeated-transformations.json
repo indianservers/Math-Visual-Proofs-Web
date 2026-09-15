@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "tessellations-repeated-transformations",
+  "categorySlug": "transformations-symmetry",
+  "slug": "tessellations-repeated-transformations",
+  "route": "/visual-proofs/transformations-symmetry/tessellations-repeated-transformations",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof167)."
+}

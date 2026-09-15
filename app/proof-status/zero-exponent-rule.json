@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "zero-exponent-rule",
+  "categorySlug": "logarithms-exponents",
+  "slug": "zero-exponent-rule",
+  "route": "/visual-proofs/logarithms-exponents/zero-exponent-rule",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/zero-exponent-rule)."
+}

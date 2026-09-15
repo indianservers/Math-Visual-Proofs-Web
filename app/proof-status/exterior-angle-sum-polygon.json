@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "exterior-angle-sum-polygon",
+  "categorySlug": "geometry",
+  "slug": "exterior-angle-sum-polygon",
+  "route": "/visual-proofs/geometry/exterior-angle-sum-polygon",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/exterior-angle-sum-polygon)."
+}

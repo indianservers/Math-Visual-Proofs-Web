@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "section-formula",
+  "categorySlug": "coordinate-geometry",
+  "slug": "section-formula",
+  "route": "/visual-proofs/coordinate-geometry/section-formula",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/045-section-formula.html)."
+}

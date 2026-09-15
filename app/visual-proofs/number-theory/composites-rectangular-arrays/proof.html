@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Composite Numbers as Rectangular Arrays | Maths Universe</title>
+  <meta name="description" content="An interactive visual math tool teaching composite numbers, factors, and rectangular arrays to 12-year-old students through hands-on counter manipulation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #f4f2fb;
+      --bg-card: #ffffff;
+      --bg-sidebar: #ffffff;
+      --primary: #7c3aed;
+      --primary-hover: #6d28d9;
+      --primary-light: #f3e8ff;
+      --primary-border: #ddd6fe;
+      --accent-pink: #ec4899;
+      --accent-indigo: #4338ca;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --danger: #ef4444;
+      --text-dark: #1e1b4b;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --border-color: #e5e7eb;
+      --border-purple: #e9e3ff;
+      --shadow-sm: 0 2px 8px rgba(124, 58, 237, 0.04);
+      --shadow-md: 0 8px 24px rgba(124, 58, 237, 0.08);
+      --shadow-lg: 0 16px 36px rgba(124, 58, 237, 0.12);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+      --font-heading: 'Outfit', -apple-system, sans-serif;
+      --font-body: 'Inter', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      touch-action: manipulation;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Layout Structure */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-purple);
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 8px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent-pink) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-item.active a {
+      background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 16px 24px 32px 24px;
+      gap: 16px;
+    }
+
+    /* Top Navigation Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .breadcrumb-sep {
+      color: var(--text-light);
+    }
+
+    .header-title {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-pills {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      background: white;
+      border: 1px solid var(--border-purple);
+      color: var(--text-dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pill-primary {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-purple);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-icon:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    /* Grid Layout for Cards */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Card Component */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-purple);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    /* Mission Banner */
+    .mission-card {
+      background: linear-gradient(135deg, #7c3aed 0%, #4338ca 100%);
+      color: white;
+      border: none;
+      box-shadow: 0 12px 30px rgba(124, 58, 237, 0.25);
+    }
+
+    .mission-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .mission-body {
+      font-size: 16px;
+      line-height: 1.5;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .mission-tip {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Control Bar & Number Selector */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .number-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: white;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-purple);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .selector-label {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-dark);
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-main);
+      padding: 4px;
+      border-radius: var(--radius-full);
+    }
+
+    .step-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: white;
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .step-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: white;
+    }
+
+    .step-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .number-val {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      min-width: 36px;
+      text-align: center;
+    }
+
+    .quick-chips {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quick-chip {
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-purple);
+      background: white;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-chip:hover, .quick-chip.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    /* Model Tabs */
+    .model-tabs {
+      display: flex;
+      gap: 8px;
+      background: white;
+      padding: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-purple);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+    }
+
+    /* Main Counter Workspace */
+    .workspace-card {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .workspace-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .counter-tray-section {
+      background: #faf8ff;
+      border: 2px dashed var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      min-height: 56px;
+    }
+
+    .tray-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tray-counters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    /* Dragging Cursor & Drop Target Highlights */
+    body.is-dragging-counter {
+      cursor: grabbing !important;
+      user-select: none;
+    }
+
+    .counter {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      background: radial-gradient(circle at 35% 35%, #a855f7 0%, #6d28d9 100%);
+      box-shadow: 0 4px 10px rgba(109, 40, 217, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
+    }
+
+    .counter:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(109, 40, 217, 0.4);
+    }
+
+    .counter.dragging {
+      cursor: grabbing !important;
+      opacity: 0.95;
+      position: fixed !important;
+      z-index: 99999 !important;
+      pointer-events: none !important;
+      box-shadow: 0 16px 36px rgba(109, 40, 217, 0.5), 0 0 0 3px rgba(168, 85, 247, 0.4);
+      transform: scale(1.18) !important;
+      transition: none !important;
+    }
+
+    .counter-glow {
+      position: absolute;
+      inset: -3px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--accent-pink), var(--primary));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .counter.placed .counter-glow {
+      opacity: 0.6;
+    }
+
+    /* Array Grid Area */
+    .array-area-container {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+      background-image: radial-gradient(var(--primary-border) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .grid-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      background: var(--bg-main);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+    }
+
+    .grid-control-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .array-grid {
+      display: grid;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      transition: all 0.3s ease;
+    }
+
+    .grid-cell {
+      width: 52px;
+      height: 52px;
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.8);
+      position: relative;
+    }
+
+    .grid-cell.highlight {
+      border-color: var(--primary);
+      border-style: solid;
+      background: var(--primary-light);
+      transform: scale(1.12);
+      box-shadow: 0 0 18px rgba(124, 58, 237, 0.4);
+    }
+
+    .counter-tray-section.highlight-tray {
+      border-color: var(--primary);
+      background: #f3e8ff;
+      box-shadow: 0 0 18px rgba(124, 58, 237, 0.2);
+    }
+
+    .grid-cell.filled {
+      border-style: solid;
+      border-color: transparent;
+      background: transparent;
+    }
+
+    /* Equation Banner */
+    .equation-card {
+      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      border: 2px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .eq-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .eq-main {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+
+    .eq-sub {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Feedback Banner */
+    .feedback-banner {
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .feedback-info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+    }
+
+    .feedback-warning {
+      background: var(--warning-bg);
+      border: 1px solid #fde68a;
+      color: #92400e;
+    }
+
+    .feedback-success {
+      background: var(--success-bg);
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+      animation: pulse-success 1.5s infinite alternate;
+    }
+
+    @keyframes pulse-success {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.01); }
+    }
+
+    /* Right Panel Components */
+
+    /* Live Counter Tracker */
+    .counter-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      text-align: center;
+    }
+
+    .stat-box {
+      background: var(--bg-main);
+      padding: 10px 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-purple);
+    }
+
+    .stat-val {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Factor Pairs Panel */
+    .factor-pairs-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .pair-btn {
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-purple);
+      background: white;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pair-btn:hover, .pair-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    }
+
+    /* Why It Works Card */
+    .reasoning-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: var(--radius-full);
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--text-dark);
+    }
+
+    .step-title {
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .reasoning-box {
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-top: 8px;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Prime Comparison Card */
+    .prime-card {
+      background: #faf8ff;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .comp-box {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .comp-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .comp-tag.prime {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .comp-tag.composite {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    /* Remainder Demonstration Card */
+    .remainder-box {
+      background: #fff7ed;
+      border: 1px solid #ffedd5;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 8px;
+    }
+
+    .remainder-vis {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 10px 0;
+    }
+
+    .rem-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: var(--radius-full);
+      background: var(--primary);
+    }
+
+    .dot.leftover {
+      background: var(--danger);
+    }
+
+    /* Bottom Full Width Sections */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Visual Proof Strip */
+    .proof-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 14px;
+      overflow-x: auto;
+      padding: 4px 2px 8px 2px;
+    }
+
+    .proof-node {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      text-align: center;
+      flex: 1;
+      min-width: 105px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .proof-node:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .proof-node.success {
+      background: var(--success-bg);
+      border-color: #a7f3d0;
+    }
+
+    .proof-node.warning {
+      background: var(--warning-bg);
+      border-color: #fde68a;
+    }
+
+    .proof-badge {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .proof-badge.badge-success {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .proof-badge.badge-warning {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .proof-val {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .proof-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .proof-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+      padding: 0 2px;
+    }
+
+    /* Student Challenge Card */
+    .challenge-card {
+      background: linear-gradient(135deg, #ffffff 0%, #faf8ff 100%);
+    }
+
+    .challenge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-pill {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .challenge-pairs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .ch-btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: 2px dashed var(--primary-border);
+      background: white;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ch-btn.found {
+      border-style: solid;
+      border-color: var(--success);
+      background: var(--success-bg);
+      color: #065f46;
+    }
+
+    /* Secondary Model Views (Groups, Clock, Remainder, Tree) */
+    .alt-model-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      padding: 24px;
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-purple);
+      text-align: center;
+    }
+
+    .alt-model-view.active {
+      display: flex;
+    }
+
+    .groups-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .group-circle {
+      border: 2px solid var(--primary-border);
+      background: var(--primary-light);
+      border-radius: var(--radius-full);
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100px;
+      height: 100px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clock-ring {
+      width: 220px;
+      height: 220px;
+      border-radius: var(--radius-full);
+      border: 4px solid var(--primary-border);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text-dark);
+      border: 1px solid var(--border-purple);
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-main);
+      border-color: var(--primary-border);
+    }
+
+    /* Canvas Confetti Layer */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1100px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        padding: 16px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+      }
+      .nav-list {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+      .main-wrapper {
+        padding: 16px;
+      }
+      .header-title {
+        font-size: 22px;
+      }
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .grid-cell {
+        width: 40px;
+        height: 40px;
+      }
+      .counter {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <a href="#" class="brand">
+        <div class="brand-icon">M</div>
+        <div class="brand-title">Maths Universe</div>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="#"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Explore</a></li>
+        <li class="nav-item active"><a href="#"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Proofs</a></li>
+        <li class="nav-item"><a href="#"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Practice</a></li>
+        <li class="nav-item"><a href="#"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a2 2 0 01-2 2 2 2 0 01-2-2V4zM4 7a2 2 0 012-2h10a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7z"/></svg>Puzzles</a></li>
+        <li class="nav-item"><a href="#"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Saved</a></li>
+        <li class="nav-item"><a href="#"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>Settings</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <main class="main-wrapper">
+      <!-- HEADER -->
+      <header class="top-header">
+        <div>
+          <div class="breadcrumb">
+            Visual Proofs <span class="breadcrumb-sep">/</span> Number <span class="breadcrumb-sep">/</span> Divisibility
+          </div>
+          <h1 class="header-title">Composite Numbers as Rectangular Arrays</h1>
+          <p class="header-subtitle">Build a rectangle to discover why a number is composite.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-primary">Intermediate</span>
+          <span class="pill">⏱️ 12 min</span>
+          <button class="btn-icon" id="audio-toggle" title="Toggle Sound Effects">🔊</button>
+        </div>
+      </header>
+
+      <!-- MISSION CARD -->
+      <section class="card mission-card">
+        <div class="mission-header">
+          <span>🎯</span> Your Mission
+        </div>
+        <div class="mission-body">
+          “Can you arrange all the counters into a rectangle?”
+        </div>
+        <div class="mission-tip">
+          💡 Small Rule: If your rectangle has more than 1 row and more than 1 column, the number is composite!
+        </div>
+      </section>
+
+      <!-- CONTROLS BAR & MODEL SWITCHER -->
+      <section class="controls-bar">
+        <div class="number-selector">
+          <span class="selector-label">Choose a number:</span>
+          <div class="stepper">
+            <button class="step-btn" id="btn-num-dec" title="Decrease n">-</button>
+            <span class="number-val" id="num-display">24</span>
+            <button class="step-btn" id="btn-num-inc" title="Increase n">+</button>
+          </div>
+          <span class="pill" id="counter-count-pill">24 counters</span>
+          <div class="quick-chips">
+            <button class="quick-chip" data-num="7">7 (Prime)</button>
+            <button class="quick-chip" data-num="12">12</button>
+            <button class="quick-chip active" data-num="24">24</button>
+            <button class="quick-chip" data-num="36">36</button>
+          </div>
+        </div>
+
+        <nav class="model-tabs">
+          <button class="tab-btn active" data-tab="array">Array</button>
+          <button class="tab-btn" data-tab="groups">Groups</button>
+          <button class="tab-btn" data-tab="clock">Clock</button>
+          <button class="tab-btn" data-tab="tree">Factor Tree</button>
+          <button class="tab-btn" data-tab="remainders">Remainders</button>
+        </nav>
+      </section>
+
+      <!-- WORKSPACE GRID (LEFT / RIGHT COLUMNS) -->
+      <div class="workspace-grid">
+        <!-- LEFT COLUMN: MAIN INTERACTIVE WORKSPACE -->
+        <div class="left-column">
+          <!-- MAIN ARRAY WORKSPACE CARD -->
+          <div class="card workspace-card" id="view-array">
+            <div class="workspace-header">
+              <h2 class="workspace-title">🧩 Build Your Rectangle</h2>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-secondary" id="btn-reset-tray">Reset to Tray</button>
+                <button class="btn-primary" id="btn-auto-fill">Auto-Arrange Rectangle</button>
+              </div>
+            </div>
+
+            <p style="font-size: 14px; color: var(--text-muted);">
+              <strong>Instruction:</strong> Drag counters into the grid below to make equal rows.
+            </p>
+
+            <!-- TRAY CONTAINER -->
+            <div class="counter-tray-section">
+              <div class="tray-label">
+                <span>Counter Tray (Unplaced Counters)</span>
+                <span id="tray-count-label">0 remaining</span>
+              </div>
+              <div class="tray-counters" id="counter-tray"></div>
+            </div>
+
+            <!-- ARRAY CONSTRUCTION AREA -->
+            <div class="array-area-container" id="array-container">
+              <div class="grid-controls">
+                <div class="grid-control-item">
+                  <span>Rows:</span>
+                  <div class="stepper">
+                    <button class="step-btn" id="btn-row-dec">-</button>
+                    <span id="row-val-display" style="font-weight:800; color:var(--primary); min-width:24px; text-align:center;">4</span>
+                    <button class="step-btn" id="btn-row-inc">+</button>
+                  </div>
+                </div>
+                <div class="grid-control-item">
+                  <span>Columns:</span>
+                  <span id="col-val-display" style="font-weight:800; color:var(--primary);">6</span>
+                </div>
+              </div>
+
+              <!-- DYNAMIC GRID -->
+              <div class="array-grid" id="array-grid"></div>
+            </div>
+
+            <!-- LIVE EQUATION BAR -->
+            <div class="equation-card">
+              <div class="eq-text-group">
+                <div class="eq-main" id="equation-main">4 × 6 = 24</div>
+                <div class="eq-sub" id="equation-sub">4 rows × 6 in each row = 24 counters</div>
+              </div>
+              <span class="pill pill-primary" id="eq-composite-pill">Composite Rectangle!</span>
+            </div>
+
+            <!-- FEEDBACK BANNER -->
+            <div class="feedback-banner feedback-info" id="feedback-banner">
+              <span>💡</span>
+              <span id="feedback-text">Drag counters to fill all slots in equal rows!</span>
+            </div>
+          </div>
+
+          <!-- ALTERNATIVE MODEL VIEWS (GROUPS, CLOCK, TREE, REMAINDERS) -->
+          <div class="alt-model-view" id="view-groups">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Group View</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+              Dividing counters into equal circular groups:
+            </p>
+            <div class="groups-container" id="groups-container"></div>
+          </div>
+
+          <div class="alt-model-view" id="view-clock">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Clock / Ring View</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+              Counters distributed evenly in a modular ring pattern:
+            </p>
+            <div class="clock-ring" id="clock-container"></div>
+          </div>
+
+          <div class="alt-model-view" id="view-tree">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Factor Tree View</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+              Breaking down the number into its prime factors:
+            </p>
+            <div id="tree-container" style="font-family:var(--font-heading); font-size:20px; font-weight:700; color:var(--primary);"></div>
+          </div>
+
+          <div class="alt-model-view" id="view-remainders">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Remainder Division View</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">
+              Testing equal rows vs leftovers:
+            </p>
+            <div id="remainders-container"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: REASONING & COUNTER TRACKER -->
+        <div class="right-column">
+          <!-- LIVE COUNTER TRACKER -->
+          <div class="card">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">📊 Live Counter Tracking</h3>
+            <div class="counter-stats-grid">
+              <div class="stat-box">
+                <div class="stat-val" id="stat-total">24</div>
+                <div class="stat-lbl">Total</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val" id="stat-placed" style="color:var(--success);">24</div>
+                <div class="stat-lbl">Placed</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-val" id="stat-remaining" style="color:var(--accent-pink);">0</div>
+                <div class="stat-lbl">Remaining</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FACTOR PAIRS PANEL -->
+          <div class="card">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">🔗 Rectangle = Factors</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+              Click any factor pair to build its rectangle:
+            </p>
+            <div class="factor-pairs-list" id="factor-pairs-container"></div>
+          </div>
+
+          <!-- WHY IT WORKS CARD -->
+          <div class="card">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">💡 Why does this work?</h3>
+            <div class="reasoning-steps">
+              <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <div class="step-title">Count the counters</div>
+                  <div style="color: var(--text-muted);" id="step1-text">You have 24 counters total.</div>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <div class="step-title">Make equal rows</div>
+                  <div style="color: var(--text-muted);" id="step2-text">a rows × b columns = n</div>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <div class="step-title">Check the rectangle</div>
+                  <div style="color: var(--text-muted);" id="step3-text">If a > 1 and b > 1, n is composite!</div>
+                </div>
+              </div>
+            </div>
+            <div class="reasoning-box" id="reasoning-summary">
+              4 × 6 = 24 (Both sides > 1) → COMPOSITE
+            </div>
+          </div>
+
+          <!-- PRIME VS COMPOSITE COMPARISON -->
+          <div class="card prime-card">
+            <h3 style="font-size: 16px; font-weight: 700;">⚡ Prime vs Composite</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+              Compare prime numbers with composite numbers:
+            </p>
+            <div class="comparison-grid">
+              <div class="comp-box">
+                <span class="comp-tag prime">7 (Prime)</span>
+                <div style="font-size:12px; font-weight:600; color:var(--text-muted);">7 = 1 × 7</div>
+                <div style="font-size:11px; color:var(--text-muted);">Only 1 row possible. Cannot make both sides > 1!</div>
+              </div>
+              <div class="comp-box">
+                <span class="comp-tag composite">24 (Composite)</span>
+                <div style="font-size:12px; font-weight:600; color:var(--text-muted);">24 = 4 × 6</div>
+                <div style="font-size:11px; color:var(--text-muted);">4 > 1 and 6 > 1! Perfect rectangle!</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- REMAINDER DEMO CARD -->
+          <div class="card">
+            <h3 style="font-size: 16px; font-weight: 700;">⚠️ Leftover Example</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+              Try arranging 14 counters into 3 equal rows:
+            </p>
+            <div class="remainder-box">
+              <div class="remainder-vis">
+                <div class="rem-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="rem-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="rem-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+                <div class="rem-row"><div class="dot leftover"></div><div class="dot leftover"></div></div>
+              </div>
+              <p style="font-size:12px; font-weight:600; color:#9a3412;">
+                2 left over! 3 is NOT a factor of 14 because the rows are not equal.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM SECTIONS: VISUAL PROOF & STUDENT CHALLENGE -->
+      <div class="bottom-grid">
+        <!-- VISUAL PROOF STRIP -->
+        <div class="card">
+          <h3 style="font-size: 18px; font-weight: 700;">📐 Visual Proof Chain</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-top: 2px;">
+            Step-by-step logic proving why the number is composite:
+          </p>
+          <div class="proof-flow" id="proof-flow-container"></div>
+        </div>
+
+        <!-- STUDENT CHALLENGE SECTION -->
+        <div class="card challenge-card">
+          <div class="challenge-header">
+            <div>
+              <h3 style="font-size: 18px; font-weight: 700;">🎯 Student Challenge</h3>
+              <p style="font-size: 14px; color: var(--text-muted); margin-top: 2px;">
+                “Build all factor rectangles for 36!”
+              </p>
+            </div>
+            <span class="progress-pill" id="challenge-progress-label">0 / 5 discovered</span>
+          </div>
+
+          <div class="challenge-pairs" id="challenge-pairs-container"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       MATHS UNIVERSE ENGINE - COMPOSITE NUMBERS AS RECTANGULAR ARRAYS
+       ========================================================================== */
+
+    // STATE ENGINE
+    const state = {
+      n: 24,
+      targetRows: 4,
+      targetCols: 6,
+      audioEnabled: true,
+      currentTab: 'array',
+      // Counter placements: array of objects { id, row, col, isPlaced }
+      counters: [],
+      // Challenge state for 36
+      challengeTarget: 36,
+      challengeDiscovered: new Set()
+    };
+
+    // DOM ELEMENTS
+    const numDisplay = document.getElementById('num-display');
+    const btnNumDec = document.getElementById('btn-num-dec');
+    const btnNumInc = document.getElementById('btn-num-inc');
+    const counterCountPill = document.getElementById('counter-count-pill');
+
+    const rowValDisplay = document.getElementById('row-val-display');
+    const colValDisplay = document.getElementById('col-val-display');
+    const btnRowDec = document.getElementById('btn-row-dec');
+    const btnRowInc = document.getElementById('btn-row-inc');
+
+    const counterTray = document.getElementById('counter-tray');
+    const trayCountLabel = document.getElementById('tray-count-label');
+    const arrayGrid = document.getElementById('array-grid');
+
+    const statTotal = document.getElementById('stat-total');
+    const statPlaced = document.getElementById('stat-placed');
+    const statRemaining = document.getElementById('stat-remaining');
+
+    const equationMain = document.getElementById('equation-main');
+    const equationSub = document.getElementById('equation-sub');
+    const eqCompositePill = document.getElementById('eq-composite-pill');
+
+    const feedbackBanner = document.getElementById('feedback-banner');
+    const feedbackText = document.getElementById('feedback-text');
+
+    const factorPairsContainer = document.getElementById('factor-pairs-container');
+    const reasoningSummary = document.getElementById('reasoning-summary');
+    const step1Text = document.getElementById('step1-text');
+    const step2Text = document.getElementById('step2-text');
+    const step3Text = document.getElementById('step3-text');
+
+    const proofFlowContainer = document.getElementById('proof-flow-container');
+    const challengePairsContainer = document.getElementById('challenge-pairs-container');
+    const challengeProgressLabel = document.getElementById('challenge-progress-label');
+
+    // WEB AUDIO API SYNTHESIZER FOR SOUND EFFECTS
+    let audioCtx = null;
+
+    function playSound(type) {
+      if (!state.audioEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'snap') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'success') {
+          // Play a joyful chord (C5 - E5 - G5 - C6)
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.frequency.setValueAtTime(freq, now + idx * 0.06);
+            g.gain.setValueAtTime(0.25, now + idx * 0.06);
+            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.3);
+            o.start(now + idx * 0.06);
+            o.stop(now + idx * 0.06 + 0.3);
+          });
+        } else if (type === 'click') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(300, now);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        }
+      } catch (e) {
+        // Fallback silently if audio fails
+      }
+    }
+
+    // CANVAS CONFETTI SYSTEM
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#7c3aed', '#ec4899', '#10b981', '#f59e0b', '#3b82f6'];
+
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.7) * 18,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          radius: Math.random() * 6 + 4,
+          gravity: 0.4,
+          opacity: 1
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.opacity -= 0.015;
+          if (p.opacity > 0) {
+            alive = true;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.opacity);
+            ctx.fill();
+          }
+        });
+        if (alive) requestAnimationFrame(animate);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      animate();
+    }
+
+    // FACTOR HELPER FUNCTIONS
+    function getFactorPairs(n) {
+      const pairs = [];
+      for (let i = 1; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) {
+          pairs.push([i, n / i]);
+        }
+      }
+      return pairs;
+    }
+
+    function isComposite(n) {
+      if (n <= 3) return false;
+      for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) return true;
+      }
+      return false;
+    }
+
+    // INITIALIZE & RESET COUNTERS
+    function initCounters() {
+      state.counters = [];
+      for (let i = 1; i <= state.n; i++) {
+        state.counters.push({
+          id: i,
+          isPlaced: false,
+          row: null,
+          col: null
+        });
+      }
+    }
+
+    // AUTO-ARRANGE ALL COUNTERS INTO RECTANGLE (ROWS x COLS)
+    function autoArrangeRectangle(r, c) {
+      state.targetRows = r;
+      state.targetCols = c;
+      const totalSlots = r * c;
+
+      state.counters.forEach((cnt, idx) => {
+        if (idx < totalSlots) {
+          cnt.isPlaced = true;
+          cnt.row = Math.floor(idx / c);
+          cnt.col = idx % c;
+        } else {
+          cnt.isPlaced = false;
+          cnt.row = null;
+          cnt.col = null;
+        }
+      });
+
+      playSound('snap');
+      renderAll();
+    }
+
+    function resetToTray() {
+      state.counters.forEach(cnt => {
+        cnt.isPlaced = false;
+        cnt.row = null;
+        cnt.col = null;
+      });
+      playSound('click');
+      renderAll();
+    }
+
+    // RENDER COUNTER ELEMENTS & DRAG ENGINE
+    function renderCountersAndGrid() {
+      // 1. Update Stepper & Display Labels
+      numDisplay.textContent = state.n;
+      counterCountPill.textContent = `${state.n} counters`;
+      btnNumDec.disabled = (state.n <= 2);
+      btnNumInc.disabled = (state.n >= 60);
+
+      rowValDisplay.textContent = state.targetRows;
+      colValDisplay.textContent = state.targetCols;
+
+      // 2. Render Array Grid Slots
+      arrayGrid.style.gridTemplateRows = `repeat(${state.targetRows}, 1fr)`;
+      arrayGrid.style.gridTemplateColumns = `repeat(${state.targetCols}, 1fr)`;
+      arrayGrid.innerHTML = '';
+
+      const cellMap = new Map(); // key: "r-c" -> DOM cell
+
+      for (let r = 0; r < state.targetRows; r++) {
+        for (let c = 0; c < state.targetCols; c++) {
+          const cell = document.createElement('div');
+          cell.className = 'grid-cell';
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          arrayGrid.appendChild(cell);
+          cellMap.set(`${r}-${c}`, cell);
+        }
+      }
+
+      // 3. Clear Tray & Render Counters
+      counterTray.innerHTML = '';
+
+      let placedCount = 0;
+
+      state.counters.forEach(cnt => {
+        const cntEl = document.createElement('div');
+        cntEl.className = 'counter';
+        cntEl.textContent = cnt.id;
+        cntEl.dataset.id = cnt.id;
+
+        const glow = document.createElement('div');
+        glow.className = 'counter-glow';
+        cntEl.appendChild(glow);
+
+        if (cnt.isPlaced && cnt.row < state.targetRows && cnt.col < state.targetCols) {
+          cntEl.classList.add('placed');
+          placedCount++;
+          const targetCell = cellMap.get(`${cnt.row}-${cnt.col}`);
+          if (targetCell) {
+            targetCell.classList.add('filled');
+            targetCell.appendChild(cntEl);
+          } else {
+            counterTray.appendChild(cntEl);
+          }
+        } else {
+          cnt.isPlaced = false;
+          counterTray.appendChild(cntEl);
+        }
+
+        // Attach Pointer Drag Events
+        makeDraggable(cntEl, cnt);
+      });
+
+      // Update Tray Stats
+      const remainingCount = state.n - placedCount;
+      trayCountLabel.textContent = `${remainingCount} remaining`;
+      statTotal.textContent = state.n;
+      statPlaced.textContent = placedCount;
+      statRemaining.textContent = remainingCount;
+    }
+
+    // SMART SNAP HELPER: Find nearest grid cell within 70px snap radius
+    function getNearestGridCell(clientX, clientY) {
+      const cells = document.querySelectorAll('.grid-cell');
+      let nearest = null;
+      let minDistance = 70; // Snap threshold in px
+
+      cells.forEach(cell => {
+        const rect = cell.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const dist = Math.hypot(clientX - centerX, clientY - centerY);
+        if (dist < minDistance) {
+          minDistance = dist;
+          nearest = cell;
+        }
+      });
+
+      return nearest;
+    }
+
+    function clearDragHighlights() {
+      document.querySelectorAll('.grid-cell').forEach(c => c.classList.remove('highlight'));
+      const tray = document.querySelector('.counter-tray-section');
+      if (tray) tray.classList.remove('highlight-tray');
+    }
+
+    // ROBUST POINTER EVENTS DRAG ENGINE (MOUSE & TOUCH)
+    function makeDraggable(element, counterObj) {
+      let isDragging = false;
+      let grabOffsetX = 0;
+      let grabOffsetY = 0;
+
+      element.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        document.body.classList.add('is-dragging-counter');
+
+        const rect = element.getBoundingClientRect();
+        grabOffsetX = e.clientX - rect.left;
+        grabOffsetY = e.clientY - rect.top;
+
+        element.classList.add('dragging');
+        element.style.left = `${e.clientX - grabOffsetX}px`;
+        element.style.top = `${e.clientY - grabOffsetY}px`;
+
+        try {
+          element.setPointerCapture(e.pointerId);
+        } catch (err) {
+          // Fallback if setPointerCapture not supported
+        }
+      });
+
+      element.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+
+        element.style.left = `${e.clientX - grabOffsetX}px`;
+        element.style.top = `${e.clientY - grabOffsetY}px`;
+
+        // Clear previous highlights
+        clearDragHighlights();
+
+        // Check nearest drop target
+        const nearestCell = getNearestGridCell(e.clientX, e.clientY);
+        if (nearestCell) {
+          nearestCell.classList.add('highlight');
+        } else {
+          const traySection = document.querySelector('.counter-tray-section');
+          if (traySection) {
+            const trayRect = traySection.getBoundingClientRect();
+            if (
+              e.clientX >= trayRect.left && e.clientX <= trayRect.right &&
+              e.clientY >= trayRect.top && e.clientY <= trayRect.bottom
+            ) {
+              traySection.classList.add('highlight-tray');
+            }
+          }
+        }
+      });
+
+      const handlePointerEnd = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        document.body.classList.remove('is-dragging-counter');
+        clearDragHighlights();
+
+        element.classList.remove('dragging');
+        element.style.position = '';
+        element.style.left = '';
+        element.style.top = '';
+
+        try {
+          element.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+
+        // Determine drop target via Smart Snap or Tray hit
+        const dropCell = getNearestGridCell(e.clientX, e.clientY);
+        const traySection = document.querySelector('.counter-tray-section');
+        const trayRect = traySection ? traySection.getBoundingClientRect() : null;
+        const isOverTray = trayRect && (
+          e.clientX >= trayRect.left && e.clientX <= trayRect.right &&
+          e.clientY >= trayRect.top && e.clientY <= trayRect.bottom
+        );
+
+        if (dropCell) {
+          const targetRow = parseInt(dropCell.dataset.row);
+          const targetCol = parseInt(dropCell.dataset.col);
+
+          // Check if slot already occupied
+          const existing = state.counters.find(c => c.isPlaced && c.row === targetRow && c.col === targetCol);
+          if (existing && existing.id !== counterObj.id) {
+            existing.isPlaced = false;
+            existing.row = null;
+            existing.col = null;
+          }
+
+          counterObj.isPlaced = true;
+          counterObj.row = targetRow;
+          counterObj.col = targetCol;
+          playSound('snap');
+        } else {
+          // Return to tray if dropped on tray or anywhere outside grid
+          counterObj.isPlaced = false;
+          counterObj.row = null;
+          counterObj.col = null;
+          playSound('click');
+        }
+
+        renderAll();
+      };
+
+      element.addEventListener('pointerup', handlePointerEnd);
+      element.addEventListener('pointercancel', handlePointerEnd);
+    }
+
+    // RENDER FACTOR PAIRS & REASONING PANELS
+    function renderFactorPanels() {
+      const pairs = getFactorPairs(state.n);
+      const isComp = isComposite(state.n);
+
+      // Render Factor Pair Chips
+      factorPairsContainer.innerHTML = '';
+      pairs.forEach(([r, c]) => {
+        const btn = document.createElement('button');
+        btn.className = `pair-btn ${(r === state.targetRows && c === state.targetCols) || (c === state.targetRows && r === state.targetCols) ? 'active' : ''}`;
+        btn.textContent = `${r} × ${c}`;
+        btn.addEventListener('click', () => {
+          autoArrangeRectangle(r, c);
+        });
+        factorPairsContainer.appendChild(btn);
+      });
+
+      // Update Reasoning Box
+      step1Text.textContent = `You have ${state.n} counters total.`;
+      step2Text.textContent = `${state.targetRows} rows × ${state.targetCols} columns = ${state.targetRows * state.targetCols}`;
+
+      const placedCount = state.counters.filter(c => c.isPlaced).length;
+      const isFullyPlaced = placedCount === state.n;
+      const isRectangleFilled = isFullyPlaced && (state.targetRows * state.targetCols === state.n);
+      const sidesGreaterThanOne = state.targetRows > 1 && state.targetCols > 1;
+
+      if (isRectangleFilled && sidesGreaterThanOne) {
+        step3Text.textContent = `Both ${state.targetRows} > 1 and ${state.targetCols} > 1. It forms a composite rectangle!`;
+        reasoningSummary.textContent = `${state.targetRows} × ${state.targetCols} = ${state.n} (Both sides > 1) → COMPOSITE!`;
+        reasoningSummary.style.background = 'var(--success-bg)';
+        reasoningSummary.style.color = '#065f46';
+      } else if (isRectangleFilled && !sidesGreaterThanOne) {
+        step3Text.textContent = `One side is 1 (${state.targetRows} × ${state.targetCols}). Can you make both sides > 1?`;
+        reasoningSummary.textContent = `1 × ${state.n} = ${state.n} (One side is 1)`;
+        reasoningSummary.style.background = 'var(--warning-bg)';
+        reasoningSummary.style.color = '#92400e';
+      } else {
+        step3Text.textContent = `Place all ${state.n} counters to complete the rectangle.`;
+        reasoningSummary.textContent = `n = a × b (Checking factors...)`;
+        reasoningSummary.style.background = 'var(--primary-light)';
+        reasoningSummary.style.color = 'var(--primary)';
+      }
+
+      // Render Visual Proof Strip Flow
+      const arrowSvg = `<div class="proof-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>`;
+
+      proofFlowContainer.innerHTML = `
+        <div class="proof-node">
+          <span class="proof-badge">Total</span>
+          <div class="proof-val">${state.n}</div>
+          <div class="proof-desc">counters</div>
+        </div>
+        ${arrowSvg}
+        <div class="proof-node">
+          <span class="proof-badge">Rows</span>
+          <div class="proof-val">${state.targetRows}</div>
+          <div class="proof-desc">equal rows</div>
+        </div>
+        ${arrowSvg}
+        <div class="proof-node">
+          <span class="proof-badge">Cols</span>
+          <div class="proof-val">${state.targetCols}</div>
+          <div class="proof-desc">in each row</div>
+        </div>
+        ${arrowSvg}
+        <div class="proof-node">
+          <span class="proof-badge">Equation</span>
+          <div class="proof-val">${state.targetRows} × ${state.targetCols}</div>
+          <div class="proof-desc">= ${state.n}</div>
+        </div>
+        ${arrowSvg}
+        <div class="proof-node ${isComp ? 'success' : 'warning'}">
+          <span class="proof-badge ${isComp ? 'badge-success' : 'badge-warning'}">Result</span>
+          <div class="proof-val" style="color:${isComp ? '#065f46' : '#92400e'}">${isComp ? 'COMPOSITE' : 'PRIME'}</div>
+          <div class="proof-desc">${isComp ? 'Both sides > 1' : 'Only 1 × n'}</div>
+        </div>
+      `;
+    }
+
+    // UPDATE EQUATION & FEEDBACK MESSAGES
+    function updateEquationAndFeedback() {
+      const placedCount = state.counters.filter(c => c.isPlaced).length;
+      const isFullyPlaced = placedCount === state.n;
+      const totalGridSlots = state.targetRows * state.targetCols;
+      const isComp = isComposite(state.n);
+
+      equationMain.textContent = `${state.targetRows} × ${state.targetCols} = ${totalGridSlots}`;
+      equationSub.textContent = `${state.targetRows} rows × ${state.targetCols} in each row = ${totalGridSlots} slots`;
+
+      if (totalGridSlots === state.n && isFullyPlaced) {
+        if (state.targetRows > 1 && state.targetCols > 1) {
+          eqCompositePill.textContent = "🎉 Valid Composite Rectangle!";
+          eqCompositePill.style.background = "var(--success-bg)";
+          eqCompositePill.style.color = "#065f46";
+
+          feedbackBanner.className = "feedback-banner feedback-success";
+          feedbackText.textContent = `🎉 Fantastic! You built a ${state.targetRows} × ${state.targetCols} rectangle! Both sides are > 1, proving ${state.n} is COMPOSITE!`;
+
+          // Track Challenge if active
+          if (state.n === state.challengeTarget) {
+            const pairKey = `${Math.min(state.targetRows, state.targetCols)}x${Math.max(state.targetRows, state.targetCols)}`;
+            if (!state.challengeDiscovered.has(pairKey)) {
+              state.challengeDiscovered.add(pairKey);
+              triggerConfetti();
+              playSound('success');
+            }
+          }
+        } else {
+          eqCompositePill.textContent = "1 × n Rectangle";
+          eqCompositePill.style.background = "var(--warning-bg)";
+          eqCompositePill.style.color = "#92400e";
+
+          feedbackBanner.className = "feedback-banner feedback-warning";
+          feedbackText.textContent = `You built a 1 × ${state.n} rectangle! But one side is 1. Can you rearrange into a rectangle where BOTH sides are bigger than 1?`;
+        }
+      } else if (placedCount < state.n) {
+        eqCompositePill.textContent = "Incomplete";
+        eqCompositePill.style.background = "var(--primary-light)";
+        eqCompositePill.style.color = "var(--primary)";
+
+        feedbackBanner.className = "feedback-banner feedback-info";
+        feedbackText.textContent = `You still have ${state.n - placedCount} counters left in the tray. Drag them into the grid!`;
+      } else {
+        eqCompositePill.textContent = "Grid Overflow";
+        eqCompositePill.style.background = "var(--warning-bg)";
+        eqCompositePill.style.color = "#92400e";
+
+        feedbackBanner.className = "feedback-banner feedback-warning";
+        feedbackText.textContent = `Not quite — every row needs the same number of counters to make a full rectangle.`;
+      }
+    }
+
+    // RENDER STUDENT CHALLENGE (TARGET: 36)
+    function renderChallenge() {
+      const targetPairs = getFactorPairs(state.challengeTarget);
+      const totalPairsCount = targetPairs.length;
+      const discoveredCount = state.challengeDiscovered.size;
+
+      challengeProgressLabel.textContent = `${discoveredCount} / ${totalPairsCount} discovered`;
+
+      challengePairsContainer.innerHTML = '';
+      targetPairs.forEach(([r, c]) => {
+        const pairKey = `${Math.min(r, c)}x${Math.max(r, c)}`;
+        const isFound = state.challengeDiscovered.has(pairKey);
+
+        const chBtn = document.createElement('button');
+        chBtn.className = `ch-btn ${isFound ? 'found' : ''}`;
+        chBtn.innerHTML = `${isFound ? '✅' : '🔍'} ${r} × ${c}`;
+        chBtn.addEventListener('click', () => {
+          state.n = 36;
+          initCounters();
+          autoArrangeRectangle(r, c);
+        });
+        challengePairsContainer.appendChild(chBtn);
+      });
+
+      if (discoveredCount === totalPairsCount) {
+        challengeProgressLabel.textContent = "🎉 Challenge Complete!";
+        challengeProgressLabel.style.background = "var(--success-bg)";
+        challengeProgressLabel.style.color = "#065f46";
+      }
+    }
+
+    // RENDER ALTERNATIVE MODEL VIEWS
+    function renderAltViews() {
+      // 1. Groups View
+      const groupsContainer = document.getElementById('groups-container');
+      groupsContainer.innerHTML = '';
+      for (let g = 0; g < state.targetRows; g++) {
+        const groupCircle = document.createElement('div');
+        groupCircle.className = 'group-circle';
+        for (let c = 0; c < state.targetCols; c++) {
+          const dot = document.createElement('div');
+          dot.className = 'dot';
+          groupCircle.appendChild(dot);
+        }
+        groupsContainer.appendChild(groupCircle);
+      }
+
+      // 2. Clock View
+      const clockContainer = document.getElementById('clock-container');
+      clockContainer.innerHTML = '';
+      const radius = 90;
+      for (let i = 0; i < state.n; i++) {
+        const angle = (i / state.n) * (2 * Math.PI) - Math.PI / 2;
+        const x = 110 + radius * Math.cos(angle) - 8;
+        const y = 110 + radius * Math.sin(angle) - 8;
+
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.style.position = 'absolute';
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        clockContainer.appendChild(dot);
+      }
+
+      // 3. Tree View
+      const treeContainer = document.getElementById('tree-container');
+      const isComp = isComposite(state.n);
+      if (isComp) {
+        const pairs = getFactorPairs(state.n);
+        const [r, c] = pairs.find(([a, b]) => a > 1 && b > 1) || pairs[0];
+        treeContainer.innerHTML = `
+          <div>${state.n}</div>
+          <div style="font-size:14px; color:var(--text-muted); margin: 6px 0;">↙ ↘</div>
+          <div>${r} × ${c}</div>
+        `;
+      } else {
+        treeContainer.innerHTML = `<div>${state.n} is PRIME (Cannot be split!)</div>`;
+      }
+
+      // 4. Remainders View
+      const remaindersContainer = document.getElementById('remainders-container');
+      const rem = state.n % 3;
+      remaindersContainer.innerHTML = `
+        <div style="font-size:16px; font-weight:700; color:var(--primary); margin-bottom:8px;">
+          ${state.n} ÷ 3 = ${Math.floor(state.n / 3)} with Remainder ${rem}
+        </div>
+        <div style="font-size:13px; color:var(--text-muted);">
+          ${rem === 0 ? "3 is a factor! Perfect equal rows." : `${rem} leftover counters! 3 is not a factor.`}
+        </div>
+      `;
+    }
+
+    // MAIN RENDER ALL FUNCTION
+    function renderAll() {
+      renderCountersAndGrid();
+      renderFactorPanels();
+      updateEquationAndFeedback();
+      renderChallenge();
+      renderAltViews();
+    }
+
+    // EVENT LISTENERS & HANDLERS
+
+    // Number Steppers & Quick Chips
+    btnNumDec.addEventListener('click', () => {
+      if (state.n > 2) {
+        state.n--;
+        initCounters();
+        // find best default factor pair
+        const pairs = getFactorPairs(state.n);
+        const validComp = pairs.find(([r, c]) => r > 1 && c > 1);
+        if (validComp) {
+          state.targetRows = validComp[0];
+          state.targetCols = validComp[1];
+        } else {
+          state.targetRows = 1;
+          state.targetCols = state.n;
+        }
+        autoArrangeRectangle(state.targetRows, state.targetCols);
+      }
+    });
+
+    btnNumInc.addEventListener('click', () => {
+      if (state.n < 60) {
+        state.n++;
+        initCounters();
+        const pairs = getFactorPairs(state.n);
+        const validComp = pairs.find(([r, c]) => r > 1 && c > 1);
+        if (validComp) {
+          state.targetRows = validComp[0];
+          state.targetCols = validComp[1];
+        } else {
+          state.targetRows = 1;
+          state.targetCols = state.n;
+        }
+        autoArrangeRectangle(state.targetRows, state.targetCols);
+      }
+    });
+
+    document.querySelectorAll('.quick-chip').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        document.querySelectorAll('.quick-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const num = parseInt(chip.dataset.num);
+        state.n = num;
+        initCounters();
+        const pairs = getFactorPairs(state.n);
+        const validComp = pairs.find(([r, c]) => r > 1 && c > 1);
+        if (validComp) {
+          state.targetRows = validComp[0];
+          state.targetCols = validComp[1];
+        } else {
+          state.targetRows = 1;
+          state.targetCols = state.n;
+        }
+        autoArrangeRectangle(state.targetRows, state.targetCols);
+      });
+    });
+
+    // Row Steppers
+    btnRowDec.addEventListener('click', () => {
+      if (state.targetRows > 1) {
+        state.targetRows--;
+        state.targetCols = Math.ceil(state.n / state.targetRows);
+        playSound('click');
+        renderAll();
+      }
+    });
+
+    btnRowInc.addEventListener('click', () => {
+      if (state.targetRows < 12) {
+        state.targetRows++;
+        state.targetCols = Math.ceil(state.n / state.targetRows);
+        playSound('click');
+        renderAll();
+      }
+    });
+
+    // Action Buttons
+    document.getElementById('btn-reset-tray').addEventListener('click', resetToTray);
+    document.getElementById('btn-auto-fill').addEventListener('click', () => {
+      const pairs = getFactorPairs(state.n);
+      const validComp = pairs.find(([r, c]) => r > 1 && c > 1) || pairs[0];
+      autoArrangeRectangle(validComp[0], validComp[1]);
+    });
+
+    // Audio Toggle
+    document.getElementById('audio-toggle').addEventListener('click', (e) => {
+      state.audioEnabled = !state.audioEnabled;
+      e.target.textContent = state.audioEnabled ? '🔊' : '🔇';
+    });
+
+    // Tabs Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        state.currentTab = tab;
+
+        // Hide all views first
+        document.getElementById('view-array').style.display = (tab === 'array') ? 'flex' : 'none';
+        document.querySelectorAll('.alt-model-view').forEach(v => v.classList.remove('active'));
+
+        if (tab !== 'array') {
+          const altView = document.getElementById(`view-${tab}`);
+          if (altView) altView.classList.add('active');
+        }
+        playSound('click');
+      });
+    });
+
+    // INITIALIZATION ON PAGE LOAD
+    initCounters();
+    autoArrangeRectangle(4, 6);
+  </script>
+</body>
+</html>

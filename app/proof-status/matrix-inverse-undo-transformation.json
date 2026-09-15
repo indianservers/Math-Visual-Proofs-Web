@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "matrix-inverse-undo-transformation",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "matrix-inverse-undo-transformation",
+  "route": "/visual-proofs/matrices-linear-algebra/matrix-inverse-undo-transformation",
+  "status": "interactive",
+  "owner": "Ishwarya",
+  "notes": "Integrated team-developed React proof component (Ishwarya/src/proofs/112-matrix-inverse-undo-transformation)."
+}

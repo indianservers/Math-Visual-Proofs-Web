@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tangent and Reflective Property of Parabola | Interactive Mathematics</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-orange: #f59e0b;
+      --accent-pink: #ec4899;
+      --accent-purple: #8b5cf6;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Container Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout {
+        grid-template-columns: 100px 1fr;
+      }
+    }
+
+    /* Left Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* Main Workspace */
+    .main-wrapper {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1750px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
+
+    /* Top Controls Bar Card */
+    .top-controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .control-group-inline {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .slider-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 210px;
+    }
+
+    .slider-box label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .slider-box label span.val {
+      color: var(--primary);
+    }
+
+    .range-input {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .stepper-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-step {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-step:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .conic-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .conic-pill-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .conic-pill-btn:hover, .conic-pill-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Main Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr 400px;
+      gap: 20px;
+      align-items: start;
+      height: 650px;
+    }
+
+    @media (max-width: 1400px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+        height: auto;
+      }
+      .why-panel {
+        grid-column: span 2;
+        height: 650px !important;
+      }
+    }
+
+    @media (max-width: 950px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .why-panel {
+        grid-column: span 1;
+      }
+    }
+
+    /* Viewport Cards */
+    .viewport-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 650px;
+    }
+
+    .viewport-header {
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 0 0 auto;
+    }
+
+    .viewport-header h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .viewport-body-wrapper {
+      flex: 1 1 auto;
+      min-height: 0;
+      padding: 14px;
+      background: #ffffff;
+    }
+
+    /* Un-overlapped 2-Column Layout for Main Locus View */
+    .locus-workspace {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 14px;
+      height: 100%;
+      align-items: center;
+    }
+
+    .locus-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .control-card-inner {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .control-card-inner h4 {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .checkbox-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 18px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 18px;
+    }
+
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-switch:before {
+      transform: translateX(14px);
+    }
+
+    .locus-graph-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      background: #ffffff;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    svg.math-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Zoom Overlay Bottom Right Corner */
+    .overlay-zoom-controls {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      z-index: 5;
+    }
+
+    .btn-zoom {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-zoom:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-zoom-text {
+      background: none;
+      border: none;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 6px;
+      cursor: pointer;
+    }
+
+    /* Bottom Action Bar */
+    .anim-bar {
+      padding: 10px 16px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex: 0 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .action-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-focus);
+    }
+
+    .btn-action.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .speed-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-speed {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 3px 7px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-speed.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Viewport 2: Live Distances & Verification Card */
+    .live-analysis-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .analysis-section {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .analysis-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-family: var(--font-math);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .verify-badge {
+      background: var(--accent-green-light);
+      color: #065f46;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 12.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* INDEPENDENT SCROLLING RIGHT PANEL (EXACT REFERENCE SCOPE) */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      height: 650px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-header-icon {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .why-panel-header h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    /* SCROLL CONTAINER */
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: visible;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .why-section.open {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .why-section-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      user-select: none;
+      background: #ffffff;
+      transition: background 0.15s;
+      border-radius: var(--radius-md);
+    }
+
+    .why-section-header:hover {
+      background: #f8fafc;
+    }
+
+    .why-section.open .why-section-header {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .why-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .why-badge-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .why-section.open .why-badge-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .why-arrow-icon {
+      font-size: 11px;
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .why-section.open .why-arrow-icon {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .why-section-content {
+      padding: 16px;
+      font-size: 13px;
+      color: var(--text-dark);
+      line-height: 1.65;
+      border-top: 1px solid #f1f5f9;
+      display: none;
+      background: #ffffff;
+    }
+
+    .why-section.open .why-section-content {
+      display: block;
+    }
+
+    .boxed-formula {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 17px;
+      text-align: center;
+      margin: 10px 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .reveal-card-body {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .reveal-button {
+      flex: 0 0 auto;
+      margin: 12px 16px 16px 16px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Bottom Section Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.8fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bottom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bottom-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .proof-steps-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .proof-step-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .proof-step-box:hover {
+      border-color: var(--primary);
+    }
+
+    .proof-step-title {
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--primary);
+    }
+
+    .input-group-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .text-input {
+      width: 90px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .feedback-msg {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-msg.correct {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .feedback-msg.incorrect {
+      background: #fce7f3;
+      color: #9f1239;
+    }
+
+    /* Target Hit Counter Badge */
+    .target-box {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .target-svg-area {
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+    }
+
+    /* SVG Styling */
+    .axis-line { stroke: #64748b; stroke-width: 1.5; }
+    .grid-line { stroke: #f1f5f9; stroke-width: 1; }
+    .parabola-curve { stroke: #635bff; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .directrix-line { stroke: #2563eb; stroke-width: 2.2; stroke-dasharray: 6 4; }
+    .axis-parabola-line { stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 4 3; }
+    
+    .incoming-ray { stroke: #f59e0b; stroke-width: 3; stroke-linecap: round; }
+    .tangent-line { stroke: #ec4899; stroke-width: 2; stroke-dasharray: 6 4; }
+    .reflected-ray { stroke: #8b5cf6; stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 0 3px rgba(139,92,246,0.4)); }
+
+    .line-pf { stroke: #8b5cf6; stroke-width: 2; stroke-dasharray: 4 3; }
+    .line-pd { stroke: #2563eb; stroke-width: 2; stroke-dasharray: 4 3; }
+
+    .point-focus { fill: #8b5cf6; stroke: #ffffff; stroke-width: 2.5; }
+    .point-directrix-foot { fill: #2563eb; stroke: #ffffff; stroke-width: 2; }
+    .point-locus { fill: #10b981; stroke: #ffffff; stroke-width: 3; cursor: grab; }
+    .point-locus:active { cursor: grabbing; }
+
+    .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
+    .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
+    .trail-dot { fill: #10b981; opacity: 0.5; }
+    .angle-arc { fill: none; stroke: #ec4899; stroke-width: 1.8; stroke-dasharray: 3 2; }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Library">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            Library
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Conic Sections</a>
+          <h1>Tangent and Reflective Property of Parabola</h1>
+          <p class="header-subtitle">A ray parallel to the axis reflects through the focus.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 10 min</span>
+          <button class="btn-secondary" id="btn-reset-all" title="Reset view and parameters">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset view
+          </button>
+        </div>
+      </header>
+
+      <!-- Top Controls Bar Card -->
+      <section class="top-controls-card">
+        <div class="control-group-inline">
+          <div class="slider-box">
+            <label for="slider-p">Parabola parameter p <span class="val" id="val-p">p = 2.00</span></label>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="stepper-group">
+                <button class="btn-step" id="btn-step-dec" title="Decrease p">&minus;</button>
+                <button class="btn-step" id="btn-step-inc" title="Increase p">+</button>
+              </div>
+              <input type="range" id="slider-p" class="range-input" min="0.5" max="5.0" step="0.1" value="2.0">
+            </div>
+          </div>
+
+          <div style="font-size:13px; font-weight:700; color:var(--text-dark); font-family:var(--font-math);">
+            Equation: <span style="color:var(--primary);" id="readout-parabola-eq">y² = 8.00x</span>
+          </div>
+        </div>
+
+        <div class="conic-badges-row">
+          <span style="font-size:12px; font-weight:700; color:var(--text-muted);">Quick Presets:</span>
+          <button class="conic-pill-btn" data-p="1.0">p = 1.0</button>
+          <button class="conic-pill-btn active" data-p="2.0">p = 2.0</button>
+          <button class="conic-pill-btn" data-p="3.0">p = 3.0</button>
+          <button class="conic-pill-btn" data-p="4.0">p = 4.0</button>
+        </div>
+      </section>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Viewport 1: Main Locus & Reflection Graph -->
+        <section class="viewport-card">
+          <div class="viewport-header">
+            <h3>
+              <span style="background:var(--primary-light); color:var(--primary); width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px;">1</span>
+              Locus View (Interactive)
+            </h3>
+            <span style="font-size:12px; color:var(--text-muted);">Drag P to explore. Distances update live.</span>
+          </div>
+
+          <div class="viewport-body-wrapper">
+            <div class="locus-workspace">
+              <!-- Left Objects Panel (Show / Hide Toggles) -->
+              <div class="locus-controls">
+                <div class="control-card-inner">
+                  <h4>Left Objects Panel</h4>
+                  <label class="checkbox-toggle-row">
+                    <span>Focus F</span>
+                    <span class="switch"><input type="checkbox" id="chk-focus" checked><span class="slider-switch"></span></span>
+                  </label>
+                  <label class="checkbox-toggle-row">
+                    <span>Directrix d</span>
+                    <span class="switch"><input type="checkbox" id="chk-directrix" checked><span class="slider-switch"></span></span>
+                  </label>
+                  <label class="checkbox-toggle-row">
+                    <span>Parabola</span>
+                    <span class="switch"><input type="checkbox" id="chk-parabola" checked><span class="slider-switch"></span></span>
+                  </label>
+                  <label class="checkbox-toggle-row">
+                    <span>Ray (parallel)</span>
+                    <span class="switch"><input type="checkbox" id="chk-ray" checked><span class="slider-switch"></span></span>
+                  </label>
+                  <label class="checkbox-toggle-row">
+                    <span>Tangent Point P</span>
+                    <span class="switch"><input type="checkbox" id="chk-point" checked><span class="slider-switch"></span></span>
+                  </label>
+                  <label class="checkbox-toggle-row">
+                    <span>Axis</span>
+                    <span class="switch"><input type="checkbox" id="chk-axis" checked><span class="slider-switch"></span></span>
+                  </label>
+                </div>
+
+                <div class="control-card-inner">
+                  <h4>Eccentricity</h4>
+                  <div style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">
+                    e = 1.00 &nbsp;&nbsp;(PF = PD)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Unobstructed Graph Container -->
+              <div class="locus-graph-container" id="locus-viewport">
+                <!-- Zoom Controls Overlay -->
+                <div class="overlay-zoom-controls">
+                  <button class="btn-zoom" id="btn-locus-zoom-out" title="Zoom Out">&minus;</button>
+                  <button class="btn-zoom-text" id="btn-locus-zoom-reset">100%</button>
+                  <button class="btn-zoom" id="btn-locus-zoom-in" title="Zoom In">+</button>
+                </div>
+
+                <!-- SVG Canvas -->
+                <svg id="locus-svg" class="math-svg">
+                  <defs>
+                    <marker id="arrow-lx" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+                    </marker>
+                    <marker id="arrow-ly" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
+                    </marker>
+
+                    <marker id="arrow-ray" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+                    </marker>
+
+                    <marker id="arrow-refl" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#8b5cf6"/>
+                    </marker>
+                  </defs>
+
+                  <g id="locus-viewport-g">
+                    <g id="locus-grid-group"></g>
+
+                    <!-- Coordinate Axes -->
+                    <g id="locus-axes-group">
+                      <line id="locus-axis-x" class="axis-line" marker-end="url(#arrow-lx)"/>
+                      <line id="locus-axis-y" class="axis-line" marker-end="url(#arrow-ly)"/>
+                      <text id="locus-label-x" class="svg-text-math">x</text>
+                      <text id="locus-label-y" class="svg-text-math">y</text>
+                    </g>
+
+                    <!-- Parabola Symmetry Axis y=0 -->
+                    <line id="locus-parabola-axis" class="axis-parabola-line"/>
+
+                    <!-- Directrix x = -p -->
+                    <line id="locus-directrix-line" class="directrix-line"/>
+                    <g id="locus-directrix-label-g">
+                      <rect class="svg-label-bg" width="90" height="20"/>
+                      <text id="locus-directrix-text" class="svg-text-math" fill="#2563eb">Directrix d</text>
+                    </g>
+
+                    <!-- Parabola Curve y^2 = 4px -->
+                    <path id="locus-curve-path" class="parabola-curve"/>
+
+                    <!-- Trace Group -->
+                    <g id="locus-trail-group"></g>
+
+                    <!-- Incoming Parallel Horizontal Ray -->
+                    <line id="locus-incoming-ray" class="incoming-ray" marker-end="url(#arrow-ray)"/>
+
+                    <!-- Tangent Line at P -->
+                    <line id="locus-tangent-line" class="tangent-line"/>
+
+                    <!-- Reflected Ray Passing Through F -->
+                    <line id="locus-reflected-ray" class="reflected-ray" marker-end="url(#arrow-refl)"/>
+
+                    <!-- Angle Arcs -->
+                    <g id="locus-angles-group" style="display:none;">
+                      <path id="arc-angle1" class="angle-arc"/>
+                      <path id="arc-angle2" class="angle-arc"/>
+                      <text id="text-angle1" class="svg-text-math" fill="#ec4899">&ang;1</text>
+                      <text id="text-angle2" class="svg-text-math" fill="#ec4899">&ang;2</text>
+                    </g>
+
+                    <!-- PF and PD Distance Lines -->
+                    <line id="locus-line-pf" class="line-pf"/>
+                    <line id="locus-line-pd" class="line-pd"/>
+
+                    <!-- Points -->
+                    <circle id="locus-point-d" class="point-directrix-foot" r="5"/>
+                    <text id="locus-label-d" class="svg-text-math" fill="#2563eb">D</text>
+
+                    <circle id="locus-point-f" class="point-focus" r="6"/>
+                    <text id="locus-label-f" class="svg-text-math" fill="#8b5cf6">F</text>
+
+                    <circle id="locus-point-p-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
+                    <circle id="locus-point-p" class="point-locus" r="7"/>
+                    <text id="locus-label-p" class="svg-text-math" fill="#047857">P (tangent)</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Bar -->
+          <div class="anim-bar">
+            <div class="action-btn-group">
+              <button class="btn-action" id="btn-undo" title="Undo position">↶ Undo</button>
+              <button class="btn-action" id="btn-redo" title="Redo position">↷ Redo</button>
+              <button class="btn-action" id="btn-animate">
+                <span id="anim-icon">▶</span> Animate
+              </button>
+              <button class="btn-action" id="btn-trace">Trace Path</button>
+              <button class="btn-action" id="btn-clear-trace" style="display:none;">Clear Trace</button>
+              <button class="btn-action" id="btn-show-angles">Show Angles</button>
+            </div>
+
+            <div class="speed-btn-group">
+              <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Speed:</span>
+              <button class="btn-speed" data-speed="0.5">0.5x</button>
+              <button class="btn-speed active" data-speed="1.0">1x</button>
+              <button class="btn-speed" data-speed="2.0">2x</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Viewport 2: Live Distances & Verification -->
+        <section class="viewport-card">
+          <div class="viewport-header">
+            <h3>Live Distances & Verification</h3>
+            <span style="font-size:12px; font-weight:700; color:var(--primary);" id="live-p-readout">P = (2.00, 4.00)</span>
+          </div>
+
+          <div class="viewport-body-wrapper">
+            <div class="live-analysis-card">
+              <!-- Live Distances Box -->
+              <div class="analysis-section">
+                <div class="analysis-title">Live Distances</div>
+                <div class="stat-row">
+                  <span>PF (to focus)</span>
+                  <span class="stat-value" id="val-pf">4.00</span>
+                </div>
+                <div class="stat-row">
+                  <span>PD (to directrix)</span>
+                  <span class="stat-value" id="val-pd">4.00</span>
+                </div>
+                <div class="stat-row" style="border-top:1px dashed var(--border); padding-top:4px;">
+                  <span>|PF &minus; PD|</span>
+                  <span class="stat-value" id="val-diff">0.00</span>
+                </div>
+                <div class="verify-badge" id="badge-dist-verify">
+                  ✓ PF = PD &nbsp;(Always true)
+                </div>
+              </div>
+
+              <!-- Angle Verification Box -->
+              <div class="analysis-section">
+                <div class="analysis-title">Reflection Angle Verification</div>
+                <div class="stat-row">
+                  <span>Incident Angle &ang;1</span>
+                  <span class="stat-value" id="val-angle1">26.57&deg;</span>
+                </div>
+                <div class="stat-row">
+                  <span>Reflected Angle &ang;2</span>
+                  <span class="stat-value" id="val-angle2">26.57&deg;</span>
+                </div>
+                <div class="verify-badge" id="badge-angle-verify">
+                  ✓ &ang;1 = &ang;2 &nbsp;(Law of Reflection)
+                </div>
+              </div>
+
+              <!-- Numerical Ray Focus Verification Box -->
+              <div class="analysis-section">
+                <div class="analysis-title">Ray Focus Verification</div>
+                <div class="stat-row">
+                  <span>Focus Distance to Ray</span>
+                  <span class="stat-value" id="val-focus-dist">0.000</span>
+                </div>
+                <div class="verify-badge">
+                  ✓ Reflected ray passes through F
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Viewport 3: Right Educational Panel (STRICT REFERENCE SCOPE, INDEPENDENTLY SCROLLABLE) -->
+        <aside class="why-panel" id="why-panel">
+          <div class="why-panel-header">
+            <span class="why-header-icon">&#9672;</span>
+            <h2>Why it works</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- SECTION 1: Equal Distances (Definition) -->
+            <section class="why-section open" id="sec-card-distances">
+              <div class="why-section-header" onclick="toggleWhySection('distances')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">1</span>
+                  <span>1. Equal Distances (Definition)</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-distances">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-distances">
+                <p>
+                  By definition of a parabola, any point <strong>P</strong> on the curve is equidistant from the focus <strong>F</strong> and the directrix <strong>d</strong>.
+                </p>
+                <p style="margin-top:8px;">
+                  Let us identify each key geometric object in the construction:
+                  <br/>• <strong>P</strong> = any point lying on the parabola
+                  <br/>• <strong>F</strong> = the fixed focus point
+                  <br/>• <strong>d</strong> = the fixed directrix line
+                  <br/>• <strong>D</strong> = the perpendicular foot from point P to the directrix line <strong>d</strong>
+                </p>
+                <div class="boxed-formula">
+                  PF = PD
+                </div>
+                <p style="margin-top:8px;">
+                  Here, <strong>PD</strong> represents the <em>perpendicular distance</em> measured straight across from point P to the directrix line <strong>d</strong>, forming a right angle at foot point D.
+                </p>
+                <p style="margin-top:8px;">
+                  This geometric structure connects the focus, directrix, and point P into an isosceles configuration:
+                </p>
+
+                <!-- Visual ASCII/SVG Diagram -->
+                <div style="background:#f8fafc; border:1px solid var(--border); border-radius:6px; padding:10px; margin-top:8px; font-family:var(--font-math); text-align:center;">
+                  <div style="display:flex; justify-content:space-around; align-items:center;">
+                    <div style="color:var(--accent-blue); font-weight:bold;">Directrix d</div>
+                    <div style="color:var(--text-muted);">&rarr;</div>
+                    <div style="color:var(--accent-blue); font-weight:bold;">Foot D</div>
+                    <div style="color:var(--text-muted);">&rarr;</div>
+                    <div style="color:var(--accent-green); font-weight:bold;">Point P</div>
+                    <div style="color:var(--text-muted);">&larr;</div>
+                    <div style="color:var(--accent-purple); font-weight:bold;">Focus F</div>
+                  </div>
+                  <div style="margin-top:8px; font-size:13px; color:var(--primary); font-weight:bold;">
+                    Distance (P &rarr; D) = Distance (P &rarr; F)
+                  </div>
+                </div>
+
+                <div style="background:#eeedfd; border:1px solid var(--primary); padding:10px; border-radius:6px; margin-top:10px; font-size:13px;">
+                  <div style="font-weight:bold; color:var(--primary);">Live Distance Values:</div>
+                  <div style="display:flex; justify-content:space-between; margin-top:4px;">
+                    <span>PF (Focus distance) = <strong id="why-live-pf" style="color:var(--accent-purple);">4.00</strong></span>
+                    <span>PD (Directrix distance) = <strong id="why-live-pd" style="color:var(--accent-blue);">4.00</strong></span>
+                  </div>
+                  <div style="color:#065f46; font-weight:bold; margin-top:4px;">
+                    ✓ PF = PD holds for all positions of P
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION 2: Equal Angles (Reflection Law) -->
+            <section class="why-section open" id="sec-card-angles">
+              <div class="why-section-header" onclick="toggleWhySection('angles')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">2</span>
+                  <span>2. Equal Angles (Reflection Law)</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-angles">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-angles">
+                <p>
+                  The tangent at point <strong>P</strong> makes equal angles with the segment <strong>PF</strong> and the axis of symmetry, so a horizontal ray reflects through the focus <strong>F</strong>.
+                </p>
+                <p style="margin-top:8px;">
+                  Let us break down this reflection step-by-step:
+                  <br/>1. An incoming light ray travels horizontally, completely <strong>parallel to the axis of symmetry</strong>.
+                  <br/>2. The incoming ray strikes the parabola at the tangent point <strong>P</strong>.
+                  <br/>3. The <strong>tangent line at P</strong> acts as a flat reflecting surface (mirror), determining the exact direction of reflection.
+                  <br/>4. The angle of incidence <strong>&ang;1</strong> formed between the incoming ray and the tangent equals the angle of reflection <strong>&ang;2</strong> formed between the tangent and the reflected ray.
+                  <br/>5. Because these relevant angles are equal, the reflected ray is directed precisely toward the focus <strong>F</strong>!
+                </p>
+                <div class="boxed-formula">
+                  &ang;1 = &ang;2
+                </div>
+                <p style="margin-top:8px;">
+                  In our interactive visualization:
+                  <br/>• <strong>&ang;1</strong> is the acute angle between the yellow incoming parallel ray and the pink tangent line.
+                  <br/>• <strong>&ang;2</strong> is the acute angle between the pink tangent line and the purple reflected ray traveling toward focus <strong>F</strong>.
+                </p>
+                <div style="background:#f8fafc; border:1px solid var(--border); padding:10px; border-radius:6px; margin-top:8px;">
+                  <div class="stat-row">
+                    <span>Incident Angle &ang;1:</span>
+                    <span class="stat-value" id="why-angle1-val">26.57&deg;</span>
+                  </div>
+                  <div class="stat-row">
+                    <span>Reflected Angle &ang;2:</span>
+                    <span class="stat-value" id="why-angle2-val">26.57&deg;</span>
+                  </div>
+                  <div style="color:#065f46; font-weight:bold; font-size:12px; margin-top:4px;">
+                    ✓ &ang;1 = &ang;2 (Reflection Law holds perfectly)
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION 3: Hence -->
+            <section class="why-section open" id="sec-card-hence">
+              <div class="why-section-header" onclick="toggleWhySection('hence')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">3</span>
+                  <span>3. Hence</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-hence">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-hence">
+                <p>
+                  Any ray parallel to the axis reflects through the focus.
+                </p>
+                <p style="margin-top:8px;">
+                  This key optical theorem is established by following the logical chain of geometric dependencies:
+                </p>
+                <p style="margin-top:6px; padding-left:10px;">
+                  1. Point <strong>P</strong> lies on the parabola.
+                  <br/>2. By definition, <strong>PF = PD</strong>.
+                  <br/>3. The tangent at <strong>P</strong> bisects the angle formed between <strong>PF</strong> and the perpendicular line from <strong>D</strong>, establishing the equal angle relationship.
+                  <br/>4. The incoming ray is parallel to the axis of symmetry.
+                  <br/>5. Because <strong>&ang;1 = &ang;2</strong>, the reflected ray must pass directly through focus <strong>F</strong>.
+                </p>
+
+                <div style="text-align:center; display:flex; flex-direction:column; gap:6px; font-weight:bold; font-size:13px; margin-top:12px;">
+                  <div class="boxed-formula" style="margin:0; background:#fffbeb; border-color:var(--accent-orange); color:#b45309;">
+                    Ray parallel to axis
+                  </div>
+                  <div style="color:var(--primary); font-size:16px;">&dArr;</div>
+                  <div class="boxed-formula" style="margin:0; background:#fce7f3; border-color:var(--accent-pink); color:#9d174d;">
+                    Reflection at P (&ang;1 = &ang;2)
+                  </div>
+                  <div style="color:var(--primary); font-size:16px;">&dArr;</div>
+                  <div class="boxed-formula" style="margin:0; background:var(--primary-light); border-color:var(--primary); color:var(--primary);">
+                    Passes through focus F
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Predict Section -->
+            <section class="why-section" id="sec-card-predict">
+              <div class="why-section-header" onclick="toggleWhySection('predict')">
+                <div class="why-title-group">
+                  <span>What do you predict?</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-predict">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-predict">
+                <p style="margin-bottom:8px;">
+                  Drag the yellow ray up or down. Does the reflected ray always pass through the focus?
+                </p>
+                <select id="select-prediction" style="width:100%; padding:8px; border:1px solid var(--border); border-radius:6px; font-weight:600; margin-bottom:8px;">
+                  <option value="">Choose your prediction</option>
+                  <option value="always">Yes, always</option>
+                  <option value="no">No</option>
+                  <option value="one">Only for one position</option>
+                </select>
+                <button class="btn-secondary" id="btn-check-prediction" style="width:100%;">Check Prediction</button>
+                <div id="prediction-feedback" class="feedback-msg" style="display:none; margin-top:8px; width:100%;"></div>
+              </div>
+            </section>
+
+            <!-- Neutral Reveal Box -->
+            <div id="reveal-card-body" class="reveal-card-body">
+              <div class="boxed-formula" style="margin:0;">PF = PD</div>
+              <div class="boxed-formula" style="margin:0;">&ang;1 = &ang;2</div>
+              <div class="boxed-formula" style="margin:0; color:#065f46; background:var(--accent-green-light); border-color:var(--accent-green);">
+                A ray parallel to the axis reflects through the focus.
+              </div>
+              <p style="font-size:13px; line-height:1.6; color:var(--text-dark); margin-top:6px;">
+                These three statements form the foundation of parabolic reflection. Because point P is equidistant from focus F and directrix d (<strong>PF = PD</strong>), the tangent line at P bisects the angle between segment PF and the horizontal line. Consequently, the angle of incidence equals the angle of reflection (<strong>&ang;1 = &ang;2</strong>), guaranteeing that every parallel incoming ray reflects directly through focus F regardless of where point P lies on the parabola!
+              </p>
+            </div>
+          </div>
+
+          <!-- FIXED REVEAL BUTTON -->
+          <button class="btn-primary reveal-button" id="btn-reveal-neutral">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Reveal (neutral)
+          </button>
+        </aside>
+      </div>
+
+      <!-- Bottom Grid: Visual Proof, Exact Challenge, Hit the Focus -->
+      <div class="bottom-grid">
+        <!-- Visual Proof Card -->
+        <section class="bottom-card">
+          <h3>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Visual Proof
+          </h3>
+
+          <div class="proof-steps-row">
+            <div class="proof-step-box" onclick="toggleWhySection('distances')">
+              <span class="proof-step-title">1. Definition of parabola</span>
+              <div style="font-family:var(--font-math); font-size:13px; font-weight:bold; color:var(--primary); margin:6px 0;">
+                PF = PD
+              </div>
+              <svg width="55" height="35" viewBox="0 0 55 35">
+                <line x1="8" y1="5" x2="8" y2="30" stroke="#2563eb" stroke-dasharray="3 2"/>
+                <circle cx="35" cy="18" r="2.5" fill="#8b5cf6"/>
+                <path d="M 12 30 Q 25 18 48 5" fill="none" stroke="#635bff" stroke-width="1.5"/>
+              </svg>
+            </div>
+
+            <div style="font-size:15px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+            <div class="proof-step-box" onclick="toggleWhySection('angles')">
+              <span class="proof-step-title">2. Law of Reflection</span>
+              <div style="font-family:var(--font-math); font-size:13px; font-weight:bold; color:var(--primary); margin:6px 0;">
+                &ang;1 = &ang;2
+              </div>
+              <svg width="55" height="35" viewBox="0 0 55 35">
+                <line x1="5" y1="30" x2="50" y2="5" stroke="#ec4899" stroke-dasharray="3 2"/>
+                <line x1="5" y1="18" x2="27" y2="18" stroke="#f59e0b" stroke-width="1.5"/>
+                <line x1="27" y1="18" x2="48" y2="30" stroke="#8b5cf6" stroke-width="1.5"/>
+              </svg>
+            </div>
+
+            <div style="font-size:15px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+            <div class="proof-step-box" onclick="toggleWhySection('hence')">
+              <span class="proof-step-title">3. Reflected ray</span>
+              <div style="font-size:11px; font-weight:bold; color:var(--primary); margin:4px 0;">
+                Passes through F
+              </div>
+              <svg width="55" height="35" viewBox="0 0 55 35">
+                <circle cx="38" cy="18" r="3" fill="#8b5cf6"/>
+                <line x1="5" y1="18" x2="25" y2="18" stroke="#f59e0b" stroke-width="1.5"/>
+                <line x1="25" y1="18" x2="48" y2="18" stroke="#8b5cf6" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exact Challenge Card -->
+        <section class="bottom-card">
+          <h3>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Exact Challenge
+          </h3>
+          <p style="font-size:12.5px; color:var(--text-muted);" id="challenge-prompt-text">
+            For <strong>p = 2</strong>, drag P to <strong>(8, 8)</strong>. Directrix is at <strong>x = &minus;2</strong>. Verify PF = PD.
+          </p>
+
+          <div class="input-group-row">
+            <span style="font-family:var(--font-math); font-weight:bold; font-size:13px;">PF =</span>
+            <input type="number" id="input-challenge-pf" class="text-input" placeholder="e.g. 10.00" step="0.01">
+            <span style="font-family:var(--font-math); font-weight:bold; font-size:13px;">PD =</span>
+            <input type="number" id="input-challenge-pd" class="text-input" placeholder="e.g. 10.00" step="0.01">
+            <button class="btn-secondary" id="btn-check-challenge">Check</button>
+            <button class="btn-secondary" id="btn-new-challenge" style="padding:6px 10px; font-size:11px;">New</button>
+          </div>
+          <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+        </section>
+
+        <!-- Hit the Focus Target Card -->
+        <section class="bottom-card">
+          <h3>Hit the Focus!</h3>
+          <div class="target-box">
+            <svg class="target-svg-area" viewBox="0 0 60 60">
+              <circle cx="30" cy="30" r="26" fill="none" stroke="#635bff" stroke-width="1.5"/>
+              <circle cx="30" cy="30" r="18" fill="none" stroke="#8b5cf6" stroke-width="1.5"/>
+              <circle cx="30" cy="30" r="10" fill="none" stroke="#ec4899" stroke-width="1.5"/>
+              <circle cx="30" cy="30" r="4" fill="#10b981"/>
+            </svg>
+            <div>
+              <div style="font-size:13px; font-weight:800; color:var(--text-dark);" id="hit-status-title">🎯 Bullseye!</div>
+              <p style="font-size:12px; color:var(--text-muted);" id="hit-status-text">Reflected ray hits Focus F perfectly.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * Tangent and Reflective Property of Parabola Engine
+     * Pure JavaScript - Math & Interactive SVG rendering
+     */
+
+    // --- 0. Mathematical State ---
+    const state = {
+      p: 2.0,            // Parabola parameter p (y^2 = 4px)
+      t: 1.0,            // Parametric t where P = (p*t^2, 2*p*t)
+      showFocus: true,
+      showDirectrix: true,
+      showParabola: true,
+      showRay: true,
+      showPoint: true,
+      showAxis: true,
+      showAngles: false,
+      isTraceEnabled: false,
+      isAnimating: false,
+      animSpeed: 1.0,
+      trailPoints: [],
+      history: [],
+      historyIdx: -1,
+      challenge: { p: 2, t: 2, targetX: 8, targetY: 8, targetDist: 10 }
+    };
+
+    // --- 1. Accordion Section State Map ---
+    const openSections = {
+      distances: true,
+      angles: true,
+      hence: true,
+      predict: false,
+      reveal: false
+    };
+
+    function toggleWhySection(key) {
+      if (openSections.hasOwnProperty(key)) {
+        openSections[key] = !openSections[key];
+      }
+      renderAccordionStates();
+      highlightSectionGraph(key);
+    }
+
+    function renderAccordionStates() {
+      for (const [key, isOpen] of Object.entries(openSections)) {
+        const card = document.getElementById(`sec-card-${key}`);
+        const content = document.getElementById(`content-${key}`);
+
+        if (card && content) {
+          if (isOpen) {
+            card.classList.add('open');
+            content.style.display = 'block';
+          } else {
+            card.classList.remove('open');
+            content.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    function highlightSectionGraph(key) {
+      if (key === 'distances') {
+        state.showFocus = true; state.showDirectrix = true; state.showPoint = true;
+      } else if (key === 'angles') {
+        state.showAngles = true; elements.btnShowAngles.classList.add('active');
+      } else if (key === 'hence') {
+        state.showRay = true;
+      }
+      syncUI();
+    }
+
+    // --- 2. Centralized Mathematical Engine ---
+    const MathEngine = {
+      radToDeg(rad) { return (rad * 180) / Math.PI; },
+
+      getParabolaPoint(t, p) {
+        return { x: p * t * t, y: 2 * p * t };
+      },
+
+      getParamFromY(y, p) {
+        return y / (2 * p);
+      },
+
+      getFocus(p) {
+        return { x: p, y: 0 };
+      },
+
+      getDirectrixX(p) {
+        return -p;
+      },
+
+      getDirectrixFoot(P, p) {
+        return { x: -p, y: P.y };
+      },
+
+      calculatePF(P, p) {
+        const F = this.getFocus(p);
+        return Math.hypot(P.x - F.x, P.y - F.y);
+      },
+
+      calculatePD(P, p) {
+        return P.x + p;
+      },
+
+      getReflectionData(t, p) {
+        const P = this.getParabolaPoint(t, p);
+        const F = this.getFocus(p);
+
+        // Tangent vector direction: (t, 1)
+        const tanLen = Math.hypot(t, 1);
+        const tanHat = { x: t / tanLen, y: 1 / tanLen };
+
+        // Incoming parallel ray direction: (1, 0)
+        const vIn = { x: 1, y: 0 };
+
+        // Dot product with tangent
+        const dotTan = vIn.x * tanHat.x + vIn.y * tanHat.y;
+
+        // Incident Angle theta_i (with tangent)
+        const incidentAngleRad = Math.acos(Math.abs(dotTan));
+        const incidentAngleDeg = this.radToDeg(incidentAngleRad);
+
+        // Reflected vector: r = 2(v * t_hat) t_hat - v
+        const rVec = {
+          x: 2 * dotTan * tanHat.x - vIn.x,
+          y: 2 * dotTan * tanHat.y - vIn.y
+        };
+
+        // Point-to-line distance from F to reflected ray line
+        const A = rVec.y;
+        const B = -rVec.x;
+        const C = rVec.x * P.y - rVec.y * P.x;
+        const focusDistToRay = Math.abs(A * F.x + B * F.y + C) / Math.hypot(A, B);
+
+        return {
+          P, F,
+          tanHat,
+          rVec,
+          angle1Deg: incidentAngleDeg,
+          angle2Deg: incidentAngleDeg,
+          focusDistToRay
+        };
+      }
+    };
+
+    // --- 3. View Transformation State ---
+    const locusView = {
+      width: 450,
+      height: 550,
+      originX: 120,
+      originY: 275,
+      scale: 35,
+      isPanning: false,
+      dragStartScreen: { x: 0, y: 0 },
+      dragStartOrigin: { x: 0, y: 0 },
+
+      toScreen(mx, my) {
+        return {
+          sx: this.originX + mx * this.scale,
+          sy: this.originY - my * this.scale
+        };
+      },
+
+      toMath(sx, sy) {
+        return {
+          mx: (sx - this.originX) / this.scale,
+          my: (this.originY - sy) / this.scale
+        };
+      }
+    };
+
+    // --- 4. DOM Cache ---
+    const elements = {
+      sliderP: document.getElementById('slider-p'),
+      valP: document.getElementById('val-p'),
+      btnStepDec: document.getElementById('btn-step-dec'),
+      btnStepInc: document.getElementById('btn-step-inc'),
+      readoutParabolaEq: document.getElementById('readout-parabola-eq'),
+
+      pills: document.querySelectorAll('.conic-pill-btn'),
+
+      chkFocus: document.getElementById('chk-focus'),
+      chkDirectrix: document.getElementById('chk-directrix'),
+      chkParabola: document.getElementById('chk-parabola'),
+      chkRay: document.getElementById('chk-ray'),
+      chkPoint: document.getElementById('chk-point'),
+      chkAxis: document.getElementById('chk-axis'),
+
+      locusViewport: document.getElementById('locus-viewport'),
+      locusSvg: document.getElementById('locus-svg'),
+      locusAxisX: document.getElementById('locus-axis-x'),
+      locusAxisY: document.getElementById('locus-axis-y'),
+      locusLabelX: document.getElementById('locus-label-x'),
+      locusLabelY: document.getElementById('locus-label-y'),
+      locusParabolaAxis: document.getElementById('locus-parabola-axis'),
+      locusDirectrixLine: document.getElementById('locus-directrix-line'),
+      locusDirectrixLabelG: document.getElementById('locus-directrix-label-g'),
+      locusCurvePath: document.getElementById('locus-curve-path'),
+      locusTrailGroup: document.getElementById('locus-trail-group'),
+      locusIncomingRay: document.getElementById('locus-incoming-ray'),
+      locusTangentLine: document.getElementById('locus-tangent-line'),
+      locusReflectedRay: document.getElementById('locus-reflected-ray'),
+      locusAnglesGroup: document.getElementById('locus-angles-group'),
+      arcAngle1: document.getElementById('arc-angle1'),
+      arcAngle2: document.getElementById('arc-angle2'),
+      textAngle1: document.getElementById('text-angle1'),
+      textAngle2: document.getElementById('text-angle2'),
+      locusLinePf: document.getElementById('locus-line-pf'),
+      locusLinePd: document.getElementById('locus-line-pd'),
+      locusPointD: document.getElementById('locus-point-d'),
+      locusLabelD: document.getElementById('locus-label-d'),
+      locusPointF: document.getElementById('locus-point-f'),
+      locusLabelF: document.getElementById('locus-label-f'),
+      locusPointP: document.getElementById('locus-point-p'),
+      locusPointPHalo: document.getElementById('locus-point-p-halo'),
+      locusLabelP: document.getElementById('locus-label-p'),
+
+      btnLocusZoomIn: document.getElementById('btn-locus-zoom-in'),
+      btnLocusZoomOut: document.getElementById('btn-locus-zoom-out'),
+      btnLocusZoomReset: document.getElementById('btn-locus-zoom-reset'),
+
+      btnUndo: document.getElementById('btn-undo'),
+      btnRedo: document.getElementById('btn-redo'),
+      btnAnimate: document.getElementById('btn-animate'),
+      animIcon: document.getElementById('anim-icon'),
+      btnTrace: document.getElementById('btn-trace'),
+      btnClearTrace: document.getElementById('btn-clear-trace'),
+      btnShowAngles: document.getElementById('btn-show-angles'),
+      btnResetAll: document.getElementById('btn-reset-all'),
+
+      livePReadout: document.getElementById('live-p-readout'),
+      valPf: document.getElementById('val-pf'),
+      valPd: document.getElementById('val-pd'),
+      valDiff: document.getElementById('val-diff'),
+      valAngle1: document.getElementById('val-angle1'),
+      valAngle2: document.getElementById('val-angle2'),
+      valFocusDist: document.getElementById('val-focus-dist'),
+
+      whyLivePf: document.getElementById('why-live-pf'),
+      whyLivePd: document.getElementById('why-live-pd'),
+      whyAngle1Val: document.getElementById('why-angle1-val'),
+      whyAngle2Val: document.getElementById('why-angle2-val'),
+
+      selectPrediction: document.getElementById('select-prediction'),
+      btnCheckPrediction: document.getElementById('btn-check-prediction'),
+      predictionFeedback: document.getElementById('prediction-feedback'),
+
+      btnRevealNeutral: document.getElementById('btn-reveal-neutral'),
+      revealCardBody: document.getElementById('reveal-card-body'),
+
+      challengePromptText: document.getElementById('challenge-prompt-text'),
+      inputChallengePf: document.getElementById('input-challenge-pf'),
+      inputChallengePd: document.getElementById('input-challenge-pd'),
+      btnCheckChallenge: document.getElementById('btn-check-challenge'),
+      btnNewChallenge: document.getElementById('btn-new-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback'),
+
+      hitStatusTitle: document.getElementById('hit-status-title'),
+      hitStatusText: document.getElementById('hit-status-text')
+    };
+
+    // --- 5. Record History ---
+    function recordState() {
+      if (state.historyIdx < state.history.length - 1) {
+        state.history = state.history.slice(0, state.historyIdx + 1);
+      }
+      state.history.push({ p: state.p, t: state.t });
+      state.historyIdx++;
+    }
+
+    // --- 6. SVG Render Engine ---
+    function render2DGraph() {
+      const p = state.p;
+      const t = state.t;
+      const P = MathEngine.getParabolaPoint(t, p);
+      const F = MathEngine.getFocus(p);
+      const directrixX = MathEngine.getDirectrixX(p);
+      const D = MathEngine.getDirectrixFoot(P, p);
+      const reflData = MathEngine.getReflectionData(t, p);
+
+      // Render Axes
+      elements.locusAxisX.setAttribute('x1', 0);
+      elements.locusAxisX.setAttribute('y1', locusView.originY);
+      elements.locusAxisX.setAttribute('x2', locusView.width - 10);
+      elements.locusAxisX.setAttribute('y2', locusView.originY);
+
+      elements.locusLabelX.setAttribute('x', locusView.width - 15);
+      elements.locusLabelX.setAttribute('y', locusView.originY - 8);
+
+      elements.locusAxisY.setAttribute('x1', locusView.originX);
+      elements.locusAxisY.setAttribute('y1', locusView.height);
+      elements.locusAxisY.setAttribute('x2', locusView.originX);
+      elements.locusAxisY.setAttribute('y2', 15);
+
+      elements.locusLabelY.setAttribute('x', locusView.originX + 10);
+      elements.locusLabelY.setAttribute('y', 20);
+
+      // Parabola Symmetry Axis (y = 0)
+      elements.locusParabolaAxis.setAttribute('x1', 0);
+      elements.locusParabolaAxis.setAttribute('y1', locusView.originY);
+      elements.locusParabolaAxis.setAttribute('x2', locusView.width);
+      elements.locusParabolaAxis.setAttribute('y2', locusView.originY);
+      elements.locusParabolaAxis.style.display = state.showAxis ? 'block' : 'none';
+
+      // Directrix Line (x = -p)
+      if (state.showDirectrix) {
+        const dirSX = locusView.toScreen(directrixX, 0).sx;
+        elements.locusDirectrixLine.setAttribute('x1', dirSX);
+        elements.locusDirectrixLine.setAttribute('y1', 0);
+        elements.locusDirectrixLine.setAttribute('x2', dirSX);
+        elements.locusDirectrixLine.setAttribute('y2', locusView.height);
+        elements.locusDirectrixLine.style.display = 'block';
+
+        elements.locusDirectrixLabelG.setAttribute('transform', `translate(${dirSX - 45}, 25)`);
+        elements.locusDirectrixLabelG.style.display = 'block';
+      } else {
+        elements.locusDirectrixLine.style.display = 'none';
+        elements.locusDirectrixLabelG.style.display = 'none';
+      }
+
+      // Parabola Curve (y^2 = 4px => x = y^2 / (4p))
+      if (state.showParabola) {
+        const steps = 120;
+        let dPath = '';
+        for (let i = 0; i <= steps; i++) {
+          const yMath = -12 + (i / steps) * 24;
+          const xMath = (yMath * yMath) / (4 * p);
+          const spt = locusView.toScreen(xMath, yMath);
+          dPath += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+        }
+        elements.locusCurvePath.setAttribute('d', dPath);
+        elements.locusCurvePath.style.display = 'block';
+      } else {
+        elements.locusCurvePath.style.display = 'none';
+      }
+
+      // Focus F
+      if (state.showFocus) {
+        const Fscreen = locusView.toScreen(F.x, F.y);
+        elements.locusPointF.setAttribute('cx', Fscreen.sx);
+        elements.locusPointF.setAttribute('cy', Fscreen.sy);
+        elements.locusLabelF.setAttribute('x', Fscreen.sx - 6);
+        elements.locusLabelF.setAttribute('y', Fscreen.sy + 20);
+        elements.locusPointF.style.display = 'block';
+        elements.locusLabelF.style.display = 'block';
+      } else {
+        elements.locusPointF.style.display = 'none';
+        elements.locusLabelF.style.display = 'none';
+      }
+
+      // Point P
+      const Pscreen = locusView.toScreen(P.x, P.y);
+      if (state.showPoint) {
+        elements.locusPointP.setAttribute('cx', Pscreen.sx);
+        elements.locusPointP.setAttribute('cy', Pscreen.sy);
+        elements.locusPointPHalo.setAttribute('cx', Pscreen.sx);
+        elements.locusPointPHalo.setAttribute('cy', Pscreen.sy);
+        elements.locusLabelP.setAttribute('x', Pscreen.sx + 10);
+        elements.locusLabelP.setAttribute('y', Pscreen.sy - 8);
+        elements.locusPointP.style.display = 'block';
+        elements.locusPointPHalo.style.display = 'block';
+        elements.locusLabelP.style.display = 'block';
+      } else {
+        elements.locusPointP.style.display = 'none';
+        elements.locusPointPHalo.style.display = 'none';
+        elements.locusLabelP.style.display = 'none';
+      }
+
+      // Directrix Foot D & Lines PF, PD
+      if (state.showPoint && state.showDirectrix) {
+        const Dscreen = locusView.toScreen(D.x, D.y);
+        elements.locusPointD.setAttribute('cx', Dscreen.sx);
+        elements.locusPointD.setAttribute('cy', Dscreen.sy);
+        elements.locusLabelD.setAttribute('x', Dscreen.sx - 18);
+        elements.locusLabelD.setAttribute('y', Dscreen.sy - 6);
+        elements.locusPointD.style.display = 'block';
+        elements.locusLabelD.style.display = 'block';
+
+        // PD Line
+        elements.locusLinePd.setAttribute('x1', Pscreen.sx);
+        elements.locusLinePd.setAttribute('y1', Pscreen.sy);
+        elements.locusLinePd.setAttribute('x2', Dscreen.sx);
+        elements.locusLinePd.setAttribute('y2', Dscreen.sy);
+        elements.locusLinePd.style.display = 'block';
+      } else {
+        elements.locusPointD.style.display = 'none';
+        elements.locusLabelD.style.display = 'none';
+        elements.locusLinePd.style.display = 'none';
+      }
+
+      if (state.showPoint && state.showFocus) {
+        const Fscreen = locusView.toScreen(F.x, F.y);
+        elements.locusLinePf.setAttribute('x1', Pscreen.sx);
+        elements.locusLinePf.setAttribute('y1', Pscreen.sy);
+        elements.locusLinePf.setAttribute('x2', Fscreen.sx);
+        elements.locusLinePf.setAttribute('y2', Fscreen.sy);
+        elements.locusLinePf.style.display = 'block';
+      } else {
+        elements.locusLinePf.style.display = 'none';
+      }
+
+      // Incoming Parallel Horizontal Ray
+      if (state.showRay) {
+        const rayStartSX = 0;
+        elements.locusIncomingRay.setAttribute('x1', rayStartSX);
+        elements.locusIncomingRay.setAttribute('y1', Pscreen.sy);
+        elements.locusIncomingRay.setAttribute('x2', Pscreen.sx);
+        elements.locusIncomingRay.setAttribute('y2', Pscreen.sy);
+        elements.locusIncomingRay.style.display = 'block';
+      } else {
+        elements.locusIncomingRay.style.display = 'none';
+      }
+
+      // Tangent Line at P (ty = x + pt^2)
+      if (state.showPoint) {
+        const tanExt = 8;
+        const pt1 = locusView.toScreen(P.x - reflData.tanHat.x * tanExt, P.y - reflData.tanHat.y * tanExt);
+        const pt2 = locusView.toScreen(P.x + reflData.tanHat.x * tanExt, P.y + reflData.tanHat.y * tanExt);
+        elements.locusTangentLine.setAttribute('x1', pt1.sx);
+        elements.locusTangentLine.setAttribute('y1', pt1.sy);
+        elements.locusTangentLine.setAttribute('x2', pt2.sx);
+        elements.locusTangentLine.setAttribute('y2', pt2.sy);
+        elements.locusTangentLine.style.display = 'block';
+      } else {
+        elements.locusTangentLine.style.display = 'none';
+      }
+
+      // Reflected Ray Passing Through F
+      if (state.showRay && state.showPoint) {
+        const Fscreen = locusView.toScreen(F.x, F.y);
+        const dx = Fscreen.sx - Pscreen.sx;
+        const dy = Fscreen.sy - Pscreen.sy;
+        const extFactor = 2.2;
+        const targetSX = Pscreen.sx + dx * extFactor;
+        const targetSY = Pscreen.sy + dy * extFactor;
+
+        elements.locusReflectedRay.setAttribute('x1', Pscreen.sx);
+        elements.locusReflectedRay.setAttribute('y1', Pscreen.sy);
+        elements.locusReflectedRay.setAttribute('x2', targetSX);
+        elements.locusReflectedRay.setAttribute('y2', targetSY);
+        elements.locusReflectedRay.style.display = 'block';
+      } else {
+        elements.locusReflectedRay.style.display = 'none';
+      }
+
+      // Angles Visualization
+      if (state.showAngles && state.showPoint) {
+        elements.locusAnglesGroup.style.display = 'block';
+        const rArc = 35;
+        const angTan = Math.atan2(-reflData.tanHat.y, reflData.tanHat.x);
+        const angIn = Math.PI;
+
+        const a1Start = angIn;
+        const a1End = angTan;
+        elements.arcAngle1.setAttribute('d', `M ${Pscreen.sx + rArc * Math.cos(a1Start)} ${Pscreen.sy + rArc * Math.sin(a1Start)} A ${rArc} ${rArc} 0 0 1 ${Pscreen.sx + rArc * Math.cos(a1End)} ${Pscreen.sy + rArc * Math.sin(a1End)}`);
+        elements.textAngle1.setAttribute('x', Pscreen.sx - 45);
+        elements.textAngle1.setAttribute('y', Pscreen.sy - 10);
+
+        const Fscreen = locusView.toScreen(F.x, F.y);
+        const angRefl = Math.atan2(Fscreen.sy - Pscreen.sy, Fscreen.sx - Pscreen.sx);
+        elements.arcAngle2.setAttribute('d', `M ${Pscreen.sx + rArc * Math.cos(angTan)} ${Pscreen.sy + rArc * Math.sin(angTan)} A ${rArc} ${rArc} 0 0 1 ${Pscreen.sx + rArc * Math.cos(angRefl)} ${Pscreen.sy + rArc * Math.sin(angRefl)}`);
+        elements.textAngle2.setAttribute('x', Pscreen.sx - 20);
+        elements.textAngle2.setAttribute('y', Pscreen.sy + 30);
+      } else {
+        elements.locusAnglesGroup.style.display = 'none';
+      }
+
+      // Trace Trail Rendering
+      if (state.isTraceEnabled) {
+        state.trailPoints.push({ sx: Pscreen.sx, sy: Pscreen.sy });
+        if (state.trailPoints.length > 300) state.trailPoints.shift();
+
+        let trailSvg = '';
+        state.trailPoints.forEach(pt => {
+          trailSvg += `<circle cx="${pt.sx.toFixed(1)}" cy="${pt.sy.toFixed(1)}" r="2" class="trail-dot" />`;
+        });
+        elements.locusTrailGroup.innerHTML = trailSvg;
+      }
+    }
+
+    // --- 7. Central UI Synchronization ---
+    function syncUI() {
+      const p = state.p;
+      const t = state.t;
+      const P = MathEngine.getParabolaPoint(t, p);
+      const pf = MathEngine.calculatePF(P, p);
+      const pd = MathEngine.calculatePD(P, p);
+      const reflData = MathEngine.getReflectionData(t, p);
+
+      // Top Control Bar Readouts
+      elements.valP.textContent = `p = ${p.toFixed(2)}`;
+      elements.sliderP.value = p;
+      elements.readoutParabolaEq.textContent = `y² = ${(4 * p).toFixed(2)}x`;
+
+      // Preset Badges
+      elements.pills.forEach(pill => {
+        if (parseFloat(pill.dataset.p) === p) pill.classList.add('active');
+        else pill.classList.remove('active');
+      });
+
+      // Live Distances Readout Card
+      elements.livePReadout.textContent = `P = (${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+      elements.valPf.textContent = pf.toFixed(2);
+      elements.valPd.textContent = pd.toFixed(2);
+      elements.valDiff.textContent = Math.abs(pf - pd).toFixed(2);
+
+      // Angle & Focus Verification Readouts
+      elements.valAngle1.textContent = `${reflData.angle1Deg.toFixed(2)}°`;
+      elements.valAngle2.textContent = `${reflData.angle2Deg.toFixed(2)}°`;
+      elements.valFocusDist.textContent = reflData.focusDistToRay.toFixed(3);
+
+      // Why Panel Dynamic Values
+      elements.whyLivePf.textContent = pf.toFixed(2);
+      elements.whyLivePd.textContent = pd.toFixed(2);
+      elements.whyAngle1Val.textContent = `${reflData.angle1Deg.toFixed(2)}°`;
+      elements.whyAngle2Val.textContent = `${reflData.angle2Deg.toFixed(2)}°`;
+
+      // Target Hit Indicator
+      if (reflData.focusDistToRay < 0.005) {
+        elements.hitStatusTitle.textContent = "🎯 Bullseye! (100%)";
+        elements.hitStatusText.textContent = "Reflected ray hits Focus F perfectly.";
+      }
+
+      render2DGraph();
+    }
+
+    // --- 8. Event Listeners ---
+    elements.sliderP.addEventListener('input', (e) => {
+      state.p = parseFloat(e.target.value);
+      recordState();
+      syncUI();
+    });
+
+    elements.btnStepDec.addEventListener('click', () => {
+      state.p = Math.max(0.5, parseFloat((state.p - 0.1).toFixed(1)));
+      recordState();
+      syncUI();
+    });
+
+    elements.btnStepInc.addEventListener('click', () => {
+      state.p = Math.min(5.0, parseFloat((state.p + 0.1).toFixed(1)));
+      recordState();
+      syncUI();
+    });
+
+    elements.pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        state.p = parseFloat(pill.dataset.p);
+        recordState();
+        syncUI();
+      });
+    });
+
+    // Toggles
+    elements.chkFocus.addEventListener('change', (e) => { state.showFocus = e.target.checked; render2DGraph(); });
+    elements.chkDirectrix.addEventListener('change', (e) => { state.showDirectrix = e.target.checked; render2DGraph(); });
+    elements.chkParabola.addEventListener('change', (e) => { state.showParabola = e.target.checked; render2DGraph(); });
+    elements.chkRay.addEventListener('change', (e) => { state.showRay = e.target.checked; render2DGraph(); });
+    elements.chkPoint.addEventListener('change', (e) => { state.showPoint = e.target.checked; render2DGraph(); });
+    elements.chkAxis.addEventListener('change', (e) => { state.showAxis = e.target.checked; render2DGraph(); });
+
+    // Zoom Controls
+    elements.btnLocusZoomIn.addEventListener('click', () => { locusView.scale = Math.min(120, locusView.scale * 1.15); render2DGraph(); });
+    elements.btnLocusZoomOut.addEventListener('click', () => { locusView.scale = Math.max(12, locusView.scale / 1.15); render2DGraph(); });
+    elements.btnLocusZoomReset.addEventListener('click', () => { locusView.originX = 120; locusView.originY = 275; locusView.scale = 35; render2DGraph(); });
+
+    // Action Buttons
+    elements.btnUndo.addEventListener('click', () => {
+      if (state.historyIdx > 0) {
+        state.historyIdx--;
+        const hist = state.history[state.historyIdx];
+        state.p = hist.p;
+        state.t = hist.t;
+        syncUI();
+      }
+    });
+
+    elements.btnRedo.addEventListener('click', () => {
+      if (state.historyIdx < state.history.length - 1) {
+        state.historyIdx++;
+        const hist = state.history[state.historyIdx];
+        state.p = hist.p;
+        state.t = hist.t;
+        syncUI();
+      }
+    });
+
+    // Animate loop
+    let animTimer = null;
+    elements.btnAnimate.addEventListener('click', () => {
+      state.isAnimating = !state.isAnimating;
+      if (state.isAnimating) {
+        elements.btnAnimate.classList.add('active');
+        elements.animIcon.textContent = '❚❚';
+        runAnimation();
+      } else {
+        elements.btnAnimate.classList.remove('active');
+        elements.animIcon.textContent = '▶';
+        cancelAnimationFrame(animTimer);
+      }
+    });
+
+    function runAnimation() {
+      if (!state.isAnimating) return;
+      state.t += 0.02 * state.animSpeed;
+      if (state.t > 2.5) state.t = -2.5;
+      syncUI();
+      animTimer = requestAnimationFrame(runAnimation);
+    }
+
+    document.querySelectorAll('.btn-speed').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.btn-speed').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.animSpeed = parseFloat(btn.dataset.speed);
+      });
+    });
+
+    // Trace path button
+    elements.btnTrace.addEventListener('click', () => {
+      state.isTraceEnabled = !state.isTraceEnabled;
+      if (state.isTraceEnabled) {
+        elements.btnTrace.classList.add('active');
+        elements.btnClearTrace.style.display = 'inline-flex';
+      } else {
+        elements.btnTrace.classList.remove('active');
+      }
+    });
+
+    elements.btnClearTrace.addEventListener('click', () => {
+      state.trailPoints = [];
+      elements.locusTrailGroup.innerHTML = '';
+    });
+
+    elements.btnShowAngles.addEventListener('click', () => {
+      state.showAngles = !state.showAngles;
+      if (state.showAngles) elements.btnShowAngles.classList.add('active');
+      else elements.btnShowAngles.classList.remove('active');
+      render2DGraph();
+    });
+
+    elements.btnResetAll.addEventListener('click', () => {
+      state.p = 2.0;
+      state.t = 1.0;
+      state.showAngles = false;
+      state.isTraceEnabled = false;
+      state.isAnimating = false;
+      state.trailPoints = [];
+      elements.btnShowAngles.classList.remove('active');
+      elements.btnTrace.classList.remove('active');
+      elements.btnAnimate.classList.remove('active');
+      elements.btnClearTrace.style.display = 'none';
+      elements.locusTrailGroup.innerHTML = '';
+      locusView.originX = 120;
+      locusView.originY = 275;
+      locusView.scale = 35;
+      recordState();
+      syncUI();
+    });
+
+    // --- 9. Interactive Dragging of Point P along Parabola ---
+    let isDraggingP = false;
+
+    function getSVGCoords(e) {
+      const rect = elements.locusSvg.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { sx: clientX - rect.left, sy: clientY - rect.top };
+    }
+
+    elements.locusViewport.addEventListener('mousedown', (e) => {
+      const coords = getSVGCoords(e);
+      const P = MathEngine.getParabolaPoint(state.t, state.p);
+      const Pscreen = locusView.toScreen(P.x, P.y);
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      if (distToP < 24) {
+        isDraggingP = true;
+      } else {
+        locusView.isPanning = true;
+        locusView.dragStartScreen = { x: coords.sx, y: coords.sy };
+        locusView.dragStartOrigin = { x: locusView.originX, y: locusView.originY };
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      const coords = getSVGCoords(e);
+      if (isDraggingP) {
+        const mathPt = locusView.toMath(coords.sx, coords.sy);
+        state.t = MathEngine.getParamFromY(mathPt.my, state.p);
+        syncUI();
+      } else if (locusView.isPanning) {
+        const dx = coords.sx - locusView.dragStartScreen.x;
+        const dy = coords.sy - locusView.dragStartScreen.y;
+        locusView.originX = locusView.dragStartOrigin.x + dx;
+        locusView.originY = locusView.dragStartOrigin.y + dy;
+        render2DGraph();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDraggingP) recordState();
+      isDraggingP = false;
+      locusView.isPanning = false;
+    });
+
+    // --- 10. Prediction & Reveal Controls ---
+    elements.btnCheckPrediction.addEventListener('click', () => {
+      const val = elements.selectPrediction.value;
+      if (val === 'always') {
+        elements.predictionFeedback.className = 'feedback-msg correct';
+        elements.predictionFeedback.innerHTML = '&#10004; Correct! Every parallel ray reflects through focus F due to the parabolic equal-angle geometry.';
+      } else if (val === '') {
+        elements.predictionFeedback.className = 'feedback-msg incorrect';
+        elements.predictionFeedback.innerHTML = '&#10008; Please choose a prediction option.';
+      } else {
+        elements.predictionFeedback.className = 'feedback-msg incorrect';
+        elements.predictionFeedback.innerHTML = '&#10008; Try again! Parabolic mirrors focus all parallel rays to a single focal point F.';
+      }
+      elements.predictionFeedback.style.display = 'inline-flex';
+    });
+
+    let isRevealOpen = false;
+    elements.btnRevealNeutral.addEventListener('click', () => {
+      isRevealOpen = !isRevealOpen;
+      elements.revealCardBody.style.display = isRevealOpen ? 'flex' : 'none';
+      elements.btnRevealNeutral.innerHTML = isRevealOpen 
+        ? 'Hide Reveal' 
+        : '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> Reveal (neutral)';
+    });
+
+    function generateNewChallenge() {
+      const ps = [1.5, 2.0, 2.5, 3.0];
+      const ts = [1.5, 2.0, 2.5];
+      const randP = ps[Math.floor(Math.random() * ps.length)];
+      const randT = ts[Math.floor(Math.random() * ts.length)];
+      const P = MathEngine.getParabolaPoint(randT, randP);
+      const targetDist = MathEngine.calculatePF(P, randP);
+
+      state.challenge = { p: randP, t: randT, targetX: P.x, targetY: P.y, targetDist };
+      elements.challengePromptText.innerHTML = `For <strong>p = ${randP}</strong>, set P to <strong>(${P.x.toFixed(1)}, ${P.y.toFixed(1)})</strong>. Directrix is at <strong>x = &minus;${randP}</strong>. Verify PF = PD.`;
+      elements.inputChallengePf.value = '';
+      elements.inputChallengePd.value = '';
+      elements.challengeFeedback.style.display = 'none';
+    }
+
+    elements.btnCheckChallenge.addEventListener('click', () => {
+      const userPf = parseFloat(elements.inputChallengePf.value);
+      const userPd = parseFloat(elements.inputChallengePd.value);
+      if (isNaN(userPf) || isNaN(userPd)) {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = '&#10008; Enter numbers for PF & PD.';
+        elements.challengeFeedback.style.display = 'inline-flex';
+        return;
+      }
+
+      const diffPf = Math.abs(userPf - state.challenge.targetDist);
+      const diffPd = Math.abs(userPd - state.challenge.targetDist);
+
+      if (diffPf < 0.2 && diffPd < 0.2) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = `&#10004; Excellent! PF = PD = ${state.challenge.targetDist.toFixed(2)}.`;
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = `&#10008; Check formula: PF = PD = x + p = ${state.challenge.targetX.toFixed(1)} + ${state.challenge.p} = ${state.challenge.targetDist.toFixed(2)}.`;
+      }
+      elements.challengeFeedback.style.display = 'inline-flex';
+    });
+
+    elements.btnNewChallenge.addEventListener('click', generateNewChallenge);
+
+    // Initial Execution
+    recordState();
+    renderAccordionStates();
+    syncUI();
+  </script>
+</body>
+</html>

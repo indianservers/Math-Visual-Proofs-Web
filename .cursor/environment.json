@@ -1,0 +1,17 @@
+{
+  "name": "math-visual-proofs-web",
+  "install": "npm ci",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "npm run dev",
+      "description": "vinext (Vite + Next.js) dev server on http://localhost:3000"
+    }
+  ],
+  "ports": [
+    {
+      "name": "dev server",
+      "port": 3000
+    }
+  ]
+}

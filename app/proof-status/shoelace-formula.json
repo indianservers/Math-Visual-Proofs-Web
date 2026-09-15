@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "shoelace-formula",
+  "categorySlug": "coordinate-geometry",
+  "slug": "shoelace-formula",
+  "route": "/visual-proofs/coordinate-geometry/shoelace-formula",
+  "status": "interactive",
+  "owner": "Praveen",
+  "notes": "Integrated team-developed React proof component (Praveen/src/proofs/shoelace-formula)."
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "triangular-numbers",
+  "categorySlug": "sequences-and-series",
+  "slug": "triangular-numbers",
+  "route": "/visual-proofs/sequences-and-series/triangular-numbers",
+  "status": "interactive",
+  "owner": "Harikishore",
+  "notes": "Integrated team-developed React proof component (Harikishore proof186)."
+}

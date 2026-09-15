@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "quadratic-inequalities-graph-regions",
+  "categorySlug": "inequalities",
+  "slug": "quadratic-inequalities-graph-regions",
+  "route": "/visual-proofs/inequalities/quadratic-inequalities-graph-regions",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/148-quadratic-inequalities-graphs-region)."
+}

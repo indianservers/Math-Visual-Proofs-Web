@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "linear-programming-feasible-region",
+  "categorySlug": "engineering-mathematics",
+  "slug": "linear-programming-feasible-region",
+  "route": "/visual-proofs/engineering-mathematics/linear-programming-feasible-region",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/linear-programming-feasible-region"
+}

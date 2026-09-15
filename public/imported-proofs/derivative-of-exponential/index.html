@@ -1,0 +1,1499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Derivative of e^x — Interactive Calculus Discovery Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1e1b4b;
+  --muted: #475569;
+  --violet: #6366f1;
+  --violet-dark: #4f46e5;
+  --violet-light: #eeefff;
+  --emerald: #10b981;
+  --emerald-dark: #059669;
+  --amber: #f59e0b;
+  --rose: #f43f5e;
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --line: #e2e8f0;
+  --shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.12);
+  --shadow-lg: 0 10px 30px -4px rgba(99, 102, 241, 0.18);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(135deg, #f8fafc 0%, #eff2fe 50%, #f1f5f9 100%);
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+/* Main Shell */
+.app {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 16px;
+  min-height: 100vh;
+}
+
+/* Navigation Sidebar */
+.sidebar {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 20px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+.brand {
+  text-align: center;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--violet);
+  margin-bottom: 24px;
+}
+.brand-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 4px;
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.navitem {
+  height: 72px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  gap: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+.navitem:hover {
+  background: var(--violet-light);
+  color: var(--violet-dark);
+}
+.navitem.active {
+  background: linear-gradient(135deg, #eeefff 0%, #e0e7ff 100%);
+  border-color: #c7d2fe;
+  color: var(--violet-dark);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
+}
+.navitem-icon { font-size: 24px; }
+.settings-btn { margin-top: auto; }
+
+/* Main Content Area */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Header Banner */
+.header-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--violet) 0%, #818cf8 100%);
+}
+.crumb {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--violet);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.subtitle {
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Header Badges & Advanced Toggle */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.badge-pill {
+  background: #f1f5f9;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--violet-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-advanced-toggle {
+  background: #fff;
+  border: 2px solid #c7d2fe;
+  color: var(--violet-dark);
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+}
+.btn-advanced-toggle:hover {
+  background: var(--violet);
+  color: #fff;
+  border-color: var(--violet);
+}
+
+/* Stepper Journey Bar */
+.stepper-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 20px;
+  box-shadow: var(--shadow);
+}
+.stepper-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.stepper-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--violet-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stepper-nav-btns {
+  display: flex;
+  gap: 8px;
+}
+.btn-step {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+.btn-step:hover:not(:disabled) {
+  background: var(--violet-light);
+  color: var(--violet);
+}
+.btn-step:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.stepper-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.step-dot {
+  flex: 1;
+  min-width: 28px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  transition: all 0.25s ease;
+}
+.step-dot.active {
+  background: var(--violet);
+  color: #fff;
+  border-color: var(--violet);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  transform: translateY(-2px);
+}
+.step-dot.completed {
+  background: #e0e7ff;
+  color: var(--violet-dark);
+  border-color: #c7d2fe;
+}
+.step-banner {
+  margin-top: 10px;
+  background: var(--violet-light);
+  border: 1px solid #c7d2fe;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--violet-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mission Card */
+.mission-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
+  border: 1.5px solid #ddd6fe;
+  border-radius: 18px;
+  padding: 18px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.mission-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #818cf8 0%, #4f46e5 100%);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-none: 1;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+.mission-content { flex: 1; }
+.mission-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--violet-dark);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.mission-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.mission-sub {
+  font-size: 14px;
+  color: #475569;
+  margin-bottom: 8px;
+}
+.mission-challenge {
+  background: #fff;
+  border: 1px stroke #c7d2fe;
+  border-left: 4px solid var(--violet);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--violet-dark);
+}
+
+/* Workspace Layout */
+.workspace {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 16px;
+}
+
+/* Lab Area */
+.lab-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+/* Toolbar Controls */
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 12px;
+}
+.tool-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tool-btn {
+  height: 42px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+.tool-btn:hover {
+  border-color: #c7d2fe;
+  background: var(--violet-light);
+  color: var(--violet-dark);
+}
+.tool-btn.active {
+  border-color: var(--violet);
+  background: var(--violet);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+.tool-btn.highlight-pulse {
+  animation: pulseHighlight 1.5s infinite alternate;
+}
+@keyframes pulseHighlight {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  100% { transform: scale(1.04); box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+}
+
+.math-word-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: #e0e7ff;
+  color: var(--violet-dark);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #c7d2fe;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* SVG Plot Wrapper */
+.plot-container {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+}
+svg.plot-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Speech bubbles and labels on canvas */
+.speech-bubble {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 27, 75, 0.92);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 10;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.speech-bubble.highlight {
+  background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+}
+
+/* Steepness & Height Dashboard */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.metric-card {
+  background: #f8fafc;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+}
+.metric-card.match-highlight {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: #34d399;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+.metric-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.metric-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 4px;
+}
+.metric-explain {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  margin-top: 2px;
+}
+
+/* Side Explanation Panel */
+.sidepanel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.explain-card {
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.explain-card.active-card {
+  border-color: var(--violet);
+  background: linear-gradient(135deg, #fff 0%, #f5f3ff 100%);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.card-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--violet);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-grid;
+  place-items: center;
+  margin-right: 8px;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+}
+.card-text {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Wow Discovery Card */
+.wow-card {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.wow-card::after {
+  content: '✨';
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 24px;
+  opacity: 0.7;
+}
+.wow-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #fbbf24;
+}
+.wow-badge {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 800;
+  display: inline-block;
+  margin: 6px 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Prediction Card */
+.predict-card {
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.predict-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.predict-question {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.predict-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.btn-choice {
+  border: 1.5px solid var(--line);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+.btn-choice:hover {
+  border-color: var(--violet);
+  background: var(--violet-light);
+  color: var(--violet-dark);
+}
+.btn-choice.selected {
+  border-color: var(--violet);
+  background: var(--violet);
+  color: #fff;
+}
+.btn-choice.correct {
+  border-color: var(--emerald);
+  background: var(--emerald);
+  color: #fff;
+}
+.predict-feedback {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: none;
+}
+.predict-feedback.show { display: block; }
+.predict-feedback.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.predict-feedback.tryagain { background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
+
+.math-reveal-box {
+  margin-top: 12px;
+  background: #f8fafc;
+  border: 1.5px solid #c7d2fe;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+.math-formula {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--violet-dark);
+  font-family: Georgia, serif;
+}
+
+/* Bottom Row Cards */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.why-care-card {
+  background: var(--panel);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+.usecase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+.usecase-item {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  color: #fff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.summary-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #a5b4fc;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.summary-big {
+  font-size: 24px;
+  font-weight: 800;
+  color: #6ee7b7;
+  margin-bottom: 6px;
+}
+.summary-formula {
+  font-family: Georgia, serif;
+  font-size: 20px;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+/* Advanced Panel (Collapsible) */
+.advanced-drawer {
+  background: #fff;
+  border: 2px dashed #a5b4fc;
+  border-radius: 18px;
+  padding: 18px;
+  margin-top: 16px;
+  display: none;
+}
+.advanced-drawer.open { display: block; }
+.advanced-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--violet-dark);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.advanced-controls-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.check-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.check-ctrl input { accent-color: var(--violet); }
+
+/* SVG Styling */
+.curve-line { fill: none; stroke: url(#purpleGrad); stroke-width: 3.5; }
+.secant-line { fill: none; stroke: #818cf8; stroke-width: 2; stroke-dasharray: 6 5; }
+.tangent-line { fill: none; stroke: var(--emerald); stroke-width: 3; }
+.point-p { fill: #6366f1; stroke: #ffffff; stroke-width: 4; cursor: grab; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+.point-q { fill: #ffffff; stroke: #f59e0b; stroke-width: 3; cursor: grab; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); }
+.hit-area { fill: transparent; stroke: transparent; stroke-width: 24; cursor: grab; }
+
+@media (max-width: 1024px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .workspace { grid-template-columns: 1fr; }
+  .bottom-grid { grid-template-columns: 1fr; }
+}
+</style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+<div class="app">
+  <!-- Navigation Sidebar -->
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">⚛️</span>MATHS<br>UNIVERSE</div>
+    <nav class="nav">
+      <div class="navitem active"><span class="navitem-icon">🧭</span>Explore</div>
+      <div class="navitem"><span class="navitem-icon">💡</span>Proof</div>
+      <div class="navitem"><span class="navitem-icon">🎯</span>Practice</div>
+      <div class="navitem"><span class="navitem-icon">⭐</span>Saved</div>
+    </nav>
+    <div class="navitem settings-btn"><span class="navitem-icon">⚙️</span>Settings</div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    
+    <!-- Header -->
+    <header class="header-card">
+      <div>
+        <div class="crumb"><span>Visual Calculus</span> / <span>Calculus for Beginners</span></div>
+        <h1>Derivative of <i>e</i><sup>x</sup></h1>
+        <div class="subtitle">A curve that grows faster and faster</div>
+      </div>
+      <div class="header-right">
+        <div class="badge-pill">🌱 Age 12+</div>
+        <button class="btn-advanced-toggle" id="btnToggleAdvanced">
+          ⚙️ <span id="toggleText">Advanced Mode</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Guided Stepper Progress -->
+    <section class="stepper-card">
+      <div class="stepper-header">
+        <div class="stepper-title">🚩 Guided Learning Journey (10 Steps)</div>
+        <div class="stepper-nav-btns">
+          <button class="btn-step" id="btnPrevStep" disabled>← Previous</button>
+          <button class="btn-step" id="btnNextStep">Next Step →</button>
+        </div>
+      </div>
+      <div class="stepper-dots" id="stepperDots">
+        <!-- 10 Step buttons rendered via JS -->
+      </div>
+      <div class="step-banner" id="stepBanner">
+        <span>STEP 1: Meet the curve — "A curve that grows faster and faster."</span>
+      </div>
+    </section>
+
+    <!-- Mission Card -->
+    <section class="mission-card">
+      <div class="mission-icon">🚀</div>
+      <div class="mission-content">
+        <div class="mission-tag">MISSION</div>
+        <div class="mission-title">Can you discover how steep this curve is?</div>
+        <div class="mission-sub">Move the purple dot and watch what happens to the slope.</div>
+        <div class="mission-challenge">
+          🎯 <b>Your Challenge:</b> Can you find a way to measure how steep the curve is at exactly one point?
+        </div>
+      </div>
+    </section>
+
+    <!-- Workspace -->
+    <section class="workspace">
+      <!-- Interactive Graph Lab Card -->
+      <div class="lab-card">
+        <!-- Top Toolbar -->
+        <div class="toolbar-row">
+          <div class="tool-group">
+            <button class="tool-btn active" id="btnToolMove" data-tool="move">👆 Move the dot</button>
+            <button class="tool-btn" id="btnToolLine" data-tool="line">📏 Draw a line</button>
+            <button class="tool-btn highlight-pulse" id="btnToolCloser" data-tool="closer">🎯 Bring points closer</button>
+          </div>
+          <div class="tool-group">
+            <span class="math-word-badge" id="badgeSecant" style="display:none;">Math word: Secant</span>
+            <span class="math-word-badge" id="badgeTangent" style="display:none;">Math word: Tangent</span>
+            <button class="tool-btn" id="btnZoomIn">🔍 Zoom +</button>
+            <button class="tool-btn" id="btnZoomOut">🔍 Zoom −</button>
+          </div>
+        </div>
+
+        <!-- SVG Plot Canvas -->
+        <div class="plot-container" id="plotContainer">
+          <div class="speech-bubble" id="speechBubble">
+            <span>👋 Drag the purple dot P to see how steep the curve is!</span>
+          </div>
+
+          <svg class="plot-svg" id="plot" viewBox="0 0 900 360" aria-label="Interactive graph of e^x curve">
+            <defs>
+              <linearGradient id="purpleGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#4f46e5" />
+                <stop offset="100%" stop-color="#818cf8" />
+              </linearGradient>
+              <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#a5b4fc" stop-opacity="0.05" />
+              </linearGradient>
+            </defs>
+
+            <!-- Axes Grid -->
+            <g stroke="#cbd5e1" stroke-width="1">
+              <line x1="50" y1="310" x2="850" y2="310" />
+              <line x1="120" y1="330" x2="120" y2="20" />
+              <path d="M850 310 l-8 -4 v8 z" fill="#94a3b8" />
+              <path d="M120 20 l-4 8 h8 z" fill="#94a3b8" />
+            </g>
+            <!-- Axis Labels -->
+            <g fill="#64748b" font-size="12" font-weight="600">
+              <text x="115" y="328">0</text>
+              <text x="250" y="328">1</text>
+              <text x="380" y="328">2</text>
+              <text x="510" y="328">3</text>
+              <text x="855" y="325" font-family="Georgia">x</text>
+              <text x="115" y="15" font-family="Georgia">y</text>
+            </g>
+
+            <!-- Area under curve (Advanced mode) -->
+            <g id="areaLayer" style="display:none;"></g>
+
+            <!-- Main Curve e^x -->
+            <path id="curve" class="curve-line" />
+
+            <!-- Connecting Line / Secant -->
+            <path id="secant" class="secant-line" style="display:none;" />
+
+            <!-- Tangent Line -->
+            <path id="tangent" class="tangent-line" style="display:none;" />
+
+            <!-- Vertical Guides -->
+            <line id="guideP" stroke="#cbd5e1" stroke-dasharray="4 4" />
+            <line id="guideQ" stroke="#cbd5e1" stroke-dasharray="4 4" style="display:none;" />
+
+            <!-- Interactive Points -->
+            <circle id="hitQ" class="hit-area" r="22" style="display:none;" />
+            <circle id="pointQ" class="point-q" r="7" style="display:none;" />
+
+            <circle id="hitP" class="hit-area" r="24" />
+            <circle id="pointP" class="point-p" r="10" />
+
+            <!-- Dynamic SVG Labels -->
+            <text id="labelCurve" x="160" y="100" fill="#4f46e5" font-size="16" font-weight="800">A curve that grows faster & faster (eˣ)</text>
+            <text id="labelP" x="0" y="0" fill="#4f46e5" font-size="14" font-weight="700">P — Start point</text>
+            <text id="labelQ" x="0" y="0" fill="#d97706" font-size="14" font-weight="700" style="display:none;">Q — Move me</text>
+            
+            <!-- Speech bubble on Q inside SVG -->
+            <g id="bubbleQGroup" style="display:none;">
+              <rect id="bubbleQBg" x="0" y="0" width="94" height="26" rx="13" fill="#f59e0b" />
+              <text id="bubbleQText" x="0" y="0" fill="#ffffff" font-size="11" font-weight="800">👋 Drag me!</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Real-time Steepness & Height Dashboard -->
+        <div class="metrics-row">
+          <div class="metric-card" id="cardHeight">
+            <div class="metric-label">
+              <span>CURVE HEIGHT</span>
+              <span>📏</span>
+            </div>
+            <div class="metric-val" id="valHeight">2.72</div>
+            <div class="metric-explain">How tall the curve is at point P</div>
+          </div>
+
+          <div class="metric-card" id="cardSteepness">
+            <div class="metric-label">
+              <span id="labelSteepnessHeader">STEEPNESS</span>
+              <span id="badgeSlopeWord" class="math-word-badge" style="display:none;">Math word: Slope</span>
+            </div>
+            <div class="metric-val" id="valSteepness">2.72</div>
+            <div class="metric-explain" id="explainSteepness">Bigger number = steeper line</div>
+          </div>
+        </div>
+
+        <!-- Advanced Mode Details (Collapsible) -->
+        <div class="advanced-drawer" id="advancedDrawer">
+          <div class="advanced-title">⚙️ Advanced Mathematical Details (University Level)</div>
+          <div class="advanced-controls-row">
+            <label class="check-ctrl"><input id="chkShowArea" type="checkbox"> Show Area Shading (∫ eˣ dx)</label>
+            <label class="check-ctrl"><input id="chkShowPartitions" type="checkbox"> Show Partitions (Riemann Sums)</label>
+            <label class="check-ctrl"><input id="chkShowFormulas" type="checkbox"> Show Formal Notation P(a, eᵃ), Q(x, eˣ)</label>
+          </div>
+          <div style="margin-top:10px; font-size:12px; color:#475569;" id="advancedOutput">
+            Secant Slope: <b>(eˣ − eᵃ)/(x − a)</b> &nbsp;|&nbsp; Tangent Slope: <b>eᵃ</b> &nbsp;|&nbsp; Difference: <b>|m − eᵃ| = <span id="valDiff">0.00</span></b>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side Explanation Cards -->
+      <aside class="sidepanel">
+        
+        <!-- Wow Discovery Card (Hidden until discovered) -->
+        <div class="wow-card" id="wowCard">
+          <div class="wow-title">🤯 THE SURPRISING DISCOVERY</div>
+          <div>For this special curve, something amazing happens…</div>
+          <div class="wow-badge">HEIGHT = STEEPNESS</div>
+          <div style="font-size:13px; opacity:0.95;">The curve's height tells us exactly how fast it is growing!</div>
+        </div>
+
+        <!-- "Why Does This Work?" 4 Cards -->
+        <div class="cards-container">
+          <div class="explain-card active-card" id="explainCard1">
+            <div class="card-title"><span class="card-num">1</span>📏 How can we measure steepness?</div>
+            <p class="card-text">Pick two points on the curve. The line connecting them helps us estimate how steep the curve is between those two spots.</p>
+          </div>
+
+          <div class="explain-card" id="explainCard2">
+            <div class="card-title"><span class="card-num">2</span>🔍 What if we bring the points closer?</div>
+            <p class="card-text">Drag Q toward P. As the points get closer and closer, the connecting line gives a much better picture of the curve at that exact point.</p>
+          </div>
+
+          <div class="explain-card" id="explainCard3">
+            <div class="card-title"><span class="card-num">3</span>🎯 What happens when they almost meet?</div>
+            <p class="card-text">The line becomes the <b>TANGENT</b> — a line that touches the curve at just one point! This tells us the steepness right at P.</p>
+          </div>
+
+          <div class="explain-card" id="explainCard4">
+            <div class="card-title"><span class="card-num">4</span>🤯 The Mind-Blowing Part</div>
+            <p class="card-text">Look at the height and the steepness! They are <b>exactly equal</b>. Height tells us how fast <i>e</i><sup>x</sup> is growing!</p>
+          </div>
+        </div>
+
+        <!-- Make a Prediction Card -->
+        <div class="predict-card">
+          <div class="predict-title">🤔 MAKE A PREDICTION</div>
+          <div class="predict-question">If the curve is about <b>2.7</b> units high, how steep do you think it is?</div>
+          <div class="predict-grid">
+            <button class="btn-choice" data-val="1">About 1</button>
+            <button class="btn-choice" data-val="2">About 2</button>
+            <button class="btn-choice" data-val="2.7">About 2.7</button>
+            <button class="btn-choice" data-val="5">About 5</button>
+          </div>
+          <div class="predict-feedback" id="predictFeedback"></div>
+
+          <div class="math-reveal-box" id="mathRevealBox" style="display:none;">
+            <div class="math-formula">d/dx (eˣ) = eˣ</div>
+            <div style="font-size:12px; color:#475569; margin-top:4px;">
+              <b>In simple words:</b> The height of eˣ tells us how fast eˣ is growing.
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </section>
+
+    <!-- Bottom Row Cards -->
+    <section class="bottom-grid">
+      <!-- Why Should I Care? -->
+      <div class="why-care-card">
+        <div style="font-size:16px; font-weight:800; color:var(--ink); flex:none;">🚀 Why is this useful in real life?</div>
+        <div style="font-size:13px; color:#64748b; margin-top:2px;">Some things change faster as they get bigger:</div>
+        <div class="usecase-grid">
+          <div class="usecase-item">🌱 Population growth</div>
+          <div class="usecase-item">💰 Compound interest</div>
+          <div class="usecase-item">🦠 Viral spreading</div>
+          <div class="usecase-item">⚛️ Radioactive decay</div>
+        </div>
+        <div style="font-size:12px; color:var(--violet-dark); font-weight:700; margin-top:10px;">
+          Calculus helps us measure how fast something is changing right now!
+        </div>
+      </div>
+
+      <!-- Final Takeaway Summary -->
+      <div class="summary-card">
+        <div class="summary-title">⭐ Lesson Takeaway</div>
+        <div class="summary-big">HEIGHT = STEEPNESS</div>
+        <div class="summary-formula">d/dx(eˣ) = eˣ</div>
+        <div style="font-size:13px; color:#e2e8f0;">
+          <b>Derivative</b> is just a math word for <i>"how fast something is changing right now."</i>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(() => {
+  // DOM Elements
+  const svg = document.getElementById('plot');
+  const curve = document.getElementById('curve');
+  const secant = document.getElementById('secant');
+  const tangent = document.getElementById('tangent');
+  const pointP = document.getElementById('pointP');
+  const hitP = document.getElementById('hitP');
+  const pointQ = document.getElementById('pointQ');
+  const hitQ = document.getElementById('hitQ');
+  const guideP = document.getElementById('guideP');
+  const guideQ = document.getElementById('guideQ');
+  const labelP = document.getElementById('labelP');
+  const labelQ = document.getElementById('labelQ');
+  const labelCurve = document.getElementById('labelCurve');
+  const bubbleQGroup = document.getElementById('bubbleQGroup');
+  const bubbleQBg = document.getElementById('bubbleQBg');
+  const bubbleQText = document.getElementById('bubbleQText');
+  const areaLayer = document.getElementById('areaLayer');
+  
+  const speechBubble = document.getElementById('speechBubble');
+  const valHeight = document.getElementById('valHeight');
+  const valSteepness = document.getElementById('valSteepness');
+  const valDiff = document.getElementById('valDiff');
+  const cardHeight = document.getElementById('cardHeight');
+  const cardSteepness = document.getElementById('cardSteepness');
+  
+  const btnToolMove = document.getElementById('btnToolMove');
+  const btnToolLine = document.getElementById('btnToolLine');
+  const btnToolCloser = document.getElementById('btnToolCloser');
+  const badgeSecant = document.getElementById('badgeSecant');
+  const badgeTangent = document.getElementById('badgeTangent');
+  const badgeSlopeWord = document.getElementById('badgeSlopeWord');
+  
+  const stepperDots = document.getElementById('stepperDots');
+  const stepBanner = document.getElementById('stepBanner');
+  const btnPrevStep = document.getElementById('btnPrevStep');
+  const btnNextStep = document.getElementById('btnNextStep');
+  
+  const btnToggleAdvanced = document.getElementById('btnToggleAdvanced');
+  const advancedDrawer = document.getElementById('advancedDrawer');
+  const chkShowArea = document.getElementById('chkShowArea');
+  const chkShowFormulas = document.getElementById('chkShowFormulas');
+  
+  // Math & View Constants
+  const W = 900, H = 360;
+  let a = 1.0; // x-coordinate of P
+  let x = 1.6; // x-coordinate of Q
+  let zoomScale = 1.0;
+  let currentStep = 1;
+  let activeTool = 'move'; // 'move', 'line', 'closer'
+  let isDraggingP = false;
+  let isDraggingQ = false;
+  let isAdvancedOpen = false;
+
+  // Coordinate Conversion Functions
+  function sx(val) { return 120 + val * 130 * zoomScale; }
+  function sy(val) { return 310 - val * 65 * zoomScale; }
+  function curveY(val) { return sy(Math.exp(val)); }
+
+  function clientToMathX(e) {
+    const r = svg.getBoundingClientRect();
+    const vx = (e.clientX - r.left) * W / r.width;
+    return (vx - 120) / (130 * zoomScale);
+  }
+
+  function generateCurvePath() {
+    let d = '';
+    const steps = 180;
+    const startX = -0.2;
+    const endX = 2.4;
+    for (let i = 0; i <= steps; i++) {
+      const xx = startX + (endX - startX) * i / steps;
+      const px = sx(xx).toFixed(2);
+      const py = sy(Math.exp(xx)).toFixed(2);
+      d += (i === 0 ? 'M' : 'L') + px + ' ' + py + ' ';
+    }
+    return d;
+  }
+
+  // 10-Step Definitions
+  const stepsData = [
+    { num: 1, title: "Meet the curve", desc: "STEP 1: A curve that grows faster and faster (eˣ)." },
+    { num: 2, title: "Move the point", desc: "STEP 2: Drag the purple dot P to see the curve's height change!" },
+    { num: 3, title: "Think about steepness", desc: "STEP 3: Notice how steep the curve gets as it goes up." },
+    { num: 4, title: "Use two points", desc: "STEP 4: Pick two points (P and Q) and draw a connecting line." },
+    { num: 5, title: "Move Q closer", desc: "STEP 5: Drag Q closer and closer to P." },
+    { num: 6, title: "Watch line transform", desc: "STEP 6: Notice how the line starts to touch the curve at just one point (Tangent)!" },
+    { num: 7, title: "Discover relationship", desc: "STEP 7: Look at Curve Height and Tangent Steepness... They are identical!" },
+    { num: 8, title: "Make a prediction", desc: "STEP 8: If height is ~2.7, how steep do you predict it is?" },
+    { num: 9, title: "Reveal the magic", desc: "STEP 9: Height = Steepness for eˣ at EVERY single point!" },
+    { num: 10, title: "Learn the math", desc: "STEP 10: Mathematicians write this as d/dx(eˣ) = eˣ!" }
+  ];
+
+  function renderStepper() {
+    stepperDots.innerHTML = '';
+    stepsData.forEach((s) => {
+      const btn = document.createElement('button');
+      btn.className = `step-dot ${s.num === currentStep ? 'active' : ''} ${s.num < currentStep ? 'completed' : ''}`;
+      btn.textContent = s.num;
+      btn.title = s.title;
+      btn.onclick = () => goToStep(s.num);
+      stepperDots.appendChild(btn);
+    });
+    stepBanner.innerHTML = `<span>${stepsData[currentStep - 1].desc}</span>`;
+    btnPrevStep.disabled = currentStep === 1;
+    btnNextStep.disabled = currentStep === 10;
+  }
+
+  function goToStep(stepNum) {
+    currentStep = stepNum;
+    renderStepper();
+
+    // Contextual step actions
+    if (stepNum === 1) {
+      activeTool = 'move';
+      x = a + 0.6;
+    } else if (stepNum === 4) {
+      activeTool = 'line';
+      x = a + 0.5;
+    } else if (stepNum === 5 || stepNum === 6) {
+      activeTool = 'closer';
+      x = a + 0.12;
+    } else if (stepNum >= 7) {
+      activeTool = 'closer';
+      x = a + 0.005;
+    }
+    updateToolButtons();
+    render();
+  }
+
+  btnPrevStep.onclick = () => { if (currentStep > 1) goToStep(currentStep - 1); };
+  btnNextStep.onclick = () => { if (currentStep < 10) goToStep(currentStep + 1); };
+
+  // Main Render Function
+  function render() {
+    // 1. Draw Curve
+    curve.setAttribute('d', generateCurvePath());
+
+    const py = Math.exp(a);
+    const qy = Math.exp(x);
+
+    const P = { x: sx(a), y: sy(py) };
+    const Q = { x: sx(x), y: sy(qy) };
+
+    // 2. Position P & Q
+    pointP.setAttribute('cx', P.x); pointP.setAttribute('cy', P.y);
+    hitP.setAttribute('cx', P.x); hitP.setAttribute('cy', P.y);
+
+    pointQ.setAttribute('cx', Q.x); pointQ.setAttribute('cy', Q.y);
+    hitQ.setAttribute('cx', Q.x); hitQ.setAttribute('cy', Q.y);
+
+    // Vertical guides
+    guideP.setAttribute('x1', P.x); guideP.setAttribute('x2', P.x);
+    guideP.setAttribute('y1', P.y); guideP.setAttribute('y2', 310);
+
+    guideQ.setAttribute('x1', Q.x); guideQ.setAttribute('x2', Q.x);
+    guideQ.setAttribute('y1', Q.y); guideQ.setAttribute('y2', 310);
+
+    // Labels
+    labelP.setAttribute('x', P.x - 45);
+    labelP.setAttribute('y', P.y - 16);
+    labelP.textContent = chkShowFormulas.checked ? `P(${a.toFixed(2)}, ${py.toFixed(2)})` : 'P — Start point';
+
+    labelQ.setAttribute('x', Q.x + 12);
+    labelQ.setAttribute('y', Q.y + 4);
+    labelQ.textContent = chkShowFormulas.checked ? `Q(${x.toFixed(2)}, ${qy.toFixed(2)})` : 'Q — Move me';
+
+    // Q Speech Bubble SVG
+    bubbleQGroup.setAttribute('transform', `translate(${Q.x - 47}, ${Q.y - 36})`);
+    bubbleQBg.setAttribute('x', 0); bubbleQBg.setAttribute('y', 0);
+    bubbleQText.setAttribute('x', 47); bubbleQText.setAttribute('y', 17);
+    bubbleQText.setAttribute('text-anchor', 'middle');
+
+    // 3. Tangent & Secant Lines
+    const dist = Math.abs(x - a);
+    const isVeryClose = dist < 0.08;
+
+    // Secant line
+    secant.setAttribute('d', `M ${P.x} ${P.y} L ${Q.x} ${Q.y}`);
+
+    // Tangent line at a: slope = e^a
+    const mTangent = Math.exp(a);
+    const x1T = Math.max(-0.2, a - 0.7);
+    const x2T = Math.min(2.3, a + 0.7);
+    const y1T = py + mTangent * (x1T - a);
+    const y2T = py + mTangent * (x2T - a);
+    tangent.setAttribute('d', `M ${sx(x1T)} ${sy(y1T)} L ${sx(x2T)} ${sy(y2T)}`);
+
+    // Visibility management based on tools
+    if (activeTool === 'move') {
+      secant.style.display = 'none';
+      tangent.style.display = 'block';
+      pointQ.style.display = 'none';
+      hitQ.style.display = 'none';
+      labelQ.style.display = 'none';
+      guideQ.style.display = 'none';
+      bubbleQGroup.style.display = 'none';
+      badgeSecant.style.display = 'none';
+      badgeTangent.style.display = 'inline-flex';
+    } else if (activeTool === 'line') {
+      secant.style.display = 'block';
+      tangent.style.display = 'none';
+      pointQ.style.display = 'block';
+      hitQ.style.display = 'block';
+      labelQ.style.display = 'block';
+      guideQ.style.display = 'block';
+      bubbleQGroup.style.display = 'block';
+      badgeSecant.style.display = 'inline-flex';
+      badgeTangent.style.display = 'none';
+    } else if (activeTool === 'closer') {
+      secant.style.display = isVeryClose ? 'none' : 'block';
+      tangent.style.display = 'block';
+      pointQ.style.display = 'block';
+      hitQ.style.display = 'block';
+      labelQ.style.display = 'block';
+      guideQ.style.display = 'block';
+      bubbleQGroup.style.display = isVeryClose ? 'none' : 'block';
+      badgeSecant.style.display = 'inline-flex';
+      badgeTangent.style.display = 'inline-flex';
+    }
+
+    // Area shading
+    if (chkShowArea.checked) {
+      areaLayer.style.display = 'block';
+      const xa = Math.min(a, x), xb = Math.max(a, x);
+      const pts = [];
+      for (let i = 0; i <= 40; i++) {
+        const xx = xa + (xb - xa) * i / 40;
+        pts.push(`${sx(xx)},${curveY(xx)}`);
+      }
+      areaLayer.innerHTML = `<path d="M ${sx(xa)},310 L ${pts.join(' L ')} L ${sx(xb)},310 Z" fill="url(#areaFill)" stroke="#6366f1" stroke-width="1"/>`;
+    } else {
+      areaLayer.style.display = 'none';
+    }
+
+    // 4. Update Steepness & Height Readouts
+    const currentHeight = py;
+    const secantSlope = (qy - py) / (x - a || 1e-6);
+    const steepnessVal = isVeryClose || activeTool === 'move' ? mTangent : secantSlope;
+
+    valHeight.textContent = currentHeight.toFixed(2);
+    valSteepness.textContent = steepnessVal.toFixed(2);
+    valDiff.textContent = Math.abs(secantSlope - mTangent).toFixed(3);
+
+    // 5. Dynamic Speech Bubble Updates
+    if (activeTool === 'move') {
+      speechBubble.innerHTML = `<span>👆 Drag P to change height: <b>${py.toFixed(2)}</b>. Steepness is <b>${mTangent.toFixed(2)}</b>!</span>`;
+      speechBubble.className = 'speech-bubble highlight';
+    } else if (activeTool === 'line') {
+      speechBubble.innerHTML = `<span>📏 Two points (P & Q) create a line to measure steepness!</span>`;
+      speechBubble.className = 'speech-bubble';
+    } else if (activeTool === 'closer') {
+      if (isVeryClose) {
+        speechBubble.innerHTML = `<span>🎯 <b>Almost touching!</b> The line becomes the TANGENT! Height = Steepness!</span>`;
+        speechBubble.className = 'speech-bubble highlight';
+        cardHeight.classList.add('match-highlight');
+        cardSteepness.classList.add('match-highlight');
+        badgeSlopeWord.style.display = 'inline-flex';
+      } else if (dist < 0.25) {
+        speechBubble.innerHTML = `<span>🔍 Getting closer… Watch the line start touching the curve!</span>`;
+        speechBubble.className = 'speech-bubble';
+      } else {
+        speechBubble.innerHTML = `<span>👋 Drag Q toward P to bring the points closer!</span>`;
+        speechBubble.className = 'speech-bubble';
+      }
+    }
+
+    // Update active explanation cards
+    updateExplanationCards(isVeryClose);
+  }
+
+  function updateExplanationCards(isVeryClose) {
+    document.querySelectorAll('.explain-card').forEach(c => c.classList.remove('active-card'));
+    if (activeTool === 'line') {
+      document.getElementById('explainCard1').classList.add('active-card');
+    } else if (activeTool === 'closer' && !isVeryClose) {
+      document.getElementById('explainCard2').classList.add('active-card');
+    } else if (isVeryClose) {
+      document.getElementById('explainCard3').classList.add('active-card');
+      document.getElementById('explainCard4').classList.add('active-card');
+    } else {
+      document.getElementById('explainCard1').classList.add('active-card');
+    }
+  }
+
+  function setA(newA) {
+    a = Math.max(0.1, Math.min(2.1, newA));
+    if (x <= a + 0.02) x = a + 0.35;
+    render();
+  }
+
+  function setX(newX) {
+    x = Math.max(a + 0.005, Math.min(2.35, newX));
+    render();
+  }
+
+  // Pointer Drag Handlers
+  function initDragHandlers() {
+    hitP.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      isDraggingP = true;
+      hitP.setPointerCapture(e.pointerId);
+    });
+    hitP.addEventListener('pointermove', (e) => {
+      if (!isDraggingP) return;
+      e.preventDefault();
+      setA(clientToMathX(e));
+    });
+    hitP.addEventListener('pointerup', (e) => {
+      isDraggingP = false;
+      try { hitP.releasePointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    hitQ.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      isDraggingQ = true;
+      hitQ.setPointerCapture(e.pointerId);
+    });
+    hitQ.addEventListener('pointermove', (e) => {
+      if (!isDraggingQ) return;
+      e.preventDefault();
+      setX(clientToMathX(e));
+    });
+    hitQ.addEventListener('pointerup', (e) => {
+      isDraggingQ = false;
+      try { hitQ.releasePointerCapture(e.pointerId); } catch (_) {}
+    });
+  }
+
+  // Tool Button Logic
+  function updateToolButtons() {
+    [btnToolMove, btnToolLine, btnToolCloser].forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tool === activeTool);
+    });
+  }
+
+  btnToolMove.onclick = () => { activeTool = 'move'; updateToolButtons(); render(); };
+  btnToolLine.onclick = () => { activeTool = 'line'; updateToolButtons(); render(); };
+  btnToolCloser.onclick = () => {
+    activeTool = 'closer';
+    updateToolButtons();
+    animateQToP();
+  };
+
+  function animateQToP() {
+    const targetX = a + 0.005;
+    const startX = x;
+    const startTime = performance.now();
+    const duration = 1200;
+
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      x = startX + (targetX - startX) * ease;
+      render();
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Zoom Controls
+  document.getElementById('btnZoomIn').onclick = () => {
+    zoomScale = Math.min(1.4, zoomScale + 0.1);
+    render();
+  };
+  document.getElementById('btnZoomOut').onclick = () => {
+    zoomScale = Math.max(0.75, zoomScale - 0.1);
+    render();
+  };
+
+  // Advanced Drawer Toggle
+  btnToggleAdvanced.onclick = () => {
+    isAdvancedOpen = !isAdvancedOpen;
+    advancedDrawer.classList.toggle('open', isAdvancedOpen);
+    document.getElementById('toggleText').textContent = isAdvancedOpen ? 'Hide Advanced' : 'Advanced Mode';
+  };
+
+  [chkShowArea, chkShowFormulas].forEach(el => el.addEventListener('change', render));
+
+  // Prediction Section Logic
+  document.querySelectorAll('.btn-choice').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.dataset.val;
+      document.querySelectorAll('.btn-choice').forEach(b => b.classList.remove('selected', 'correct'));
+      btn.classList.add('selected');
+
+      const fb = document.getElementById('predictFeedback');
+      const reveal = document.getElementById('mathRevealBox');
+      fb.classList.add('show');
+
+      if (val === '2.7') {
+        btn.classList.add('correct');
+        fb.className = 'predict-feedback show success';
+        fb.innerHTML = '🎉 <b>Bingo! You found the secret pattern!</b> The curve is 2.7 high, and its steepness is also 2.7!';
+        reveal.style.display = 'block';
+      } else {
+        fb.className = 'predict-feedback show tryagain';
+        fb.innerHTML = '💡 <b>Take another look at Curve Height and Steepness!</b> Notice how they match? Try picking 2.7!';
+      }
+    });
+  });
+
+  // Initial Execution
+  initDragHandlers();
+  renderStepper();
+  render();
+})();
+</script>
+</body>
+</html>

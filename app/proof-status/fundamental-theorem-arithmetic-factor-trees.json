@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "fundamental-theorem-arithmetic-factor-trees",
+  "categorySlug": "number-theory",
+  "slug": "fundamental-theorem-arithmetic-factor-trees",
+  "route": "/visual-proofs/number-theory/fundamental-theorem-arithmetic-factor-trees",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/77-code/index.html"
+}

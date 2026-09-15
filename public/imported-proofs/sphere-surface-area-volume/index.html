@@ -1,0 +1,2842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maths Universe - Sphere Surface Area & Volume</title>
+
+  <!-- Three.js CDN for Real 3D WebGL Rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    /* Reset & Base Styling */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f3f4fd;
+      color: #334155;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Top Header Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-box {
+      width: 2.75rem;
+      height: 2.75rem;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+      font-size: 1.25rem;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #1e293b;
+      line-height: 1;
+    }
+    .brand-sub {
+      font-weight: 400;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 2rem;
+      background-color: #cbd5e1;
+    }
+
+    .title-group .breadcrumbs {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 0.125rem;
+    }
+
+    .title-group h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+    }
+
+    .title-group p {
+      font-size: 0.8125rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .mission-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e0e7ff;
+      border-radius: 1rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .mission-icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: #eeeefd;
+      color: #4f46e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: bold;
+    }
+
+    .badge {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    /* Main Grid Layout */
+    .app-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+       min-width: 0;
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    @media (max-width: 1180px) {
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Left Sidebar */
+    .left-nav {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0.5rem;
+    }
+
+    .nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-btn {
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 1rem;
+      border: none;
+      background: transparent;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.125rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.6875rem;
+      font-weight: 600;
+    }
+
+    .nav-btn:hover {
+      background: #f8fafc;
+      color: #334155;
+    }
+
+    .nav-btn.active {
+      background: #eeeefd;
+      color: #4f46e5;
+    }
+
+    /* Center Content Area */
+    .center-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* Toolbar & Tabs */
+    .toolbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .step-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 0.25rem;
+      border-radius: 1rem;
+      gap: 0.25rem;
+    }
+
+    .step-tab {
+      border: none;
+      background: transparent;
+      padding: 0.5rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .step-tab.active {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+    }
+
+    .step-tab.locked {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .step-num {
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+    }
+
+    .step-tab.active .step-num {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .tools-bar {
+      display: flex;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 0.25rem;
+      border-radius: 1rem;
+      gap: 0.25rem;
+    }
+
+    .tool-btn {
+      border: none;
+      background: transparent;
+      padding: 0.375rem 0.625rem;
+      border-radius: 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn.active {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+    }
+
+    .tool-key {
+      font-size: 0.625rem;
+      opacity: 0.6;
+      background: rgba(0, 0, 0, 0.08);
+      padding: 0.0625rem 0.25rem;
+      border-radius: 0.25rem;
+    }
+
+    .tool-btn.active .tool-key {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Tab Visual Views */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .tab-content.active {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .visual-stage {
+      background: #f5f6ff;
+      border: 1px solid #e0e7ff;
+      border-radius: 1.25rem;
+      padding: 1.25rem;
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      position: relative;
+      overflow: hidden;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    /* 3D WebGL Canvas Wrapper */
+    .three-canvas-box {
+      width: 320px;
+      height: 320px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas#webglCanvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+      cursor: grab;
+    }
+    canvas#webglCanvas:active {
+      cursor: grabbing;
+    }
+
+    .sphere-formula-pill {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #e0e7ff;
+      padding: 0.375rem 0.875rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #312e81;
+      margin-top: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+      z-index: 10;
+    }
+
+    /* Selection Tag Label */
+    #selectLabelPill {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: rgba(30, 27, 75, 0.92);
+      color: white;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: none;
+      z-index: 20;
+    }
+
+    /* Tab 1 Pedagogical Area Unit Dragging Component */
+    .unit-drag-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.875rem;
+      background: white;
+      border: 1px solid #e0e7ff;
+      padding: 1.25rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      min-width: 270px;
+    }
+
+    .unit-drag-header {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #4f46e5;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .area-unit-draggable {
+      width: 4.5rem;
+      height: 4.5rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #818cf8, #4f46e5);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 0.875rem;
+      transition: transform 0.2s ease;
+      animation: unitPulse 2s infinite;
+    }
+    @keyframes unitPulse {
+      0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    }
+
+    .area-unit-draggable:hover {
+      transform: scale(1.08);
+    }
+
+    .surface-target-zone {
+      width: 14rem;
+      min-height: 6rem;
+      border: 2px dashed #818cf8;
+      border-radius: 1rem;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.625rem;
+      gap: 0.375rem;
+      transition: all 0.3s ease;
+    }
+
+    .surface-target-zone.zone-hover {
+      border-color: #4f46e5;
+      background: #eeeefd;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .placed-units-grid {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .placed-circle-mini {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: #eeeefd;
+      border: 1.5px solid #6366f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #312e81;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .progress-dots-row {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #475569;
+    }
+    .dot-unit {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      border: 1.5px solid #94a3b8;
+      background: white;
+    }
+    .dot-unit.filled {
+      background: #4f46e5;
+      border-color: #4f46e5;
+    }
+
+    /* TAB 2 4-CIRCLE GEOMETRY LAYOUT */
+    .tab2-circles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: center;
+      justify-items: center;
+      padding: 0.5rem;
+      transition: all 0.5s ease;
+    }
+
+    .tab2-circle-card {
+      width: 5.25rem;
+      height: 5.25rem;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.875rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      cursor: grab;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2.5px solid transparent;
+    }
+    .tab2-circle-card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .circle-color-1 { background: #f3e8ff; border-color: #c084fc; color: #7e22ce; }
+    .circle-color-2 { background: #e0f2fe; border-color: #38bdf8; color: #0369a1; }
+    .circle-color-3 { background: #d1fae5; border-color: #34d399; color: #047857; }
+    .circle-color-4 { background: #ffe4e6; border-color: #fb7185; color: #be123c; }
+
+    /* TAB 2 UNROLLED STATE TRANSFORMATION */
+    .unrolled-active-stage .tab2-circles-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 2px dashed #818cf8;
+      border-radius: 0.875rem;
+      background: white;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .unrolled-active-stage .tab2-circle-card {
+      border-radius: 0;
+      width: 4rem;
+      height: 7rem;
+      border: none;
+      border-right: 1px dashed rgba(0,0,0,0.15);
+      box-shadow: none;
+    }
+    .unrolled-active-stage .tab2-circle-card:last-child {
+      border-right: none;
+    }
+
+    /* TAB 3 DIMENSIONAL SWITCHER TABS */
+    .dimension-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: #e0e7ff;
+      padding: 0.25rem;
+      border-radius: 0.75rem;
+      width: fit-content;
+    }
+
+    .dim-tab {
+      border: none;
+      background: transparent;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dim-tab.active {
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Live Values Card */
+    .live-panel {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.25rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.875rem;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #334155;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .live-tag {
+      background: #eeeefd;
+      color: #4f46e5;
+      padding: 0.125rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.625rem;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .control-val {
+      font-weight: 800;
+      color: #1e1b4b;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      background: #cbd5e1;
+      border-radius: 3px;
+      outline: none;
+      accent-color: #4f46e5;
+      cursor: pointer;
+    }
+
+    .val-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.625rem;
+    }
+
+    .val-title {
+      font-size: 0.6875rem;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .val-num {
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: #0f172a;
+      font-family: monospace;
+      margin-top: 0.125rem;
+    }
+
+    .val-sym {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4f46e5;
+      margin-top: 0.125rem;
+    }
+
+    .units-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.6875rem;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .toggle-group {
+      display: flex;
+      background: #e2e8f0;
+      padding: 0.125rem;
+      border-radius: 0.5rem;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 0.25rem 0.625rem;
+      border-radius: 0.375rem;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+    }
+
+    .toggle-btn.active {
+      background: #4f46e5;
+      color: white;
+    }
+
+    /* Tip Banner */
+    .tip-banner {
+      background: #eeeefd;
+      border: 1px solid #c7d2fe;
+      border-radius: 1rem;
+      padding: 0.625rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #312e81;
+      font-weight: 500;
+    }
+
+    /* Buttons */
+    .btn-next {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 0.625rem 1.25rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+    .btn-next:hover:not(:disabled) {
+      opacity: 0.95;
+      transform: translateX(2px);
+    }
+    .btn-next:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      padding: 0.5rem 1rem;
+      border-radius: 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* VISUAL PROOF SUMMARY PIPELINE TIMELINE */
+    .summary-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .summary-card h3 {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #4f46e5;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .summary-flow-chain {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      overflow-x: auto;
+      padding: 0.5rem 0;
+    }
+
+    .summary-node {
+      background: #f8fafc;
+      border: 1px solid #e0e7ff;
+      border-radius: 1.25rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-width: 140px;
+      flex: 1;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .summary-node-title {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .summary-node-val {
+      font-size: 0.8125rem;
+      font-weight: 800;
+      color: #4f46e5;
+      font-family: monospace;
+    }
+
+    .flow-arrow {
+      color: #a5b4fc;
+      font-size: 1.25rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    /* Right Sidebar */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 0.875rem;
+    }
+
+    .card-title-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 0.5rem;
+      background: #eeeefd;
+      color: #4f46e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+    }
+
+    .points-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .point-item {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      color: #475569;
+    }
+
+    .point-num {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      background: #4f46e5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.625rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .point-body strong {
+      color: #0f172a;
+    }
+
+    /* Form Quiz Controls */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .form-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .text-input {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      font-family: monospace;
+      color: #0f172a;
+      outline: none;
+      transition: border 0.2s ease;
+    }
+
+    .text-input:focus {
+      border-color: #4f46e5;
+      background: #ffffff;
+    }
+
+    .check-btn {
+      position: absolute;
+      right: 0.25rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      font-size: 0.625rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .hint-box {
+      font-size: 0.6875rem;
+      color: #d97706;
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-radius: 0.5rem;
+      padding: 0.375rem 0.5rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .status-ok {
+      color: #10b981;
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 0.625rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+      transition: opacity 0.2s ease;
+    }
+
+    .primary-btn:hover {
+      opacity: 0.95;
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
+  
+/* MASTER MATHS UNIVERSE SHELL OVERRIDES */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.page-header .title-group {
+  min-width: 0;
+}
+.page-header .title-group h1 {
+  font-size: 2.1rem;
+}
+.mission-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.mission-row .mission-card {
+  width: 100%;
+  max-width: 760px;
+}
+.mission-label {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #4f46e5;
+  text-transform: uppercase;
+}
+.mission-text {
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.app-grid {
+  grid-template-columns: minmax(0, 1fr) 320px;
+  min-width: 0;
+}
+.center-column,
+.right-column {
+  min-width: 0;
+}
+.visual-stage {
+  min-width: 0;
+  overflow: hidden;
+}
+.three-canvas-box {
+  max-width: 100%;
+  overflow: hidden;
+  flex: 0 1 360px;
+}
+#webglCanvas {
+  display: block;
+  max-width: 100%;
+}
+.right-column > .card {
+  min-width: 0;
+}
+.live-panel {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+/* Do not let generic overflow rules alter the page's outer layout. */
+.main-content {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1180px) {
+  .app-grid {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+  .page-header {
+    gap: 12px;
+  }
+  .page-header .title-group h1 {
+    font-size: 1.65rem;
+  }
+  .header-right {
+    width: 100%;
+  }
+  .mission-row .mission-card {
+    max-width: 100%;
+  }
+  .visual-stage {
+    flex-direction: column;
+  }
+  .three-canvas-box {
+    width: min(100%, 360px);
+  }
+}
+
+</style>
+<style>
+
+/* UNIFIED MATHS UNIVERSE APPLICATION SHELL STYLES */
+:root {
+  --bg-main: #f5f6fc;
+  --card-bg: #ffffff;
+  --text-main: #1e1b4b;
+  --text-muted: #6b7280;
+  --text-purple: #4c1d95;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #ede9fe;
+  --primary-dark: #4338ca;
+  --border-color: #e2e8f0;
+  --border-purple: #ddd6fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 220px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  margin-left: 8px;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-item.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  overflow-y: auto;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.main-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-purple {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.bookmark-btn {
+  background: white;
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-btn:hover, .bookmark-btn.active {
+  color: var(--primary);
+  border-color: var(--border-purple);
+  background-color: var(--primary-light);
+}
+
+/* REQUIREMENT 4: COUNTER TRAY OVERFLOW FIX */
+.controls-panel, .live-values-panel, .counter-box, .stats-panel, .info-tray, .control-panel, .control-box-list {
+  max-height: 520px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px;
+}
+
+.controls-panel::-webkit-scrollbar, .live-values-panel::-webkit-scrollbar, .control-panel::-webkit-scrollbar {
+  width: 5px;
+}
+.controls-panel::-webkit-scrollbar-thumb, .live-values-panel::-webkit-scrollbar-thumb, .control-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.val-num, .counter-value, .stat-value, .value-num {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* REQUIREMENT 5: ZOOM VIEWPORT CONTAINMENT FIX */
+.canvas-container, .graph-container, .viewport-container, .svg-container, #canvas-container, .render-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-md, 14px);
+  z-index: 1;
+}
+
+.graph-tools, .zoom-controls, .floating-tools {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+/* Responsive queries */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-content {
+    padding: 16px;
+  }
+}
+
+</style>
+
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+<div class="app-container">
+<aside class="sidebar">
+    <div class="brand">
+      <a href="/proofs" class="brand-link" title="Return to All Visualizations">
+        <img src="../../assets/logo.png" alt="Maths Universe Logo" class="brand-logo-img">
+      </a>
+      <div class="brand-text">
+        <span class="brand-title">MATHS</span>
+        <span class="brand-subtitle">UNIVERSE</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active" data-nav="explore">
+        <a href="#explore">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+          <span>Explore</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="proofs">
+        <a href="#proofs">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          <span>Proofs</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="practice">
+        <a href="#practice">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Practice</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="saved">
+        <a href="#saved">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+          <span>Saved</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+<main class="main-content">
+
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+  <!-- Header Section: master Maths Universe layout -->
+  <header class="page-header">
+    <div class="title-group">
+      <div class="breadcrumbs"><a href="/proofs" class="back-link">← All Visualizations</a> / Geometry &amp; Solids</div>
+      <h1>Sphere Surface Area and Volume</h1>
+      <p>Discover why surface area uses <i>r</i>² — and volume uses <i>r</i>³.</p>
+    </div>
+
+    <div class="header-right">
+      <div class="badge"><span style="color:#4f46e5;">Intermediate II</span> 📊</div>
+      <div class="badge">⏱️ 12 min</div>
+    </div>
+  </header>
+
+  <div class="mission-row">
+    <div class="mission-card">
+      <div class="mission-icon">🎯</div>
+      <div>
+        <div class="mission-label">Mission</div>
+        <div class="mission-text">Use what you know about circles to uncover the sphere formulas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application Grid Layout -->
+  <div class="app-grid">
+
+     <!-- Center Workspace -->
+    <div class="center-column">
+      
+      <!-- Main Interactive Proof Card -->
+      <div class="card" id="explore">
+
+        <!-- Toolbar & Step Tabs -->
+        <div class="toolbar-row">
+          <div class="step-tabs">
+            <button id="step1Btn" class="step-tab active" onclick="switchTab(1)">
+              <span class="step-num">1</span>
+              Sphere & great circle
+            </button>
+            <button id="step2Btn" class="step-tab locked" onclick="switchTab(2)">
+              <span class="step-num">2</span>
+              Four-circle surface 🔒
+            </button>
+            <button id="step3Btn" class="step-tab locked" onclick="switchTab(3)">
+              <span class="step-num">3</span>
+              Build intuition: <i>r</i>² vs <i>r</i>³ 🔒
+            </button>
+          </div>
+
+          <div class="tools-bar">
+            <button id="toolSelect" class="tool-btn active" onclick="setTool('select')">
+              ☝️ Select <span class="tool-key">V</span>
+            </button>
+            <button id="toolRotate" class="tool-btn" onclick="setTool('rotate')">
+              🔄 Rotate <span class="tool-key">R</span>
+            </button>
+            <button id="toolSlice" class="tool-btn" onclick="setTool('slice')">
+              ✂️ Slice <span class="tool-key">S</span>
+            </button>
+            <button id="toolNet" class="tool-btn" onclick="setTool('net')">
+              🕸️ Net <span class="tool-key">N</span>
+            </button>
+            <button id="toolUnroll" class="tool-btn" onclick="setTool('unroll')">
+              📜 Unroll <span class="tool-key">U</span>
+            </button>
+            <button class="tool-btn" onclick="resetGlobal()" title="Start Again (X)">
+              ↺ <span class="tool-key">X</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 1: SPHERE & GREAT CIRCLE -->
+        <div id="tab1" class="tab-content active">
+          <div class="visual-stage">
+            
+            <!-- Real 3D WebGL Canvas Container for Sphere -->
+            <div class="three-canvas-box">
+              <canvas id="webglCanvas"></canvas>
+              
+              <!-- Raycasting Selection Popover Label -->
+              <div id="selectLabelPill">
+                Selected: <span id="selectLabelText">Sphere</span>
+              </div>
+
+              <div class="sphere-formula-pill">
+                Great circle area <b>A = π<i>r</i>²</b>
+              </div>
+            </div>
+
+            <!-- Pedagogical Area Unit Dragging Interaction -->
+            <div class="unit-drag-container">
+              <div class="unit-drag-header">Surface Area Measuring Unit</div>
+              
+              <!-- Draggable Area Unit -->
+              <div id="areaUnitPiece" class="area-unit-draggable" draggable="true" ondragstart="onUnitDragStart(event)">
+                π<i>r</i>²
+              </div>
+              <div style="font-size: 0.6875rem; color: #64748b; font-weight: 600;">Drag the area unit →</div>
+
+              <!-- Magnetic Drop Zone -->
+              <div id="surfaceTargetZone" class="surface-target-zone" ondragover="onUnitDragOver(event)" ondragleave="onUnitDragLeave(event)" ondrop="onUnitDrop(event)">
+                <div id="targetZonePrompt" style="font-size: 0.75rem; color: #4f46e5; font-weight: 700;">
+                  Surface-area target
+                </div>
+
+                <div id="placedMiniGrid" class="placed-units-grid"></div>
+              </div>
+
+              <!-- Counter Dots -->
+              <div class="progress-dots-row">
+                <span>Units placed:</span>
+                <div class="dot-unit" id="dot1"></div>
+                <div class="dot-unit" id="dot2"></div>
+                <div class="dot-unit" id="dot3"></div>
+                <div class="dot-unit" id="dot4"></div>
+                <span id="unitCounterText" style="margin-left: 0.25rem;">0 / 4</span>
+              </div>
+
+              <div id="unitSuccessMsg" style="display: none; font-size: 0.75rem; font-weight: 800; color: #059669; text-align: center;">
+                Great! Four equal great-circle areas give total surface area S = 4πr²! Step 2 Unlocked!
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div id="tab1FormulaReveal" style="font-size: 0.875rem; font-weight: 800; color: #4f46e5;">
+              1 × π<i>r</i>² = π<i>r</i>²
+            </div>
+            <button id="btnTab1Next" class="btn-next" onclick="switchTab(2)" disabled>
+              Next: prove the 4 →
+            </button>
+          </div>
+        </div>
+
+        <!-- REBUILT TAB 2: FOUR-CIRCLE SURFACE (4 DISTINCT CIRCULAR AREA UNITS) -->
+        <div id="tab2" class="tab-content">
+          <div class="visual-stage" id="tab2Stage">
+            
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%;">
+              
+              <div style="font-size: 0.875rem; font-weight: 800; color: #1e1b4b; text-align: center;">
+                Four Great Circle Areas Equivalence
+              </div>
+
+              <!-- 4 Circular Area Units arranged in 2x2 grid -->
+              <div id="tab2CirclesGrid" class="tab2-circles-grid">
+                <div class="tab2-circle-card circle-color-1" draggable="true" ondragstart="onTab2CircleDrag(event, 1)">π<i>r</i>²</div>
+                <div class="tab2-circle-card circle-color-2" draggable="true" ondragstart="onTab2CircleDrag(event, 2)">π<i>r</i>²</div>
+                <div class="tab2-circle-card circle-color-3" draggable="true" ondragstart="onTab2CircleDrag(event, 3)">π<i>r</i>²</div>
+                <div class="tab2-circle-card circle-color-4" draggable="true" ondragstart="onTab2CircleDrag(event, 4)">π<i>r</i>²</div>
+              </div>
+
+              <!-- Interactive Unroll / Reset Controls -->
+              <div style="display: flex; gap: 0.75rem; margin-top: 0.25rem;">
+                <button class="btn-secondary" onclick="toggleUnroll(true)">📜 Unroll Surface</button>
+                <button class="btn-secondary" onclick="toggleUnroll(false)">↺ Reset</button>
+              </div>
+
+              <!-- Formula Progression Box -->
+              <div id="tab2FormulaProgression" style="background: white; border: 1px solid #e0e7ff; border-radius: 1rem; padding: 0.75rem 1.25rem; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                <div id="tab2ProgressionText" style="font-size: 1rem; font-weight: 800; color: #4f46e5; font-family: monospace;">
+                  π<i>r</i>² + π<i>r</i>² + π<i>r</i>² + π<i>r</i>²
+                </div>
+                <div id="tab2ProgressionSub" style="font-size: 0.75rem; font-weight: 600; color: #64748b; margin-top: 0.25rem;">
+                  Four equal great-circle areas combine to form 4 × π<i>r</i>² = 4π<i>r</i>²
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.75rem; font-weight: 600; color: #64748b;">
+              Key idea: surface area equals 4 great-circle areas.
+            </div>
+            <button id="btnTab2Next" class="btn-next" onclick="switchTab(3)">
+              Next: why r³ →
+            </button>
+          </div>
+        </div>
+
+        <!-- REBUILT TAB 3: BUILD INTUITION r² vs r³ (ROBUST WEBGL VOXEL ENGINE) -->
+        <div id="tab3" class="tab-content">
+          <div class="visual-stage" style="flex-direction: column; align-items: stretch; padding: 1.25rem; gap: 1rem;">
+            
+            <!-- Top Segmented Controls Switcher -->
+            <div style="display: flex; justify-content: center;">
+              <div class="dimension-tabs">
+                <button id="dimLength" class="dim-tab active" onclick="setDimMode('length')">Length (1D)</button>
+                <button id="dimArea" class="dim-tab" onclick="setDimMode('area')">Area (2D)</button>
+                <button id="dimVolume" class="dim-tab" onclick="setDimMode('volume')">Volume (3D WebGL)</button>
+              </div>
+            </div>
+
+            <!-- Central Stage Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 240px; gap: 1rem; align-items: stretch; min-height: 270px;">
+              
+              <!-- Main Visual Display Box (1D SVG, 2D Grid, or Real 3D WebGL Canvas) -->
+              <div id="tab3VisualContainer" style="background: white; border: 1px solid #e0e7ff; border-radius: 1.25rem; min-height: 270px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);">
+              </div>
+
+              <!-- Side Explanation & Live Math Result Card -->
+              <div style="background: white; border: 1px solid #e0e7ff; border-radius: 1.25rem; padding: 1rem; display: flex; flex-direction: column; justify-content: space-between; min-height: 270px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+                <div>
+                  <div id="dimTitle" style="font-size: 0.75rem; font-weight: 800; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem;">Length (1D)</div>
+                  <div id="dimDesc" style="font-size: 0.75rem; color: #475569; font-weight: 500; line-height: 1.35;">Length changes in one direction.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 0.625rem; text-align: center;">
+                  <div style="font-size: 0.6875rem; color: #64748b; font-weight: 600;">Relationship</div>
+                  <div id="dimFormula" style="font-size: 1.125rem; font-weight: 800; color: #1e1b4b; font-family: monospace; margin-top: 0.125rem;">r</div>
+                </div>
+
+                <div style="background: #eeeefd; border: 1px solid #c7d2fe; border-radius: 0.75rem; padding: 0.625rem; text-align: center;">
+                  <div style="font-size: 0.6875rem; color: #4f46e5; font-weight: 700; text-transform: uppercase;">Live Result</div>
+                  <div id="dimCalculation" style="font-size: 1.125rem; font-weight: 800; color: #4f46e5; font-family: monospace; margin-top: 0.125rem;">3 units</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.75rem; font-weight: 600; color: #64748b;">
+              Surface area uses <i>r</i>² (outside skin), Volume uses <i>r</i>³ (fills 3D space).
+            </div>
+            <button class="btn-next" onclick="resetGlobal()">
+              Start Again ↺
+            </button>
+          </div>
+        </div>
+
+        <!-- Tip Banner -->
+        <div class="tip-banner" style="margin-top: 1rem;">
+          <div>💡 <span id="tipText">Tip: A slice through the center creates a great circle of area πr².</span></div>
+          <div style="color: #4f46e5; font-weight: 700; font-size: 0.6875rem;">Adjust radius slider to see real 3D scaling</div>
+        </div>
+
+      </div>
+
+      <!-- VISUAL PROOF SUMMARY PIPELINE TIMELINE -->
+      <div class="summary-card" id="proofs">
+        <h3>📊 Visual proof summary</h3>
+        
+        <div class="summary-flow-chain">
+          <!-- Node 1: 3D Sphere -->
+          <div class="summary-node">
+            <div class="summary-node-title">Great Circle</div>
+            <div style="width: 50px; height: 50px; position: relative;">
+              <canvas id="summarySphereCanvas" width="50" height="50"></canvas>
+            </div>
+            <div class="summary-node-val">π<i>r</i>²</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <!-- Node 2: 4 Circles -->
+          <div class="summary-node">
+            <div class="summary-node-title">× 4 Circles</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px;">
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #c084fc;"></div>
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #38bdf8;"></div>
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #34d399;"></div>
+              <div style="width: 16px; height: 16px; border-radius: 50%; background: #fb7185;"></div>
+            </div>
+            <div class="summary-node-val">4π<i>r</i>²</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <!-- Node 3: Unrolled Surface -->
+          <div class="summary-node">
+            <div class="summary-node-title">Unroll Surface</div>
+            <div style="display: flex; width: 44px; height: 28px; border: 1px dashed #818cf8; border-radius: 4px; overflow: hidden; background: white;">
+              <div style="flex: 1; background: #f3e8ff; border-right: 1px dashed #c084fc;"></div>
+              <div style="flex: 1; background: #e0f2fe; border-right: 1px dashed #38bdf8;"></div>
+              <div style="flex: 1; background: #d1fae5; border-right: 1px dashed #34d399;"></div>
+              <div style="flex: 1; background: #ffe4e6;"></div>
+            </div>
+            <div class="summary-node-val">= 4π<i>r</i>²</div>
+          </div>
+
+          <div class="flow-arrow">→</div>
+
+          <!-- Node 4: 3D Volume -->
+          <div class="summary-node">
+            <div class="summary-node-title">3D Volume Growth</div>
+            <div style="display: flex; align-items: flex-end; gap: 3px; height: 32px;">
+              <div style="width: 8px; height: 8px; background: #818cf8; border-radius: 1px;"></div>
+              <div style="width: 14px; height: 14px; background: #6366f1; border-radius: 2px;"></div>
+              <div style="width: 22px; height: 22px; background: #4f46e5; border-radius: 3px;"></div>
+            </div>
+            <div class="summary-node-val">V = 4/3 π<i>r</i>³</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar Panel -->
+    <div class="right-column">
+      
+      <!-- Live Values Card -->
+      <div class="card live-panel">
+        <div class="panel-header">
+          <span>Live values</span>
+          <span class="live-tag">Interactive</span>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Radius</span>
+            <span class="control-val">r = <span id="rValText">3.00</span></span>
+          </div>
+          <input id="rSlider" type="range" min="1.00" max="5.00" step="0.25" value="3.00" oninput="onRadiusChange()" />
+        </div>
+
+        <div class="val-card">
+          <div class="val-title">Surface Area</div>
+          <div id="saNumText" class="val-num">S = 113.10</div>
+          <div id="saSymText" class="val-sym">= 4π<i>r</i>²</div>
+        </div>
+
+        <div class="val-card">
+          <div class="val-title">Volume</div>
+          <div id="volNumText" class="val-num">V = 113.10</div>
+          <div id="volSymText" class="val-sym">= 4/3 π<i>r</i>³</div>
+        </div>
+
+        <div class="units-row">
+          <span>Units</span>
+          <div class="toggle-group">
+            <button id="symToggle" class="toggle-btn active" onclick="setUnits('symbolic')">Symbolic</button>
+            <button id="numToggle" class="toggle-btn" onclick="setUnits('numeric')">Numeric</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 1: Why it works -->
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-icon">✨</div>
+          Why it works
+        </div>
+        <div class="points-list">
+          <div class="point-item">
+            <div class="point-num" id="whyStep1Num">1</div>
+            <div class="point-body" id="whyStep1Text">
+              A <strong>great circle</strong> is a circle through the center of the sphere. Area = <strong>π<i>r</i>²</strong>.
+            </div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-num" id="whyStep2Num">2</div>
+            <div class="point-body" id="whyStep2Text">
+              Four equal great-circle areas cover the sphere: <strong>4 × π<i>r</i>² = 4π<i>r</i>²</strong>.
+            </div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-num" id="whyStep3Num">3</div>
+            <div class="point-body" id="whyStep3Text">
+              Length (<i>r</i>) → Area (<i>r</i>²) → Volume (<i>r</i>³) grows in three dimensions.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Predict the formulas -->
+      <div class="card" id="practice">
+        <div class="card-title">
+          <div class="card-title-icon">✏️</div>
+          Predict the formulas
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>Surface Area S =</span>
+            <span id="saPredictStatus" class="status-ok" style="display: none;">✓ Correct!</span>
+          </div>
+          <div class="input-wrapper">
+            <input id="saPredictInput" type="text" placeholder="e.g. 4pi r^2" class="text-input" />
+            <button class="check-btn" onclick="checkPredict()">Check</button>
+          </div>
+          <div id="saHint" class="hint-box">💡 Think about 4 great circle areas.</div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>Volume V =</span>
+            <span id="volPredictStatus" class="status-ok" style="display: none;">✓ Correct!</span>
+          </div>
+          <div class="input-wrapper">
+            <input id="volPredictInput" type="text" placeholder="e.g. 4/3 pi r^3" class="text-input" />
+            <button class="check-btn" onclick="checkPredict()">Check</button>
+          </div>
+          <div id="volHint" class="hint-box">💡 Volume fills three dimensions (r³).</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem;">
+          <button style="border: none; background: transparent; font-size: 0.75rem; font-weight: 600; color: #64748b; cursor: pointer;" onclick="revealPredict()">
+            👁️ Reveal
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 3: Mini challenge -->
+       <span id="saved-marker" aria-hidden="true"></span>
+      <div class="card">
+        <div class="card-title">
+          <div class="card-title-icon">🏆</div>
+          Mini challenge
+        </div>
+        <p style="font-size: 0.75rem; color: #475569; font-weight: 500; margin-bottom: 0.75rem;">
+          If <strong><i>r</i> = 5</strong>, what are the exact values?
+        </p>
+
+        <div class="form-group">
+          <div class="form-label">Surface Area =</div>
+          <div class="input-wrapper">
+            <input id="chalSaInput" type="text" placeholder="100π" class="text-input" />
+            <span id="chalSaOk" class="status-ok" style="display: none; position: absolute; right: 0.5rem;">✓</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">Volume =</div>
+          <div class="input-wrapper">
+            <input id="chalVolInput" type="text" placeholder="500π/3" class="text-input" />
+            <span id="chalVolOk" class="status-ok" style="display: none; position: absolute; right: 0.5rem;">✓</span>
+          </div>
+        </div>
+
+        <div id="challengeHintBox" class="hint-box" style="margin-bottom: 0.5rem;">
+          💡 S = 4 × π × 5² = 100π. V = 4/3 × π × 5³ = 500π/3.
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="primary-btn" onclick="checkChallenge()">Submit Solution</button>
+          <button class="btn-secondary" style="font-size: 0.6875rem;" onclick="toggleChallengeHint()">Hint</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Single Source of Truth & Real 3D JavaScript -->
+  <script>
+    // SINGLE SOURCE OF TRUTH STATE
+    const state = {
+      radius: 3.00,
+      mode: 'select', // 'select' | 'rotate' | 'slice' | 'net' | 'unroll'
+      unitsMode: 'symbolic',
+      sliceActive: false,
+      sliceProgress: 0,
+      netVisible: false,
+      unrolled: false,
+      placedUnits: 0,
+      tab1Complete: false,
+      tab2Unlocked: false,
+      tab3Unlocked: false,
+      activeTab: 1,
+      dimMode: 'length'
+    };
+
+    // Three.js Scene Variables for 3D Sphere (Tab 1)
+    let scene, camera, renderer, raycaster, mouseVec;
+    let sphereGroup, sphereMesh, wireframeMesh, equatorRing, sliceDiskMesh, radiusLine;
+    let frontHemisphereMesh;
+    let isMouseDown = false, lastMouseX = 0, lastMouseY = 0;
+
+    // Mini Summary WebGL Canvas Renderer
+    let summaryScene, summaryCamera, summaryRenderer, summarySphere;
+
+    // Tab 3 Real 3D Voxel WebGL Canvas Renderer
+    let tab3Scene, tab3Camera, tab3Renderer, tab3VoxelGroup;
+    let isTab3MouseDown = false, tab3MouseX = 0, tab3MouseY = 0;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initThreeD();
+      initSummaryThreeD();
+      initTab3ThreeD();
+      onRadiusChange();
+    });
+
+    // Initialize Real 3D WebGL Sphere in Three.js (Tab 1)
+    function initThreeD() {
+      const canvas = document.getElementById('webglCanvas');
+      if (!canvas || typeof THREE === 'undefined') return;
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
+      camera.position.set(0, 0, 5.2);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(310, 310);
+      renderer.setPixelRatio(window.devicePixelRatio);
+
+      raycaster = new THREE.Raycaster();
+      mouseVec = new THREE.Vector2();
+
+      sphereGroup = new THREE.Group();
+      scene.add(sphereGroup);
+
+      // Shaded 3D Sphere Mesh
+      const geometry = new THREE.SphereGeometry(1.5, 32, 32);
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x6366f1,
+        transparent: true,
+        opacity: 0.75,
+        shininess: 90,
+        side: THREE.DoubleSide
+      });
+      sphereMesh = new THREE.Mesh(geometry, material);
+      sphereMesh.userData.partName = 'sphere';
+      sphereGroup.add(sphereMesh);
+
+      // Front hemisphere for slice separation animation
+      const frontGeo = new THREE.SphereGeometry(1.505, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2);
+      const frontMat = new THREE.MeshPhongMaterial({
+        color: 0x818cf8,
+        transparent: true,
+        opacity: 0.75,
+        side: THREE.DoubleSide
+      });
+      frontHemisphereMesh = new THREE.Mesh(frontGeo, frontMat);
+      frontHemisphereMesh.userData.partName = 'sphere';
+      sphereGroup.add(frontHemisphereMesh);
+
+      // Wireframe Lines
+      const wireGeometry = new THREE.WireframeGeometry(geometry);
+      const wireMaterial = new THREE.LineBasicMaterial({ color: 0x312e81, transparent: true, opacity: 0.35 });
+      wireframeMesh = new THREE.LineSegments(wireGeometry, wireMaterial);
+      sphereGroup.add(wireframeMesh);
+
+      // Equator Ring (Great Circle)
+      const circleGeo = new THREE.BufferGeometry();
+      const circlePoints = [];
+      for (let i = 0; i <= 64; i++) {
+        const theta = (i / 64) * Math.PI * 2;
+        circlePoints.push(new THREE.Vector3(Math.cos(theta) * 1.51, 0, Math.sin(theta) * 1.51));
+      }
+      circleGeo.setFromPoints(circlePoints);
+      const circleMat = new THREE.LineBasicMaterial({ color: 0x1e1b4b, linewidth: 3 });
+      equatorRing = new THREE.Line(circleGeo, circleMat);
+      equatorRing.userData.partName = 'greatCircle';
+      sphereGroup.add(equatorRing);
+
+      // Slice Disc (Exposed Great Circle Disc)
+      const diskGeo = new THREE.CircleGeometry(1.5, 32);
+      const diskMat = new THREE.MeshBasicMaterial({ color: 0xa855f7, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
+      sliceDiskMesh = new THREE.Mesh(diskGeo, diskMat);
+      sliceDiskMesh.rotation.x = Math.PI / 2;
+      sliceDiskMesh.visible = false;
+      sliceDiskMesh.userData.partName = 'greatCircle';
+      sphereGroup.add(sliceDiskMesh);
+
+      // Center Dot & Radius Line Segment
+      const centerGeo = new THREE.SphereGeometry(0.07, 16, 16);
+      const centerMat = new THREE.MeshBasicMaterial({ color: 0x1e1b4b });
+      const centerDot = new THREE.Mesh(centerGeo, centerMat);
+      sphereGroup.add(centerDot);
+
+      const radPoints = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(1.5, 0, 0)];
+      const radLineGeo = new THREE.BufferGeometry().setFromPoints(radPoints);
+      const radLineMat = new THREE.LineBasicMaterial({ color: 0x1e1b4b, linewidth: 3 });
+      radiusLine = new THREE.Line(radLineGeo, radLineMat);
+      radiusLine.userData.partName = 'radius';
+      sphereGroup.add(radiusLine);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+      scene.add(ambientLight);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+      dirLight.position.set(5, 5, 5);
+      scene.add(dirLight);
+
+      // Mouse Controls (Rotate vs Select)
+      canvas.addEventListener('mousedown', (e) => {
+        if (state.mode === 'rotate') {
+          isMouseDown = true;
+          lastMouseX = e.clientX;
+          lastMouseY = e.clientY;
+        } else if (state.mode === 'select') {
+          onRaycastSelect(e, canvas);
+        }
+      });
+
+      window.addEventListener('mouseup', () => isMouseDown = false);
+
+      canvas.addEventListener('mousemove', (e) => {
+        if (isMouseDown && state.mode === 'rotate') {
+          const deltaX = e.clientX - lastMouseX;
+          const deltaY = e.clientY - lastMouseY;
+
+          sphereGroup.rotation.y += deltaX * 0.01;
+          sphereGroup.rotation.x += deltaY * 0.01;
+
+          lastMouseX = e.clientX;
+          lastMouseY = e.clientY;
+        }
+      });
+
+      function render3D() {
+        requestAnimationFrame(render3D);
+
+        // Smooth Slice Separation Animation
+        if (state.sliceActive) {
+          if (state.sliceProgress < 1.0) {
+            state.sliceProgress += 0.03;
+            frontHemisphereMesh.position.y = state.sliceProgress * 0.8;
+            frontHemisphereMesh.material.opacity = 0.75 - state.sliceProgress * 0.45;
+          }
+        } else {
+          if (state.sliceProgress > 0.0) {
+            state.sliceProgress -= 0.03;
+            frontHemisphereMesh.position.y = state.sliceProgress * 0.8;
+            frontHemisphereMesh.material.opacity = 0.75 - state.sliceProgress * 0.45;
+          }
+        }
+
+        renderer.render(scene, camera);
+      }
+      render3D();
+    }
+
+
+    function resizeMainSphereCanvas() {
+      if (!renderer || !camera) return;
+      const canvas = document.getElementById('webglCanvas');
+      const box = canvas ? canvas.parentElement : null;
+      const availableWidth = box ? box.clientWidth : 320;
+      const availableHeight = box ? box.clientHeight : 320;
+      const size = Math.max(180, Math.min(availableWidth, availableHeight, 360));
+      renderer.setSize(size, size, false);
+      camera.aspect = 1;
+      camera.updateProjectionMatrix();
+    }
+
+    // Raycasting Pick Selection
+    function onRaycastSelect(e, canvas) {
+      const rect = canvas.getBoundingClientRect();
+      mouseVec.x = ((e.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+      mouseVec.y = -((e.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouseVec, camera);
+      const intersects = raycaster.intersectObjects(sphereGroup.children, true);
+
+      const pill = document.getElementById('selectLabelPill');
+      const text = document.getElementById('selectLabelText');
+
+      if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        pill.style.display = 'block';
+        if (obj.userData.partName === 'greatCircle') {
+          text.innerText = `Great Circle (Area = πr² = ${(Math.PI * state.radius * state.radius).toFixed(2)})`;
+        } else if (obj.userData.partName === 'radius') {
+          text.innerText = `Radius Segment (r = ${state.radius.toFixed(2)})`;
+        } else {
+          text.innerText = `3D Sphere (r = ${state.radius.toFixed(2)}, S = 4πr²)`;
+        }
+      } else {
+        pill.style.display = 'none';
+      }
+    }
+
+    // Mini Summary WebGL 3D Renderer
+    function initSummaryThreeD() {
+      const summaryCanvas = document.getElementById('summarySphereCanvas');
+      if (!summaryCanvas || typeof THREE === 'undefined') return;
+
+      summaryScene = new THREE.Scene();
+      summaryCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      summaryCamera.position.z = 4;
+
+      summaryRenderer = new THREE.WebGLRenderer({ canvas: summaryCanvas, alpha: true, antialias: true });
+      summaryRenderer.setSize(50, 50);
+
+      const geo = new THREE.SphereGeometry(1.2, 16, 16);
+      const mat = new THREE.MeshPhongMaterial({ color: 0x6366f1, transparent: true, opacity: 0.65 });
+      summarySphere = new THREE.Mesh(geo, mat);
+      summaryScene.add(summarySphere);
+
+      const amb = new THREE.AmbientLight(0xffffff, 0.8);
+      summaryScene.add(amb);
+
+      function animSummary() {
+        requestAnimationFrame(animSummary);
+        summarySphere.rotation.y += 0.015;
+        summaryRenderer.render(summaryScene, summaryCamera);
+      }
+      animSummary();
+    }
+
+    // TAB 3 REAL 3D THREE.JS VOXEL CUBE ENGINE
+    function initTab3ThreeD() {
+      const container = document.getElementById('tab3VisualContainer');
+      if (!container || typeof THREE === 'undefined') return;
+
+      const canvas = document.createElement('canvas');
+      canvas.id = 'tab3VoxelCanvas';
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
+      canvas.style.display = 'none';
+      container.appendChild(canvas);
+
+      tab3Scene = new THREE.Scene();
+      tab3Camera = new THREE.PerspectiveCamera(45, 1.4, 0.1, 1000);
+      tab3Camera.position.set(5.5, 5.5, 8.0);
+      tab3Camera.lookAt(0, 0, 0);
+
+      tab3Renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      tab3Renderer.setSize(380, 260);
+      tab3Renderer.setPixelRatio(window.devicePixelRatio);
+
+      tab3VoxelGroup = new THREE.Group();
+      tab3Scene.add(tab3VoxelGroup);
+
+      const amb = new THREE.AmbientLight(0xffffff, 0.85);
+      tab3Scene.add(amb);
+      const dir = new THREE.DirectionalLight(0xffffff, 0.95);
+      dir.position.set(6, 10, 8);
+      tab3Scene.add(dir);
+
+      canvas.addEventListener('mousedown', (e) => {
+        isTab3MouseDown = true;
+        tab3MouseX = e.clientX;
+        tab3MouseY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => isTab3MouseDown = false);
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isTab3MouseDown) return;
+        const dx = e.clientX - tab3MouseX;
+        const dy = e.clientY - tab3MouseY;
+        tab3VoxelGroup.rotation.y += dx * 0.01;
+        tab3VoxelGroup.rotation.x += dy * 0.01;
+        tab3MouseX = e.clientX;
+        tab3MouseY = e.clientY;
+      });
+
+      function renderTab3Loop() {
+        requestAnimationFrame(renderTab3Loop);
+        if (state.activeTab === 3 && state.dimMode === 'volume') {
+          if (!isTab3MouseDown) {
+            tab3VoxelGroup.rotation.y += 0.005;
+          }
+          tab3Renderer.render(tab3Scene, tab3Camera);
+        }
+      }
+      renderTab3Loop();
+    }
+
+    // Ensure Tab 3 WebGL Canvas is sized properly when visible
+    function resizeTab3Canvas() {
+      const container = document.getElementById('tab3VisualContainer');
+      if (!container || !tab3Renderer) return;
+
+      const w = container.clientWidth || 380;
+      const h = container.clientHeight || 260;
+
+      tab3Renderer.setSize(w, h);
+      tab3Camera.aspect = w / h;
+      tab3Camera.updateProjectionMatrix();
+      tab3Renderer.render(tab3Scene, tab3Camera);
+    }
+
+    // Build/Update 3D Voxel Cubes in Three.js for Tab 3
+    function updateTab3Voxels(rInt) {
+      if (!tab3VoxelGroup) return;
+
+      while (tab3VoxelGroup.children.length > 0) {
+        tab3VoxelGroup.remove(tab3VoxelGroup.children[0]);
+      }
+
+      // Dynamic Camera Distance according to r
+      const dist = 3.5 + rInt * 1.5;
+      tab3Camera.position.set(dist * 0.7, dist * 0.7, dist);
+      tab3Camera.lookAt(0, 0, 0);
+
+      const voxelSize = 0.65;
+      const gap = 0.08;
+      const step = voxelSize + gap;
+      const offset = ((rInt - 1) * step) / 2;
+
+      const cubeGeo = new THREE.BoxGeometry(voxelSize, voxelSize, voxelSize);
+
+      for (let z = 0; z < rInt; z++) {
+        for (let y = 0; y < rInt; y++) {
+          for (let x = 0; x < rInt; x++) {
+            const mat = new THREE.MeshPhongMaterial({
+              color: 0x6366f1,
+              transparent: true,
+              opacity: 0.85,
+              shininess: 90
+            });
+            const mesh = new THREE.Mesh(cubeGeo, mat);
+            mesh.position.set(
+              x * step - offset,
+              y * step - offset,
+              z * step - offset
+            );
+
+            // Crisp white edges separating individual voxel unit cubes
+            const wireGeo = new THREE.EdgesGeometry(cubeGeo);
+            const wireMat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 });
+            const wire = new THREE.LineSegments(wireGeo, wireMat);
+            mesh.add(wire);
+
+            tab3VoxelGroup.add(mesh);
+          }
+        }
+      }
+    }
+
+    // Dynamic Radius Slider Change Handler
+    function onRadiusChange() {
+      const r = parseFloat(document.getElementById('rSlider').value);
+      state.radius = r;
+      document.getElementById('rValText').innerText = r.toFixed(2);
+
+      const surfaceAreaNum = 4 * Math.PI * r * r;
+      const volumeNum = (4 / 3) * Math.PI * Math.pow(r, 3);
+
+      const saNumEl = document.getElementById('saNumText');
+      const volNumEl = document.getElementById('volNumText');
+      const saSymEl = document.getElementById('saSymText');
+      const volSymEl = document.getElementById('volSymText');
+
+      if (state.unitsMode === 'numeric') {
+        saNumEl.innerText = `S = ${surfaceAreaNum.toFixed(2)}`;
+        volNumEl.innerText = `V = ${volumeNum.toFixed(2)}`;
+        saSymEl.innerText = `= ${(4 * r * r).toFixed(1)} π`;
+        volSymEl.innerText = `= ${((4 / 3) * Math.pow(r, 3)).toFixed(1)} π`;
+      } else {
+        saNumEl.innerText = `S = ${surfaceAreaNum.toFixed(2)}`;
+        volNumEl.innerText = `V = ${volumeNum.toFixed(2)}`;
+        saSymEl.innerText = `= 4π r²`;
+        volSymEl.innerText = `= 4/3 π r³`;
+      }
+
+      // Scale 3D WebGL Sphere dynamically
+      if (sphereGroup) {
+        const scaleFactor = r / 3.0;
+        sphereGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
+      }
+
+      renderIntuitionVisual();
+    }
+
+    // Tab Navigation Switcher with Locked Checks
+    function switchTab(num) {
+      if (num === 2 && !state.tab2Unlocked) {
+        alert("🔒 Complete Step 1 by placing 4 area units to unlock Step 2!");
+        return;
+      }
+      if (num === 3 && !state.tab3Unlocked) {
+        alert("🔒 Complete Step 2 first to unlock Step 3!");
+        return;
+      }
+
+      state.activeTab = num;
+      [1, 2, 3].forEach(n => {
+        const btn = document.getElementById(`step${n}Btn`);
+        const tabContent = document.getElementById(`tab${n}`);
+        if (n === num) {
+          btn.classList.add('active');
+          tabContent.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+          tabContent.classList.remove('active');
+        }
+      });
+
+      const tipText = document.getElementById('tipText');
+      if (num === 1) tipText.innerText = "Tip: Drag the area unit into the target to measure sphere surface area!";
+      if (num === 2) tipText.innerText = "Tip: Unroll circles to see how four equal area pieces equal sphere surface area.";
+      if (num === 3) tipText.innerText = "Tip: Compare 1D length (r), 2D area (r²), and 3D volume (r³ voxel cubes).";
+
+      if (num === 3) {
+        setTimeout(() => {
+          resizeTab3Canvas();
+          renderIntuitionVisual();
+        }, 50);
+      }
+    }
+
+    // Tool Switcher
+    function setTool(tool) {
+      state.mode = tool;
+      ['Select', 'Rotate', 'Slice', 'Net', 'Unroll'].forEach(t => {
+        const btn = document.getElementById(`tool${t}`);
+        if (btn) {
+          if (t.toLowerCase() === tool) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+
+      const pill = document.getElementById('selectLabelPill');
+      if (tool !== 'select' && pill) pill.style.display = 'none';
+
+      // Real 3D Slicing Plane Animation
+      if (tool === 'slice') {
+        state.sliceActive = true;
+        if (sliceDiskMesh) sliceDiskMesh.visible = true;
+        document.getElementById('whyStep2Text').innerHTML = "A center slice reveals a <strong>Great Circle</strong> with area <strong>πr²</strong>.";
+      } else {
+        state.sliceActive = false;
+        if (sliceDiskMesh) sliceDiskMesh.visible = false;
+      }
+
+      if (tool === 'net') switchTab(2);
+      if (tool === 'unroll') {
+        switchTab(2);
+        toggleUnroll(true);
+      }
+    }
+
+    function setUnits(mode) {
+      state.unitsMode = mode;
+      document.getElementById('symToggle').className = mode === 'symbolic' ? 'toggle-btn active' : 'toggle-btn';
+      document.getElementById('numToggle').className = mode === 'numeric' ? 'toggle-btn active' : 'toggle-btn';
+      onRadiusChange();
+    }
+
+    // TAB 1 AREA UNIT DRAGGING
+    function onUnitDragStart(e) {
+      e.dataTransfer.setData("text", "area-unit");
+    }
+
+    function onUnitDragOver(e) {
+      e.preventDefault();
+      document.getElementById('surfaceTargetZone').classList.add('zone-hover');
+    }
+
+    function onUnitDragLeave(e) {
+      document.getElementById('surfaceTargetZone').classList.remove('zone-hover');
+    }
+
+    function onUnitDrop(e) {
+      e.preventDefault();
+      const zone = document.getElementById('surfaceTargetZone');
+      zone.classList.remove('zone-hover');
+
+      if (state.placedUnits < 4) {
+        state.placedUnits++;
+        updatePlacedUnitsUI();
+      }
+    }
+
+    function updatePlacedUnitsUI() {
+      const count = state.placedUnits;
+      document.getElementById('unitCounterText').innerText = `${count} / 4`;
+      document.getElementById('tab1FormulaReveal').innerText = `${count} × πr² = ${count}πr²`;
+
+      for (let i = 1; i <= 4; i++) {
+        const dot = document.getElementById(`dot${i}`);
+        if (i <= count) dot.classList.add('filled');
+        else dot.classList.remove('filled');
+      }
+
+      const grid = document.getElementById('placedMiniGrid');
+      grid.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        grid.innerHTML += `<div class="placed-circle-mini">πr²</div>`;
+      }
+
+      if (count === 4) {
+        state.tab1Complete = true;
+        state.tab2Unlocked = true;
+
+        const step2Btn = document.getElementById('step2Btn');
+        step2Btn.classList.remove('locked');
+        step2Btn.innerText = '2 Four-circle surface';
+
+        document.getElementById('btnTab1Next').disabled = false;
+        document.getElementById('unitSuccessMsg').style.display = 'block';
+        document.getElementById('targetZonePrompt').innerText = '✓ Surface Area Measured!';
+        document.getElementById('tab1FormulaReveal').innerText = '4 × πr² = 4πr² (Total Surface Area S)';
+        document.getElementById('whyStep2Text').innerHTML = "Four equal great-circle area units cover the sphere: <strong>4 × π<i>r</i>² = 4π<i>r</i>²</strong>.";
+      }
+    }
+
+    // TAB 2 DRAGGING AND UNROLL TRANSFORMATION
+    function onTab2CircleDrag(e, circleId) {
+      e.dataTransfer.setData("text", `circle-${circleId}`);
+    }
+
+    function toggleUnroll(unroll) {
+      const stage = document.getElementById('tab2Stage');
+      const textEl = document.getElementById('tab2ProgressionText');
+      const subEl = document.getElementById('tab2ProgressionSub');
+
+      if (unroll) {
+        stage.classList.add('unrolled-active-stage');
+        textEl.innerText = "4 × πr² = 4πr²";
+        subEl.innerText = "Four equal circular area pieces unroll and combine into total surface area 4πr²!";
+        state.tab3Unlocked = true;
+
+        const step3Btn = document.getElementById('step3Btn');
+        step3Btn.classList.remove('locked');
+        step3Btn.innerText = '3 Build intuition: r² vs r³';
+      } else {
+        stage.classList.remove('unrolled-active-stage');
+        textEl.innerText = "πr² + πr² + πr² + πr²";
+        subEl.innerText = "Four equal great-circle areas combine to form 4 × πr² = 4πr²";
+      }
+    }
+
+    // REBUILT TAB 3 INTUITION VISUALIZER & 3D VOXEL CONTROLS
+    function setDimMode(mode) {
+      state.dimMode = mode;
+      ['length', 'area', 'volume'].forEach(m => {
+        const btnId = 'dim' + m.charAt(0).toUpperCase() + m.slice(1);
+        document.getElementById(btnId).className = m === mode ? 'dim-tab active' : 'dim-tab';
+      });
+
+      if (mode === 'volume') {
+        setTimeout(() => resizeTab3Canvas(), 50);
+      }
+      renderIntuitionVisual();
+    }
+
+    function renderIntuitionVisual() {
+      const container = document.getElementById('tab3VisualContainer');
+      const voxelCanvas = document.getElementById('tab3VoxelCanvas');
+      const rFloat = state.radius;
+      const rInt = Math.round(rFloat);
+
+      const titleEl = document.getElementById('dimTitle');
+      const descEl = document.getElementById('dimDesc');
+      const formulaEl = document.getElementById('dimFormula');
+      const calcEl = document.getElementById('dimCalculation');
+
+      const lenVal = rInt;
+      const areaVal = rInt * rInt;
+      const volVal = rInt * rInt * rInt;
+
+      if (state.dimMode === 'length') {
+        if (voxelCanvas) voxelCanvas.style.display = 'none';
+        
+        titleEl.innerText = "Length (1D)";
+        descEl.innerText = "Length changes in one direction.";
+        formulaEl.innerText = "r";
+        calcEl.innerText = `${rInt} units`;
+
+        const lineWidth = 35 * rInt;
+        let ticksSvg = '';
+        const step = lineWidth / rInt;
+        for (let i = 0; i <= rInt; i++) {
+          const x = 30 + i * step;
+          ticksSvg += `
+            <line x1="${x}" y1="125" x2="${x}" y2="135" stroke="#4f46e5" stroke-width="2"/>
+            <text x="${x}" y="150" font-size="11" font-weight="bold" fill="#64748b" text-anchor="middle">${i}</text>
+          `;
+        }
+
+        container.innerHTML = `
+          <svg width="340" height="220" viewBox="0 0 340 220" style="transition: all 0.3s ease;">
+            <line x1="30" y1="130" x2="${30 + lineWidth}" y2="130" stroke="#4f46e5" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="30" cy="130" r="7" fill="#4f46e5"/>
+            <circle cx="${30 + lineWidth}" cy="130" r="7" fill="#4f46e5"/>
+            ${ticksSvg}
+            <text x="${30 + lineWidth/2}" y="105" font-size="16" font-weight="800" fill="#4f46e5" text-anchor="middle">r = ${rInt} unit length</text>
+          </svg>
+        `;
+      } else if (state.dimMode === 'area') {
+        if (voxelCanvas) voxelCanvas.style.display = 'none';
+
+        titleEl.innerText = "Area (2D)";
+        descEl.innerText = "Area spreads in two directions.";
+        formulaEl.innerText = "r × r = r²";
+        calcEl.innerText = `${rInt} × ${rInt} = ${areaVal}`;
+
+        const cellSize = 36;
+        const gap = 3;
+        const totalSize = rInt * (cellSize + gap);
+        const startX = (340 - totalSize) / 2;
+        const startY = (220 - totalSize) / 2;
+
+        let gridCells = '';
+        for (let row = 0; row < rInt; row++) {
+          for (let col = 0; col < rInt; col++) {
+            const x = startX + col * (cellSize + gap);
+            const y = startY + row * (cellSize + gap);
+            gridCells += `
+              <rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="#eeeefd" stroke="#4f46e5" stroke-width="2" rx="4"/>
+              <text x="${x + cellSize/2}" y="${y + cellSize/2 + 4}" font-size="10" font-weight="700" fill="#4f46e5" text-anchor="middle">1</text>
+            `;
+          }
+        }
+
+        container.innerHTML = `
+          <svg width="340" height="220" viewBox="0 0 340 220" style="transition: all 0.3s ease;">
+            ${gridCells}
+            <text x="170" y="210" font-size="14" font-weight="800" fill="#4f46e5" text-anchor="middle">r² = ${rInt} × ${rInt} = ${areaVal} cells</text>
+          </svg>
+        `;
+      } else if (state.dimMode === 'volume') {
+        titleEl.innerText = "Volume (3D WebGL)";
+        descEl.innerText = "Volume fills space in three directions.";
+        formulaEl.innerText = "r × r × r = r³";
+        calcEl.innerText = `${rInt} × ${rInt} × ${rInt} = ${volVal}`;
+
+        const svgEl = container.querySelector('svg');
+        if (svgEl) svgEl.remove();
+
+        if (voxelCanvas) {
+          voxelCanvas.style.display = 'block';
+          updateTab3Voxels(rInt);
+          resizeTab3Canvas();
+        }
+      }
+    }
+
+    // Formula Prediction Quiz Logic
+    function checkPredict() {
+      const sa = document.getElementById('saPredictInput').value.trim().toLowerCase();
+      const vol = document.getElementById('volPredictInput').value.trim().toLowerCase();
+
+      const saOk = sa.includes('4') && (sa.includes('pi') || sa.includes('π')) && sa.includes('r');
+      const volOk = (vol.includes('4/3') || vol.includes('1.33')) && (vol.includes('pi') || vol.includes('π')) && vol.includes('r');
+
+      const saStatus = document.getElementById('saPredictStatus');
+      const saHint = document.getElementById('saHint');
+      if (saOk) {
+        saStatus.style.display = 'inline';
+        saHint.style.display = 'none';
+      } else {
+        saStatus.style.display = 'none';
+        saHint.style.display = 'block';
+      }
+
+      const volStatus = document.getElementById('volPredictStatus');
+      const volHint = document.getElementById('volHint');
+      if (volOk) {
+        volStatus.style.display = 'inline';
+        volHint.style.display = 'none';
+      } else {
+        volStatus.style.display = 'none';
+        volHint.style.display = 'block';
+      }
+    }
+
+    function revealPredict() {
+      document.getElementById('saPredictInput').value = '4πr²';
+      document.getElementById('volPredictInput').value = '4/3πr³';
+      document.getElementById('saPredictStatus').style.display = 'inline';
+      document.getElementById('volPredictStatus').style.display = 'inline';
+      document.getElementById('saHint').style.display = 'none';
+      document.getElementById('volHint').style.display = 'none';
+    }
+
+    // Challenge Validation & Confetti Animation
+    function toggleChallengeHint() {
+      const hint = document.getElementById('challengeHintBox');
+      hint.style.display = hint.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function checkChallenge() {
+      const sa = document.getElementById('chalSaInput').value.trim().toLowerCase();
+      const vol = document.getElementById('chalVolInput').value.trim().toLowerCase();
+
+      const saOk = sa.includes('100') && (sa.includes('pi') || sa.includes('π') || sa.includes('314'));
+      const volOk = (vol.includes('500') || vol.includes('166')) && (vol.includes('pi') || vol.includes('π') || vol.includes('523'));
+
+      if (saOk) document.getElementById('chalSaOk').style.display = 'inline';
+      if (volOk) document.getElementById('chalVolOk').style.display = 'inline';
+
+      if (saOk && volOk) {
+        launchConfetti();
+      }
+    }
+
+    // Pure JS Confetti burst
+    function launchConfetti() {
+      const c = document.getElementById('confettiCanvas');
+      const cCtx = c.getContext('2d');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#6366f1', '#818cf8', '#ec4899', '#10b981', '#f59e0b', '#3b82f6'];
+
+      for (let i = 0; i < 120; i++) {
+        particles.push({
+          x: c.width / 2,
+          y: c.height / 2,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.7) * 14,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 10
+        });
+      }
+
+      let frame = 0;
+      function renderConfetti() {
+        cCtx.clearRect(0, 0, c.width, c.height);
+        let alive = false;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.3;
+          p.rotation += p.rotSpeed;
+
+          if (p.y < c.height) alive = true;
+
+          cCtx.save();
+          cCtx.translate(p.x, p.y);
+          cCtx.rotate((p.rotation * Math.PI) / 180);
+          cCtx.fillStyle = p.color;
+          cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          cCtx.restore();
+        });
+
+        frame++;
+        if (alive && frame < 180) {
+          requestAnimationFrame(renderConfetti);
+        } else {
+          cCtx.clearRect(0, 0, c.width, c.height);
+        }
+      }
+      renderConfetti();
+    }
+
+
+    // Application sidebar navigation.
+    // Explore/Proofs/Practice scroll to the real page sections.
+    // Saved persists this visualization in localStorage.
+    (function initAppNavigation() {
+      const navItems = Array.from(document.querySelectorAll('.sidebar .nav-item'));
+      const sectionMap = {
+        explore: 'explore',
+        proofs: 'proofs',
+        practice: 'practice'
+      };
+      const savedKey = 'maths-universe-saved-projects';
+      const projectKey = '135-sphere-surface-area-volume';
+
+      function setActive(name) {
+        navItems.forEach(item => {
+          item.classList.toggle('active', item.dataset.nav === name);
+        });
+      }
+
+      navItems.forEach(item => {
+        const link = item.querySelector('a');
+        if (!link) return;
+
+        link.addEventListener('click', (event) => {
+          const name = item.dataset.nav;
+
+          if (name === 'saved') {
+            event.preventDefault();
+
+            let saved = [];
+            try {
+              saved = JSON.parse(localStorage.getItem(savedKey) || '[]');
+            } catch (_) {}
+
+            const index = saved.indexOf(projectKey);
+            if (index >= 0) {
+              saved.splice(index, 1);
+            } else {
+              saved.push(projectKey);
+            }
+
+            localStorage.setItem(savedKey, JSON.stringify(saved));
+            setActive('saved');
+
+            showNavToast(
+              saved.includes(projectKey)
+                ? 'Visualization saved'
+                : 'Visualization removed from Saved'
+            );
+            return;
+          }
+
+          const target = document.getElementById(sectionMap[name]);
+          if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setActive(name);
+          }
+        });
+      });
+
+      function showNavToast(message) {
+        let toast = document.getElementById('navToast');
+
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'navToast';
+          toast.style.cssText =
+            'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);' +
+            'z-index:1000;background:#1e1b4b;color:#fff;padding:10px 16px;' +
+            'border-radius:12px;font-size:12px;font-weight:700;' +
+            'box-shadow:0 8px 24px rgba(15,23,42,.18);' +
+            'transition:opacity .2s ease;';
+          document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+        toast.style.opacity = '1';
+
+        clearTimeout(window.__navToastTimer);
+        window.__navToastTimer = setTimeout(() => {
+          toast.style.opacity = '0';
+        }, 1600);
+      }
+    })();
+
+    // Global Reset
+    function resetGlobal() {
+      document.getElementById('rSlider').value = 3.00;
+      toggleUnroll(false);
+
+      state.placedUnits = 0;
+      state.tab1Complete = false;
+      state.tab2Unlocked = false;
+      state.tab3Unlocked = false;
+
+      const step2Btn = document.getElementById('step2Btn');
+      step2Btn.classList.add('locked');
+      step2Btn.innerText = '2 Four-circle surface 🔒';
+
+      const step3Btn = document.getElementById('step3Btn');
+      step3Btn.classList.add('locked');
+      step3Btn.innerText = '3 Build intuition: r² vs r³ 🔒';
+
+      document.getElementById('btnTab1Next').disabled = true;
+      updatePlacedUnitsUI();
+      document.getElementById('unitSuccessMsg').style.display = 'none';
+      document.getElementById('targetZonePrompt').innerText = 'Surface-area target';
+      
+      document.getElementById('saPredictInput').value = '';
+      document.getElementById('volPredictInput').value = '';
+      document.getElementById('saPredictStatus').style.display = 'none';
+      document.getElementById('volPredictStatus').style.display = 'none';
+      document.getElementById('saHint').style.display = 'none';
+      document.getElementById('volHint').style.display = 'none';
+
+      document.getElementById('chalSaInput').value = '';
+      document.getElementById('chalVolInput').value = '';
+      document.getElementById('chalSaOk').style.display = 'none';
+      document.getElementById('chalVolOk').style.display = 'none';
+      document.getElementById('challengeHintBox').style.display = 'none';
+
+      switchTab(1);
+      setTool('select');
+      setDimMode('length');
+      onRadiusChange();
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (['input', 'textarea'].includes(document.activeElement.tagName.toLowerCase())) return;
+      const key = e.key.toLowerCase();
+      if (key === 'v') setTool('select');
+      if (key === 'r') setTool('rotate');
+      if (key === 's') setTool('slice');
+      if (key === 'n') setTool('net');
+      if (key === 'u') setTool('unroll');
+      if (key === 'x') resetGlobal();
+    });
+  </script>
+
+</main>
+</div>
+</html>

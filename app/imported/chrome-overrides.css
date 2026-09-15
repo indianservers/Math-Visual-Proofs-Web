@@ -1,0 +1,15 @@
+/* Hide intern-app chrome so VisualProofShell remains the page chrome. */
+.sfp-sidenav,
+.sfp-header,
+.pageContainer aside,
+[class*="pageContainer"] > aside,
+.app-sidebar {
+  display: none !important;
+}
+
+.sfp-shell {
+  width: 100% !important;
+  min-height: auto !important;
+  display: block !important;
+  grid-template-columns: none !important;
+}

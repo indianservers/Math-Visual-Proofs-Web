@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "circle-to-triangle-uncurling",
+  "categorySlug": "geometry",
+  "slug": "circle-to-triangle",
+  "route": "/visual-proofs/geometry/circle-to-triangle",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-03.html"
+}

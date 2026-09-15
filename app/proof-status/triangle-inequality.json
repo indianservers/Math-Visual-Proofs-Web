@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "triangle-inequality",
+  "categorySlug": "inequalities",
+  "slug": "triangle-inequality",
+  "route": "/visual-proofs/inequalities/triangle-inequality",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/150-triangle-inequality"
+}

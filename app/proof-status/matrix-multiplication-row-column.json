@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "matrix-multiplication-row-column",
+  "categorySlug": "matrices-linear-algebra",
+  "slug": "matrix-multiplication-row-column",
+  "route": "/visual-proofs/matrices-linear-algebra/matrix-multiplication-row-column",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Ishwarya/106-matrix-multiplication-row-column"
+}

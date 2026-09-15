@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "circle-locus-equal-distance",
+  "categorySlug": "conic-sections",
+  "slug": "circle-locus-equal-distance",
+  "route": "/visual-proofs/conic-sections/circle-locus-equal-distance",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/137-circle-locus-equal-distance"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "riemann-sums-area-under-curve",
+  "categorySlug": "calculus",
+  "slug": "riemann-sums-area-under-curve",
+  "route": "/visual-proofs/calculus/riemann-sums-area-under-curve",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/65/index.html"
+}

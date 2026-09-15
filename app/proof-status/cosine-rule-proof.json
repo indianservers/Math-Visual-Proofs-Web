@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "cosine-rule-proof",
+  "categorySlug": "trigonometry",
+  "slug": "cosine-rule-proof",
+  "route": "/visual-proofs/trigonometry/cosine-rule-proof",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-30.html"
+}

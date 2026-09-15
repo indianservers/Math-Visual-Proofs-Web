@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "exterior-angle-sum-polygon",
+  "categorySlug": "geometry",
+  "slug": "exterior-angle-sum-polygon",
+  "route": "/visual-proofs/geometry/exterior-angle-sum-polygon",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/exterior-angle-sum-polygon"
+}

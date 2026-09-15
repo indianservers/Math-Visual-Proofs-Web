@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "parabola-focus-directrix",
+  "categorySlug": "conic-sections",
+  "slug": "parabola-focus-directrix",
+  "route": "/visual-proofs/conic-sections/parabola-focus-directrix",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/138-parabola-focus-directrix"
+}

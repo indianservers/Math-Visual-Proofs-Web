@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "derivative-of-exponential",
+  "categorySlug": "calculus",
+  "slug": "derivative-of-exponential",
+  "route": "/visual-proofs/calculus/derivative-of-exponential",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/70/graph_lab_complete.html"
+}

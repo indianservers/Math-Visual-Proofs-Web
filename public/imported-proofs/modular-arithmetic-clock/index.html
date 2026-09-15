@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modular Arithmetic as Clock Arithmetic</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-app: #f4f6fc;
+      --bg-sidebar: #ffffff;
+      --bg-card: #ffffff;
+      --bg-subcard: #f8fafc;
+      --bg-purple-light: #f0eeff;
+      --bg-purple-active: #6344e7;
+      
+      --text-main: #181e36;
+      --text-muted: #64748b;
+      --text-purple: #6344e7;
+      
+      --border-color: #e2e8f0;
+      --border-purple: #dcd2ff;
+      
+      --primary: #6344e7;
+      --primary-hover: #5033d4;
+      --primary-light: #ebe7ff;
+      
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px rgba(100, 110, 140, 0.08);
+      --shadow-lg: 0 8px 24px rgba(99, 68, 231, 0.12);
+      
+      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-heading: 'Outfit', var(--font-main);
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* App Container Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 14px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      padding: 0 8px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: #0f172a;
+    }
+
+    .brand-subtitle {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .nav-item.active {
+      background: var(--bg-purple-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2px;
+    }
+
+    .nav-bottom {
+      margin-top: auto;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 24px 32px;
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* Header Bar */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .breadcrumb span.sep {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .breadcrumb span.category {
+      color: var(--text-muted);
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-pill {
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-intermediate {
+      background: var(--bg-purple-light);
+      color: var(--primary);
+      border: 1px solid var(--border-purple);
+    }
+
+    .badge-time {
+      background: #ffffff;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Title Section */
+    .title-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .title-section h1 {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+
+    .title-section .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .title-section .subtitle span {
+      font-family: var(--font-mono);
+      font-style: italic;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Mission Banner */
+    .mission-banner {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+
+    .mission-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .mission-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-purple-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .mission-text {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    .mission-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 2px;
+    }
+
+    .stepper-btn {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text-main);
+      transition: background 0.15s;
+    }
+
+    .stepper-btn:hover {
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-val {
+      width: 28px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .toggle-switch {
+      display: flex;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .toggle-opt {
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-opt.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(99, 68, 231, 0.3);
+    }
+
+    /* Main Grid Layout */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 20px;
+    }
+
+    @media (max-width: 1100px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Center Visualizer Container (3 Columns inside card) */
+    .visualizer-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 210px minmax(280px, 1fr) 230px;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    @media (max-width: 900px) {
+      .visualizer-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Section Subheaders */
+    .card-subheader {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Counters Panel */
+    .counters-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px dashed #e2e8f0;
+      padding-right: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .counters-panel {
+        border-right: none;
+        border-bottom: 1px dashed #e2e8f0;
+        padding-right: 0;
+        padding-bottom: 16px;
+      }
+    }
+
+    .counters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .counter-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 15px;
+      color: #1e293b;
+      cursor: grab;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      touch-action: none;
+    }
+
+    .counter-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .counter-btn:active, .counter-btn.dragging {
+      cursor: grabbing;
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(99, 68, 231, 0.25);
+    }
+
+    /* Counter Pastel Colors */
+    .cnt-1  { background: #ece9fe; border-color: #ddd6fe; }
+    .cnt-2  { background: #e0f2fe; border-color: #bae6fd; }
+    .cnt-3  { background: #ccfbf1; border-color: #99f6e4; }
+    .cnt-4  { background: #fef9c3; border-color: #fef08a; }
+    .cnt-5  { background: #ffedd5; border-color: #fed7aa; }
+    .cnt-6  { background: #ffe4e6; border-color: #fecdd3; }
+    .cnt-7  { background: #f3e8ff; border-color: #e9d5ff; }
+    .cnt-8  { background: #e0e7ff; border-color: #c7d2fe; }
+    .cnt-9  { background: #dbeafe; border-color: #bfdbfe; }
+    .cnt-10 { background: #d1fae5; border-color: #a7f3d0; }
+    .cnt-11 { background: #fef3c7; border-color: #fde68a; }
+    .cnt-12 { background: #fee2e2; border-color: #fca5a5; }
+
+    .btn-reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      align-self: flex-start;
+    }
+
+    .btn-reset:hover {
+      background: var(--bg-purple-light);
+      color: var(--primary);
+      border-color: var(--border-purple);
+    }
+
+    /* Central Clock Panel */
+    .clock-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .clock-header {
+      text-align: center;
+    }
+
+    .clock-stage {
+      width: 100%;
+      height: 270px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clock-svg-wrap {
+      width: 250px;
+      height: 250px;
+      position: relative;
+    }
+
+    /* Clock SVG Styling */
+    .clock-circle {
+      fill: #ffffff;
+      stroke: #7c3aed;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 4px 12px rgba(124, 58, 237, 0.08));
+    }
+
+    .clock-tick {
+      stroke: #94a3b8;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .clock-node {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .clock-node-circle {
+      stroke-width: 2;
+      transition: all 0.2s ease;
+    }
+
+    .clock-node-text {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 14px;
+      fill: #0f172a;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .clock-hand-line {
+      stroke: #7c3aed;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .clock-hand-head {
+      fill: #7c3aed;
+    }
+
+    .clock-pivot {
+      fill: #ffffff;
+      stroke: #7c3aed;
+      stroke-width: 3;
+    }
+
+    /* Number Line View */
+    .numberline-stage {
+      width: 100%;
+      height: 270px;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      touch-action: none;
+    }
+
+    .numline-svg-wrap {
+      width: 100%;
+      height: 250px;
+      position: relative;
+    }
+
+    .numline-handle {
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .numline-handle:hover circle.handle-bg {
+      filter: brightness(1.1);
+      transform: scale(1.1);
+    }
+
+    .numline-handle:active, .numline-handle.dragging {
+      cursor: grabbing;
+    }
+
+    .btn-start-0 {
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s;
+    }
+
+    .btn-start-0:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* History & Remainder Panel */
+    .history-remainder-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-left: 1px dashed #e2e8f0;
+      padding-left: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .history-remainder-panel {
+        border-left: none;
+        border-top: 1px dashed #e2e8f0;
+        padding-left: 0;
+        padding-top: 16px;
+      }
+    }
+
+    .history-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-sequence {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-height: 32px;
+    }
+
+    .history-node {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      color: #334155;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    .history-node.active-target {
+      border: 2px solid #f59e0b;
+      background: #fef3c7;
+      color: #b45309;
+      transform: scale(1.1);
+    }
+
+    .history-arrow {
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .history-summary {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .remainder-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .remainder-lanes-grid {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      min-height: 80px;
+      padding-top: 6px;
+    }
+
+    .remainder-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .remainder-col.active {
+      border: 1.5px dashed #f59e0b;
+      background: #fffbeb;
+    }
+
+    .remainder-label {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+    }
+
+    .remainder-dots {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 3px;
+      min-height: 48px;
+    }
+
+    .remainder-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    .remainder-equation {
+      background: #ffffff;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 600;
+      color: #334155;
+      box-shadow: 0 2px 6px rgba(99, 68, 231, 0.05);
+    }
+
+    .remainder-equation span.res {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    /* Right Column: Why It Works */
+    .why-it-works-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .why-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .why-header svg {
+      color: var(--primary);
+    }
+
+    .why-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .why-card-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .why-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .why-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .why-card-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .why-card-badge {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 2px 8px;
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Prediction Section inside right column */
+    .prediction-card {
+      background: #ffffff;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .prediction-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .prediction-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      flex-wrap: wrap;
+    }
+
+    .input-num {
+      width: 48px;
+      height: 28px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 13px;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .input-num:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-check-pred {
+      padding: 5px 10px;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-check-pred:hover {
+      background: var(--primary-hover);
+    }
+
+    .reveal-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-reveal {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .btn-reveal:hover {
+      background: var(--bg-purple-light);
+      color: var(--primary);
+    }
+
+    .reveal-result {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .feedback-text {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    /* Key Idea Banner */
+    .key-idea-card {
+      background: var(--bg-purple-light);
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-lg);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .key-idea-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .key-idea-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(99, 68, 231, 0.15);
+    }
+
+    .key-idea-text {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.4;
+    }
+
+    .key-idea-text strong {
+      color: #0f172a;
+    }
+
+    .presets-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .preset-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+      border: 1px solid var(--border-purple);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    /* Bottom Section */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .proof-card, .challenge-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .proof-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .proof-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      min-width: 95px;
+      text-align: center;
+    }
+
+    .proof-step-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .proof-step-val {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .proof-arrow {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .challenge-help-icon {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      color: #94a3b8;
+      cursor: pointer;
+    }
+
+    .challenge-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tip-box {
+      background: #f8fafc;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .tip-box strong {
+      color: #0f172a;
+    }
+
+    /* Drag SVG Overlay & Avatar */
+    .drag-svg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    .drag-avatar {
+      position: fixed;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 15px;
+      color: #1e293b;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 10px 25px rgba(99, 68, 231, 0.3);
+      transform: translate(-50%, -50%) scale(1.15);
+      transition: transform 0.05s ease-out;
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">MATHS</span>
+          <span class="brand-subtitle">UNIVERSE</span>
+        </div>
+      </div>
+
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          Explore
+        </li>
+        <li class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          Proofs
+        </li>
+        <li class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Practice
+        </li>
+        <li class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Saved
+        </li>
+      </ul>
+
+      <div class="nav-bottom">
+        <div class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <div class="top-header">
+        <div class="breadcrumb">
+          <span class="category">Visual Proofs</span>
+          <span class="sep">/</span>
+          <span>Number Theory</span>
+        </div>
+        <div class="header-badges">
+          <span class="badge-pill badge-intermediate">Intermediate</span>
+          <span class="badge-pill badge-time">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            10 min
+          </span>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="title-section">
+        <h1>Modular Arithmetic as Clock Arithmetic</h1>
+        <p class="subtitle">Numbers wrap around the clock every <span id="title-mod-display">m=5</span> steps.</p>
+      </div>
+
+      <!-- Mission Banner -->
+      <div class="mission-banner">
+        <div class="mission-left">
+          <div class="mission-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="mission-text">
+            Drag counters into the clock/number line to take steps.<br>
+            See how positions wrap every <em>m</em> steps (here <span id="banner-mod-display">m=5</span>).
+          </div>
+        </div>
+
+        <div class="mission-controls">
+          <div class="ctrl-group">
+            <span>Modulus m</span>
+            <div class="stepper">
+              <button class="stepper-btn" id="btn-mod-dec">−</button>
+              <div class="stepper-val" id="val-mod">5</div>
+              <button class="stepper-btn" id="btn-mod-inc">+</button>
+            </div>
+          </div>
+
+          <div class="ctrl-group">
+            <span>Show as</span>
+            <div class="toggle-switch">
+              <button class="toggle-opt active" id="toggle-clock">Clock</button>
+              <button class="toggle-opt" id="toggle-numline">Number line</button>
+            </div>
+          </div>
+
+          <div class="ctrl-group">
+            <span>Step size</span>
+            <div class="stepper">
+              <button class="stepper-btn" id="btn-step-dec">−</button>
+              <div class="stepper-val" id="val-step">1</div>
+              <button class="stepper-btn" id="btn-step-inc">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workspace Visualizer -->
+      <div class="workspace-grid">
+        <div class="visualizer-card">
+          <!-- Left: Counters Panel -->
+          <div class="counters-panel">
+            <div>
+              <div class="card-subheader">
+                <div class="card-title">Counters (steps)</div>
+                <div class="card-desc">Drag to take steps.</div>
+              </div>
+              <div class="counters-grid" id="counters-grid">
+                <!-- 1 to 12 Buttons rendered by JS -->
+              </div>
+            </div>
+
+            <button class="btn-reset" id="btn-reset">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset
+            </button>
+          </div>
+
+          <!-- Middle: Clock / Number Line Stage -->
+          <div class="clock-panel">
+            <div class="clock-header">
+              <div class="card-title" id="clock-panel-title">Clock (mod 5)</div>
+            </div>
+
+            <div class="clock-stage" id="clock-stage">
+              <div class="clock-svg-wrap">
+                <svg width="250" height="250" viewBox="0 0 250 250" id="clock-svg">
+                  <!-- Generated dynamically -->
+                </svg>
+              </div>
+            </div>
+
+            <div class="numberline-stage" id="numberline-stage">
+              <div class="numline-svg-wrap">
+                <svg width="340" height="240" viewBox="0 0 340 240" id="numline-svg">
+                  <!-- Generated dynamically with interactive marker handle -->
+                </svg>
+              </div>
+            </div>
+
+            <button class="btn-start-0" id="btn-start-0">Start at 0</button>
+          </div>
+
+          <!-- Right: History & Remainder Panel -->
+          <div class="history-remainder-panel">
+            <div class="history-box">
+              <div class="card-title" style="font-size: 13px;">History <span style="font-weight:400; color:var(--text-muted);">(positions visited)</span></div>
+              <div class="history-sequence" id="history-sequence">
+                <!-- Nodes generated by JS -->
+              </div>
+              <div class="history-summary" id="history-summary">That is: 0</div>
+            </div>
+
+            <div class="remainder-box">
+              <div class="card-title" style="font-size: 13px;" id="remainder-title">Remainder lane (mod 5)</div>
+              <div class="remainder-lanes-grid" id="remainder-lanes">
+                <!-- Lanes generated by JS -->
+              </div>
+
+              <div class="remainder-equation" id="remainder-equation">
+                0 mod 5 = <span class="res">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Why It Works -->
+        <div class="why-it-works-col">
+          <div class="why-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>
+            Why it works
+          </div>
+
+          <div class="why-card">
+            <svg class="why-card-icon" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <line x1="25" y1="25" x2="25" y2="10" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="25" cy="25" r="3" fill="#7c3aed"/>
+              <circle cx="25" cy="8" r="3" fill="#8b5cf6"/>
+              <circle cx="37" cy="15" r="3" fill="#3b82f6"/>
+              <circle cx="37" cy="35" r="3" fill="#14b8a6"/>
+            </svg>
+            <div class="why-card-body">
+              <div class="why-card-title">Take m distinct steps</div>
+              <div class="why-card-desc">Positions 0 to m − 1 are all different.</div>
+            </div>
+          </div>
+
+          <div class="why-card">
+            <svg class="why-card-icon" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <path d="M 25 8 A 17 17 0 1 1 10 25" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="3 3"/>
+              <circle cx="25" cy="8" r="4" fill="#f59e0b"/>
+            </svg>
+            <div class="why-card-body">
+              <div class="why-card-title">The (m + 1)-th step</div>
+              <div class="why-card-desc">Must land on a position you've already visited.</div>
+            </div>
+          </div>
+
+          <div class="why-card">
+            <svg class="why-card-icon" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <line x1="25" y1="25" x2="35" y2="15" stroke="#7c3aed" stroke-width="3" stroke-linecap="round"/>
+              <line x1="25" y1="25" x2="35" y2="15" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="2 2"/>
+            </svg>
+            <div class="why-card-body">
+              <div class="why-card-title">Same position ⇒ same remainder</div>
+              <div class="why-card-desc">Equal positions on the clock correspond to equal remainders.</div>
+              <div><span class="why-card-badge">a ≡ b (mod m)</span></div>
+            </div>
+          </div>
+
+          <!-- Prediction Box -->
+          <div class="prediction-card">
+            <div class="prediction-title">Predict the remainder</div>
+            <div class="prediction-row">
+              n = <input type="number" class="input-num" id="pred-n" value="23">
+              mod <span id="pred-mod">5</span> = ?
+              <button class="btn-check-pred" id="btn-check-pred">Check my prediction</button>
+            </div>
+            <div class="reveal-row">
+              <button class="btn-reveal" id="btn-reveal">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                Reveal
+              </button>
+              <div class="reveal-result" id="reveal-result" style="display:none;">23 mod 5 = 3</div>
+            </div>
+            <div class="feedback-text" id="pred-feedback" style="display:none;">You're right! 🎉</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Idea Banner -->
+      <div class="key-idea-card">
+        <div class="key-idea-left">
+          <div class="key-idea-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          </div>
+          <div class="key-idea-text">
+            <strong>Key idea:</strong> The clock has <em>m</em> positions. After <em>m</em> steps we return to the start.<br>
+            So <em>n</em> and <em>n + km</em> land on the same position for any integer <em>k</em>.
+          </div>
+        </div>
+
+        <div class="presets-group">
+          <span>Try presets</span>
+          <button class="preset-btn" data-m="3">m = 3</button>
+          <button class="preset-btn" data-m="4">m = 4</button>
+          <button class="preset-btn active" data-m="5">m = 5</button>
+          <button class="preset-btn" data-m="7">m = 7</button>
+          <button class="preset-btn" data-m="12">m = 12</button>
+        </div>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="bottom-grid">
+        <!-- Visual Proof Card -->
+        <div class="proof-card">
+          <div class="card-title">One-line visual proof</div>
+          <div class="proof-diagram">
+            <div class="proof-step">
+              <div class="proof-step-title">m positions</div>
+              <svg width="32" height="32" viewBox="0 0 32 32">
+                <circle cx="16" cy="16" r="13" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+                <line x1="16" y1="16" x2="16" y2="7" stroke="#7c3aed" stroke-width="1.5"/>
+              </svg>
+              <div class="proof-step-val">0, 1, ..., m−1</div>
+            </div>
+
+            <div class="proof-arrow">→</div>
+
+            <div class="proof-step">
+              <div class="proof-step-title">Take n steps</div>
+              <svg width="40" height="24" viewBox="0 0 40 24">
+                <path d="M 5 20 Q 20 5 35 20" fill="none" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="2 2"/>
+                <circle cx="35" cy="20" r="3" fill="#7c3aed"/>
+              </svg>
+              <div class="proof-step-val">Lands on r</div>
+            </div>
+
+            <div class="proof-arrow">→</div>
+
+            <div class="proof-step">
+              <div class="proof-step-title">Add km steps</div>
+              <svg width="40" height="24" viewBox="0 0 40 24">
+                <path d="M 5 20 Q 20 2 35 20" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="2 2"/>
+                <circle cx="35" cy="20" r="3" fill="#f59e0b"/>
+              </svg>
+              <div class="proof-step-val">Lands on r again</div>
+            </div>
+
+            <div class="proof-arrow">→</div>
+
+            <div class="proof-step" style="background:#f0eeff; border-color:#dcd2ff;">
+              <div class="proof-step-title" style="color:var(--primary);">Same position</div>
+              <div class="proof-step-val" style="font-size:11px;">n ≡ n + km (mod m)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Challenge Card -->
+        <div class="challenge-card">
+          <div class="challenge-help-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="card-title">Challenge (exact)</div>
+          <div class="card-desc" id="challenge-prompt">Find the smallest positive n such that n ≡ 7 (mod 12).</div>
+          
+          <div class="challenge-form">
+            n = <input type="number" class="input-num" id="challenge-ans" style="width: 70px;" placeholder="Your answer">
+            <button class="btn-check-pred" id="btn-check-challenge">Check answer</button>
+            <span id="challenge-feedback" style="font-size:12px; font-weight:600;"></span>
+          </div>
+
+          <div class="tip-box">
+            <strong>Tip:</strong> <span id="challenge-tip">Find the remainder of 7 when divided by 12.</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Dragging Overlay & Floating Avatar -->
+  <svg id="drag-svg-overlay" class="drag-svg-overlay"></svg>
+  <div id="drag-avatar" class="drag-avatar" style="display: none;"></div>
+
+  <script>
+    // State Management (Single Shared Source of Truth)
+    const state = {
+      m: 5,
+      stepSize: 1,
+      totalSteps: 0,
+      currentPos: 0,
+      history: [0],
+      remainderDots: {}, // { pos: count }
+      viewMode: 'clock', // 'clock' | 'numline'
+      draggedValue: null,
+      isDraggingCounter: false,
+      isDraggingNumline: false,
+      revealSolution: false
+    };
+
+    // Color Palette for clock nodes & remainder lanes
+    const nodeColors = [
+      '#8b5cf6', // 0 Purple
+      '#3b82f6', // 1 Blue
+      '#14b8a6', // 2 Teal
+      '#f59e0b', // 3 Amber
+      '#f43f5e', // 4 Coral
+      '#ec4899', // 5 Pink
+      '#10b981', // 6 Mint
+      '#6366f1', // 7 Indigo
+      '#84cc16', // 8 Lime
+      '#a855f7', // 9 Purple accent
+      '#06b6d4', // 10 Cyan
+      '#eab308'  // 11 Yellow
+    ];
+
+    // Audio context for tick sound
+    let audioCtx = null;
+    function playTickSound() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch (e) {}
+    }
+
+    // DOM Elements
+    const elValMod = document.getElementById('val-mod');
+    const elValStep = document.getElementById('val-step');
+    const elTitleMod = document.getElementById('title-mod-display');
+    const elBannerMod = document.getElementById('banner-mod-display');
+    const elClockTitle = document.getElementById('clock-panel-title');
+    const elRemainderTitle = document.getElementById('remainder-title');
+    const elPredMod = document.getElementById('pred-mod');
+    const elCountersGrid = document.getElementById('counters-grid');
+    const elClockSvg = document.getElementById('clock-svg');
+    const elNumlineSvg = document.getElementById('numline-svg');
+    const elHistorySeq = document.getElementById('history-sequence');
+    const elHistorySummary = document.getElementById('history-summary');
+    const elRemainderLanes = document.getElementById('remainder-lanes');
+    const elRemainderEq = document.getElementById('remainder-equation');
+    const elDragSvg = document.getElementById('drag-svg-overlay');
+    const elDragAvatar = document.getElementById('drag-avatar');
+
+    // Initialize App
+    function init() {
+      initRemainderDots();
+      renderCounters();
+      updateUI();
+      bindEvents();
+      bindNumberLineDragging();
+    }
+
+    function initRemainderDots() {
+      state.remainderDots = {};
+      for (let i = 0; i < state.m; i++) {
+        state.remainderDots[i] = 0;
+      }
+      state.remainderDots[state.currentPos] = 1;
+    }
+
+    function renderCounters() {
+      elCountersGrid.innerHTML = '';
+      for (let i = 1; i <= 12; i++) {
+        const btn = document.createElement('div');
+        btn.className = `counter-btn cnt-${i}`;
+        btn.textContent = i;
+        btn.dataset.val = i;
+        
+        // Pointer events for dragging counters
+        btn.addEventListener('pointerdown', (e) => startCounterDrag(e, i));
+        
+        // Click fallback for quick stepping
+        btn.addEventListener('click', () => {
+          if (!state.isDraggingCounter) {
+            takeSteps(i * state.stepSize);
+          }
+        });
+        
+        elCountersGrid.appendChild(btn);
+      }
+    }
+
+    // Comprehensive UI update (ensures 100% synchronization across both views)
+    function updateUI() {
+      state.currentPos = ((state.totalSteps % state.m) + state.m) % state.m;
+
+      elValMod.textContent = state.m;
+      elValStep.textContent = state.stepSize;
+      elTitleMod.textContent = `m=${state.m}`;
+      elBannerMod.textContent = `here m=${state.m}`;
+      elClockTitle.textContent = `Clock (mod ${state.m})`;
+      elRemainderTitle.textContent = `Remainder lane (mod ${state.m})`;
+      elPredMod.textContent = state.m;
+
+      // Update preset buttons active state
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        const pMod = parseInt(btn.dataset.m);
+        btn.classList.toggle('active', pMod === state.m);
+      });
+
+      renderClockSVG();
+      renderNumberLineSVG();
+      renderHistory();
+      renderRemainderLanes();
+      updateRemainderEquation();
+      updatePredictionBox();
+      updateChallengeBox();
+    }
+
+    // Render SVG Clock Dial
+    function renderClockSVG() {
+      const cx = 125, cy = 125, r = 90;
+      let html = `<circle cx="${cx}" cy="${cy}" r="${r}" class="clock-circle" />`;
+
+      // Render Ticks & Position Nodes
+      for (let i = 0; i < state.m; i++) {
+        const angleDeg = (i * 360 / state.m) - 90;
+        const angleRad = angleDeg * Math.PI / 180;
+        
+        const x1 = cx + (r - 8) * Math.cos(angleRad);
+        const y1 = cy + (r - 8) * Math.sin(angleRad);
+        const x2 = cx + r * Math.cos(angleRad);
+        const y2 = cy + r * Math.sin(angleRad);
+        html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="clock-tick" />`;
+
+        const nx = cx + r * Math.cos(angleRad);
+        const ny = cy + r * Math.sin(angleRad);
+        const color = nodeColors[i % nodeColors.length];
+        const isCurrent = i === state.currentPos;
+
+        html += `
+          <g class="clock-node" data-pos="${i}">
+            <circle cx="${nx}" cy="${ny}" r="${isCurrent ? 16 : 14}" 
+              fill="${color}" class="clock-node-circle"
+              stroke="#ffffff" stroke-width="${isCurrent ? 3 : 2}" />
+            <text x="${nx}" y="${ny}" class="clock-node-text" fill="#ffffff">${i}</text>
+          </g>
+        `;
+      }
+
+      // Clock Hand Needle
+      const currentAngleDeg = (state.currentPos * 360 / state.m) - 90;
+      const currentAngleRad = currentAngleDeg * Math.PI / 180;
+      const handLen = r - 26;
+      const hx = cx + handLen * Math.cos(currentAngleRad);
+      const hy = cy + handLen * Math.sin(currentAngleRad);
+
+      html += `
+        <line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" class="clock-hand-line" id="clock-hand-line" />
+        <circle cx="${hx}" cy="${hy}" r="4" class="clock-hand-head" id="clock-hand-head" />
+        <circle cx="${cx}" cy="${cy}" r="6" class="clock-pivot" />
+      `;
+
+      elClockSvg.innerHTML = html;
+    }
+
+    // Geometry parameters for Number Line (used for drawing & dragging)
+    const numlineConfig = {
+      startX: 30,
+      endX: 310,
+      y: 150,
+      totalTicks: 18
+    };
+
+    // Render SVG Number Line View with Interactive Marker
+    function renderNumberLineSVG() {
+      const { startX, endX, y } = numlineConfig;
+      const totalTicks = Math.max(state.m * 2, state.totalSteps + 4, 12);
+      numlineConfig.totalTicks = totalTicks;
+
+      const stepX = (endX - startX) / totalTicks;
+      const curPosOnLine = Math.min(state.totalSteps, totalTicks);
+      const handleX = startX + curPosOnLine * stepX;
+      const curColor = nodeColors[state.currentPos % nodeColors.length];
+
+      let html = `
+        <!-- Main horizontal line -->
+        <line x1="${startX - 10}" y1="${y}" x2="${endX + 10}" y2="${y}" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" />
+      `;
+
+      // Wrapping Arcs modulo m
+      for (let i = 0; i < totalTicks; i += state.m) {
+        const x1 = startX + i * stepX;
+        const x2 = startX + Math.min(i + state.m, totalTicks) * stepX;
+        const midX = (x1 + x2) / 2;
+        const arcH = 45;
+        html += `<path d="M ${x1} ${y} Q ${midX} ${y - arcH} ${x2} ${y}" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-dasharray="3 3" />`;
+      }
+
+      // Ticks & Labels
+      for (let i = 0; i <= totalTicks; i++) {
+        const tx = startX + i * stepX;
+        const modVal = i % state.m;
+        const isCurrent = i === state.totalSteps;
+        const tickColor = nodeColors[modVal % nodeColors.length];
+
+        html += `<line x1="${tx}" y1="${y - 5}" x2="${tx}" y2="${y + 5}" stroke="${isCurrent ? '#7c3aed' : '#94a3b8'}" stroke-width="${isCurrent ? 2.5 : 1.5}" />`;
+
+        html += `
+          <text x="${tx}" y="${y + 22}" font-family="var(--font-heading)" font-size="11" font-weight="700" fill="${isCurrent ? '#7c3aed' : '#475569'}" text-anchor="middle">${i}</text>
+          <text x="${tx}" y="${y + 36}" font-family="var(--font-mono)" font-size="9" font-weight="600" fill="${isCurrent ? '#7c3aed' : '#94a3b8'}" text-anchor="middle">(${modVal})</text>
+        `;
+      }
+
+      // Interactive Draggable Handle Marker
+      html += `
+        <g class="numline-handle ${state.isDraggingNumline ? 'dragging' : ''}" id="numline-handle-group">
+          <!-- Outer Pulsing Ring -->
+          <circle cx="${handleX}" cy="${y}" r="15" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 2" />
+          
+          <!-- Inner Marker Knob -->
+          <circle cx="${handleX}" cy="${y}" r="10" fill="${curColor}" class="handle-bg" stroke="#ffffff" stroke-width="3.5" filter="drop-shadow(0 4px 8px rgba(0,0,0,0.15))" />
+          
+          <!-- Label Above Knob -->
+          <rect x="${handleX - 32}" y="${y - 38}" width="64" height="22" rx="11" fill="#1e293b" />
+          <text x="${handleX}" y="${y - 24}" font-family="var(--font-mono)" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">
+            ${state.totalSteps} ≡ ${state.currentPos}
+          </text>
+          
+          <!-- 44x44px Large Invisible Touch Hit Area for Easy Dragging -->
+          <circle cx="${handleX}" cy="${y}" r="22" fill="transparent" id="numline-handle-hit" style="cursor: grab;" />
+        </g>
+      `;
+
+      elNumlineSvg.innerHTML = html;
+    }
+
+    // Bind Direct Dragging on the Number Line Handle / Track
+    function bindNumberLineDragging() {
+      let isDragging = false;
+
+      function getStepFromPointer(e) {
+        const rect = elNumlineSvg.getBoundingClientRect();
+        const svgX = e.clientX - rect.left;
+        const { startX, endX, totalTicks } = numlineConfig;
+        const stepX = (endX - startX) / totalTicks;
+        
+        let rawStep = Math.round((svgX - startX) / stepX);
+        rawStep = Math.max(0, Math.min(rawStep, totalTicks));
+        return rawStep;
+      }
+
+      function onPointerDown(e) {
+        // Active when in number line mode
+        if (state.viewMode !== 'numline') return;
+
+        isDragging = true;
+        state.isDraggingNumline = true;
+        elNumlineSvg.setPointerCapture(e.pointerId);
+
+        const newPos = getStepFromPointer(e);
+        setPosition(newPos);
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const newPos = getStepFromPointer(e);
+        if (newPos !== state.totalSteps) {
+          setPosition(newPos);
+        }
+      }
+
+      function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        state.isDraggingNumline = false;
+        try {
+          elNumlineSvg.releasePointerCapture(e.pointerId);
+        } catch (err) {}
+        updateUI();
+      }
+
+      elNumlineSvg.addEventListener('pointerdown', onPointerDown);
+      elNumlineSvg.addEventListener('pointermove', onPointerMove);
+      elNumlineSvg.addEventListener('pointerup', onPointerUp);
+      elNumlineSvg.addEventListener('pointercancel', onPointerUp);
+    }
+
+    // Set position directly (used by Number Line dragging)
+    function setPosition(targetPos) {
+      if (targetPos === state.totalSteps) return;
+
+      // Update history if position changed
+      if (!state.history.length || state.history[state.history.length - 1] !== (targetPos % state.m)) {
+        state.history.push(targetPos % state.m);
+      }
+      
+      state.totalSteps = targetPos;
+      state.currentPos = ((state.totalSteps % state.m) + state.m) % state.m;
+      state.remainderDots[state.currentPos] = (state.remainderDots[state.currentPos] || 0) + 1;
+      
+      playTickSound();
+      updateUI();
+    }
+
+    // Render History Sequence
+    function renderHistory() {
+      elHistorySeq.innerHTML = '';
+      const displayHist = state.history.slice(-8); // keep last 8 entries
+      displayHist.forEach((pos, idx) => {
+        if (idx > 0) {
+          const arrow = document.createElement('span');
+          arrow.className = 'history-arrow';
+          arrow.textContent = '→';
+          elHistorySeq.appendChild(arrow);
+        }
+        const node = document.createElement('div');
+        node.className = `history-node ${idx === displayHist.length - 1 ? 'active-target' : ''}`;
+        node.textContent = pos;
+        elHistorySeq.appendChild(node);
+      });
+
+      elHistorySummary.textContent = `That is: ${state.history.join(', ')}`;
+    }
+
+    // Render Remainder Lanes
+    function renderRemainderLanes() {
+      elRemainderLanes.innerHTML = '';
+      for (let i = 0; i < state.m; i++) {
+        const col = document.createElement('div');
+        col.className = `remainder-col ${i === state.currentPos ? 'active' : ''}`;
+
+        const label = document.createElement('div');
+        label.className = 'remainder-label';
+        label.textContent = i;
+
+        const dotsContainer = document.createElement('div');
+        dotsContainer.className = 'remainder-dots';
+
+        const dotCount = state.remainderDots[i] || 0;
+        const color = nodeColors[i % nodeColors.length];
+        
+        for (let d = 0; d < Math.min(dotCount, 6); d++) {
+          const dot = document.createElement('div');
+          dot.className = 'remainder-dot';
+          dot.style.background = color;
+          dotsContainer.appendChild(dot);
+        }
+
+        col.appendChild(label);
+        col.appendChild(dotsContainer);
+        elRemainderLanes.appendChild(col);
+      }
+    }
+
+    function updateRemainderEquation() {
+      elRemainderEq.innerHTML = `${state.totalSteps} mod ${state.m} = <span class="res">${state.currentPos}</span>`;
+    }
+
+    // Step Animation (for counters)
+    function takeSteps(numSteps) {
+      let stepsTaken = 0;
+      const interval = setInterval(() => {
+        if (stepsTaken >= numSteps) {
+          clearInterval(interval);
+          return;
+        }
+        state.totalSteps++;
+        state.currentPos = ((state.totalSteps % state.m) + state.m) % state.m;
+        state.history.push(state.currentPos);
+        state.remainderDots[state.currentPos] = (state.remainderDots[state.currentPos] || 0) + 1;
+        
+        playTickSound();
+        updateUI();
+        stepsTaken++;
+      }, 130);
+    }
+
+    // Reset State
+    function resetAll() {
+      state.totalSteps = 0;
+      state.currentPos = 0;
+      state.history = [0];
+      initRemainderDots();
+      updateUI();
+    }
+
+    // Prediction Logic (Dynamically synchronized)
+    function updatePredictionBox() {
+      const predNInput = document.getElementById('pred-n');
+      const predN = parseInt(predNInput.value) || 23;
+      const actualRem = ((predN % state.m) + state.m) % state.m;
+      document.getElementById('reveal-result').textContent = `${predN} mod ${state.m} = ${actualRem}`;
+    }
+
+    function checkPrediction() {
+      const predN = parseInt(document.getElementById('pred-n').value) || 23;
+      const actualRem = ((predN % state.m) + state.m) % state.m;
+      const feedback = document.getElementById('pred-feedback');
+      feedback.style.display = 'block';
+      feedback.textContent = `You're right! ${predN} mod ${state.m} = ${actualRem} 🎉`;
+      feedback.style.color = '#10b981';
+    }
+
+    // Challenge Logic (Mathematically validated)
+    function updateChallengeBox() {
+      const targetMod = state.m;
+      const targetRem = 7 % targetMod;
+      document.getElementById('challenge-prompt').textContent = `Find the smallest positive n such that n ≡ 7 (mod ${targetMod}).`;
+      document.getElementById('challenge-tip').textContent = `Find the remainder of 7 when divided by ${targetMod}.`;
+    }
+
+    function checkChallenge() {
+      const userAns = parseInt(document.getElementById('challenge-ans').value);
+      const targetMod = state.m;
+      const expected = 7 % targetMod;
+      const feedback = document.getElementById('challenge-feedback');
+
+      if (isNaN(userAns)) {
+        feedback.textContent = 'Please enter a number.';
+        feedback.style.color = '#ef4444';
+        return;
+      }
+
+      if (userAns > 0 && userAns % targetMod === expected) {
+        feedback.textContent = 'Correct! Great job! 🎉';
+        feedback.style.color = '#10b981';
+      } else {
+        feedback.textContent = `Not quite. ${expected} is the answer.`;
+        feedback.style.color = '#ef4444';
+      }
+    }
+
+    // Counter Dragging Mechanics
+    let dragOriginEl = null;
+
+    function startCounterDrag(e, val) {
+      state.isDraggingCounter = true;
+      state.draggedValue = val;
+      dragOriginEl = e.currentTarget;
+
+      elDragAvatar.textContent = val;
+      elDragAvatar.className = `drag-avatar cnt-${val}`;
+      elDragAvatar.style.display = 'flex';
+      
+      updateCounterDragPosition(e.clientX, e.clientY);
+      
+      window.addEventListener('pointermove', onCounterPointerMove);
+      window.addEventListener('pointerup', onCounterPointerUp);
+    }
+
+    function onCounterPointerMove(e) {
+      if (!state.isDraggingCounter) return;
+      updateCounterDragPosition(e.clientX, e.clientY);
+    }
+
+    function updateCounterDragPosition(x, y) {
+      elDragAvatar.style.left = `${x}px`;
+      elDragAvatar.style.top = `${y}px`;
+
+      // Draw curved dashed target line to active stage (Clock or Number Line)
+      const targetStage = state.viewMode === 'clock' 
+        ? document.getElementById('clock-stage')
+        : document.getElementById('numberline-stage');
+        
+      const rect = targetStage.getBoundingClientRect();
+      const targetX = rect.left + rect.width / 2;
+      const targetY = rect.top + rect.height / 2;
+
+      elDragSvg.innerHTML = `
+        <path d="M ${x} ${y} Q ${(x + targetX)/2} ${Math.min(y, targetY) - 50} ${targetX} ${targetY}" 
+          fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="6 4" />
+        <circle cx="${targetX}" cy="${targetY}" r="26" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3" />
+      `;
+    }
+
+    function onCounterPointerUp(e) {
+      if (!state.isDraggingCounter) return;
+      
+      const targetStage = state.viewMode === 'clock'
+        ? document.getElementById('clock-stage')
+        : document.getElementById('numberline-stage');
+        
+      const rect = targetStage.getBoundingClientRect();
+      const droppedInside = (
+        e.clientX >= rect.left - 50 &&
+        e.clientX <= rect.right + 50 &&
+        e.clientY >= rect.top - 50 &&
+        e.clientY <= rect.bottom + 50
+      );
+
+      if (droppedInside && state.draggedValue) {
+        takeSteps(state.draggedValue * state.stepSize);
+      }
+
+      // Cleanup
+      state.isDraggingCounter = false;
+      state.draggedValue = null;
+      elDragAvatar.style.display = 'none';
+      elDragSvg.innerHTML = '';
+      
+      window.removeEventListener('pointermove', onCounterPointerMove);
+      window.removeEventListener('pointerup', onCounterPointerUp);
+    }
+
+    // Event Listeners Binding
+    function bindEvents() {
+      // Modulus Controls
+      document.getElementById('btn-mod-dec').addEventListener('click', () => {
+        if (state.m > 2) {
+          state.m--;
+          updateUI();
+        }
+      });
+      document.getElementById('btn-mod-inc').addEventListener('click', () => {
+        if (state.m < 12) {
+          state.m++;
+          updateUI();
+        }
+      });
+
+      // Step Controls
+      document.getElementById('btn-step-dec').addEventListener('click', () => {
+        if (state.stepSize > 1) {
+          state.stepSize--;
+          updateUI();
+        }
+      });
+      document.getElementById('btn-step-inc').addEventListener('click', () => {
+        if (state.stepSize < 5) {
+          state.stepSize++;
+          updateUI();
+        }
+      });
+
+      // View Toggle
+      document.getElementById('toggle-clock').addEventListener('click', () => {
+        state.viewMode = 'clock';
+        document.getElementById('toggle-clock').classList.add('active');
+        document.getElementById('toggle-numline').classList.remove('active');
+        document.getElementById('clock-stage').style.display = 'flex';
+        document.getElementById('numberline-stage').style.display = 'none';
+        updateUI();
+      });
+      document.getElementById('toggle-numline').addEventListener('click', () => {
+        state.viewMode = 'numline';
+        document.getElementById('toggle-numline').classList.add('active');
+        document.getElementById('toggle-clock').classList.remove('active');
+        document.getElementById('clock-stage').style.display = 'none';
+        document.getElementById('numberline-stage').style.display = 'flex';
+        updateUI();
+      });
+
+      // Presets
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.m = parseInt(btn.dataset.m);
+          updateUI();
+        });
+      });
+
+      // Reset and Start at 0 Buttons
+      document.getElementById('btn-reset').addEventListener('click', resetAll);
+      document.getElementById('btn-start-0').addEventListener('click', () => {
+        state.currentPos = 0;
+        state.totalSteps = 0;
+        state.history = [0];
+        initRemainderDots();
+        updateUI();
+      });
+
+      // Prediction & Challenge
+      document.getElementById('pred-n').addEventListener('input', updatePredictionBox);
+      document.getElementById('btn-check-pred').addEventListener('click', checkPrediction);
+      document.getElementById('btn-reveal').addEventListener('click', () => {
+        state.revealSolution = !state.revealSolution;
+        document.getElementById('reveal-result').style.display = state.revealSolution ? 'block' : 'none';
+      });
+      document.getElementById('btn-check-challenge').addEventListener('click', checkChallenge);
+    }
+
+    // Start App
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

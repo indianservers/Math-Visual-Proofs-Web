@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "composite-solids-and-units",
+  "categorySlug": "mensuration",
+  "slug": "composite-solids-and-units",
+  "route": "/visual-proofs/mensuration/composite-solids-and-units",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/136-composite-solids-and-units"
+}

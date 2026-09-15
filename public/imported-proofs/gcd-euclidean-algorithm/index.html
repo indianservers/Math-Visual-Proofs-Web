@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCD by Euclidean Algorithm - Maths Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #635BFF;
+      --primary-hover: #4B44E0;
+      --primary-light: #EEF2FF;
+      --primary-border: #C7D2FE;
+      --bg-app: #F6F8FC;
+      --bg-card: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --text-light: #94A3B8;
+      --border-light: #E2E8F0;
+      --border-focus: #818CF8;
+      
+      --purple-counter: #8B5CF6;
+      --purple-light: #F3E8FF;
+      --purple-border: #D8B4FE;
+      
+      --blue-counter: #3B82F6;
+      --blue-light: #EFF6FF;
+      --blue-border: #BFDBFE;
+      
+      --green-counter: #10B981;
+      --green-light: #ECFDF5;
+      --green-border: #A7F3D0;
+      
+      --amber-accent: #F59E0B;
+      --amber-light: #FEF3C7;
+      
+      --rose-accent: #EF4444;
+      --rose-light: #FEE2E2;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(99, 91, 255, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(99, 91, 255, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Layout Structure */
+    .app-sidebar {
+      width: 80px;
+      background: #FFFFFF;
+      border-right: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #7C3AED, #635BFF);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(99, 91, 255, 0.3);
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .nav-item:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-item.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+      position: relative;
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 4px;
+      background: var(--primary);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-bottom {
+      margin-top: auto;
+    }
+
+    /* Main Container */
+    .app-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: calc(100vw - 80px);
+      padding: 24px 32px;
+      gap: 20px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Header Section */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .breadcrumb span {
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .page-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .math-expr {
+      font-family: 'Fira Code', monospace;
+      font-style: italic;
+      color: var(--text-main);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .mission-card {
+      background: #FFFFFF;
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mission-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mission-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mission-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .mission-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .meta-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .level-select-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .level-select-btn:hover {
+      border-color: var(--primary-border);
+      background: var(--primary-light);
+    }
+
+    .time-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Content Layout Split */
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .workspace-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .sidebar-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* Step Tabs */
+    .tabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #FFFFFF;
+      padding: 6px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-light);
+      width: fit-content;
+      box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 20px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(99, 91, 255, 0.3);
+    }
+
+    .tab-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tab-btn.active .tab-num {
+      background: rgba(255, 255, 255, 0.25);
+      color: white;
+    }
+
+    /* Card Box Universal Styles */
+    .card-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Interactive Model Workspace Card */
+    .interactive-workspace {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 20px;
+      min-height: 420px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    @media (max-width: 860px) {
+      .interactive-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Control Box: Build Lengths */
+    .build-lengths-panel {
+      border-right: 1px solid var(--border-light);
+      padding-right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (max-width: 860px) {
+      .build-lengths-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+        padding-right: 0;
+        padding-bottom: 20px;
+      }
+    }
+
+    .panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .length-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .length-label {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .length-label.a-val { color: var(--purple-counter); }
+    .length-label.b-val { color: var(--blue-counter); }
+
+    .val-input-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .val-input {
+      width: 58px;
+      padding: 4px 8px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      font-size: 13px;
+      text-align: center;
+      outline: none;
+    }
+
+    .val-input:focus {
+      border-color: var(--primary);
+    }
+
+    .counter-dots-mini {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      min-height: 24px;
+      max-height: 48px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dot-mini {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: inset 0 -2px 4px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    .dot-mini.purple { background: linear-gradient(135deg, #A78BFA, #7C3AED); }
+    .dot-mini.blue { background: linear-gradient(135deg, #60A5FA, #2563EB); }
+    .dot-mini.green { background: linear-gradient(135deg, #34D399, #059669); }
+    .dot-mini.red { background: linear-gradient(135deg, #F87171, #DC2626); }
+    .dot-mini.orange { background: linear-gradient(135deg, #FBBF24, #D97706); }
+    .dot-mini.white { background: #FFFFFF; border: 1px solid var(--border-light); }
+
+    .instruction-card {
+      background: var(--primary-light);
+      border: 1px dashed var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .instruction-icon {
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    .instruction-text {
+      font-size: 12px;
+      color: var(--primary);
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .palette-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .palette-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .palette-items {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .palette-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: grab;
+      transition: transform 0.15s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      touch-action: none;
+    }
+
+    .palette-dot:hover {
+      transform: scale(1.2);
+    }
+
+    /* Middle Grouping Workspace */
+    .grouping-workspace {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: #FAFAFE;
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      border: 1px solid #EEF2FF;
+      min-width: 0;
+    }
+
+    .grouping-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grouping-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .illustration-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .grouping-stage {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 16px 0;
+      position: relative;
+      min-height: 240px;
+    }
+
+    .counter-lane {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1.5px solid var(--border-light);
+      min-height: 56px;
+      position: relative;
+      transition: all 0.2s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .counter-lane.group-full {
+      border-color: var(--purple-border);
+      background: #FAF5FF;
+    }
+
+    .counter-lane.drag-over-active {
+      border: 2px dashed var(--primary) !important;
+      background: var(--primary-light) !important;
+      transform: scale(1.01);
+    }
+
+    .counter-lane.remainder-lane {
+      border: 2px dashed var(--green-border);
+      background: var(--green-light);
+    }
+
+    .lane-balls-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+      min-height: 28px;
+    }
+
+    .lane-group-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .lane-group-meta .count-val {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .remainder-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 13px;
+      color: var(--green-counter);
+      font-weight: 700;
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .remainder-meta .rem-val {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    /* Draggable Counter Ball */
+    .counter-ball {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: grab;
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 -3px 6px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      position: relative;
+      z-index: 5;
+      flex-shrink: 0;
+    }
+
+    .counter-ball:active, .counter-ball.dragging {
+      cursor: grabbing;
+      transform: scale(1.25);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+      z-index: 100;
+    }
+
+    .counter-ball.purple { background: linear-gradient(135deg, #A78BFA, #6D28D9); }
+    .counter-ball.blue { background: linear-gradient(135deg, #60A5FA, #1D4ED8); }
+    .counter-ball.green { background: linear-gradient(135deg, #34D399, #047857); }
+    .counter-ball.red { background: linear-gradient(135deg, #F87171, #DC2626); }
+    .counter-ball.orange { background: linear-gradient(135deg, #FBBF24, #D97706); }
+
+    /* Equation Display Bar */
+    .equation-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      background: #FFFFFF;
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .eq-num.a { color: var(--purple-counter); font-size: 28px; }
+    .eq-num.q { color: var(--text-main); background: #F1F5F9; padding: 2px 10px; border-radius: 6px; }
+    .eq-num.b { color: var(--blue-counter); font-size: 28px; }
+    .eq-num.r { color: var(--green-counter); font-size: 28px; }
+    .eq-op { color: var(--text-muted); font-weight: 400; }
+
+    /* Action Footer Controls */
+    .workspace-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      grid-column: span 2;
+      padding-top: 10px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-light);
+      background: #FFFFFF;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary-border);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .hint-callout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--amber-accent);
+      font-weight: 500;
+    }
+
+    /* Algorithm Sequence Runner Card */
+    .euclid-runner-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .runner-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .run-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(99, 91, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .run-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .steps-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .step-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 180px;
+      position: relative;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .step-card.active-highlight {
+      background: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .step-card.gcd-card {
+      background: linear-gradient(135deg, #FEFCE8, #FFFBEB);
+      border: 1.5px solid #FCD34D;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+    }
+
+    .step-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .step-eq {
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .step-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+      white-space: nowrap;
+    }
+
+    .step-arrow {
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .gcd-star-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber-accent);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .gcd-result-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #B45309;
+      white-space: nowrap;
+    }
+
+    /* Bottom Grid: Visual Proof + Challenge */
+    .bottom-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-row-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* One-line Visual Proof Card */
+    .proof-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .proof-chain {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 6px 0;
+    }
+
+    .proof-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-width: 120px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .proof-expr {
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    .proof-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* Your Challenge Card */
+    .challenge-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .challenge-inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      align-items: center;
+    }
+
+    .input-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .input-col label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .challenge-num-input {
+      width: 100%;
+      padding: 6px 2px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .challenge-num-input:focus {
+      border-color: var(--primary);
+    }
+
+    .challenge-num-input.correct {
+      border-color: var(--green-counter);
+      background: var(--green-light);
+      color: var(--green-counter);
+    }
+
+    .challenge-num-input.incorrect {
+      border-color: var(--rose-accent);
+      background: var(--rose-light);
+      color: var(--rose-accent);
+    }
+
+    .check-btn-purple {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      align-self: flex-end;
+    }
+
+    .check-btn-purple:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Right Sidebar Cards */
+    .sidebar-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .sidebar-card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-card-title svg {
+      color: var(--primary);
+    }
+
+    .why-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .why-step-item {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.4;
+      overflow: hidden;
+    }
+
+    .why-step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .math-pill-group {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .math-pill {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Cycle Diagram */
+    .cycle-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 10px;
+      background: #F8FAFC;
+      border-radius: var(--radius-md);
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      white-space: nowrap;
+      border: 1px solid var(--border-light);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Predict Card Input */
+    .predict-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .predict-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .predict-input:focus {
+      border-color: var(--primary);
+    }
+
+    .predict-result-badge {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      display: none;
+    }
+
+    .predict-result-badge.correct {
+      display: block;
+      background: var(--green-light);
+      color: var(--green-counter);
+      border: 1px solid var(--green-border);
+    }
+
+    .predict-result-badge.incorrect {
+      display: block;
+      background: var(--rose-light);
+      color: var(--rose-accent);
+      border: 1px solid #FCA5A5;
+    }
+
+    /* Reveal Card */
+    .reveal-card {
+      background: #F8FAFC;
+      border: 1.5px dashed var(--border-light);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding: 24px 20px;
+    }
+
+    .reveal-card:hover {
+      border-color: var(--primary-border);
+      background: var(--primary-light);
+    }
+
+    .reveal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reveal-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .reveal-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .reveal-answer-box {
+      display: none;
+      background: #FFFFFF;
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      width: 100%;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    /* Additional Tab Views (Tab 2, 3, 4) */
+    .tab-view-container {
+      display: none;
+    }
+
+    .tab-view-container.active {
+      display: block;
+    }
+
+    /* Division Table Styling */
+    .div-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .div-table th, .div-table td {
+      border: 1px solid var(--border-light);
+      padding: 10px 14px;
+      text-align: center;
+    }
+
+    .div-table th {
+      background: #F1F5F9;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Remainder Lanes View */
+    .lanes-view {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .lane-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lane-bar-label {
+      width: 60px;
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .lane-bar-track {
+      flex: 1;
+      height: 28px;
+      background: #F1F5F9;
+      border-radius: var(--radius-sm);
+      display: flex;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    .lane-bar-fill {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* Clock Cycles View */
+    .clock-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 0;
+    }
+
+    .clock-dial {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      box-shadow: var(--shadow-md);
+    }
+
+    .clock-hand {
+      position: absolute;
+      width: 4px;
+      height: 70px;
+      background: var(--amber-accent);
+      top: 20px;
+      transform-origin: bottom center;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 4px;
+    }
+
+    .clock-center-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--primary);
+      z-index: 2;
+    }
+
+    /* Modal / Select Dropdown */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 6px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      display: none;
+      flex-direction: column;
+      width: 160px;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    .dropdown-menu.show {
+      display: flex;
+    }
+
+    .dropdown-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .dropdown-item:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Dragging ghost element */
+    .drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      opacity: 0.9;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+  <!-- Left Icon Sidebar -->
+  <aside class="app-sidebar">
+    <a href="#" class="brand-logo">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 3v18M3 12h18"/>
+          <circle cx="12" cy="12" r="3" fill="white"/>
+        </svg>
+      </div>
+      MATHS<br>UNIVERSE
+    </a>
+
+    <nav class="nav-list">
+      <div class="nav-item active" data-nav="explore" title="Explore">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>Explore</span>
+      </div>
+      <div class="nav-item" data-nav="proofs" title="Proofs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.66 16.03D12 10l5 5 2-2M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/></svg>
+        <span>Proofs</span>
+      </div>
+      <div class="nav-item" data-nav="practice" title="Practice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span>Practice</span>
+      </div>
+      <div class="nav-item" data-nav="saved" title="Saved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        <span>Saved</span>
+      </div>
+      <div class="nav-item" data-nav="history" title="History">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>History</span>
+      </div>
+    </nav>
+
+    <div class="nav-bottom">
+      <div class="nav-item" data-nav="settings" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Layout -->
+  <main class="app-main">
+    
+    <!-- Top Header Bar -->
+    <header class="header-bar">
+      <div class="header-left">
+        <div class="breadcrumb">
+          Visual Proofs <span>/</span> Number Theory
+        </div>
+        <h1 class="page-title">
+          GCD by Euclidean Algorithm
+        </h1>
+        <p class="page-subtitle">
+          Show that <span class="math-expr">gcd(a, b) = gcd(b, a mod b)</span>
+        </p>
+      </div>
+
+      <div class="header-right">
+        <div class="mission-card">
+          <div class="mission-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-3.05 11a22.35 22.35 0 0 1-3.95 2z"/></svg>
+          </div>
+          <div class="mission-text">
+            <span class="mission-title">Mission</span>
+            <span class="mission-desc">Use division and remainders to see why the GCD stays the same.</span>
+          </div>
+        </div>
+
+        <div class="meta-controls">
+          <div style="position: relative;">
+            <button class="level-select-btn" id="levelBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              <span id="levelLabel">Intermediate</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="dropdown-menu" id="levelDropdown">
+              <div class="dropdown-item" onclick="setPreset(48, 18, 'Beginner')">Beginner (48, 18)</div>
+              <div class="dropdown-item" onclick="setPreset(84, 30, 'Intermediate')">Intermediate (84, 30)</div>
+              <div class="dropdown-item" onclick="setPreset(252, 105, 'Advanced')">Advanced (252, 105)</div>
+            </div>
+          </div>
+
+          <div class="time-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>12 min</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid Split -->
+    <div class="main-grid">
+      
+      <!-- Left Workspace Column -->
+      <div class="workspace-column">
+        
+        <!-- Step Navigation Tabs -->
+        <div class="tabs-bar">
+          <button class="tab-btn active" onclick="switchTab(1)" id="tab-btn-1">
+            <span class="tab-num">1</span> Length Model
+          </button>
+          <button class="tab-btn" onclick="switchTab(2)" id="tab-btn-2">
+            <span class="tab-num">2</span> Division Table
+          </button>
+          <button class="tab-btn" onclick="switchTab(3)" id="tab-btn-3">
+            <span class="tab-num">3</span> Remainder Lanes
+          </button>
+          <button class="tab-btn" onclick="switchTab(4)" id="tab-btn-4">
+            <span class="tab-num">4</span> Clock / Cycles
+          </button>
+        </div>
+
+        <!-- TAB 1: LENGTH MODEL INTERACTIVE WORKSPACE -->
+        <div class="tab-view-container active" id="tab-view-1">
+          <div class="interactive-workspace">
+            
+            <!-- Left Controls Panel -->
+            <div class="build-lengths-panel">
+              <div class="panel-title">Build lengths</div>
+              
+              <!-- Input A -->
+              <div class="length-row">
+                <div class="length-label a-val">
+                  <span>a = <span id="label-a-val">84</span></span>
+                  <div class="val-input-group">
+                    <input type="number" id="input-a" class="val-input" value="84" min="1" max="500" onchange="updateValuesFromInput()">
+                  </div>
+                </div>
+                <div class="counter-dots-mini" id="mini-dots-a">
+                  <!-- JS generated mini dots -->
+                </div>
+              </div>
+
+              <!-- Input B -->
+              <div class="length-row">
+                <div class="length-label b-val">
+                  <span>b = <span id="label-b-val">30</span></span>
+                  <div class="val-input-group">
+                    <input type="number" id="input-b" class="val-input" value="30" min="1" max="500" onchange="updateValuesFromInput()">
+                  </div>
+                </div>
+                <div class="counter-dots-mini" id="mini-dots-b">
+                  <!-- JS generated mini dots -->
+                </div>
+              </div>
+
+              <!-- Instruction Banner -->
+              <div class="instruction-card">
+                <div class="instruction-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 0 1 2 2v4a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.83l1.76 1.76"/></svg>
+                </div>
+                <div class="instruction-text">
+                  Drag counters into group lanes or remainder lane. See the equation update live!
+                </div>
+              </div>
+
+              <!-- Palette of Counters -->
+              <div class="palette-box">
+                <div class="palette-title">Counters Palette (Drag to Canvas)</div>
+                <div class="palette-items">
+                  <div class="palette-dot dot-mini purple" data-color="purple" title="Drag Purple Counter"></div>
+                  <div class="palette-dot dot-mini blue" data-color="blue" title="Drag Blue Counter"></div>
+                  <div class="palette-dot dot-mini green" data-color="green" title="Drag Green Counter"></div>
+                  <div class="palette-dot dot-mini red" data-color="red" title="Drag Red Counter"></div>
+                  <div class="palette-dot dot-mini orange" data-color="orange" title="Drag Orange Counter"></div>
+                  <div class="palette-dot dot-mini white" data-color="white" title="Drag White Counter"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Middle Grouping Canvas -->
+            <div class="grouping-workspace" id="groupingCanvas">
+              <div class="grouping-header">
+                <div class="grouping-title">Group <b>a</b> into parts of <b>b</b></div>
+                <button class="illustration-btn" onclick="toggleIllustration()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                  <span>Illustration</span>
+                </button>
+              </div>
+
+              <div class="grouping-stage" id="groupingStage">
+                <!-- Group lanes and remainder lane injected dynamically -->
+              </div>
+
+              <!-- Dynamic Formula Bar -->
+              <div class="equation-bar" id="equationBar">
+                <span class="eq-num a" id="eq-a">84</span>
+                <span class="eq-op">=</span>
+                <span class="eq-num q" id="eq-q">2</span>
+                <span class="eq-op">×</span>
+                <span class="eq-num b" id="eq-b">30</span>
+                <span class="eq-op">+</span>
+                <span class="eq-num r" id="eq-r">24</span>
+              </div>
+            </div>
+
+            <!-- Bottom Workspace Controls -->
+            <div class="workspace-actions">
+              <button class="action-btn" onclick="resetInteractiveModel()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                <span>Reset</span>
+              </button>
+
+              <div class="hint-callout">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15 9a3 3 0 0 0-6 0c0 1.66-1.34 3-3 3v2h12v-2c-1.66 0-3-1.34-3-3z"/></svg>
+                <span><b>Hint:</b> Drag counters between lanes or click Auto-Group.</span>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button class="action-btn" onclick="autoGroupAll()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <span>Auto-Group</span>
+                </button>
+                <button class="action-btn" onclick="generateRandomExample()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+                  <span>Random example</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB 2: DIVISION TABLE VIEW -->
+        <div class="tab-view-container" id="tab-view-2">
+          <div class="card-panel">
+            <h3 class="panel-title" style="margin-bottom: 12px;">Division Table View</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+              Step-by-step mathematical long division representation for <span class="math-expr" id="tab2-expr">84 ÷ 30</span>:
+            </p>
+            <table class="div-table">
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>Dividend (a)</th>
+                  <th>Divisor (b)</th>
+                  <th>Quotient (q)</th>
+                  <th>Product (q × b)</th>
+                  <th>Remainder (r = a - q×b)</th>
+                </tr>
+              </thead>
+              <tbody id="div-table-body">
+                <!-- JS populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: REMAINDER LANES VIEW -->
+        <div class="tab-view-container" id="tab-view-3">
+          <div class="card-panel">
+            <h3 class="panel-title" style="margin-bottom: 12px;">Remainder Lanes (Length Reduction)</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+              Visual bar scale showing how length <b>a</b> is segmented by length <b>b</b> until the GCD remainder is reached:
+            </p>
+            <div class="lanes-view" id="lanes-view-container">
+              <!-- JS populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: CLOCK / CYCLES VIEW -->
+        <div class="tab-view-container" id="tab-view-4">
+          <div class="card-panel">
+            <h3 class="panel-title" style="margin-bottom: 12px;">Modular Arithmetic Clock (Cycles)</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px; text-align: center;">
+              Modular cycle mod <b id="clock-mod-val">30</b>: Stepping <b id="clock-step-val">84</b> steps wraps around the clock face to remainder position <b id="clock-rem-val">24</b>.
+            </p>
+            <div class="clock-view">
+              <div class="clock-dial">
+                <div class="clock-hand" id="clockHand"></div>
+                <div class="clock-center-dot"></div>
+              </div>
+              <div style="font-family: 'Fira Code', monospace; font-weight: 700; font-size: 18px; color: var(--primary);">
+                84 ≡ <span id="clock-result-val">24</span> (mod 30)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RUN EUCLID'S ALGORITHM RUNNER -->
+        <div class="card-panel euclid-runner-panel">
+          <div class="runner-header">
+            <button class="run-btn" onclick="runEuclidAlgorithm()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Run Euclid's Algorithm</span>
+            </button>
+            <div style="font-size: 13px; color: var(--text-muted);">
+              Calculates each division step automatically
+            </div>
+          </div>
+
+          <!-- Step Cards Row -->
+          <div class="steps-row" id="euclidStepsRow">
+            <!-- Dynamically populated steps -->
+          </div>
+        </div>
+
+        <!-- BOTTOM ROW: VISUAL PROOF + YOUR CHALLENGE -->
+        <div class="bottom-row-grid">
+          
+          <!-- One-line visual proof Card -->
+          <div class="card-panel proof-card">
+            <div class="sidebar-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span>One-line visual proof</span>
+            </div>
+
+            <div class="proof-chain" id="proofChainContainer">
+              <div class="proof-box">
+                <span class="proof-expr" id="proof-step-1">84 = 2 × 30 + 24</span>
+                <span class="proof-label">Division</span>
+              </div>
+              <span class="step-arrow">→</span>
+              <div class="proof-box">
+                <span class="proof-expr">d | a and d | b</span>
+                <span class="proof-label">Common divisor</span>
+              </div>
+              <span class="step-arrow">→</span>
+              <div class="proof-box">
+                <span class="proof-expr">d | (a - q × b)</span>
+                <span class="proof-label">Divides combinations</span>
+              </div>
+              <span class="step-arrow">→</span>
+              <div class="proof-box">
+                <span class="proof-expr">d | r</span>
+                <span class="proof-label">Also divides remainder</span>
+              </div>
+              <span class="step-arrow">→</span>
+              <div class="proof-box">
+                <span class="proof-expr" id="proof-step-final">gcd(84, 30) = gcd(30, 24)</span>
+                <span class="proof-label">GCD is preserved</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Your Challenge Card -->
+          <div class="card-panel challenge-card">
+            <div class="sidebar-card-title" style="justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17M14 14.66V17M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+                <span>Your challenge</span>
+              </div>
+              <button style="background: none; border: none; font-size: 11px; color: var(--primary); font-weight: 600; cursor: pointer;" onclick="newChallenge()">New Challenge</button>
+            </div>
+
+            <div style="font-size: 13px; font-weight: 600; color: var(--text-main);" id="challengeTitle">
+              Find gcd(252, 105)
+            </div>
+
+            <div class="challenge-inputs-grid">
+              <div class="input-col">
+                <label>q₁</label>
+                <input type="number" class="challenge-num-input" id="c_q1" value="2">
+              </div>
+              <div class="input-col">
+                <label>r₁</label>
+                <input type="number" class="challenge-num-input" id="c_r1" value="42">
+              </div>
+              <div class="input-col">
+                <label>q₂</label>
+                <input type="number" class="challenge-num-input" id="c_q2" value="2">
+              </div>
+              <div class="input-col">
+                <label>r₂</label>
+                <input type="number" class="challenge-num-input" id="c_r2" value="21">
+              </div>
+              <div class="input-col">
+                <label>q₃</label>
+                <input type="number" class="challenge-num-input" id="c_q3" value="3">
+              </div>
+              <div class="input-col">
+                <label>r₃</label>
+                <input type="number" class="challenge-num-input" id="c_r3" value="0">
+              </div>
+              <div class="input-col">
+                <label>gcd</label>
+                <input type="number" class="challenge-num-input" id="c_gcd" value="21">
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+              <span id="challengeFeedback" style="font-size: 12px; font-weight: 600;"></span>
+              <button class="check-btn-purple" onclick="checkChallengeSolution()">Check solution</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Right Sidebar Column -->
+      <aside class="sidebar-column">
+        
+        <!-- Card 1: Why it works -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Why it works</span>
+          </div>
+
+          <div class="why-step-list">
+            <div class="why-step-item">
+              <span class="why-step-num">1</span>
+              <div>
+                <b>Divide a by b.</b>
+                <div style="margin-top: 4px; font-family: 'Fira Code', monospace; font-size: 13px;">
+                  a = q × b + r
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                  multiple of b + remainder (0 ≤ r < b)
+                </div>
+              </div>
+            </div>
+
+            <div class="why-step-item">
+              <span class="why-step-num">2</span>
+              <div>
+                <b>Any common divisor of a and b also divides r.</b>
+                <div class="math-pill-group">
+                  <span class="math-pill">d | a</span>
+                  <span class="math-pill">d | b</span>
+                  <span class="math-pill" style="background: var(--green-light); color: var(--green-counter); border-color: var(--green-border);">d | r</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="why-step-item">
+              <span class="why-step-num">3</span>
+              <div style="width: 100%;">
+                <b>Therefore gcd(a, b) = gcd(b, r).</b>
+                <div class="cycle-diagram">
+                  <span>(a, b)</span>
+                  <span style="color: var(--primary);">→</span>
+                  <span>(b, r)</span>
+                  <span style="color: var(--primary);">→</span>
+                  <span>(r, b mod r)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Predict the outcome -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 22h4M15 9a3 3 0 0 0-6 0c0 1.66-1.34 3-3 3v2h12v-2c-1.66 0-3-1.34-3-3z"/></svg>
+            <span>Predict the outcome</span>
+          </div>
+
+          <div style="font-size: 13px; color: var(--text-main);">
+            What is <b class="math-expr" id="predictQuestionText">gcd(84, 30)</b>?
+          </div>
+
+          <div class="predict-input-group">
+            <input type="number" id="predictInput" class="predict-input" placeholder="Type your answer...">
+            <button class="check-btn-purple" onclick="checkPrediction()">Check</button>
+          </div>
+
+          <div class="predict-result-badge" id="predictResultBadge">
+            <!-- Results feedback -->
+          </div>
+        </div>
+
+        <!-- Card 3: Reveal Solution -->
+        <div class="sidebar-card reveal-card" id="revealCard" onclick="toggleRevealSolution()">
+          <div class="reveal-content" id="revealContentInitial">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <div class="reveal-title">Reveal</div>
+            <div class="reveal-sub">Show steps & answer</div>
+          </div>
+
+          <div class="reveal-answer-box" id="revealAnswerBox">
+            <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;" id="revealTitleText">
+              Solution for gcd(84, 30):
+            </div>
+            <div id="revealBodyText">
+              84 = 2 × 30 + 24<br>
+              30 = 1 × 24 + 6<br>
+              24 = 4 × 6 + 0<br>
+              <b style="color: var(--amber-accent);">GCD is 6</b> (the last non-zero remainder).
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- JavaScript App Logic -->
+  <script>
+    // State Variables
+    let currentA = 84;
+    let currentB = 30;
+    let currentQ = 2;
+    let currentR = 24;
+    let currentGCD = 6;
+
+    // Interactive Dragging State
+    let laneGroupCounts = [30, 30]; // counters in each group lane
+    let remainderLaneCount = 24;     // counters in remainder lane
+
+    let challengeData = {
+      a: 252,
+      b: 105,
+      steps: [
+        { q: 2, r: 42 },
+        { q: 2, r: 21 },
+        { q: 3, r: 0 }
+      ],
+      gcd: 21
+    };
+
+    // Initialize application on DOM content loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      initApp();
+      setupLevelDropdown();
+      setupSidebarNav();
+      setupPointerDragging();
+    });
+
+    function initApp() {
+      calculateEuclideanState(currentA, currentB);
+      resetLaneCountsToInitial();
+      renderAllViews();
+    }
+
+    function calculateEuclideanState(a, b) {
+      if (a < b) {
+        let temp = a;
+        a = b;
+        b = temp;
+      }
+      currentA = a;
+      currentB = b;
+      currentQ = Math.floor(a / b);
+      currentR = a % b;
+      
+      // Calculate GCD
+      let tempA = a;
+      let tempB = b;
+      while (tempB !== 0) {
+        let remainder = tempA % tempB;
+        tempA = tempB;
+        tempB = remainder;
+      }
+      currentGCD = tempA;
+    }
+
+    function resetLaneCountsToInitial() {
+      laneGroupCounts = [];
+      for (let i = 0; i < currentQ; i++) {
+        laneGroupCounts.push(currentB);
+      }
+      remainderLaneCount = currentR;
+    }
+
+    function recalculateFromLanes() {
+      // Complete groups are those with >= currentB counters
+      let fullGroups = 0;
+      let leftovers = 0;
+
+      laneGroupCounts.forEach(c => {
+        if (c >= currentB) {
+          fullGroups += Math.floor(c / currentB);
+          leftovers += (c % currentB);
+        } else {
+          leftovers += c;
+        }
+      });
+      leftovers += remainderLaneCount;
+
+      currentQ = fullGroups;
+      currentR = leftovers;
+
+      // Update Equation bar dynamically
+      document.getElementById('eq-q').textContent = currentQ;
+      document.getElementById('eq-r').textContent = currentR;
+      document.getElementById('eq-a').textContent = currentA;
+      document.getElementById('eq-b').textContent = currentB;
+
+      // Update proof
+      document.getElementById('proof-step-1').textContent = `${currentA} = ${currentQ} × ${currentB} + ${currentR}`;
+      document.getElementById('proof-step-final').textContent = `gcd(${currentA}, ${currentB}) = gcd(${currentB}, ${currentR})`;
+    }
+
+    function renderAllViews() {
+      // Inputs
+      document.getElementById('input-a').value = currentA;
+      document.getElementById('input-b').value = currentB;
+      document.getElementById('label-a-val').textContent = currentA;
+      document.getElementById('label-b-val').textContent = currentB;
+
+      // Mini dots preview
+      renderMiniDots('mini-dots-a', currentA, 'purple');
+      renderMiniDots('mini-dots-b', currentB, 'blue');
+
+      // Grouping stage
+      renderGroupingStage();
+
+      // Equation bar
+      document.getElementById('eq-a').textContent = currentA;
+      document.getElementById('eq-q').textContent = currentQ;
+      document.getElementById('eq-b').textContent = currentB;
+      document.getElementById('eq-r').textContent = currentR;
+
+      // Predict section text
+      document.getElementById('predictQuestionText').textContent = `gcd(${currentA}, ${currentB})`;
+
+      // Reveal Box text
+      document.getElementById('revealTitleText').textContent = `Solution for gcd(${currentA}, ${currentB}):`;
+      let stepsList = computeAllEuclidSteps(currentA, currentB);
+      let revealHTML = stepsList.map(s => `${s.a} = ${s.q} × ${s.b} + ${s.r}`).join('<br>') + 
+        `<br><b style="color: var(--amber-accent); margin-top: 4px; display: inline-block;">GCD is ${currentGCD}</b>`;
+      document.getElementById('revealBodyText').innerHTML = revealHTML;
+
+      // One line proof
+      document.getElementById('proof-step-1').textContent = `${currentA} = ${currentQ} × ${currentB} + ${currentR}`;
+      document.getElementById('proof-step-final').textContent = `gcd(${currentA}, ${currentB}) = gcd(${currentB}, ${currentR})`;
+
+      // Render tab views
+      renderDivisionTable();
+      renderRemainderLanes();
+      renderClockView();
+
+      // Clear predictors
+      document.getElementById('predictResultBadge').className = 'predict-result-badge';
+      document.getElementById('predictInput').value = '';
+    }
+
+    function renderMiniDots(containerId, count, colorClass) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      const displayCount = Math.min(count, 14);
+      for (let i = 0; i < displayCount; i++) {
+        const dot = document.createElement('span');
+        dot.className = `dot-mini ${colorClass}`;
+        container.appendChild(dot);
+      }
+    }
+
+    function renderGroupingStage() {
+      const stage = document.getElementById('groupingStage');
+      stage.innerHTML = '';
+
+      // Create Group Lanes based on laneGroupCounts
+      laneGroupCounts.forEach((count, gIdx) => {
+        const lane = document.createElement('div');
+        const isFull = count >= currentB;
+        lane.className = `counter-lane ${isFull ? 'group-full' : ''}`;
+        lane.dataset.laneType = 'group';
+        lane.dataset.laneIndex = gIdx;
+
+        const ballsContainer = document.createElement('div');
+        ballsContainer.className = 'lane-balls-container';
+
+        const displayLimit = Math.min(count, 15);
+        const ballColor = gIdx % 2 === 0 ? 'purple' : 'blue';
+        for (let i = 0; i < displayLimit; i++) {
+          const ball = createCounterBall(ballColor, 'group', gIdx);
+          ballsContainer.appendChild(ball);
+        }
+        if (count > 15) {
+          const badge = document.createElement('span');
+          badge.style.fontSize = '12px';
+          badge.style.fontWeight = '700';
+          badge.style.color = 'var(--text-muted)';
+          badge.textContent = `+${count - 15} more`;
+          ballsContainer.appendChild(badge);
+        }
+
+        lane.appendChild(ballsContainer);
+
+        // Right Meta Label (Contained inside lane, never overflowing)
+        const meta = document.createElement('div');
+        meta.className = 'lane-group-meta';
+        meta.innerHTML = `<span class="count-val">Group ${gIdx + 1} (${count}/${currentB})</span><span style="font-size: 11px;">${isFull ? '= Full group of ' + currentB : 'Incomplete group'}</span>`;
+        lane.appendChild(meta);
+
+        stage.appendChild(lane);
+      });
+
+      // Remainder Lane
+      const remLane = document.createElement('div');
+      remLane.className = 'counter-lane remainder-lane';
+      remLane.dataset.laneType = 'remainder';
+
+      const remBallsContainer = document.createElement('div');
+      remBallsContainer.className = 'lane-balls-container';
+
+      const remDisplayLimit = Math.min(remainderLaneCount, 15);
+      for (let i = 0; i < remDisplayLimit; i++) {
+        const ball = createCounterBall('green', 'remainder', 0);
+        remBallsContainer.appendChild(ball);
+      }
+      if (remainderLaneCount > 15) {
+        const badge = document.createElement('span');
+        badge.style.fontSize = '12px';
+        badge.style.fontWeight = '700';
+        badge.style.color = 'var(--green-counter)';
+        badge.textContent = `+${remainderLaneCount - 15} more`;
+        remBallsContainer.appendChild(badge);
+      }
+
+      remLane.appendChild(remBallsContainer);
+
+      const remMeta = document.createElement('div');
+      remMeta.className = 'remainder-meta';
+      remMeta.innerHTML = `<span>Remainder (a mod b)</span><span class="rem-val">${remainderLaneCount}</span>`;
+      remLane.appendChild(remMeta);
+
+      stage.appendChild(remLane);
+    }
+
+    function createCounterBall(colorClass, sourceLaneType, sourceIndex) {
+      const ball = document.createElement('div');
+      ball.className = `counter-ball ${colorClass}`;
+      ball.dataset.sourceType = sourceLaneType || 'group';
+      ball.dataset.sourceIndex = sourceIndex !== undefined ? sourceIndex : 0;
+      ball.dataset.color = colorClass;
+      return ball;
+    }
+
+    /* Fully Functional Pointer Dragging */
+    function setupPointerDragging() {
+      let activeBall = null;
+      let ghostEl = null;
+      let sourceLaneType = null;
+      let sourceIndex = 0;
+      let ballColor = 'purple';
+
+      document.addEventListener('pointerdown', (e) => {
+        const ball = e.target.closest('.counter-ball, .palette-dot');
+        if (!ball) return;
+
+        activeBall = ball;
+        sourceLaneType = ball.dataset.sourceType || (ball.classList.contains('palette-dot') ? 'palette' : 'group');
+        sourceIndex = parseInt(ball.dataset.sourceIndex) || 0;
+        ballColor = ball.dataset.color || 'purple';
+
+        ball.classList.add('dragging');
+
+        // Create Ghost Element following cursor
+        ghostEl = document.createElement('div');
+        ghostEl.className = `drag-ghost counter-ball ${ballColor}`;
+        ghostEl.style.left = `${e.clientX}px`;
+        ghostEl.style.top = `${e.clientY}px`;
+        document.body.appendChild(ghostEl);
+      });
+
+      document.addEventListener('pointermove', (e) => {
+        if (!activeBall || !ghostEl) return;
+        ghostEl.style.left = `${e.clientX}px`;
+        ghostEl.style.top = `${e.clientY}px`;
+
+        // Highlight drop lane under cursor
+        const hoverEl = document.elementFromPoint(e.clientX, e.clientY);
+        document.querySelectorAll('.counter-lane').forEach(l => l.classList.remove('drag-over-active'));
+        if (hoverEl) {
+          const targetLane = hoverEl.closest('.counter-lane');
+          if (targetLane) {
+            targetLane.classList.add('drag-over-active');
+          }
+        }
+      });
+
+      document.addEventListener('pointerup', (e) => {
+        if (activeBall) {
+          activeBall.classList.remove('dragging');
+        }
+
+        if (ghostEl) {
+          const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+          ghostEl.remove();
+          ghostEl = null;
+
+          if (dropTarget) {
+            const lane = dropTarget.closest('.counter-lane');
+            if (lane) {
+              handleCounterDrop(sourceLaneType, sourceIndex, lane.dataset.laneType, parseInt(lane.dataset.laneIndex));
+            }
+          }
+        }
+
+        document.querySelectorAll('.counter-lane').forEach(l => l.classList.remove('drag-over-active'));
+        activeBall = null;
+      });
+    }
+
+    function handleCounterDrop(srcType, srcIdx, targetType, targetIdx) {
+      // Deduct 1 from source
+      if (srcType === 'group' && laneGroupCounts[srcIdx] > 0) {
+        laneGroupCounts[srcIdx]--;
+      } else if (srcType === 'remainder' && remainderLaneCount > 0) {
+        remainderLaneCount--;
+      }
+
+      // Add 1 to target
+      if (targetType === 'group') {
+        if (isNaN(targetIdx) || targetIdx < 0) targetIdx = 0;
+        if (laneGroupCounts[targetIdx] !== undefined) {
+          laneGroupCounts[targetIdx]++;
+        }
+      } else if (targetType === 'remainder') {
+        remainderLaneCount++;
+      }
+
+      recalculateFromLanes();
+      renderGroupingStage();
+    }
+
+    function autoGroupAll() {
+      resetLaneCountsToInitial();
+      recalculateFromLanes();
+      renderGroupingStage();
+    }
+
+    /* Update values from user input fields */
+    function updateValuesFromInput() {
+      const aVal = parseInt(document.getElementById('input-a').value) || 84;
+      const bVal = parseInt(document.getElementById('input-b').value) || 30;
+      calculateEuclideanState(aVal, bVal);
+      resetLaneCountsToInitial();
+      renderAllViews();
+    }
+
+    function setPreset(a, b, levelName) {
+      document.getElementById('levelLabel').textContent = levelName;
+      document.getElementById('levelDropdown').classList.remove('show');
+      calculateEuclideanState(a, b);
+      resetLaneCountsToInitial();
+      renderAllViews();
+    }
+
+    function resetInteractiveModel() {
+      calculateEuclideanState(currentA, currentB);
+      resetLaneCountsToInitial();
+      renderAllViews();
+    }
+
+    function generateRandomExample() {
+      const presets = [
+        [96, 36], [105, 45], [72, 28], [84, 30], [120, 45], [150, 60], [210, 84], [180, 75]
+      ];
+      const randomChoice = presets[Math.floor(Math.random() * presets.length)];
+      calculateEuclideanState(randomChoice[0], randomChoice[1]);
+      resetLaneCountsToInitial();
+      renderAllViews();
+    }
+
+    /* Euclidean Algorithm Step Runner */
+    function computeAllEuclidSteps(a, b) {
+      const steps = [];
+      let current_a = a;
+      let current_b = b;
+
+      while (current_b !== 0) {
+        let q = Math.floor(current_a / current_b);
+        let r = current_a % current_b;
+        steps.push({
+          a: current_a,
+          b: current_b,
+          q: q,
+          r: r
+        });
+        current_a = current_b;
+        current_b = r;
+      }
+      return steps;
+    }
+
+    function runEuclidAlgorithm() {
+      const stepsRow = document.getElementById('euclidStepsRow');
+      stepsRow.innerHTML = '';
+
+      const steps = computeAllEuclidSteps(currentA, currentB);
+
+      steps.forEach((step, index) => {
+        const stepCard = document.createElement('div');
+        stepCard.className = 'step-card active-highlight';
+        stepCard.innerHTML = `
+          <span class="step-tag">Step ${index + 1}</span>
+          <span class="step-eq">${step.a} = ${step.q} × ${step.b} + ${step.r}</span>
+          <span class="step-sub">gcd(${step.a}, ${step.b}) = gcd(${step.b}, ${step.r})</span>
+        `;
+        stepsRow.appendChild(stepCard);
+
+        // Arrow
+        const arrow = document.createElement('span');
+        arrow.className = 'step-arrow';
+        arrow.textContent = '→';
+        stepsRow.appendChild(arrow);
+      });
+
+      // GCD Star Card
+      const gcdCard = document.createElement('div');
+      gcdCard.className = 'step-card gcd-card';
+      gcdCard.innerHTML = `
+        <div class="gcd-star-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Last non-zero remainder</span>
+        </div>
+        <div class="gcd-result-text">gcd(${currentA}, ${currentB}) = ${currentGCD}</div>
+        <div style="font-size: 12px; color: #92400E; font-weight: 500;">That's the GCD!</div>
+      `;
+      stepsRow.appendChild(gcdCard);
+    }
+
+    /* Tab Switching Logic */
+    function switchTab(tabNum) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-view-container').forEach(view => view.classList.remove('active'));
+
+      document.getElementById(`tab-btn-${tabNum}`).classList.add('active');
+      document.getElementById(`tab-view-${tabNum}`).classList.add('active');
+    }
+
+    /* Render Tab 2: Division Table */
+    function renderDivisionTable() {
+      const tbody = document.getElementById('div-table-body');
+      tbody.innerHTML = '';
+
+      document.getElementById('tab2-expr').textContent = `${currentA} ÷ ${currentB}`;
+
+      const steps = computeAllEuclidSteps(currentA, currentB);
+      steps.forEach((step, idx) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>Step ${idx + 1}</td>
+          <td style="font-weight:700; color:var(--purple-counter);">${step.a}</td>
+          <td style="font-weight:700; color:var(--blue-counter);">${step.b}</td>
+          <td style="font-weight:700;">${step.q}</td>
+          <td>${step.q * step.b}</td>
+          <td style="font-weight:700; color:var(--green-counter);">${step.r}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    /* Render Tab 3: Remainder Lanes */
+    function renderRemainderLanes() {
+      const container = document.getElementById('lanes-view-container');
+      container.innerHTML = '';
+
+      const steps = computeAllEuclidSteps(currentA, currentB);
+      const maxVal = currentA;
+
+      steps.forEach((step, idx) => {
+        const row = document.createElement('div');
+        row.className = 'lane-bar-row';
+
+        const pctA = Math.max((step.a / maxVal) * 100, 5);
+        const pctB = Math.max((step.b / maxVal) * 100, 5);
+        const pctR = Math.max((step.r / maxVal) * 100, 2);
+
+        row.innerHTML = `
+          <div class="lane-bar-label">Step ${idx + 1}</div>
+          <div class="lane-bar-track">
+            <div class="lane-bar-fill" style="width: ${pctA}%; background: var(--purple-counter);" title="Dividend: ${step.a}">a=${step.a}</div>
+            <div class="lane-bar-fill" style="width: ${pctB}%; background: var(--blue-counter);" title="Divisor: ${step.b}">b=${step.b}</div>
+            <div class="lane-bar-fill" style="width: ${pctR}%; background: var(--green-counter);" title="Remainder: ${step.r}">r=${step.r}</div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    /* Render Tab 4: Clock / Cycles */
+    function renderClockView() {
+      document.getElementById('clock-mod-val').textContent = currentB;
+      document.getElementById('clock-step-val').textContent = currentA;
+      document.getElementById('clock-rem-val').textContent = currentR;
+      document.getElementById('clock-result-val').textContent = currentR;
+
+      const angle = (currentR / currentB) * 360;
+      document.getElementById('clockHand').style.transform = `rotate(${angle}deg)`;
+    }
+
+    /* Predict Outcome Validation */
+    function checkPrediction() {
+      const inputVal = parseInt(document.getElementById('predictInput').value);
+      const badge = document.getElementById('predictResultBadge');
+
+      if (isNaN(inputVal)) {
+        badge.className = 'predict-result-badge incorrect';
+        badge.textContent = '⚠️ Please enter a number.';
+        return;
+      }
+
+      if (inputVal === currentGCD) {
+        badge.className = 'predict-result-badge correct';
+        badge.textContent = `🎉 Correct! gcd(${currentA}, ${currentB}) = ${currentGCD}`;
+      } else {
+        badge.className = 'predict-result-badge incorrect';
+        badge.textContent = `❌ Incorrect. Try again! Hint: factorize ${currentA} and ${currentB}.`;
+      }
+    }
+
+    /* Reveal Solution Toggle */
+    function toggleRevealSolution() {
+      const initial = document.getElementById('revealContentInitial');
+      const answer = document.getElementById('revealAnswerBox');
+      const card = document.getElementById('revealCard');
+
+      if (answer.style.display === 'block') {
+        answer.style.display = 'none';
+        initial.style.display = 'flex';
+        card.style.background = '#F8FAFC';
+      } else {
+        answer.style.display = 'block';
+        initial.style.display = 'none';
+        card.style.background = '#FFFFFF';
+      }
+    }
+
+    /* Challenge Mode Solution Validation */
+    function checkChallengeSolution() {
+      const q1 = parseInt(document.getElementById('c_q1').value);
+      const r1 = parseInt(document.getElementById('c_r1').value);
+      const q2 = parseInt(document.getElementById('c_q2').value);
+      const r2 = parseInt(document.getElementById('c_r2').value);
+      const q3 = parseInt(document.getElementById('c_q3').value);
+      const r3 = parseInt(document.getElementById('c_r3').value);
+      const gcd = parseInt(document.getElementById('c_gcd').value);
+
+      const isCorrect = (
+        q1 === challengeData.steps[0].q &&
+        r1 === challengeData.steps[0].r &&
+        q2 === challengeData.steps[1].q &&
+        r2 === challengeData.steps[1].r &&
+        q3 === challengeData.steps[2].q &&
+        r3 === challengeData.steps[2].r &&
+        gcd === challengeData.gcd
+      );
+
+      const feedback = document.getElementById('challengeFeedback');
+      if (isCorrect) {
+        feedback.style.color = 'var(--green-counter)';
+        feedback.textContent = '✅ Excellent! Challenge solved perfectly!';
+        document.querySelectorAll('.challenge-num-input').forEach(inp => {
+          inp.classList.remove('incorrect');
+          inp.classList.add('correct');
+        });
+      } else {
+        feedback.style.color = 'var(--rose-accent)';
+        feedback.textContent = '❌ Some values are incorrect. Re-check division steps.';
+        document.querySelectorAll('.challenge-num-input').forEach(inp => {
+          inp.classList.remove('correct');
+          inp.classList.add('incorrect');
+        });
+      }
+    }
+
+    function newChallenge() {
+      const challenges = [
+        {
+          a: 252, b: 105,
+          steps: [{ q: 2, r: 42 }, { q: 2, r: 21 }, { q: 3, r: 0 }],
+          gcd: 21
+        },
+        {
+          a: 144, b: 60,
+          steps: [{ q: 2, r: 24 }, { q: 2, r: 12 }, { q: 2, r: 0 }],
+          gcd: 12
+        }
+      ];
+
+      const c = challenges[Math.floor(Math.random() * challenges.length)];
+      challengeData = c;
+
+      document.getElementById('challengeTitle').textContent = `Find gcd(${c.a}, ${c.b})`;
+      document.getElementById('c_q1').value = '';
+      document.getElementById('c_r1').value = '';
+      document.getElementById('c_q2').value = '';
+      document.getElementById('c_r2').value = '';
+      document.getElementById('c_q3').value = '';
+      document.getElementById('c_r3').value = '';
+      document.getElementById('c_gcd').value = '';
+
+      document.querySelectorAll('.challenge-num-input').forEach(inp => {
+        inp.classList.remove('correct', 'incorrect');
+      });
+      document.getElementById('challengeFeedback').textContent = '';
+    }
+
+    function toggleIllustration() {
+      alert(`Illustration Guide:\n\nStep 1: Length a (${currentA}) is repeatedly split into equal lengths of b (${currentB}).\nStep 2: After fitting ${currentQ} full groups of ${currentB}, the leftover segment is remainder r (${currentR}).\nStep 3: Any common factor of a and b must also factor r!`);
+    }
+
+    function setupLevelDropdown() {
+      const btn = document.getElementById('levelBtn');
+      const menu = document.getElementById('levelDropdown');
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('show');
+      });
+
+      document.addEventListener('click', () => {
+        menu.classList.remove('show');
+      });
+    }
+
+    function setupSidebarNav() {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+    }
+  </script>
+</body>
+</html>

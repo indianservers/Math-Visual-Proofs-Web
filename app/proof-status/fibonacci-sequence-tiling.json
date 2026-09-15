@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "fibonacci-sequence-tiling",
+  "categorySlug": "sequences-and-series",
+  "slug": "fibonacci-sequence-tiling",
+  "route": "/visual-proofs/sequences-and-series/fibonacci-sequence-tiling",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/fibonacci-sequence-tiling"
+}

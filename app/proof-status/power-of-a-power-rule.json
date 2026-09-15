@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "power-of-a-power-rule",
+  "categorySlug": "logarithms-exponents",
+  "slug": "power-of-a-power-rule",
+  "route": "/visual-proofs/logarithms-exponents/power-of-a-power-rule",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/power-of-a-power-rule"
+}

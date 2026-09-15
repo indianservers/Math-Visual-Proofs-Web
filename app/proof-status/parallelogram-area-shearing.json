@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "parallelogram-area-shearing",
+  "categorySlug": "geometry",
+  "slug": "parallelogram-area-shearing",
+  "route": "/visual-proofs/geometry/parallelogram-area-shearing",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-06.html"
+}

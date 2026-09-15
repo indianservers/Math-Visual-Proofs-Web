@@ -1,0 +1,1337 @@
+{
+  "catalog": 223,
+  "githubSources": 111,
+  "keep": [
+    "pythagorean-area-rearrangement",
+    "triangle-area-half-rectangle",
+    "triangle-angle-sum",
+    "exterior-angle-theorem",
+    "similar-triangles-proportional-sides"
+  ],
+  "willIntegrate": [
+    {
+      "id": "parallelogram-area-shearing",
+      "title": "Area of Parallelogram by Shearing",
+      "category": "geometry",
+      "github": "Aditya/lesson-06.html",
+      "type": "HTML"
+    },
+    {
+      "id": "trapezoid-area-duplication",
+      "title": "Area of Trapezoid / Trapezium by Duplication",
+      "category": "geometry",
+      "github": "Aditya/lesson-05.html",
+      "type": "HTML"
+    },
+    {
+      "id": "polygon-interior-angle-sum",
+      "title": "Sum of Interior Angles of a Polygon",
+      "category": "geometry",
+      "github": "Aditya/lesson-22.html",
+      "type": "HTML"
+    },
+    {
+      "id": "area-circle-unrolling",
+      "title": "Area of Circle by Unrolling Circumference",
+      "category": "geometry",
+      "github": "Aditya/lesson-02.html",
+      "type": "HTML"
+    },
+    {
+      "id": "circle-to-triangle-uncurling",
+      "title": "Circle to Triangle Uncurling",
+      "category": "geometry",
+      "github": "Aditya/lesson-03.html",
+      "type": "HTML"
+    },
+    {
+      "id": "square-of-sum",
+      "title": "Square of a Sum: (a + b)^2",
+      "category": "algebraic-identities",
+      "github": "Aditya/lesson-09.html",
+      "type": "HTML"
+    },
+    {
+      "id": "difference-of-squares",
+      "title": "Difference of Squares: a^2 - b^2",
+      "category": "algebraic-identities",
+      "github": "Aditya/lesson-10.html",
+      "type": "HTML"
+    },
+    {
+      "id": "cube-of-sum",
+      "title": "Cube of a Sum: (a + b)^3",
+      "category": "algebraic-identities",
+      "github": "Aditya/lesson-28.html",
+      "type": "HTML"
+    },
+    {
+      "id": "unit-circle-sine-cosine",
+      "title": "Sine and Cosine on the Unit Circle",
+      "category": "trigonometry",
+      "github": "Aditya/lesson-16.html",
+      "type": "HTML"
+    },
+    {
+      "id": "cosine-rule-proof",
+      "title": "Cosine Rule / Law of Cosines",
+      "category": "trigonometry",
+      "github": "Aditya/lesson-30.html",
+      "type": "HTML"
+    },
+    {
+      "id": "secant-becomes-tangent",
+      "title": "Secant Line Becoming Tangent Line",
+      "category": "calculus",
+      "github": "Aditya/lesson-25.html",
+      "type": "HTML"
+    },
+    {
+      "id": "riemann-sums-area-under-curve",
+      "title": "Area Under a Curve by Riemann Sums",
+      "category": "calculus",
+      "github": "Asad/65",
+      "type": "HTML"
+    },
+    {
+      "id": "fundamental-theorem-of-calculus",
+      "title": "Fundamental Theorem of Calculus",
+      "category": "calculus",
+      "github": "Pavan/67-fundamental-theorem-of-calculus",
+      "type": "HTML"
+    },
+    {
+      "id": "integration-by-parts-visual-proof",
+      "title": "Integration by Parts",
+      "category": "calculus",
+      "github": "Ishwarya/068-integration-by-parts",
+      "type": "TSX"
+    },
+    {
+      "id": "derivative-of-sine",
+      "title": "Derivative of sin x",
+      "category": "calculus",
+      "github": "Praveen/derivative-of-sine",
+      "type": "TSX"
+    },
+    {
+      "id": "derivative-of-exponential",
+      "title": "Derivative of e^x",
+      "category": "calculus",
+      "github": "Asad/70",
+      "type": "HTML"
+    },
+    {
+      "id": "optimization-derivative-max-min",
+      "title": "Optimization: Maximum and Minimum from Derivative",
+      "category": "calculus",
+      "github": "Pavan/72-optimization-derivative-max-min",
+      "type": "HTML"
+    },
+    {
+      "id": "even-odd-pairing",
+      "title": "Even and Odd Numbers as Pairing Patterns",
+      "category": "number-theory",
+      "github": "Ishwarya/073-even-odd-pairing",
+      "type": "TSX"
+    },
+    {
+      "id": "divisibility-equal-grouping",
+      "title": "Divisibility as Equal Grouping",
+      "category": "number-theory",
+      "github": "Praveen/divisibility-equal-grouping",
+      "type": "TSX"
+    },
+    {
+      "id": "primes-non-rectangular-arrays",
+      "title": "Prime Numbers as Non-Rectangular Arrays",
+      "category": "number-theory",
+      "github": "Asad/75-code",
+      "type": "HTML"
+    },
+    {
+      "id": "composites-rectangular-arrays",
+      "title": "Composite Numbers as Rectangular Arrays",
+      "category": "number-theory",
+      "github": "Asad/76-code",
+      "type": "HTML"
+    },
+    {
+      "id": "fundamental-theorem-arithmetic-factor-trees",
+      "title": "Fundamental Theorem of Arithmetic through Factor Trees",
+      "category": "number-theory",
+      "github": "Asad/77-code",
+      "type": "HTML"
+    },
+    {
+      "id": "euclid-infinitely-many-primes",
+      "title": "Euclid's Proof of Infinitely Many Primes",
+      "category": "number-theory",
+      "github": "Asad/78-code",
+      "type": "HTML"
+    },
+    {
+      "id": "gcd-euclidean-algorithm",
+      "title": "GCD by Euclidean Algorithm",
+      "category": "number-theory",
+      "github": "Asad/79",
+      "type": "HTML"
+    },
+    {
+      "id": "lcm-grid-alignment",
+      "title": "LCM by Grid Alignment",
+      "category": "number-theory",
+      "github": "Asad/80",
+      "type": "HTML"
+    },
+    {
+      "id": "modular-arithmetic-clock",
+      "title": "Modular Arithmetic as Clock Arithmetic",
+      "category": "number-theory",
+      "github": "Asad/81",
+      "type": "HTML"
+    },
+    {
+      "id": "remainder-pattern-cycles",
+      "title": "Remainder Pattern Cycles",
+      "category": "number-theory",
+      "github": "Asad/82",
+      "type": "HTML"
+    },
+    {
+      "id": "divisibility-by-3-and-9-digit-sum",
+      "title": "Divisibility by 3 and 9 using Digit Sum",
+      "category": "number-theory",
+      "github": "Asad/83",
+      "type": "HTML"
+    },
+    {
+      "id": "irrationality-of-square-root-2",
+      "title": "Why sqrt(2) is Irrational",
+      "category": "number-theory",
+      "github": "Asad/84",
+      "type": "HTML"
+    },
+    {
+      "id": "cross-multiplication-equal-rectangles",
+      "title": "Cross Multiplication as Equal Rectangles",
+      "category": "ratios",
+      "github": "Asad/85",
+      "type": "HTML"
+    },
+    {
+      "id": "matrix-addition-cell-by-cell",
+      "title": "Matrix Addition as Cell-by-Cell Addition",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/105-matrix-addition-cell-by-cell",
+      "type": "TSX"
+    },
+    {
+      "id": "matrix-multiplication-row-column",
+      "title": "Matrix Multiplication as Row-by-Column Dot Product",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/106-matrix-multiplication-row-column",
+      "type": "TSX"
+    },
+    {
+      "id": "matrix-linear-transformation-grid",
+      "title": "Matrix as Linear Transformation",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/107-matrix-linear-transformation-grid",
+      "type": "TSX"
+    },
+    {
+      "id": "determinant-area-scale-factor",
+      "title": "Determinant as Area Scale Factor",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/108-determinant-area-scale-factor",
+      "type": "TSX"
+    },
+    {
+      "id": "linear-system-line-intersection",
+      "title": "Solving 2x2 Linear Systems as Line Intersection",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/109-linear-system-line-intersection",
+      "type": "TSX"
+    },
+    {
+      "id": "row-operations-preserve-solutions",
+      "title": "Row Operations Preserve Solution Set",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/110-row-operations-preserve-solutions",
+      "type": "TSX"
+    },
+    {
+      "id": "eigenvectors-directions-do-not-turn",
+      "title": "Eigenvectors as Directions That Do Not Turn",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/111-eigenvectors-directions-do-not-turn",
+      "type": "TSX"
+    },
+    {
+      "id": "matrix-inverse-undo-transformation",
+      "title": "Matrix Inverse as Undoing a Transformation",
+      "category": "matrices-linear-algebra",
+      "github": "Ishwarya/112-matrix-inverse-undo-transformation",
+      "type": "TSX"
+    },
+    {
+      "id": "sphere-surface-area-volume",
+      "title": "Sphere Surface Area and Volume",
+      "category": "mensuration",
+      "github": "Pavan/135-sphere-surface-area-volume",
+      "type": "HTML"
+    },
+    {
+      "id": "composite-solids-and-units",
+      "title": "Composite Solids and Units",
+      "category": "mensuration",
+      "github": "Pavan/136-composite-solids-and-units",
+      "type": "HTML"
+    },
+    {
+      "id": "circle-locus-equal-distance",
+      "title": "Circle as Equal Distance from Center",
+      "category": "conic-sections",
+      "github": "Pavan/137-circle-locus-equal-distance",
+      "type": "HTML"
+    },
+    {
+      "id": "parabola-focus-directrix",
+      "title": "Parabola as Focus-Directrix Locus",
+      "category": "conic-sections",
+      "github": "Pavan/138-parabola-focus-directrix",
+      "type": "HTML"
+    },
+    {
+      "id": "ellipse-sum-of-distances",
+      "title": "Ellipse as Constant Sum of Distances",
+      "category": "conic-sections",
+      "github": "Pavan/139-ellipse-sum-of-distances",
+      "type": "HTML"
+    },
+    {
+      "id": "hyperbola-difference-of-distances",
+      "title": "Hyperbola as Constant Difference of Distances",
+      "category": "conic-sections",
+      "github": "Pavan/140-hyperbola-difference-of-distances",
+      "type": "HTML"
+    },
+    {
+      "id": "eccentricity-classification",
+      "title": "Eccentricity: Circle, Ellipse, Parabola, Hyperbola",
+      "category": "conic-sections",
+      "github": "Pavan/141-eccentricity-classification",
+      "type": "HTML"
+    },
+    {
+      "id": "cone-slicing-conics",
+      "title": "Conic Sections from Slicing a Cone",
+      "category": "conic-sections",
+      "github": "Pavan/142-cone-slice-conics",
+      "type": "HTML"
+    },
+    {
+      "id": "parabola-reflective-property",
+      "title": "Tangent and Reflective Property of Parabola",
+      "category": "conic-sections",
+      "github": "Pavan/143-parabola-reflective-property",
+      "type": "HTML"
+    },
+    {
+      "id": "directrix-focus-standard-equations",
+      "title": "Directrix, Focus, and Standard Equations",
+      "category": "conic-sections",
+      "github": "Pavan/144-directrix-focus-standard-equation",
+      "type": "HTML"
+    },
+    {
+      "id": "inequality-number-line",
+      "title": "Inequality on a Number Line",
+      "category": "inequalities",
+      "github": "Pavan/145-inequality-number-line",
+      "type": "HTML"
+    },
+    {
+      "id": "solving-linear-inequalities",
+      "title": "Solving Linear Inequalities",
+      "category": "inequalities",
+      "github": "Pavan/146-solving-linear-inequalities",
+      "type": "HTML"
+    },
+    {
+      "id": "compound-inequalities-intervals",
+      "title": "Compound Inequalities and Intervals",
+      "category": "inequalities",
+      "github": "Pavan/147-compound-inequalities-intervals",
+      "type": "HTML"
+    },
+    {
+      "id": "quadratic-inequalities-graph-regions",
+      "title": "Quadratic Inequalities by Graph Regions",
+      "category": "inequalities",
+      "github": "Pavan/148-quadratic-inequalities-graphs-region",
+      "type": "HTML"
+    },
+    {
+      "id": "am-gm-inequality",
+      "title": "AM-GM Inequality",
+      "category": "inequalities",
+      "github": "Pavan/149-am-gm-inequality",
+      "type": "HTML"
+    },
+    {
+      "id": "triangle-inequality",
+      "title": "Triangle Inequality",
+      "category": "inequalities",
+      "github": "Pavan/150-triangle-inequality",
+      "type": "HTML"
+    },
+    {
+      "id": "line-rotational-symmetry",
+      "title": "Line Symmetry and Rotational Symmetry",
+      "category": "transformations-symmetry",
+      "github": "Harikishore/line-rotational-symmetry",
+      "type": "TSX"
+    },
+    {
+      "id": "tessellations-repeated-transformations",
+      "title": "Tessellations by Repeated Transformations",
+      "category": "transformations-symmetry",
+      "github": "Harikishore/tessellations-repeated-transformations",
+      "type": "TSX"
+    },
+    {
+      "id": "transformation-matrices-2d",
+      "title": "Transformation Matrices in 2D",
+      "category": "transformations-symmetry",
+      "github": "Harikishore/transformation-matrices-2d",
+      "type": "TSX"
+    },
+    {
+      "id": "first-order-differential-equation-slope-field",
+      "title": "First-Order Differential Equation: Slope Field",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/first-order-differential-equation-slope-field",
+      "type": "TSX"
+    },
+    {
+      "id": "simple-harmonic-motion",
+      "title": "Simple Harmonic Motion",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/simple-harmonic-motion",
+      "type": "TSX"
+    },
+    {
+      "id": "fourier-series-wave-building",
+      "title": "Fourier Series as Wave Building",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/fourier-series-wave-building",
+      "type": "TSX"
+    },
+    {
+      "id": "laplace-transform-decay-system",
+      "title": "Laplace Transform as Time-to-System View",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/laplace-transform-decay-system",
+      "type": "TSX"
+    },
+    {
+      "id": "gradient-steepest-increase",
+      "title": "Gradient and Direction of Steepest Increase",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/gradient-steepest-increase",
+      "type": "TSX"
+    },
+    {
+      "id": "divergence-curl-vector-field",
+      "title": "Divergence and Curl Intuition",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/divergence-curl-vector-field",
+      "type": "TSX"
+    },
+    {
+      "id": "trapezoidal-rule-numerical-integration",
+      "title": "Numerical Integration: Trapezoidal Rule",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/trapezoidal-rule-numerical-integration",
+      "type": "TSX"
+    },
+    {
+      "id": "linear-programming-feasible-region",
+      "title": "Linear Programming Feasible Region",
+      "category": "engineering-mathematics",
+      "github": "Harikishore/linear-programming-feasible-region",
+      "type": "TSX"
+    },
+    {
+      "id": "arithmetic-progression-equal-steps",
+      "title": "Arithmetic Progression as Equal Steps",
+      "category": "sequences-and-series",
+      "github": "Harikishore/arithmetic-progression-equal-steps",
+      "type": "TSX"
+    },
+    {
+      "id": "sum-first-n-natural-numbers",
+      "title": "Sum of First n Natural Numbers",
+      "category": "sequences-and-series",
+      "github": "Harikishore/sum-first-n-natural-numbers",
+      "type": "TSX"
+    },
+    {
+      "id": "sum-first-n-odd-numbers",
+      "title": "Sum of First n Odd Numbers",
+      "category": "sequences-and-series",
+      "github": "Harikishore/sum-first-n-odd-numbers",
+      "type": "TSX"
+    },
+    {
+      "id": "sum-arithmetic-progression",
+      "title": "Sum of Arithmetic Progression",
+      "category": "sequences-and-series",
+      "github": "Harikishore/sum-arithmetic-progression",
+      "type": "TSX"
+    },
+    {
+      "id": "geometric-progression-repeated-scaling",
+      "title": "Geometric Progression as Repeated Scaling",
+      "category": "sequences-and-series",
+      "github": "Harikishore/geometric-progression-repeated-scaling",
+      "type": "TSX"
+    },
+    {
+      "id": "finite-geometric-series-sum",
+      "title": "Sum of Finite Geometric Series",
+      "category": "sequences-and-series",
+      "github": "Harikishore/finite-geometric-series-sum",
+      "type": "TSX"
+    },
+    {
+      "id": "sierpinski-retained-area",
+      "title": "Sierpinski Carpet Retained Area",
+      "category": "sequences-and-series",
+      "github": "Harikishore/sierpinski-retained-area",
+      "type": "TSX"
+    },
+    {
+      "id": "sierpinski-removed-square-sum",
+      "title": "Sierpinski Removed Square Sum",
+      "category": "sequences-and-series",
+      "github": "Harikishore/sierpinski-removed-square-sum",
+      "type": "TSX"
+    },
+    {
+      "id": "infinite-geometric-series-convergence",
+      "title": "Infinite Geometric Series Convergence",
+      "category": "sequences-and-series",
+      "github": "Aditya/lesson-11.html",
+      "type": "HTML"
+    },
+    {
+      "id": "triangular-numbers",
+      "title": "Triangular Numbers",
+      "category": "sequences-and-series",
+      "github": "Harikishore/triangular-numbers",
+      "type": "TSX"
+    },
+    {
+      "id": "square-numbers-odd-layers",
+      "title": "Square Numbers from Odd Number Layers",
+      "category": "sequences-and-series",
+      "github": "Harikishore/square-numbers-odd-layers",
+      "type": "TSX"
+    },
+    {
+      "id": "fibonacci-sequence-tiling",
+      "title": "Fibonacci Sequence by Tiling",
+      "category": "sequences-and-series",
+      "github": "Harikishore/fibonacci-sequence-tiling",
+      "type": "TSX"
+    },
+    {
+      "id": "fibonacci-spiral-approximation",
+      "title": "Fibonacci Spiral Approximation",
+      "category": "sequences-and-series",
+      "github": "Harikishore/fibonacci-spiral-approximation",
+      "type": "TSX"
+    },
+    {
+      "id": "divisibility-by-11",
+      "title": "Divisibility by 11",
+      "category": "number-theory",
+      "github": "Praveen/divisibility-by-11",
+      "type": "TSX"
+    },
+    {
+      "id": "divisibility-by-3",
+      "title": "Divisibility by 3",
+      "category": "number-theory",
+      "github": "Praveen/divisibility-by-3",
+      "type": "TSX"
+    },
+    {
+      "id": "divisibility-by-9",
+      "title": "Divisibility by 9",
+      "category": "number-theory",
+      "github": "Praveen/divisibility-by-9",
+      "type": "TSX"
+    },
+    {
+      "id": "even-number-sum",
+      "title": "Sum of First n Even Numbers: 2 + 4 + ... + 2n = n(n + 1)",
+      "category": "sequences-and-series",
+      "github": "Praveen/even-number-sum",
+      "type": "TSX"
+    },
+    {
+      "id": "exponent-product-rule",
+      "title": "Exponent Product Rule: a^m a^n = a^(m+n)",
+      "category": "logarithms-exponents",
+      "github": "Praveen/exponent-product-rule",
+      "type": "TSX"
+    },
+    {
+      "id": "exponent-quotient-rule",
+      "title": "Exponent Quotient Rule: a^m / a^n = a^(m-n)",
+      "category": "logarithms-exponents",
+      "github": "Praveen/exponent-quotient-rule",
+      "type": "TSX"
+    },
+    {
+      "id": "power-of-a-power-rule",
+      "title": "Power of a Power: (a^m)^n = a^(mn)",
+      "category": "logarithms-exponents",
+      "github": "Praveen/power-of-a-power-rule",
+      "type": "TSX"
+    },
+    {
+      "id": "zero-exponent-rule",
+      "title": "Zero Exponent Rule: a^0 = 1",
+      "category": "logarithms-exponents",
+      "github": "Praveen/zero-exponent-rule",
+      "type": "TSX"
+    },
+    {
+      "id": "negative-exponent-rule",
+      "title": "Negative Exponent Rule: a^(-n) = 1 / a^n",
+      "category": "logarithms-exponents",
+      "github": "Praveen/negative-exponent-rule",
+      "type": "TSX"
+    },
+    {
+      "id": "exterior-angle-sum-polygon",
+      "title": "Exterior Angle Sum of a Polygon: 360 degrees",
+      "category": "geometry",
+      "github": "Praveen/exterior-angle-sum-polygon",
+      "type": "TSX"
+    },
+    {
+      "id": "herons-formula-visual-proof",
+      "title": "Heron's Formula",
+      "category": "geometry",
+      "github": "Praveen/herons-formula-visual-proof",
+      "type": "TSX"
+    },
+    {
+      "id": "pyramid-volume-one-third",
+      "title": "Volume of a Pyramid: V = (1/3)Bh",
+      "category": "mensuration",
+      "github": "Praveen/pyramid-volume-one-third",
+      "type": "TSX"
+    },
+    {
+      "id": "shoelace-formula",
+      "title": "Shoelace Formula",
+      "category": "coordinate-geometry",
+      "github": "Praveen/shoelace-formula",
+      "type": "TSX"
+    }
+  ],
+  "missing": [
+    {
+      "id": "circle-circumference-unwrapping",
+      "title": "Circle Circumference by Rolling/Unwrapping",
+      "category": "geometry"
+    },
+    {
+      "id": "sector-area-formula",
+      "title": "Sector Area Formula",
+      "category": "geometry"
+    },
+    {
+      "id": "orthographic-projection-from-cube-stacks",
+      "title": "Orthographic Projections from Cube Stacks",
+      "category": "geometry"
+    },
+    {
+      "id": "non-unique-solid-projections",
+      "title": "Non-Unique Solid Projections",
+      "category": "geometry"
+    },
+    {
+      "id": "square-of-difference",
+      "title": "Square of a Difference: (a - b)^2",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "product-of-binomials",
+      "title": "Product of Binomials: (x + a)(x + b)",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "distributive-law-area-model",
+      "title": "Distributive Law Area Model: (a + b)(c + d)",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "three-term-square",
+      "title": "Three-Term Square: (a + b + c)^2",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "completing-the-square",
+      "title": "Completing the Square",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "quadratic-factorization-area-model",
+      "title": "Factorization of x^2 + px + q",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "perfect-square-trinomial-recognition",
+      "title": "Perfect Square Trinomial Recognition",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "cube-of-difference",
+      "title": "Cube of a Difference: (a - b)^3",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "sum-and-difference-product",
+      "title": "Sum and Difference Product: (a + b)(a - b)",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "right-triangle-trig-ratios",
+      "title": "Sine, Cosine, and Tangent from a Right Triangle",
+      "category": "trigonometry"
+    },
+    {
+      "id": "pythagorean-trig-identity",
+      "title": "Pythagorean Identity: sin^2 theta + cos^2 theta = 1",
+      "category": "trigonometry"
+    },
+    {
+      "id": "tangent-ratio-identity",
+      "title": "Tangent Identity: tan theta = sin theta / cos theta",
+      "category": "trigonometry"
+    },
+    {
+      "id": "radians-arc-radius",
+      "title": "Radians as Arc Length over Radius",
+      "category": "trigonometry"
+    },
+    {
+      "id": "arc-length-formula",
+      "title": "Arc Length Formula: s = r theta",
+      "category": "trigonometry"
+    },
+    {
+      "id": "trig-graphs-from-unit-circle",
+      "title": "Trigonometric Graphs from the Unit Circle",
+      "category": "trigonometry"
+    },
+    {
+      "id": "cosine-angle-addition",
+      "title": "Angle Addition Formula for Cosine",
+      "category": "trigonometry"
+    },
+    {
+      "id": "sine-angle-addition",
+      "title": "Angle Addition Formula for Sine",
+      "category": "trigonometry"
+    },
+    {
+      "id": "double-angle-identities",
+      "title": "Double Angle Identities",
+      "category": "trigonometry"
+    },
+    {
+      "id": "sine-rule-proof",
+      "title": "Sine Rule / Law of Sines",
+      "category": "trigonometry"
+    },
+    {
+      "id": "law-of-cosines-circle-construction",
+      "title": "Law of Cosines Circle Construction",
+      "category": "trigonometry"
+    },
+    {
+      "id": "complementary-angle-identities",
+      "title": "Complementary Angle Identities",
+      "category": "trigonometry"
+    },
+    {
+      "id": "triangle-area-sine-formula",
+      "title": "Area of a Triangle Using Sine: A = 1/2 ab sin C",
+      "category": "trigonometry"
+    },
+    {
+      "id": "small-angle-approximation",
+      "title": "Small Angle Approximation: sin theta is approximately theta",
+      "category": "trigonometry"
+    },
+    {
+      "id": "distance-formula",
+      "title": "Distance Formula",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "midpoint-formula",
+      "title": "Midpoint Formula",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "section-formula",
+      "title": "Section Formula / Internal Division Formula",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "slope-formula",
+      "title": "Slope Formula",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "slope-intercept-line-equation",
+      "title": "Equation of a Line: y = mx + c",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "point-slope-line-equation",
+      "title": "Point-Slope Form of a Line",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "parallel-lines-slope",
+      "title": "Parallel Lines Have Equal Slopes",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "perpendicular-lines-slope",
+      "title": "Perpendicular Lines Have Slopes with Product -1",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "triangle-area-coordinates",
+      "title": "Area of Triangle Using Coordinates",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "circle-equation",
+      "title": "Equation of a Circle",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "translation-of-points",
+      "title": "Translation of Points",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "reflection-across-axes",
+      "title": "Reflection Across Axes",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "rotation-about-origin",
+      "title": "Rotation About Origin",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "scaling-dilation-origin",
+      "title": "Scaling / Dilation from Origin",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "coordinate-proof-pythagorean-theorem",
+      "title": "Coordinate Proof of Pythagorean Theorem",
+      "category": "coordinate-geometry"
+    },
+    {
+      "id": "limit-approaches-point",
+      "title": "Limit as x Approaches a Point",
+      "category": "calculus"
+    },
+    {
+      "id": "derivative-slope-of-tangent",
+      "title": "Derivative as Slope of Tangent",
+      "category": "calculus"
+    },
+    {
+      "id": "derivative-power-rule",
+      "title": "Power Rule for Derivatives",
+      "category": "calculus"
+    },
+    {
+      "id": "product-rule-visual-proof",
+      "title": "Product Rule Visual Intuition",
+      "category": "calculus"
+    },
+    {
+      "id": "chain-rule-visual-proof",
+      "title": "Chain Rule Visual Intuition",
+      "category": "calculus"
+    },
+    {
+      "id": "mean-value-theorem",
+      "title": "Mean Value Theorem",
+      "category": "calculus"
+    },
+    {
+      "id": "definite-integral-accumulated-area",
+      "title": "Definite Integral as Accumulated Area",
+      "category": "calculus"
+    },
+    {
+      "id": "taylor-series-approximation",
+      "title": "Taylor Series Approximation",
+      "category": "calculus"
+    },
+    {
+      "id": "map-scale-same-unit-principle",
+      "title": "Map Scale Needs Same Units",
+      "category": "ratios"
+    },
+    {
+      "id": "multi-term-ratio-shares",
+      "title": "Multi-Term Ratio Shares",
+      "category": "ratios"
+    },
+    {
+      "id": "direct-vs-inverse-proportion",
+      "title": "Direct vs Inverse Proportion",
+      "category": "ratios"
+    },
+    {
+      "id": "probability-favorable-over-total",
+      "title": "Probability as Favorable Outcomes over Total Outcomes",
+      "category": "probability"
+    },
+    {
+      "id": "complement-rule",
+      "title": "Complement Rule",
+      "category": "probability"
+    },
+    {
+      "id": "addition-rule-overlapping-events",
+      "title": "Addition Rule for Overlapping Events",
+      "category": "probability"
+    },
+    {
+      "id": "multiplication-rule-independent-events",
+      "title": "Multiplication Rule and Independent Events",
+      "category": "probability"
+    },
+    {
+      "id": "conditional-probability",
+      "title": "Conditional Probability",
+      "category": "probability"
+    },
+    {
+      "id": "tree-diagram-compound-probability",
+      "title": "Tree Diagrams for Compound Probability",
+      "category": "probability"
+    },
+    {
+      "id": "experimental-probability-law-large-numbers",
+      "title": "Experimental Probability and Law of Large Numbers",
+      "category": "probability"
+    },
+    {
+      "id": "expected-value-long-run-average",
+      "title": "Expected Value as Long-Run Average",
+      "category": "probability"
+    },
+    {
+      "id": "mean-as-balance-point",
+      "title": "Mean as Balance Point",
+      "category": "statistics"
+    },
+    {
+      "id": "median-and-quartiles",
+      "title": "Median and Quartiles",
+      "category": "statistics"
+    },
+    {
+      "id": "variance-standard-deviation",
+      "title": "Variance and Standard Deviation",
+      "category": "statistics"
+    },
+    {
+      "id": "histogram-frequency-distribution",
+      "title": "Histogram and Frequency Distribution",
+      "category": "statistics"
+    },
+    {
+      "id": "sampling-distribution-mean",
+      "title": "Sampling Distribution of the Mean",
+      "category": "statistics"
+    },
+    {
+      "id": "normal-distribution-empirical-rule",
+      "title": "Normal Distribution Empirical Rule",
+      "category": "statistics"
+    },
+    {
+      "id": "correlation-scatterplot",
+      "title": "Correlation and Scatterplots",
+      "category": "statistics"
+    },
+    {
+      "id": "linear-regression-least-squares",
+      "title": "Linear Regression Least Squares",
+      "category": "statistics"
+    },
+    {
+      "id": "vector-as-directed-segment",
+      "title": "Vector as Directed Segment",
+      "category": "vectors"
+    },
+    {
+      "id": "vector-addition-tip-to-tail",
+      "title": "Vector Addition: Tip-to-Tail and Parallelogram Rule",
+      "category": "vectors"
+    },
+    {
+      "id": "scalar-multiplication-vector",
+      "title": "Scalar Multiplication of Vectors",
+      "category": "vectors"
+    },
+    {
+      "id": "dot-product-as-projection",
+      "title": "Dot Product as Projection",
+      "category": "vectors"
+    },
+    {
+      "id": "cross-product-area",
+      "title": "Cross Product Magnitude as Area",
+      "category": "vectors"
+    },
+    {
+      "id": "unit-vectors-normalization",
+      "title": "Unit Vectors and Normalization",
+      "category": "vectors"
+    },
+    {
+      "id": "vector-equation-line",
+      "title": "Vector Equation of a Line",
+      "category": "vectors"
+    },
+    {
+      "id": "vector-projection-component",
+      "title": "Vector Projection and Component Along a Direction",
+      "category": "vectors"
+    },
+    {
+      "id": "complex-number-plane-point",
+      "title": "Complex Number as a Point on the Plane",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "modulus-and-argument",
+      "title": "Complex Modulus and Argument",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "complex-addition-vector",
+      "title": "Complex Addition as Vector Addition",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "complex-multiplication-rotation-scaling",
+      "title": "Complex Multiplication as Rotation and Scaling",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "multiplication-by-i-rotation",
+      "title": "Multiplication by i as 90 Degree Rotation",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "complex-conjugate-reflection",
+      "title": "Complex Conjugate and Reflection",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "roots-of-unity",
+      "title": "Roots of Unity",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "euler-form-unit-circle",
+      "title": "Euler Form and Unit Circle",
+      "category": "complex-numbers"
+    },
+    {
+      "id": "rectangle-square-area",
+      "title": "Rectangle and Square Area",
+      "category": "mensuration"
+    },
+    {
+      "id": "perimeter-and-circumference",
+      "title": "Perimeter and Circumference",
+      "category": "mensuration"
+    },
+    {
+      "id": "cuboid-cube-surface-area",
+      "title": "Surface Area of Cuboid and Cube",
+      "category": "mensuration"
+    },
+    {
+      "id": "cuboid-cube-volume",
+      "title": "Volume of Cuboid and Cube",
+      "category": "mensuration"
+    },
+    {
+      "id": "cylinder-volume-surface-area",
+      "title": "Cylinder Volume and Curved Surface Area",
+      "category": "mensuration"
+    },
+    {
+      "id": "cone-volume-surface-area",
+      "title": "Cone Volume and Surface Area",
+      "category": "mensuration"
+    },
+    {
+      "id": "cauchy-schwarz-dot-product-bound",
+      "title": "Cauchy-Schwarz Inequality: Dot Product Bound",
+      "category": "inequalities"
+    },
+    {
+      "id": "linear-inequality-regions",
+      "title": "Inequality Regions in the Coordinate Plane",
+      "category": "inequalities"
+    },
+    {
+      "id": "exponents-repeated-multiplication",
+      "title": "Exponents as Repeated Multiplication",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "laws-of-exponents-same-base",
+      "title": "Laws of Exponents: Same Base",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "exponential-growth-decay",
+      "title": "Exponential Growth and Decay",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "logarithm-inverse-exponential",
+      "title": "Logarithm as Inverse of Exponential",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "laws-of-logarithms",
+      "title": "Laws of Logarithms",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "change-of-base-formula",
+      "title": "Change of Base Formula",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "logarithmic-scale-orders-magnitude",
+      "title": "Logarithmic Scale and Orders of Magnitude",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "natural-exponential-e",
+      "title": "Natural Exponential and Euler's Number e",
+      "category": "logarithms-exponents"
+    },
+    {
+      "id": "translation-sliding-vector",
+      "title": "Translation as Sliding Without Turning",
+      "category": "transformations-symmetry"
+    },
+    {
+      "id": "reflection-mirror-line",
+      "title": "Reflection as Mirror Image",
+      "category": "transformations-symmetry"
+    },
+    {
+      "id": "rotation-about-point",
+      "title": "Rotation About a Point",
+      "category": "transformations-symmetry"
+    },
+    {
+      "id": "dilation-similarity-scale-factor",
+      "title": "Dilation and Similarity",
+      "category": "transformations-symmetry"
+    },
+    {
+      "id": "congruence-rigid-motions",
+      "title": "Congruence Through Rigid Motions",
+      "category": "transformations-symmetry"
+    },
+    {
+      "id": "sum-of-fibonacci-numbers",
+      "title": "Sum of Fibonacci Numbers",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "pascal-triangle-binomial-coefficients",
+      "title": "Binomial Coefficients and Pascal's Triangle",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "visual-induction-domino-growth",
+      "title": "Visual Induction: Domino Growth",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "harmonic-series-growth-intuition",
+      "title": "Harmonic Series Growth Intuition",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "gcd-lcm-product-relation",
+      "title": "GCD-LCM Product Relation: gcd(a,b) x lcm(a,b) = ab",
+      "category": "number-theory"
+    },
+    {
+      "id": "consecutive-square-difference",
+      "title": "Difference of Consecutive Squares: (n + 1)^2 - n^2 = 2n + 1",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "sum-of-cubes-identity",
+      "title": "Sum of Cubes: a^3 + b^3 = (a + b)(a^2 - ab + b^2)",
+      "category": "algebraic-identities"
+    },
+    {
+      "id": "integral-power-zero-one",
+      "title": "Power Integral on [0,1]: integral_0^1 x^n dx = 1/(n+1)",
+      "category": "calculus"
+    },
+    {
+      "id": "bayes-theorem-tree-reversal",
+      "title": "Bayes' Theorem",
+      "category": "probability"
+    },
+    {
+      "id": "binomial-mean",
+      "title": "Binomial Mean: E(X) = np",
+      "category": "probability"
+    },
+    {
+      "id": "binomial-variance",
+      "title": "Binomial Variance: np(1-p)",
+      "category": "probability"
+    },
+    {
+      "id": "linear-independence-span-collapse",
+      "title": "Linear Independence",
+      "category": "matrices-linear-algebra"
+    },
+    {
+      "id": "cramers-rule-determinants",
+      "title": "Cramer's Rule",
+      "category": "matrices-linear-algebra"
+    },
+    {
+      "id": "rank-transformation-dimension",
+      "title": "Rank as Remaining Independent Directions",
+      "category": "matrices-linear-algebra"
+    },
+    {
+      "id": "binomial-theorem-pascal-expansion",
+      "title": "Binomial Theorem",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "pascal-identity-subset-split",
+      "title": "Pascal Identity: C(n,r) = C(n-1,r-1) + C(n-1,r)",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "sum-of-cubes-square-triangular",
+      "title": "Sum of Cubes: 1^3 + 2^3 + ... + n^3 = [n(n+1)/2]^2",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "telescoping-series-cancellation",
+      "title": "Telescoping Series",
+      "category": "sequences-and-series"
+    },
+    {
+      "id": "standard-deviation-effect",
+      "title": "Standard Deviation Effect",
+      "category": "statistics"
+    },
+    {
+      "id": "central-limit-theorem",
+      "title": "Central Limit Theorem",
+      "category": "statistics"
+    },
+    {
+      "id": "geometric-series-sum-one-over-one-minus-r",
+      "title": "Geometric-Series Sum: 1 + r + r^2 + ... = 1/(1-r)",
+      "category": "sequences-and-series"
+    }
+  ],
+  "unmatchedGithub": [
+    {
+      "id": null,
+      "github": "Aditya/lesson-12.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-15.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-18.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-19.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-21.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-24.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-27.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    },
+    {
+      "id": null,
+      "github": "Aditya/lesson-32.html",
+      "type": "HTML",
+      "intern": "Aditya"
+    }
+  ]
+}

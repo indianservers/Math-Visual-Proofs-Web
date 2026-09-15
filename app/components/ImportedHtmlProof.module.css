@@ -1,0 +1,16 @@
+.wrap {
+  width: 100%;
+  min-height: min(85vh, 1100px);
+  border: 1px solid #dce1f4;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.frame {
+  display: block;
+  width: 100%;
+  height: min(85vh, 1100px);
+  border: 0;
+  background: #fff;
+}

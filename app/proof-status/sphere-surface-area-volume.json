@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "sphere-surface-area-volume",
+  "categorySlug": "mensuration",
+  "slug": "sphere-surface-area-volume",
+  "route": "/visual-proofs/mensuration/sphere-surface-area-volume",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/135-sphere-surface-area-volume"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "exponent-product-rule",
+  "categorySlug": "logarithms-exponents",
+  "slug": "exponent-product-rule",
+  "route": "/visual-proofs/logarithms-exponents/exponent-product-rule",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/exponent-product-rule"
+}

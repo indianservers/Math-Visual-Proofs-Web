@@ -1,0 +1,2586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundamental Theorem of Calculus - Visual Proofs</title>
+  
+  <!-- KaTeX for mathematical expressions -->
+  <link rel="stylesheet" href="/vendor/katex/katex.min.css" crossorigin="anonymous">
+  <script src="/vendor/katex/katex.min.js" crossorigin="anonymous"></script>
+  <script src="/vendor/katex/auto-render.min.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* CSS Variables & Theme */
+    :root {
+      --bg-main: #f5f6fc;
+      --card-bg: #ffffff;
+      --text-main: #1e1b4b;
+      --text-muted: #6b7280;
+      --text-purple: #4c1d95;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #ede9fe;
+      --primary-dark: #4338ca;
+
+      --purple-graph: #7c3aed;
+      --purple-area-fill: rgba(124, 58, 237, 0.15);
+      --purple-area-stroke: rgba(124, 58, 237, 0.4);
+
+      --orange-accent: #ea580c;
+      --orange-rect-fill: rgba(234, 88, 12, 0.25);
+      --orange-rect-stroke: #ea580c;
+      --orange-light: #fff7ed;
+
+      --border-color: #e2e8f0;
+      --border-purple: #ddd6fe;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Layout Structure */
+    .app-container {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      padding: 0 8px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    .brand-subtitle {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item a:hover {
+      background-color: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .nav-item.active a {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1600px;
+      overflow-y: auto;
+    }
+
+    /* Header Section */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .main-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .main-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-purple {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .badge-gray {
+      background-color: #e2e8f0;
+      color: #475569;
+    }
+
+    .bookmark-btn {
+      background: white;
+      border: 1px solid var(--border-color);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .bookmark-btn:hover, .bookmark-btn.active {
+      color: var(--primary);
+      border-color: var(--border-purple);
+      background-color: var(--primary-light);
+    }
+
+    /* Mission Banner */
+    .mission-card {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mission-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mission-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mission-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      letter-spacing: 0.3px;
+    }
+
+    .mission-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Main Grid: Graph Lab & Why It Works */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+    }
+
+    /* Card Wrapper */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .card-header-icon {
+      color: var(--primary);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    /* Graph Lab Internal Layout */
+    .graph-lab-body {
+      display: grid;
+      grid-template-columns: 190px 1fr 190px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .control-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+    }
+
+    .control-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .func-display {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-purple);
+      margin-bottom: 6px;
+    }
+
+    .func-select, .input-text {
+      width: 100%;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      outline: none;
+      background: white;
+    }
+
+    .func-select:focus, .input-text:focus {
+      border-color: var(--primary);
+    }
+
+    .interval-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .interval-row input {
+      width: 45px;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .toggle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      background: white;
+      border: 1px solid var(--border-color);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .toggle-btn.active {
+      background: var(--primary-light);
+      border-color: var(--border-purple);
+      color: var(--primary-dark);
+    }
+
+    .toggle-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+    }
+
+    .toggle-btn.active .toggle-indicator {
+      background: var(--primary);
+    }
+
+    /* Interactive Graph Canvas Area */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid #f1f5f9;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 420px;
+      cursor: crosshair;
+    }
+
+    /* Live Values Panel */
+    .live-values-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .values-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .val-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 0.9rem;
+      border-bottom: 1px dashed #f1f5f9;
+    }
+
+    .val-name {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .val-num {
+      font-weight: 800;
+      font-family: monospace;
+      color: var(--primary-dark);
+    }
+
+    .val-num.orange {
+      color: var(--orange-accent);
+    }
+
+    .approx-box {
+      background: var(--orange-light);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .approx-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--orange-accent);
+    }
+
+    /* Graph Lab Bottom Controls */
+    .graph-bottom-bar {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: #f8fafc;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .slider-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      flex: 1;
+      max-width: 280px;
+    }
+
+    .slider-group input[type="range"] {
+      flex: 1;
+      accent-color: var(--primary);
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .action-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .action-btn-primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .action-btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Why It Works Sidebar Panel */
+    .why-panel {
+      max-height: 820px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .why-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+    .why-panel::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+    .why-panel::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    .explain-step {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .step-diagram {
+      width: 100%;
+      height: 90px;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Predict Card */
+    .predict-box {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .predict-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .predict-input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .predict-input-group input {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+    }
+
+    .predict-result {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Bottom Grid Row: One Line Proof & Challenge */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 24px;
+    }
+
+    /* Proof Flow */
+    .proof-flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+
+    .proof-node {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      text-align: center;
+      min-width: 110px;
+      flex-shrink: 0;
+    }
+
+    .proof-node-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .proof-node.highlight {
+      border: 2px dashed var(--primary);
+      background: var(--primary-light);
+    }
+
+    .proof-arrow {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    /* Challenge Box */
+    .challenge-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .challenge-question {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .challenge-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .challenge-form input {
+      width: 100px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .score-badge {
+      margin-top: auto;
+      align-self: flex-end;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: var(--primary-dark);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .graph-lab-body {
+        grid-template-columns: 1fr;
+      }
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main-content {
+        padding: 16px;
+      }
+    }
+  </style>
+<style>
+
+/* UNIFIED MATHS UNIVERSE APPLICATION SHELL STYLES */
+:root {
+  --bg-main: #f5f6fc;
+  --card-bg: #ffffff;
+  --text-main: #1e1b4b;
+  --text-muted: #6b7280;
+  --text-purple: #4c1d95;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #ede9fe;
+  --primary-dark: #4338ca;
+  --border-color: #e2e8f0;
+  --border-purple: #ddd6fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 220px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  margin-left: 8px;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-item.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  overflow-y: auto;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.main-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-purple {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.bookmark-btn {
+  background: white;
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-btn:hover, .bookmark-btn.active {
+  color: var(--primary);
+  border-color: var(--border-purple);
+  background-color: var(--primary-light);
+}
+
+/* REQUIREMENT 4: COUNTER TRAY OVERFLOW FIX */
+.controls-panel, .live-values-panel, .counter-box, .stats-panel, .info-tray, .control-panel, .control-box-list {
+  max-height: 520px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px;
+}
+
+.controls-panel::-webkit-scrollbar, .live-values-panel::-webkit-scrollbar, .control-panel::-webkit-scrollbar {
+  width: 5px;
+}
+.controls-panel::-webkit-scrollbar-thumb, .live-values-panel::-webkit-scrollbar-thumb, .control-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.val-num, .counter-value, .stat-value, .value-num {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* REQUIREMENT 5: ZOOM VIEWPORT CONTAINMENT FIX */
+.canvas-container, .graph-container, .viewport-container, .svg-container, #canvas-container, .render-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-md, 14px);
+  z-index: 1;
+}
+
+.graph-tools, .zoom-controls, .floating-tools {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+/* Responsive queries */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-content {
+    padding: 16px;
+  }
+}
+
+</style>
+<style>
+
+/* UNIFIED MATHS UNIVERSE APPLICATION SHELL STYLES */
+:root {
+  --bg-main: #f5f6fc;
+  --card-bg: #ffffff;
+  --text-main: #1e1b4b;
+  --text-muted: #6b7280;
+  --text-purple: #4c1d95;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #ede9fe;
+  --primary-dark: #4338ca;
+  --border-color: #e2e8f0;
+  --border-purple: #ddd6fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 220px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  margin-left: 8px;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-item.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  overflow-y: auto;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.main-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-purple {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.bookmark-btn {
+  background: white;
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-btn:hover, .bookmark-btn.active {
+  color: var(--primary);
+  border-color: var(--border-purple);
+  background-color: var(--primary-light);
+}
+
+/* REQUIREMENT 4: COUNTER TRAY OVERFLOW FIX */
+.controls-panel, .live-values-panel, .counter-box, .stats-panel, .info-tray, .control-panel, .control-box-list {
+  max-height: 520px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px;
+}
+
+.controls-panel::-webkit-scrollbar, .live-values-panel::-webkit-scrollbar, .control-panel::-webkit-scrollbar {
+  width: 5px;
+}
+.controls-panel::-webkit-scrollbar-thumb, .live-values-panel::-webkit-scrollbar-thumb, .control-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.val-num, .counter-value, .stat-value, .value-num {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* REQUIREMENT 5: ZOOM VIEWPORT CONTAINMENT FIX */
+.canvas-container, .graph-container, .viewport-container, .svg-container, #canvas-container, .render-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-md, 14px);
+  z-index: 1;
+}
+
+.graph-tools, .zoom-controls, .floating-tools {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+/* Responsive queries */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-content {
+    padding: 16px;
+  }
+}
+
+</style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+<div class="app-container">
+  <!-- Left Navigation Rail -->
+  <aside class="sidebar">
+    <div class="brand">
+      <a href="/proofs" class="brand-link" title="Return to All Visualizations">
+        <img src="../../assets/logo.png" alt="Maths Universe Logo" class="brand-logo-img">
+      </a>
+      <div class="brand-text">
+        <span class="brand-title">MATHS</span>
+        <span class="brand-subtitle">UNIVERSE</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active" data-nav="explore">
+        <a href="#explore">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+          <span>Explore</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="proofs">
+        <a href="#proofs">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          <span>Proofs</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="practice">
+        <a href="#practice">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Practice</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="saved">
+        <a href="#saved">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+          <span>Saved</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Viewport Area -->
+  <main class="main-content">
+    
+    <!-- Top Header -->
+    <header class="header-bar">
+      <div>
+        <div class="breadcrumb"><a href="/proofs" class="back-link">← All Visualizations</a> / Calculus</div>
+        <h1 class="main-title">Fundamental Theorem of Calculus</h1>
+        <div class="main-subtitle">
+          A small added area rectangle explains why <span id="tex-header-eq">\(A'(x) = f(x)\)</span> for <span id="tex-header-integral">\(A(x) = \int_a^x f(t)\,dt\)</span>.
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-purple">Intermediate</span>
+        <span class="badge badge-gray">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          12 min
+        </span>
+        <button class="bookmark-btn" id="bookmark-btn" title="Save page">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mission Card -->
+    <section class="mission-card">
+      <div class="mission-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+      </div>
+      <div class="mission-text">
+        <span class="mission-title">MISSION: Connect area and slope.</span>
+        <span class="mission-desc">Move the point x to see how the small rectangle makes the slope equal to the function value.</span>
+      </div>
+    </section>
+
+    <!-- Middle Content Grid: Graph Lab & Why It Works -->
+    <div class="content-grid">
+      
+      <!-- Graph Lab Card -->
+      <section class="card">
+        <div class="card-header">
+          <svg class="card-header-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <h2 class="card-title">Graph Lab</h2>
+        </div>
+
+        <div class="graph-lab-body">
+          <!-- Left Controls Column -->
+          <div class="controls-panel">
+            <div class="control-box">
+              <div class="control-label">Function \(f(t)\)</div>
+              <div class="func-display" id="func-display-str">f(t) = sin(t) + 1</div>
+              <select id="func-preset-select" class="func-select">
+                <option value="sin(t) + 1">sin(t) + 1</option>
+                <option value="cos(t) + 1">cos(t) + 1</option>
+                <option value="t">t</option>
+                <option value="t^2">t²</option>
+                <option value="t^2 + 1">t² + 1</option>
+                <option value="2*t + 1">2t + 1</option>
+                <option value="custom">Custom...</option>
+              </select>
+              <input type="text" id="func-custom-input" class="input-text" placeholder="e.g. t^2 - t + 1" style="display:none; margin-top: 6px;">
+            </div>
+
+            <div class="control-box">
+              <div class="control-label">Interval \([a, b]\)</div>
+              <div class="interval-row">
+                <span>[</span>
+                <input type="text" id="interval-a" value="0">
+                <span>,</span>
+                <input type="text" id="interval-b" value="π">
+                <span>]</span>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <div class="control-label">Controls</div>
+              <div class="toggle-list">
+                <button class="toggle-btn active" id="btn-x-pos">
+                  <span class="toggle-indicator"></span>
+                  x position
+                </button>
+                <button class="toggle-btn active" id="btn-secant">
+                  <span class="toggle-indicator"></span>
+                  --- Secant line
+                </button>
+                <button class="toggle-btn active" id="btn-tangent">
+                  <span class="toggle-indicator"></span>
+                  / Tangent line
+                </button>
+                <button class="toggle-btn" id="btn-partition">
+                  <span class="toggle-indicator"></span>
+                  ||| Partition (n=20)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Interactive Canvas -->
+          <div class="canvas-container" id="canvas-container">
+            <canvas id="graph-canvas"></canvas>
+          </div>
+
+          <!-- Right Live Values Panel -->
+          <div class="live-values-panel">
+            <div class="values-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Live Values
+            </div>
+
+            <div class="val-row">
+              <span class="val-name">\(x\)</span>
+              <span class="val-num" id="val-x">2.3561</span>
+            </div>
+
+            <div class="val-row">
+              <span class="val-name">\(f(x)\)</span>
+              <span class="val-num" id="val-fx">1.7071</span>
+            </div>
+
+            <div class="val-row">
+              <span class="val-name">\(A(x)\)</span>
+              <span class="val-num" id="val-ax">3.3196</span>
+            </div>
+
+            <div class="val-row">
+              <span class="val-name">\(\Delta x\)</span>
+              <span class="val-num orange" id="val-dx">0.2000</span>
+            </div>
+
+            <div class="val-row">
+              <span class="val-name">\(\Delta A\)</span>
+              <span class="val-num orange" id="val-da">0.3413</span>
+            </div>
+
+            <div class="val-row">
+              <span class="val-name">\(\frac{\Delta A}{\Delta x}\)</span>
+              <span class="val-num orange" id="val-dadx">1.7066</span>
+            </div>
+
+            <div class="approx-box">
+              <div class="approx-title" id="val-approx-eq">\(f(x) \approx \frac{\Delta A}{\Delta x}\)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graph Lab Bottom Action Bar -->
+        <div class="graph-bottom-bar">
+          <div class="slider-group">
+            <span>Slower</span>
+            <input type="range" id="speed-slider" min="0.1" max="2.0" step="0.1" value="1.0">
+            <span>Faster</span>
+          </div>
+
+          <div class="btn-group">
+            <button class="action-btn action-btn-primary" id="btn-animate">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Animate
+            </button>
+            <button class="action-btn" id="btn-reset">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset
+            </button>
+            <button class="action-btn" id="btn-zoom-in" title="Zoom In">+</button>
+            <button class="action-btn" id="btn-zoom-out" title="Zoom Out">−</button>
+            <button class="action-btn" id="btn-zoom-reset" title="Reset View">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Zoom
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Explanation Panel ("Why it works") -->
+      <section class="card why-panel">
+        <div class="card-header">
+          <svg class="card-header-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <h2 class="card-title">Why it works</h2>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="explain-step">
+          <div class="step-header">
+            <div class="step-num">1</div>
+            <div class="step-title">Small added area</div>
+          </div>
+          <div class="step-diagram">
+            <svg width="100%" height="100%" viewBox="0 0 280 90">
+              <path d="M 10 70 Q 70 20 140 50 T 270 30" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <rect x="140" y="20" width="30" height="55" fill="rgba(234, 88, 12, 0.25)" stroke="#ea580c" stroke-dasharray="2 2"/>
+              <line x1="140" y1="20" x2="140" y2="75" stroke="#94a3b8" stroke-dasharray="2 2"/>
+              <line x1="170" y1="20" x2="170" y2="75" stroke="#94a3b8" stroke-dasharray="2 2"/>
+              <line x1="10" y1="75" x2="270" y2="75" stroke="#64748b" stroke-width="1.5"/>
+              <text x="140" y="87" font-size="10" fill="#64748b" text-anchor="middle">x</text>
+              <text x="170" y="87" font-size="10" fill="#64748b" text-anchor="middle">x+Δx</text>
+              <text x="155" y="50" font-size="11" font-weight="bold" fill="#ea580c" text-anchor="middle">ΔA</text>
+            </svg>
+          </div>
+          <p class="step-desc">
+            Adding a thin rectangle from \(x\) to \(x + \Delta x\) adds area \(\Delta A \approx f(x)\Delta x\).
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="explain-step">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <div class="step-title">Average value becomes slope</div>
+          </div>
+          <div class="step-diagram">
+            <svg width="100%" height="100%" viewBox="0 0 280 90">
+              <path d="M 10 70 Q 70 20 140 50 T 270 30" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <line x1="100" y1="65" x2="200" y2="25" stroke="#ea580c" stroke-width="2"/>
+              <circle cx="140" cy="48" r="4" fill="#7c3aed"/>
+              <circle cx="170" cy="36" r="4" fill="#ea580c"/>
+              <text x="210" y="30" font-size="11" font-weight="bold" fill="#ea580c">ΔA/Δx</text>
+            </svg>
+          </div>
+          <p class="step-desc">
+            As \(\Delta x \to 0\), the average rate of change \(\frac{\Delta A}{\Delta x}\) becomes the instantaneous tangent slope.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="explain-step">
+          <div class="step-header">
+            <div class="step-num">3</div>
+            <div class="step-title">Equals the function value</div>
+          </div>
+          <div class="step-diagram">
+            <svg width="100%" height="100%" viewBox="0 0 280 90">
+              <path d="M 10 70 Q 70 20 140 50 T 270 30" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <line x1="90" y1="68" x2="190" y2="28" stroke="#4338ca" stroke-width="2" stroke-dasharray="4 2"/>
+              <circle cx="140" cy="48" r="4" fill="#4338ca"/>
+            </svg>
+          </div>
+          <p class="step-desc">
+            The tangent slope at \(x\) equals \(f(x)\). Therefore, \(A'(x) = f(x)\).
+          </p>
+        </div>
+
+        <!-- Predict then Reveal Card -->
+        <div class="predict-box">
+          <div class="predict-title">Predict then Reveal</div>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:8px;">What is \(A'(x)\)?</p>
+          <div class="predict-input-group">
+            <input type="text" id="predict-input" placeholder="e.g. f(x)">
+            <button class="action-btn action-btn-primary" id="predict-btn">Reveal</button>
+          </div>
+          <div class="predict-result" id="predict-result" style="display:none;">
+            ✓ Correct! Therefore, <span id="predict-tex">\(A'(x) = f(x)\)</span> ✓
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Row: One Line Proof & Challenge -->
+    <div class="bottom-grid">
+      
+      <!-- One-line Visual Proof Card -->
+      <section class="card">
+        <div class="card-header">
+          <svg class="card-header-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <h2 class="card-title">One-line visual proof</h2>
+        </div>
+
+        <div class="proof-flow">
+          <div class="proof-node">
+            <div>\(A(x+\Delta x) - A(x)\)</div>
+            <div class="proof-node-sub">Change in area</div>
+          </div>
+
+          <div class="proof-arrow">=</div>
+
+          <div class="proof-node">
+            <div>\(\Delta A\)</div>
+            <div class="proof-node-sub">Small rectangle</div>
+          </div>
+
+          <div class="proof-arrow">=</div>
+
+          <div class="proof-node">
+            <div>\(\frac{\Delta A}{\Delta x} \cdot \Delta x\)</div>
+            <div class="proof-node-sub">Area as rate × width</div>
+          </div>
+
+          <div class="proof-arrow">→</div>
+
+          <div class="proof-node">
+            <div>\(f(x) \cdot 0\)</div>
+            <div class="proof-node-sub">As \(\Delta x \to 0\)</div>
+          </div>
+
+          <div class="proof-arrow">→</div>
+
+          <div class="proof-node highlight">
+            <div style="font-weight:800; color:var(--primary-dark);">\(A'(x) = f(x)\)</div>
+            <div class="proof-node-sub">Fundamental Theorem</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Challenge Card -->
+      <section class="card">
+        <div class="card-header">
+          <svg class="card-header-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <h2 class="card-title">Your challenge (exact)</h2>
+        </div>
+
+        <div class="challenge-content">
+          <p class="challenge-question">
+            For \(f(x) = x^2\) on \([0,3]\), find \(A'(2)\) exactly where \(A(x) = \int_0^x t^2\,dt\).
+          </p>
+
+          <div class="challenge-form">
+            <span>\(A'(2) =\)</span>
+            <input type="text" id="challenge-input" placeholder="Value">
+            <button class="action-btn action-btn-primary" id="challenge-btn">Check</button>
+          </div>
+
+          <div id="challenge-feedback" style="font-size:0.85rem; font-weight:700;"></div>
+
+          <div class="score-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            Score <span id="score-val">0</span> / 10
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- JavaScript Logic Engine -->
+<script>
+  // State Machine
+  const state = {
+    funcStr: 'sin(t) + 1',
+    a: 0,
+    b: Math.PI,
+    x: 2.35619,
+    dx: 0.2000,
+    nPartition: 20,
+    showSecant: true,
+    showTangent: true,
+    showPartition: false,
+    zoomLevel: 1.0,
+    panX: 0,
+    panY: 0,
+    animating: false,
+    animSpeed: 1.0,
+    isBookmarked: false,
+    score: 0,
+    dragTarget: null // null | 'xPoint' | 'dxPoint' | 'canvasPan'
+  };
+
+  // Math Expression Parser & Evaluator
+  function evalFunc(exprStr, tVal) {
+    try {
+      let s = exprStr.toLowerCase().trim();
+      s = s.replace(/π/g, 'Math.PI');
+      s = s.replace(/\bpi\b/g, 'Math.PI');
+      s = s.replace(/\be\b/g, 'Math.E');
+      s = s.replace(/\bsin\b/g, 'Math.sin');
+      s = s.replace(/\bcos\b/g, 'Math.cos');
+      s = s.replace(/\btan\b/g, 'Math.tan');
+      s = s.replace(/\bsqrt\b/g, 'Math.sqrt');
+      s = s.replace(/\bexp\b/g, 'Math.exp');
+      s = s.replace(/\blog\b/g, 'Math.log');
+      
+      // Power operator replacement t^2 -> Math.pow(t, 2)
+      s = s.replace(/([a-z0-9\.\)\s]+)\^([0-9\.\s]+|\([^\)]+\))/g, 'Math.pow($1, $2)');
+      
+      // Implicit multiplication: 2t -> 2*t
+      s = s.replace(/(\d+)\s*t/g, '$1*t');
+
+      const fn = new Function('t', `return ${s};`);
+      const res = fn(tVal);
+      return isNaN(res) || !isFinite(res) ? 0 : res;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  // Simpson's 1/3 Integration Rule
+  function integrate(exprStr, start, end, steps = 100) {
+    if (start === end) return 0;
+    if (start > end) return -integrate(exprStr, end, start, steps);
+    if (steps % 2 !== 0) steps++;
+    const h = (end - start) / steps;
+    let sum = evalFunc(exprStr, start) + evalFunc(exprStr, end);
+    for (let i = 1; i < steps; i++) {
+      const t = start + i * h;
+      sum += (i % 2 === 0 ? 2 : 4) * evalFunc(exprStr, t);
+    }
+    return (h / 3) * sum;
+  }
+
+  // Numerical Derivative
+  function derivative(exprStr, tVal, h = 1e-5) {
+    const fPlus = evalFunc(exprStr, tVal + h);
+    const fMinus = evalFunc(exprStr, tVal - h);
+    return (fPlus - fMinus) / (2 * h);
+  }
+
+  // Coordinate Conversion Helpers
+  function mathToScreen(t, y, canvas) {
+    const margin = 50;
+    const width = canvas.width - 2 * margin;
+    const height = canvas.height - 2 * margin;
+
+    const tMin = state.a - 0.5;
+    const tMax = state.b + 0.5;
+    const yMin = -1.2;
+    const yMax = 2.8;
+
+    let sx = margin + ((t - tMin) / (tMax - tMin)) * width;
+    let sy = canvas.height - margin - ((y - yMin) / (yMax - yMin)) * height;
+
+    // Apply zoom & pan
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    sx = cx + (sx - cx) * state.zoomLevel + state.panX;
+    sy = cy + (sy - cy) * state.zoomLevel + state.panY;
+
+    return { x: sx, y: sy };
+  }
+
+  function screenToMath(sx, sy, canvas) {
+    const margin = 50;
+    const width = canvas.width - 2 * margin;
+    const height = canvas.height - 2 * margin;
+
+    const tMin = state.a - 0.5;
+    const tMax = state.b + 0.5;
+    const yMin = -1.2;
+    const yMax = 2.8;
+
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const unZoomX = cx + (sx - state.panX - cx) / state.zoomLevel;
+    const unZoomY = cy + (sy - state.panY - cy) / state.zoomLevel;
+
+    const t = tMin + ((unZoomX - margin) / width) * (tMax - tMin);
+    const y = yMin + ((canvas.height - margin - unZoomY) / height) * (yMax - yMin);
+
+    return { t, y };
+  }
+
+  // Canvas Render Pipeline
+  function renderGraph() {
+    const canvas = document.getElementById('graph-canvas');
+    const container = document.getElementById('canvas-container');
+    
+    // Set actual canvas size matching container dimensions & DevicePixelRatio
+    const rect = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = 420 * dpr;
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const w = rect.width;
+    const h = 420;
+
+    // Clear background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+
+    // Draw Axes & Ticks
+    const origin = mathToScreen(0, 0, { width: w, height: h });
+    
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+
+    // X axis (t)
+    ctx.beginPath();
+    ctx.moveTo(0, origin.y);
+    ctx.lineTo(w, origin.y);
+    ctx.stroke();
+
+    // Y axis (y)
+    ctx.beginPath();
+    ctx.moveTo(origin.x, 0);
+    ctx.lineTo(origin.x, h);
+    ctx.stroke();
+
+    // Axis Labels
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('t', w - 20, origin.y - 10);
+    ctx.fillText('y', origin.x + 10, 20);
+
+    // Ticks on Y axis
+    [-1, 1, 2].forEach(yVal => {
+      const pt = mathToScreen(0, yVal, { width: w, height: h });
+      ctx.beginPath();
+      ctx.moveTo(origin.x - 4, pt.y);
+      ctx.lineTo(origin.x + 4, pt.y);
+      ctx.stroke();
+      ctx.fillText(yVal.toString(), origin.x - 20, pt.y + 4);
+    });
+
+    // Special Ticks on t axis (a, pi/4, pi/2, 3pi/4, b)
+    const ticks = [
+      { t: 0, label: '0' },
+      { t: Math.PI / 4, label: 'π/4' },
+      { t: Math.PI / 2, label: 'π/2' },
+      { t: (3 * Math.PI) / 4, label: '3π/4' },
+      { t: Math.PI, label: 'π' }
+    ];
+
+    ticks.forEach(tick => {
+      const pt = mathToScreen(tick.t, 0, { width: w, height: h });
+      ctx.beginPath();
+      ctx.moveTo(pt.x, origin.y - 4);
+      ctx.lineTo(pt.x, origin.y + 4);
+      ctx.stroke();
+      ctx.fillText(tick.label, pt.x - 10, origin.y + 18);
+    });
+
+    // Draw Riemann Partitioning Rectangles if enabled
+    if (state.showPartition) {
+      const step = (state.x - state.a) / state.nPartition;
+      ctx.fillStyle = 'rgba(196, 181, 253, 0.3)';
+      ctx.strokeStyle = 'rgba(124, 58, 237, 0.3)';
+      for (let i = 0; i < state.nPartition; i++) {
+        const tLeft = state.a + i * step;
+        const yVal = evalFunc(state.funcStr, tLeft);
+        const p1 = mathToScreen(tLeft, yVal, { width: w, height: h });
+        const p2 = mathToScreen(tLeft + step, 0, { width: w, height: h });
+        const rectW = p2.x - p1.x;
+        const rectH = origin.y - p1.y;
+        ctx.fillRect(p1.x, p1.y, rectW, rectH);
+        ctx.strokeRect(p1.x, p1.y, rectW, rectH);
+      }
+    }
+
+    // 1. Fill Shaded Area A(x) from a to x
+    ctx.beginPath();
+    const pStart = mathToScreen(state.a, 0, { width: w, height: h });
+    ctx.moveTo(pStart.x, pStart.y);
+
+    const stepCount = 100;
+    for (let i = 0; i <= stepCount; i++) {
+      const t = state.a + (i / stepCount) * (state.x - state.a);
+      const yVal = evalFunc(state.funcStr, t);
+      const pt = mathToScreen(t, yVal, { width: w, height: h });
+      ctx.lineTo(pt.x, pt.y);
+    }
+
+    const pEnd = mathToScreen(state.x, 0, { width: w, height: h });
+    ctx.lineTo(pEnd.x, pEnd.y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(124, 58, 237, 0.15)';
+    ctx.fill();
+
+    // 2. Fill Added Area Rectangle Delta A from x to x + dx
+    const xPlusDx = Math.min(state.b, state.x + state.dx);
+    ctx.beginPath();
+    const pDxStart = mathToScreen(state.x, 0, { width: w, height: h });
+    ctx.moveTo(pDxStart.x, pDxStart.y);
+
+    for (let i = 0; i <= 30; i++) {
+      const t = state.x + (i / 30) * (xPlusDx - state.x);
+      const yVal = evalFunc(state.funcStr, t);
+      const pt = mathToScreen(t, yVal, { width: w, height: h });
+      ctx.lineTo(pt.x, pt.y);
+    }
+
+    const pDxEnd = mathToScreen(xPlusDx, 0, { width: w, height: h });
+    ctx.lineTo(pDxEnd.x, pDxEnd.y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(234, 88, 12, 0.25)';
+    ctx.fill();
+    ctx.strokeStyle = '#ea580c';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // 3. Smooth Function Curve y = f(t)
+    ctx.beginPath();
+    const totalSamples = 200;
+    const tMin = state.a - 0.5;
+    const tMax = state.b + 0.5;
+
+    for (let i = 0; i <= totalSamples; i++) {
+      const t = tMin + (i / totalSamples) * (tMax - tMin);
+      const yVal = evalFunc(state.funcStr, t);
+      const pt = mathToScreen(t, yVal, { width: w, height: h });
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // 4. Vertical Dashed Lines at x and x+dx
+    const ptXNode = mathToScreen(state.x, evalFunc(state.funcStr, state.x), { width: w, height: h });
+    const ptXBase = mathToScreen(state.x, 0, { width: w, height: h });
+
+    ctx.beginPath();
+    ctx.setLineDash([4, 4]);
+    ctx.moveTo(ptXBase.x, ptXBase.y);
+    ctx.lineTo(ptXNode.x, ptXNode.y);
+    ctx.strokeStyle = '#7c3aed';
+    ctx.stroke();
+
+    const ptDxNode = mathToScreen(xPlusDx, evalFunc(state.funcStr, xPlusDx), { width: w, height: h });
+    const ptDxBase = mathToScreen(xPlusDx, 0, { width: w, height: h });
+
+    ctx.beginPath();
+    ctx.moveTo(ptDxBase.x, ptDxBase.y);
+    ctx.lineTo(ptDxNode.x, ptDxNode.y);
+    ctx.strokeStyle = '#ea580c';
+    ctx.stroke();
+    ctx.setLineDash([]); // Reset line dash
+
+    // 5. Tangent Line at x
+    if (state.showTangent) {
+      const slope = derivative(state.funcStr, state.x);
+      const t1 = state.x - 0.8;
+      const t2 = state.x + 0.8;
+      const y1 = evalFunc(state.funcStr, state.x) + slope * (t1 - state.x);
+      const y2 = evalFunc(state.funcStr, state.x) + slope * (t2 - state.x);
+
+      const pTan1 = mathToScreen(t1, y1, { width: w, height: h });
+      const pTan2 = mathToScreen(t2, y2, { width: w, height: h });
+
+      ctx.beginPath();
+      ctx.setLineDash([6, 4]);
+      ctx.moveTo(pTan1.x, pTan1.y);
+      ctx.lineTo(pTan2.x, pTan2.y);
+      ctx.strokeStyle = '#4338ca';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // 6. Secant Line between x and x+dx
+    if (state.showSecant) {
+      ctx.beginPath();
+      ctx.setLineDash([4, 4]);
+      ctx.moveTo(ptXNode.x, ptXNode.y);
+      ctx.lineTo(ptDxNode.x, ptDxNode.y);
+      ctx.strokeStyle = '#ea580c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // 7. Dashed Curved Arc Arrow connecting (x, f(x)) to (x+dx, f(x+dx))
+    ctx.beginPath();
+    const ctrlX = (ptXNode.x + ptDxNode.x) / 2;
+    const ctrlY = Math.min(ptXNode.y, ptDxNode.y) - 30;
+    ctx.setLineDash([3, 3]);
+    ctx.moveTo(ptXNode.x, ptXNode.y);
+    ctx.quadraticCurveTo(ctrlX, ctrlY, ptDxNode.x, ptDxNode.y);
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 8. Draggable Points / Nodes
+    // Point x node
+    ctx.beginPath();
+    ctx.arc(ptXNode.x, ptXNode.y, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = '#7c3aed';
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#ffffff';
+    ctx.stroke();
+
+    // Point x+dx node
+    ctx.beginPath();
+    ctx.arc(ptDxNode.x, ptDxNode.y, 7, 0, 2 * Math.PI);
+    ctx.fillStyle = '#ea580c';
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#ffffff';
+    ctx.stroke();
+
+    // Labels on Graph
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillStyle = '#4c1d95';
+    ctx.fillText('A(x) = ∫ f(t)dt', (pStart.x + ptXBase.x) / 2 - 35, origin.y - 40);
+
+    ctx.fillStyle = '#ea580c';
+    ctx.fillText('ΔA', (ptXBase.x + ptDxBase.x) / 2 - 8, origin.y - 25);
+
+    ctx.fillStyle = '#7c3aed';
+    ctx.fillText('x', ptXBase.x - 4, origin.y + 18);
+    ctx.fillStyle = '#ea580c';
+    ctx.fillText('x + Δx', ptDxBase.x - 14, origin.y + 18);
+
+    ctx.fillStyle = '#4c1d95';
+    ctx.fillText('y = f(t)', w - 100, 50);
+  }
+
+  // Update Live Values Panel
+  function updateCalculations() {
+    const fx = evalFunc(state.funcStr, state.x);
+    const Ax = integrate(state.funcStr, state.a, state.x);
+    const xPlusDx = Math.min(state.b, state.x + state.dx);
+    const da = integrate(state.funcStr, state.x, xPlusDx);
+    const dadx = state.dx > 0 ? da / state.dx : fx;
+
+    document.getElementById('val-x').innerText = state.x.toFixed(4);
+    document.getElementById('val-fx').innerText = fx.toFixed(4);
+    document.getElementById('val-ax').innerText = Ax.toFixed(4);
+    document.getElementById('val-dx').innerText = state.dx.toFixed(4);
+    document.getElementById('val-da').innerText = da.toFixed(4);
+    document.getElementById('val-dadx').innerText = dadx.toFixed(4);
+
+    renderGraph();
+  }
+
+  // Interaction Event Handlers (Mouse & Touch Dragging)
+  function initPointerInteractions() {
+    const canvas = document.getElementById('graph-canvas');
+
+    let isDragging = false;
+    let dragTarget = null;
+    let startX = 0;
+    let startY = 0;
+
+    canvas.addEventListener('pointerdown', e => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      const ptXNode = mathToScreen(state.x, evalFunc(state.funcStr, state.x), canvas);
+      const ptDxNode = mathToScreen(state.x + state.dx, evalFunc(state.funcStr, state.x + state.dx), canvas);
+
+      // Check distance to xNode
+      const distX = Math.hypot(clickX - ptXNode.x, clickY - ptXNode.y);
+      const distDx = Math.hypot(clickX - ptDxNode.x, clickY - ptDxNode.y);
+
+      if (distX < 20) {
+        isDragging = true;
+        dragTarget = 'xNode';
+      } else if (distDx < 20) {
+        isDragging = true;
+        dragTarget = 'dxNode';
+      } else {
+        isDragging = true;
+        dragTarget = 'canvasPan';
+        startX = e.clientX;
+        startY = e.clientY;
+      }
+
+      canvas.setPointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener('pointermove', e => {
+      if (!isDragging) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      if (dragTarget === 'xNode') {
+        const mathPt = screenToMath(mouseX, mouseY, canvas);
+        state.x = Math.max(state.a, Math.min(state.b - state.dx, mathPt.t));
+        updateCalculations();
+      } else if (dragTarget === 'dxNode') {
+        const mathPt = screenToMath(mouseX, mouseY, canvas);
+        const newDx = Math.max(0.01, Math.min(state.b - state.x, mathPt.t - state.x));
+        state.dx = newDx;
+        updateCalculations();
+      } else if (dragTarget === 'canvasPan') {
+        state.panX += e.clientX - startX;
+        state.panY += e.clientY - startY;
+        startX = e.clientX;
+        startY = e.clientY;
+        renderGraph();
+      }
+    });
+
+    const stopDrag = e => {
+      isDragging = false;
+      dragTarget = null;
+    };
+
+    canvas.addEventListener('pointerup', stopDrag);
+    canvas.addEventListener('pointercancel', stopDrag);
+  }
+
+  // Animation Loop: Shrinks dx toward 0
+  let animId = null;
+  function startAnimation() {
+    if (state.dx <= 0.006) state.dx = 0.2000;
+    if (state.animating) {
+      state.animating = false;
+      cancelAnimationFrame(animId);
+      document.getElementById('btn-animate').innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Animate
+      `;
+      return;
+    }
+
+    state.animating = true;
+    document.getElementById('btn-animate').innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      Pause
+    `;
+
+    function step() {
+      if (!state.animating) return;
+
+      if (state.dx > 0.005) {
+        state.dx -= 0.003 * state.animSpeed;
+        if (state.dx < 0.005) state.dx = 0.005;
+        updateCalculations();
+        animId = requestAnimationFrame(step);
+      } else {
+        state.animating = false;
+        document.getElementById('btn-animate').innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Animate
+        `;
+      }
+    }
+
+    animId = requestAnimationFrame(step);
+  }
+
+  // Bind UI Controls
+  function bindControls() {
+    // Function Preset Selector
+    document.getElementById('func-preset-select').addEventListener('change', e => {
+      const val = e.target.value;
+      const customInput = document.getElementById('func-custom-input');
+      if (val === 'custom') {
+        customInput.style.display = 'block';
+      } else {
+        customInput.style.display = 'none';
+        state.funcStr = val;
+        document.getElementById('func-display-str').innerText = `f(t) = ${val}`;
+        updateCalculations();
+      }
+    });
+
+    document.getElementById('func-custom-input').addEventListener('input', e => {
+      state.funcStr = e.target.value;
+      document.getElementById('func-display-str').innerText = `f(t) = ${e.target.value}`;
+      updateCalculations();
+    });
+
+    // Interval Inputs
+    document.getElementById('interval-a').addEventListener('change', e => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val)) state.a = val;
+      updateCalculations();
+    });
+
+    document.getElementById('interval-b').addEventListener('change', e => {
+      const val = e.target.value.includes('π') ? Math.PI : parseFloat(e.target.value);
+      if (!isNaN(val)) state.b = val;
+      updateCalculations();
+    });
+
+    // Toggle Buttons
+    document.getElementById('btn-secant').addEventListener('click', function() {
+      state.showSecant = !state.showSecant;
+      this.classList.toggle('active', state.showSecant);
+      renderGraph();
+    });
+
+    document.getElementById('btn-tangent').addEventListener('click', function() {
+      state.showTangent = !state.showTangent;
+      this.classList.toggle('active', state.showTangent);
+      renderGraph();
+    });
+
+    document.getElementById('btn-partition').addEventListener('click', function() {
+      state.showPartition = !state.showPartition;
+      this.classList.toggle('active', state.showPartition);
+      renderGraph();
+    });
+
+    // Animation & Reset Buttons
+    document.getElementById('btn-animate').addEventListener('click', startAnimation);
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      state.funcStr = 'sin(t) + 1';
+      state.a = 0;
+      state.b = Math.PI;
+      state.x = 2.35619;
+      state.dx = 0.2000;
+      state.zoomLevel = 1.0;
+      state.panX = 0;
+      state.panY = 0;
+      state.showSecant = true;
+      state.showTangent = true;
+      state.showPartition = false;
+      document.getElementById('func-preset-select').value = 'sin(t) + 1';
+      document.getElementById('func-display-str').innerText = 'f(t) = sin(t) + 1';
+      updateCalculations();
+    });
+
+    // Zoom Controls
+    document.getElementById('btn-zoom-in').addEventListener('click', () => {
+      state.zoomLevel *= 1.2;
+      renderGraph();
+    });
+
+    document.getElementById('btn-zoom-out').addEventListener('click', () => {
+      state.zoomLevel /= 1.2;
+      renderGraph();
+    });
+
+    document.getElementById('btn-zoom-reset').addEventListener('click', () => {
+      state.zoomLevel = 1.0;
+      state.panX = 0;
+      state.panY = 0;
+      renderGraph();
+    });
+
+    // Bookmark Toggle
+    document.getElementById('bookmark-btn').addEventListener('click', function() {
+      state.isBookmarked = !state.isBookmarked;
+      this.classList.toggle('active', state.isBookmarked);
+    });
+
+    // Predict then Reveal Card
+    document.getElementById('predict-btn').addEventListener('click', () => {
+      const val = document.getElementById('predict-input').value.trim().toLowerCase();
+      const resContainer = document.getElementById('predict-result');
+      resContainer.style.display = 'flex';
+      if (val === 'f(x)' || val === 'f(t)' || val === 'fx') {
+        resContainer.innerHTML = '✓ Correct! Therefore, <span>\\(A\'(x) = f(x)\\)</span> ✓';
+      } else {
+        resContainer.innerHTML = 'Hint: The slope equals the function value \(f(x)\). Therefore, <span>\\(A\'(x) = f(x)\\)</span>';
+      }
+      renderMathInElement(resContainer);
+    });
+
+    // Challenge Card
+    document.getElementById('challenge-btn').addEventListener('click', () => {
+      const val = document.getElementById('challenge-input').value.trim();
+      const feedback = document.getElementById('challenge-feedback');
+      if (val === '4') {
+        feedback.style.color = '#16a34a';
+        feedback.innerText = '✓ Correct! A\'(2) = f(2) = 2² = 4.';
+        if (state.score < 10) {
+          state.score += 1;
+          document.getElementById('score-val').innerText = state.score;
+        }
+      } else {
+        feedback.style.color = '#dc2626';
+        feedback.innerText = 'Incorrect. Hint: By FTC, A\'(x) = f(x) = x². Evaluate at x = 2.';
+      }
+    });
+
+    // Speed Slider
+    document.getElementById('speed-slider').addEventListener('input', e => {
+      state.animSpeed = parseFloat(e.target.value);
+    });
+
+    window.addEventListener('resize', renderGraph);
+  }
+
+  // Initialization
+  window.addEventListener('DOMContentLoaded', () => {
+    bindControls();
+    initPointerInteractions();
+    updateCalculations();
+
+    // Render all inline and block KaTeX formulas
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true }
+      ]
+    });
+  });
+</script>
+
+<script>
+
+/* UNIFIED NAVIGATION & SAVED SYSTEM JAVASCRIPT */
+(function() {
+  function getProjectId() {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || 'current-project';
+  }
+
+  function initShell() {
+    const pid = getProjectId();
+    
+    // Sidebar nav handlers
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = item.dataset.nav || item.querySelector('a')?.getAttribute('href')?.replace('#', '');
+        
+        document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        if (target === 'explore') {
+          const el = document.querySelector('.content-grid') || document.querySelector('.main-content') || document.querySelector('#explore') || document.querySelector('.canvas-container') || document.querySelector('.card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'proofs') {
+          const el = document.querySelector('.why-card') || document.querySelector('.why-panel') || document.querySelector('#proofs') || document.querySelector('.explanation-card') || document.querySelector('.proof-section') || document.querySelector('.card:nth-of-type(2)');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'practice') {
+          const el = document.querySelector('.challenge-card') || document.querySelector('#practice') || document.querySelector('#your-challenge') || document.querySelector('.practice-card') || document.querySelector('.score-card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'saved') {
+          toggleSaved(pid);
+        }
+      });
+    });
+
+    // Bookmark button
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) {
+      bkmkBtn.addEventListener('click', () => toggleSaved(pid));
+      updateSavedState(pid);
+    }
+  }
+
+  function toggleSaved(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const idx = saved.indexOf(pid);
+    let isSaved = false;
+    if (idx >= 0) {
+      saved.splice(idx, 1);
+      isSaved = false;
+    } else {
+      saved.push(pid);
+      isSaved = true;
+    }
+    localStorage.setItem('math_universe_saved', JSON.stringify(saved));
+    updateSavedState(pid);
+    showToast(isSaved ? '✓ Lesson saved to your favorites' : 'Removed from saved lessons');
+  }
+
+  function updateSavedState(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const isSaved = saved.includes(pid);
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) bkmkBtn.classList.toggle('active', isSaved);
+    const navSaved = document.querySelector('.sidebar .nav-item[data-nav="saved"]');
+    if (navSaved) navSaved.classList.toggle('active', isSaved);
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('math-toast-msg');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'math-toast-msg';
+      toast.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#1e1b4b; color:#ffffff; padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 14px rgba(0,0,0,0.2); z-index:9999; transition:all 0.3s ease; opacity:0; pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShell);
+  } else {
+    initShell();
+  }
+})();
+
+</script>
+<script>
+
+/* UNIFIED NAVIGATION & SAVED SYSTEM JAVASCRIPT */
+(function() {
+  function getProjectId() {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || 'current-project';
+  }
+
+  function initShell() {
+    const pid = getProjectId();
+    
+    // Sidebar nav handlers
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = item.dataset.nav || item.querySelector('a')?.getAttribute('href')?.replace('#', '');
+        
+        document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        if (target === 'explore') {
+          const el = document.querySelector('.content-grid') || document.querySelector('.main-content') || document.querySelector('#explore') || document.querySelector('.canvas-container') || document.querySelector('.card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'proofs') {
+          const el = document.querySelector('.why-card') || document.querySelector('.why-panel') || document.querySelector('#proofs') || document.querySelector('.explanation-card') || document.querySelector('.proof-section') || document.querySelector('.card:nth-of-type(2)');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'practice') {
+          const el = document.querySelector('.challenge-card') || document.querySelector('#practice') || document.querySelector('#your-challenge') || document.querySelector('.practice-card') || document.querySelector('.score-card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'saved') {
+          toggleSaved(pid);
+        }
+      });
+    });
+
+    // Bookmark button
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) {
+      bkmkBtn.addEventListener('click', () => toggleSaved(pid));
+      updateSavedState(pid);
+    }
+  }
+
+  function toggleSaved(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const idx = saved.indexOf(pid);
+    let isSaved = false;
+    if (idx >= 0) {
+      saved.splice(idx, 1);
+      isSaved = false;
+    } else {
+      saved.push(pid);
+      isSaved = true;
+    }
+    localStorage.setItem('math_universe_saved', JSON.stringify(saved));
+    updateSavedState(pid);
+    showToast(isSaved ? '✓ Lesson saved to your favorites' : 'Removed from saved lessons');
+  }
+
+  function updateSavedState(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const isSaved = saved.includes(pid);
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) bkmkBtn.classList.toggle('active', isSaved);
+    const navSaved = document.querySelector('.sidebar .nav-item[data-nav="saved"]');
+    if (navSaved) navSaved.classList.toggle('active', isSaved);
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('math-toast-msg');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'math-toast-msg';
+      toast.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#1e1b4b; color:#ffffff; padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 14px rgba(0,0,0,0.2); z-index:9999; transition:all 0.3s ease; opacity:0; pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShell);
+  } else {
+    initShell();
+  }
+})();
+
+</script>
+</body>
+</html>

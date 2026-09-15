@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "divisibility-equal-grouping",
+  "categorySlug": "number-theory",
+  "slug": "divisibility-equal-grouping",
+  "route": "/visual-proofs/number-theory/divisibility-equal-grouping",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/divisibility-equal-grouping"
+}

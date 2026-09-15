@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "gradient-steepest-increase",
+  "categorySlug": "engineering-mathematics",
+  "slug": "gradient-steepest-increase",
+  "route": "/visual-proofs/engineering-mathematics/gradient-steepest-increase",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/gradient-steepest-increase"
+}

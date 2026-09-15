@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "integration-by-parts-visual-proof",
+  "categorySlug": "calculus",
+  "slug": "integration-by-parts-visual-proof",
+  "route": "/visual-proofs/calculus/integration-by-parts-visual-proof",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Ishwarya/068-integration-by-parts"
+}

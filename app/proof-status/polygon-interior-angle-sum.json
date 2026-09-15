@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "polygon-interior-angle-sum",
+  "categorySlug": "geometry",
+  "slug": "polygon-interior-angle-sum",
+  "route": "/visual-proofs/geometry/polygon-interior-angle-sum",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-22.html"
+}

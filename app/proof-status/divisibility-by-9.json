@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "divisibility-by-9",
+  "categorySlug": "number-theory",
+  "slug": "divisibility-by-9",
+  "route": "/visual-proofs/number-theory/divisibility-by-9",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/divisibility-by-9"
+}

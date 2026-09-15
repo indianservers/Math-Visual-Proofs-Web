@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "fibonacci-spiral-approximation",
+  "categorySlug": "sequences-and-series",
+  "slug": "fibonacci-spiral-approximation",
+  "route": "/visual-proofs/sequences-and-series/fibonacci-spiral-approximation",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/fibonacci-spiral-approximation"
+}

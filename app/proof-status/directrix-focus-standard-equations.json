@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "directrix-focus-standard-equations",
+  "categorySlug": "conic-sections",
+  "slug": "directrix-focus-standard-equations",
+  "route": "/visual-proofs/conic-sections/directrix-focus-standard-equations",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/144-directrix-focus-standard-equation"
+}

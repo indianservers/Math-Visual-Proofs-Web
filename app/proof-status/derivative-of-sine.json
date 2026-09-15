@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "derivative-of-sine",
+  "categorySlug": "calculus",
+  "slug": "derivative-of-sine",
+  "route": "/visual-proofs/calculus/derivative-of-sine",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/derivative-of-sine"
+}

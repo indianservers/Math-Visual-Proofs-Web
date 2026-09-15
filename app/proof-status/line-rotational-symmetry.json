@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "line-rotational-symmetry",
+  "categorySlug": "transformations-symmetry",
+  "slug": "line-rotational-symmetry",
+  "route": "/visual-proofs/transformations-symmetry/line-rotational-symmetry",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/line-rotational-symmetry"
+}

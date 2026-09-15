@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "irrationality-of-square-root-2",
+  "categorySlug": "number-theory",
+  "slug": "irrationality-of-square-root-2",
+  "route": "/visual-proofs/number-theory/irrationality-of-square-root-2",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/84/why_sqrt2_irrational.html"
+}

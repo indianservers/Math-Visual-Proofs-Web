@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getProofImplementation } from "../../../lib/proofImplementation";
 import {
   ALL_VISUAL_PROOFS,
   catalogProofRoute,
@@ -12,7 +13,10 @@ import {
 type PageProps = { params: Promise<{ category: string; slug: string }> };
 
 export function generateStaticParams() {
-  return ALL_VISUAL_PROOFS.map((proof) => ({
+  return ALL_VISUAL_PROOFS.filter((proof) => {
+    const implementation = getProofImplementation(proof.id);
+    return !implementation || implementation.route !== catalogProofRoute(proof);
+  }).map((proof) => ({
     category: proof.categorySlug,
     slug: proof.slug,
   }));

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "double-angle-identities",
+  "categorySlug": "trigonometry",
+  "slug": "double-angle-identities",
+  "route": "/visual-proofs/trigonometry/double-angle-identities",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/036_double_angle_identities_single_page.html)."
+}

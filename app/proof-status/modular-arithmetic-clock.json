@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "modular-arithmetic-clock",
+  "categorySlug": "number-theory",
+  "slug": "modular-arithmetic-clock",
+  "route": "/visual-proofs/number-theory/modular-arithmetic-clock",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/81/index.html)."
+}

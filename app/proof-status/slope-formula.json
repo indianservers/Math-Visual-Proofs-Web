@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "slope-formula",
+  "categorySlug": "coordinate-geometry",
+  "slug": "slope-formula",
+  "route": "/visual-proofs/coordinate-geometry/slope-formula",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/046-slope-formula.html)."
+}

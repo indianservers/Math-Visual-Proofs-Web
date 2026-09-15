@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "law-of-cosines-circle-construction",
+  "categorySlug": "trigonometry",
+  "slug": "law-of-cosines-circle-construction",
+  "route": "/visual-proofs/trigonometry/law-of-cosines-circle-construction",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/039_law_of_cosines_circle_construction.html)."
+}

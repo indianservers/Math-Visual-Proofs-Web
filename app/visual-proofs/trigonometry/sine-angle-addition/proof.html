@@ -1,0 +1,579 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Angle Addition Formula for Sine</title>
+    <style>
+      :root {
+        --p: #6238f3;
+        --b: #125af5;
+        --ink: #111946;
+        --l: #e4e2f3;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(circle at 48% 5%, #fff, #f4f5ff);
+        font-family: Inter, Arial;
+        color: var(--ink);
+      }
+      .app {
+        height: 941px;
+        padding: 10px 18px;
+        display: grid;
+        grid-template-columns: 96px 1fr 322px;
+        grid-template-rows: 118px 82px 1fr 130px;
+        gap: 16px;
+      }
+      .card {
+        background: #ffffffc9;
+        border: 1px solid var(--l);
+        box-shadow: 0 7px 16px #37306712;
+        border-radius: 23px;
+      }
+      .brand {
+        font-weight: 800;
+        text-align: center;
+        padding: 15px 5px;
+        font-size: 15px;
+      }
+      .brand b {
+        color: var(--p);
+        font-size: 39px;
+        display: block;
+      }
+      .top {
+        grid-column: 2/4;
+      }
+      .crumb {
+        color: #4423dc;
+        font-size: 14px;
+        margin-top: 12px;
+      }
+      .top h1 {
+        font-size: 39px;
+        margin: 7px 0;
+        letter-spacing: -1.5px;
+      }
+      .top p {
+        margin: 0;
+        font-size: 17px;
+        color: #3f4b86;
+      }
+      .badges {
+        position: absolute;
+        right: 30px;
+        top: 24px;
+      }
+      .badge {
+        display: inline-block;
+        border: 1px solid #e3def9;
+        border-radius: 20px;
+        padding: 13px 21px;
+        margin-left: 14px;
+        color: #4526d7;
+        background: #fff;
+      }
+      .nav {
+        grid-row: 2/5;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .n {
+        height: 101px;
+        text-align: center;
+        padding: 13px;
+        color: #46437b;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+      .n i {
+        display: block;
+        font-style: normal;
+        font-size: 32px;
+      }
+      .active {
+        background: #f4efff;
+        color: #4c27e2;
+      }
+      .n:last-child {
+        margin-top: auto;
+      }
+      .mission {
+        grid-column: 2;
+        padding: 15px 21px;
+        display: flex;
+        align-items: center;
+        gap: 17px;
+      }
+      .mission .target {
+        font-size: 43px;
+        color: var(--p);
+      }
+      .mission b {
+        font-size: 16px;
+      }
+      .mission p {
+        margin: 7px 0;
+        color: #34366c;
+      }
+      .icons {
+        margin-left: auto;
+        display: flex;
+        gap: 34px;
+        color: #33356e;
+        text-align: center;
+        font-size: 12px;
+      }
+      .icons i {
+        display: block;
+        color: var(--p);
+        font-style: normal;
+        font-size: 27px;
+      }
+      .icons span { cursor: pointer; }
+      .canvas {
+        grid-column: 2;
+        position: relative;
+        overflow: hidden;
+      }
+      .steps {
+        height: 80px;
+        border-bottom: 1px solid var(--l);
+        display: flex;
+        justify-content: space-around;
+        padding: 19px;
+        color: #5130e7;
+        font-size: 17px;
+      }
+      .steps small {
+        display: block;
+        font-size: 12px;
+        color: #34366d;
+        margin: 8px 24px;
+      }
+      .angles {
+        position: absolute;
+        left: 18px;
+        top: 92px;
+        width: 150px;
+        padding: 14px;
+      }
+      .angles b {
+        font-size: 14px;
+      }
+      .angles label {
+        display: block;
+        margin: 14px 0;
+        color: #3e397f;
+      }
+      .angles input {
+        width: 100%;
+        accent-color: var(--p);
+      }
+      .readout {
+        position: absolute;
+        right: 100px;
+        top: 180px;
+        width: 190px;
+        padding: 15px;
+        line-height: 2.1;
+        color: #1644ad;
+      }
+      .readout strong {
+        color: #5135ee;
+      }
+      .mode {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+        width: 155px;
+        padding: 16px;
+        text-align: center;
+      }
+      .mode button {
+        border: 1px solid #c2b6ff;
+        background: #fff;
+        border-radius: 9px;
+        padding: 9px;
+        color: #5132e8;
+      }
+      .canvas svg {
+        width: 100%;
+        height: calc(100% - 80px);
+      }
+      .why {
+        grid-column: 3;
+        grid-row: 2/4;
+        padding: 16px;
+        overflow-y: auto;
+      }
+      .why h2 {
+        color: #4522e0;
+        margin: 0 8px 12px;
+        font-size: 19px;
+      }
+      .reason {
+        border: 1px solid var(--l);
+        padding: 12px;
+        border-radius: 14px;
+        font-size: 14px;
+      }
+      .reason + .reason {
+        border-top: 0;
+        border-radius: 0;
+      }
+      .num {
+        display: inline-grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        background: var(--p);
+        color: #fff;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+      .reason svg {
+        width: 100%;
+        height: 78px;
+      }
+      .drop,
+      .reveal,
+      .conclusion {
+        margin-top: 10px;
+        border: 1px solid var(--l);
+        padding: 10px;
+        border-radius: 11px;
+      }
+      .reveal {
+        width: 100%;
+        background: linear-gradient(100deg, #4e26db, #794df5);
+        color: #fff;
+        border: 0;
+        font-size: 16px;
+      }
+      .conclusion {
+        font: 18px Georgia;
+        text-align: center;
+      }
+      .bottom {
+        grid-column: 2/4;
+        display: grid;
+        grid-template-columns: 1.55fr 1fr;
+        gap: 16px;
+      }
+      .proof,
+      .challenge {
+        padding: 14px;
+      }
+      .proof h3,
+      .challenge h3 {
+        margin: 0;
+        color: #4e2ce4;
+        font-size: 14px;
+      }
+      .flow {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 12px;
+      }
+      .flow div {
+        border: 1px solid #ded8f4;
+        border-radius: 9px;
+        padding: 16px;
+        flex: 1;
+        text-align: center;
+        font: 15px Georgia;
+      }
+      .flow b {
+        font-size: 22px;
+        color: #512fe8;
+      }
+      .challenge input {
+        width: 76px;
+        padding: 8px;
+        border: 1px solid #c9bdf6;
+        border-radius: 7px;
+      }
+      .challenge button {
+        background: var(--p);
+        color: #fff;
+        border: 0;
+        border-radius: 8px;
+        padding: 9px 18px;
+      }
+      .bottom { min-height: 0; align-items: stretch; }
+      .bottom > .card { min-width: 0; min-height: 0; overflow: hidden; }
+      .proof { display: flex; flex-direction: column; }
+      .proof .flow { min-height: 0; margin-top: 6px; }
+      .proof .flow div { min-width: 0; padding: 8px; }
+      #proofLive { margin-top: 4px !important; white-space: nowrap; font-size: 11px !important; }
+      @media (max-width: 900px) {
+        .app {
+          height: auto;
+          display: block;
+        }
+        .nav,
+        .badges {
+          display: none;
+        }
+        .top {
+          height: 120px;
+        }
+        .mission,
+        .canvas,
+        .why,
+        .bottom {
+          margin: 10px 0;
+        }
+        .canvas {
+          height: 600px;
+        }
+        .bottom {
+          display: block;
+        }
+        .bottom > * {
+          margin: 10px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="card brand"><b>✣</b>MATHS<br />UNIVERSE</div>
+      <header class="top">
+        <div class="crumb">Visual Proofs　/　Trigonometry Proofs</div>
+        <h1>Angle Addition Formula for Sine</h1>
+        <p>
+          Meaning: A rotated unit vector gives a <i>y</i>-coordinate of
+          <i>sin α cos β + cos α sin β.</i>
+        </p>
+      </header>
+      <div class="badges">
+        <span class="badge">▥　Advanced</span
+        ><span class="badge">◷　11 min</span>
+      </div>
+      <nav class="card nav">
+        <div class="n active"><i>Δ</i>Explore</div>
+        <div class="n"><i>♧</i>Proofs</div>
+        <div class="n"><i>♢</i>Practice</div>
+        <div class="n"><i>♧</i>Saved</div>
+        <div class="n"><i>▤</i>Glossary</div>
+        <div class="n"><i>⚙</i>Settings</div>
+      </nav>
+      <section class="card mission">
+        <div class="target">◎</div>
+        <div>
+          <b
+            >Mission: Build the angle <i>α + β</i> by rotating the unit
+            vector.</b
+          >
+          <p>
+            Read the final <i>y</i>-coordinate to uncover sin(<i>α + β</i>).
+          </p>
+        </div>
+        <div class="icons">
+          <span><i>▦</i>Grid</span><span><i>∪</i>Snap</span
+          ><span><i>≡</i>Equality</span><span><i>〰</i>Trace</span
+          ><span><i>↶</i>Reset</span>
+        </div>
+      </section>
+      <section class="card canvas">
+        <div class="steps">
+          <div>
+            ❶　Observe<small>Start with angle <i>α</i>.</small>
+          </div>
+          <div>
+            ❷　Drag<small>Rotate by <i>β</i> to form <i>α + β</i>.</small>
+          </div>
+          <div>
+            ❸　Prove<small>Read the <i>y</i>-coordinate.</small>
+          </div>
+        </div>
+        <div class="card angles">
+          <b>Angles</b
+          ><label
+            ><i>α</i> = <span id="av">35</span>°<input
+              id="a"
+              type="range"
+              min="5"
+              max="85"
+              value="35" /></label
+          ><label
+            ><i>β</i> = <span id="bv">55</span>°<input
+              id="b"
+              type="range"
+              min="5"
+              max="85"
+              value="55" /></label
+          ><strong><i>α + β</i> = <span id="sum">90</span>°</strong>
+        </div>
+        <svg id="svg" viewBox="0 0 960 510"></svg>
+        <div class="card readout">
+          Live Readout<br /><i>sin α</i> = <span id="sa"></span><br /><strong
+            >sin(α + β) = <span id="ss"></span
+          ></strong>
+          <hr />
+          <span style="color: #087">cos α cos β = <span id="one"></span></span
+          ><br /><span style="color: #f60"
+            >sin α sin β = <span id="two"></span
+          ></span>
+        </div>
+        <div class="card mode">
+          Vector Mode<br /><button>↗ Ray</button> <button>╱ Line</button>
+        </div>
+      </section>
+      <aside class="card why">
+        <h2>✧　Why it works</h2>
+        <div class="reason">
+          <b
+            ><span class="num">1</span>Start with unit vector at angle
+            <i>α</i>.</b
+          ><svg viewBox="0 0 220 80">
+            <path d="M20 65H195M50 75V10M50 65l70-48" stroke="#222" />
+            <path d="M50 65l70-48" stroke="#613cf0" stroke-width="3" />
+          </svg>
+        </div>
+        <div class="reason">
+          <b
+            ><span class="num">2</span>Rotate by <i>β</i> to reach angle
+            <i>α + β</i>.</b
+          ><svg viewBox="0 0 220 80">
+            <path d="M20 65H195M50 75V10M50 65l70-48" stroke="#222" />
+            <path d="M120 17q38 26 8 50" fill="none" stroke="#1760f5" />
+          </svg>
+        </div>
+        <div class="reason">
+          <b
+            ><span class="num">3</span>The new <i>y</i>-coordinate is sin(<i
+              >α + β</i
+            >).</b
+          ><svg viewBox="0 0 220 80">
+            <path d="M30 65H190M50 75V10" stroke="#222" />
+            <path d="M50 65V24" stroke="#1760f5" stroke-width="3" />
+          </svg>
+        </div>
+        <div class="drop">What should the y-coordinate be?　⌄</div>
+        <button class="reveal" id="reveal">Reveal proof</button>
+        <div class="conclusion" id="con" hidden>
+          <i>sin(α + β) = sin α cos β + cos α sin β</i>
+          <div style="color: #098b55; font: 14px Arial; margin-top: 10px">
+            ✓　You proved it!
+          </div>
+        </div>
+      </aside>
+      <section class="bottom">
+        <div class="card proof">
+          <h3>One-line proof　(builds itself)</h3>
+          <div class="flow">
+            <div>↗　sin(α + β)</div>
+            <b>=</b>
+            <div>cos α cos β</div>
+            <b>+</b>
+            <div>sin α sin β</div>
+            <b>=</b>
+            <div>sin α cos β + cos α sin β</div>
+          </div>
+        </div>
+        <div class="card challenge">
+          <h3>Challenge: Hit special angles</h3>
+          <p>Set α and β so that α + β = 90°. Then sin(α + β) should be 1.</p>
+          <input id="ca" value="35" /><span>　/　</span
+          ><input id="cb" value="55" /><button id="check">Check</button
+          ><b id="out" style="color: #098b55; margin-left: 8px"></b>
+        </div>
+      </section>
+    </div>
+    <script>
+      const E = (id) => document.getElementById(id),
+        S = E("svg");
+      function draw() {
+        let a = +E("a").value,
+          b = +E("b").value,
+          t = (a * Math.PI) / 180,
+          u = ((a + b) * Math.PI) / 180,
+          cx = 370,
+          cy = 270,
+          R = 190,
+          qx = cx + R * Math.cos(t),
+          qy = cy - R * Math.sin(t),
+          px = cx + R * Math.cos(u),
+          py = cy - R * Math.sin(u);
+        E("av").textContent = a;
+        E("bv").textContent = b;
+        E("sum").textContent = a + b;
+        let one = Math.sin((a * Math.PI) / 180) * Math.cos((b * Math.PI) / 180),
+          two = Math.cos((a * Math.PI) / 180) * Math.sin((b * Math.PI) / 180);
+        E("sa").textContent = Math.sin(t).toFixed(3);
+        E("ss").textContent = Math.sin(u).toFixed(3);
+        E("one").textContent = one.toFixed(3);
+        E("two").textContent = two.toFixed(3);
+        S.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#222"/><path d="M160 ${cy}H720M${cx} 45V475" stroke="#222"/><path d="M${cx} ${cy}L${qx} ${qy}" stroke="#1760f5" stroke-width="3"/><path d="M${cx} ${cy}L${px} ${py}" stroke="#713af4" stroke-width="3"/><path d="M${qx} ${qy}V${cy}M${px} ${py}V${cy}" stroke="#6295f5" stroke-dasharray="5 4"/><circle cx="${qx}" cy="${qy}" r="7" fill="#1760f5"/><circle cx="${px}" cy="${py}" r="7" fill="#713af4"/><g font-family="Georgia" font-size="19"><text x="${qx - 8}" y="${qy - 16}">Q</text><text x="${px + 10}" y="${py - 10}">P</text><text x="${cx - 22}" y="${cy + 22}">O</text><text x="${px + 110}" y="${py + 8}" fill="#135cf0">sin(α + β)</text><text x="${cx + 25}" y="${cy + 55}" fill="#5f34f1">α</text><text x="${cx + 50}" y="${cy - 55}" fill="#165cf4">α + β</text></g>`;
+      }
+      ["a", "b"].forEach((x) => (E(x).oninput = draw));
+      E("reveal").onclick = () => (E("con").hidden = false);
+      E("check").onclick = () =>
+        (E("out").textContent =
+          +E("ca").value + +E("cb").value === 90
+            ? "✓ Target reached!"
+            : "Try angles that add to 90°.");
+draw();
+</script>
+<script>
+  (() => {
+    const E = id => document.getElementById(id), svg = E('svg'); let mode = null, vectorMode = 'ray';
+    const buttons = document.querySelectorAll('.mode button');
+    const pointAngle = event => { const q = svg.createSVGPoint(); q.x = event.clientX; q.y = event.clientY; const p = q.matrixTransform(svg.getScreenCTM().inverse()); let d = Math.atan2(270 - p.y, p.x - 370) * 180 / Math.PI; return d < 0 ? d + 360 : d; };
+    function render() {
+      const a = +E('a').value, b = +E('b').value, t = a * Math.PI / 180, u = (a + b) * Math.PI / 180, cx = 370, cy = 270, R = 190;
+      const qx = cx + R * Math.cos(t), qy = cy - R * Math.sin(t), px = cx + R * Math.cos(u), py = cy - R * Math.sin(u), first = Math.sin(t) * Math.cos(b * Math.PI / 180), second = Math.cos(t) * Math.sin(b * Math.PI / 180);
+      E('av').textContent = a; E('bv').textContent = b; E('sum').textContent = a + b; E('sa').textContent = Math.sin(t).toFixed(3); E('ss').textContent = Math.sin(u).toFixed(3); E('one').textContent = first.toFixed(3); E('two').textContent = second.toFixed(3);
+      const extension = vectorMode === 'line' ? `<path d="M${cx - R * Math.cos(t)} ${cy + R * Math.sin(t)}L${qx} ${qy}" stroke="#1760f5" opacity=".4"/><path d="M${cx - R * Math.cos(u)} ${cy + R * Math.sin(u)}L${px} ${py}" stroke="#713af4" opacity=".4"/>` : '';
+      svg.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#222"/><path d="M160 ${cy}H720M${cx} 45V475" stroke="#222"/>${extension}<path d="M${cx} ${cy}L${qx} ${qy}" stroke="#1760f5" stroke-width="3"/><path d="M${cx} ${cy}L${px} ${py}" stroke="#713af4" stroke-width="3"/><path d="M${qx} ${qy}V${cy}M${px} ${py}V${cy}" stroke="#6295f5" stroke-dasharray="5 4"/><circle id="alphaHit" cx="${qx}" cy="${qy}" r="22" fill="transparent" style="cursor:grab"/><circle id="finalHit" cx="${px}" cy="${py}" r="22" fill="transparent" style="cursor:grab"/><circle cx="${qx}" cy="${qy}" r="7" fill="#1760f5"/><circle cx="${px}" cy="${py}" r="7" fill="#713af4"/><g font-family="Georgia" font-size="19"><text x="${qx-8}" y="${qy-16}">Q</text><text x="${px+10}" y="${py-10}">P</text><text x="${cx-22}" y="${cy+22}">O</text><text x="${px+80}" y="${py+8}" fill="#135cf0">sin(α + β)</text></g>`;
+      let live = E('proofLive'); if (!live) { live = document.createElement('div'); live.id = 'proofLive'; live.style.cssText = 'font:12px Georgia;color:#4d4078;text-align:center;margin-top:7px'; document.querySelector('.proof').append(live); } live.textContent = `sin(${a + b}°) = ${first.toFixed(3)} + ${second.toFixed(3)} = ${Math.sin(u).toFixed(3)}`;
+      let how = E('how'); if (!how) { how = document.createElement('div'); how.id = 'how'; how.className = 'drop'; document.querySelector('.why').insertBefore(how, E('reveal')); } how.textContent = `How it works: change α or β → the final ray moves. Its height is sin(${a + b}°) = ${Math.sin(u).toFixed(3)}, so the two parts add together.`;
+    }
+    ['a', 'b'].forEach(id => E(id).oninput = render);
+    buttons[0].onclick = () => { vectorMode = 'ray'; buttons[0].style.background = '#eee8ff'; buttons[1].style.background = '#fff'; render(); };
+    buttons[1].onclick = () => { vectorMode = 'line'; buttons[1].style.background = '#eee8ff'; buttons[0].style.background = '#fff'; render(); };
+    svg.onpointerdown = e => { mode = e.target.id === 'alphaHit' ? 'alpha' : e.target.id === 'finalHit' ? 'beta' : null; if (mode) svg.setPointerCapture(e.pointerId); };
+    svg.onpointermove = e => { if (!mode) return; const d = pointAngle(e); if (mode === 'alpha') E('a').value = Math.max(5, Math.min(85, Math.round(d))); else E('b').value = Math.max(5, Math.min(85, Math.round(d - (+E('a').value)))); render(); };
+    svg.onpointerup = svg.onpointercancel = () => mode = null;
+    document.querySelector('.flow div:nth-child(3)').textContent = 'sin α cos β'; document.querySelector('.flow div:nth-child(5)').textContent = 'cos α sin β'; buttons[0].click();
+  })();
+    </script>
+    <script>
+      (() => {
+        const E = id => document.getElementById(id), svg = E('svg'), controls = document.querySelectorAll('.icons span'), modeButtons = document.querySelectorAll('.mode button');
+        let grid = true, snap = true, equality = true, tracing = false, trace = [], drag = null;
+        const angleAt = event => { const p = svg.createSVGPoint(); p.x = event.clientX; p.y = event.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); let d = Math.atan2(270 - q.y, q.x - 370) * 180 / Math.PI; return d < 0 ? d + 360 : d; };
+        const decorate = () => {
+          const a = +E('a').value, b = +E('b').value, t = a * Math.PI / 180, u = (a + b) * Math.PI / 180, qx = 370 + 190 * Math.cos(t), qy = 270 - 190 * Math.sin(t), px = 370 + 190 * Math.cos(u), py = 270 - 190 * Math.sin(u);
+          const gridLines = grid ? Array.from({length: 13}, (_, i) => 130 + i * 50).map(v => `<path d="M${v} 45V475M160 ${v}H720" stroke="#e6e9f5"/>`).join('') : '';
+          const equalityLines = equality ? `<path d="M${qx} ${qy}H${px}V270" fill="none" stroke="#00a07a" stroke-width="2" stroke-dasharray="5 4"/>` : '';
+          const traceLine = tracing && trace.length > 1 ? `<path d="M${trace.map(p => `${p.x} ${p.y}`).join('L')}" fill="none" stroke="#713af4" stroke-width="2" opacity=".45"/>` : '';
+          svg.querySelector('#controlOverlay')?.remove();
+          svg.insertAdjacentHTML('afterbegin', `<g id="controlOverlay" pointer-events="none">${gridLines}${traceLine}${equalityLines}</g>`);
+        };
+        ['a', 'b'].forEach(id => E(id).addEventListener('input', decorate));
+        modeButtons.forEach(button => button.addEventListener('click', () => setTimeout(decorate, 0)));
+        controls[0].onclick = () => { grid = !grid; decorate(); };
+        controls[1].onclick = () => { snap = !snap; E('a').step = E('b').step = snap ? '1' : 'any'; };
+        controls[2].onclick = () => { equality = !equality; decorate(); };
+        controls[3].onclick = () => { tracing = !tracing; if (!tracing) trace = []; decorate(); };
+        controls[4].onclick = () => { E('a').value = 85; E('b').value = 5; grid = true; snap = true; equality = true; tracing = false; trace = []; E('a').step = E('b').step = '1'; modeButtons[0].click(); E('a').dispatchEvent(new Event('input')); };
+        svg.addEventListener('pointerdown', event => { drag = event.target.id === 'alphaHit' ? 'a' : event.target.id === 'finalHit' ? 'b' : null; if (drag) { svg.setPointerCapture(event.pointerId); event.stopImmediatePropagation(); } }, true);
+        svg.addEventListener('pointermove', event => { if (!drag) return; let value = drag === 'a' ? angleAt(event) : angleAt(event) - +E('a').value; value = Math.max(5, Math.min(85, snap ? Math.round(value) : Math.round(value * 10) / 10)); E(drag).value = value; if (tracing) { const u = (+E('a').value + +E('b').value) * Math.PI / 180; trace.push({x: 370 + 190 * Math.cos(u), y: 270 - 190 * Math.sin(u)}); } E(drag).dispatchEvent(new Event('input')); event.stopImmediatePropagation(); }, true);
+        svg.addEventListener('pointerup', () => { drag = null; }, true);
+        svg.addEventListener('pointercancel', () => { drag = null; }, true);
+        decorate();
+      })();
+    </script>
+  </body>
+</html>

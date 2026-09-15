@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "parallel-lines-slope",
+  "categorySlug": "coordinate-geometry",
+  "slug": "parallel-lines-slope",
+  "route": "/visual-proofs/coordinate-geometry/parallel-lines-slope",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/049_parallel_lines_slope.html)."
+}

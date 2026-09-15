@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "inequality-number-line",
+  "categorySlug": "inequalities",
+  "slug": "inequality-number-line",
+  "route": "/visual-proofs/inequalities/inequality-number-line",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/145-inequality-number-line)."
+}

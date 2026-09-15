@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "cosine-rule-proof",
+  "categorySlug": "trigonometry",
+  "slug": "cosine-rule-proof",
+  "route": "/visual-proofs/trigonometry/cosine-rule-proof",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/038_cosine_rule_proof_single_page.html)."
+}

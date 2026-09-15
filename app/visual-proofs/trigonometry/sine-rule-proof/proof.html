@@ -1,0 +1,727 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sine Rule / Law of Sines</title>
+    <style>
+      body {
+        margin: 0;
+        background: #f7f7ff;
+        color: #111946;
+        font-family: Inter, Arial;
+      }
+      .app {
+        height: 941px;
+        padding: 9px 16px;
+        display: grid;
+        grid-template-columns: 80px 1fr 326px;
+        grid-template-rows: 109px 70px 490px 164px;
+        gap: 10px;
+      }
+      .card {
+        background: #ffffffcc;
+        border: 1px solid #e4e2f3;
+        border-radius: 19px;
+        box-shadow: 0 5px 13px #30256f12;
+      }
+      .brand {
+        text-align: center;
+        padding: 10px;
+        font-weight: 800;
+      }
+      .brand b {
+        color: #6338ee;
+        font-size: 38px;
+        display: block;
+      }
+      .top {
+        grid-column: 2/4;
+        padding: 3px 39px;
+      }
+      .crumb {
+        color: #4d25dd;
+        font-size: 14px;
+      }
+      .top h1 {
+        font-size: 45px;
+        margin: 5px 0;
+        letter-spacing: -2px;
+      }
+      .top p {
+        margin: 0;
+        color: #53558b;
+        font-size: 16px;
+      }
+      .badges {
+        position: absolute;
+        right: 28px;
+        top: 54px;
+      }
+      .badge {
+        background: #fff;
+        border: 1px solid #e4def5;
+        border-radius: 20px;
+        padding: 11px 16px;
+        margin-left: 14px;
+      }
+      .nav {
+        grid-row: 2/5;
+        padding: 7px;
+      }
+      .n {
+        text-align: center;
+        height: 112px;
+        padding: 13px;
+        color: #47477f;
+        font-size: 14px;
+      }
+      .n i {
+        display: block;
+        font-size: 32px;
+        font-style: normal;
+      }
+      .n.active {
+        color: #5129e0;
+        background: #f2eeff;
+        border-radius: 15px;
+      }
+      .n:last-child {
+        margin-top: 145px;
+      }
+      .mission {
+        grid-column: 2;
+        padding: 12px 20px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+      .mission b {
+        color: #4d25df;
+      }
+      .micon {
+        font-size: 36px;
+        color: #6337ed;
+      }
+      .switches {
+        margin-left: auto;
+        display: flex;
+        gap: 30px;
+        color: #454279;
+        font-size: 12px;
+      }
+      .switches i {
+        display: block;
+        text-align: center;
+        color: #552be3;
+        font-size: 26px;
+        font-style: normal;
+      }
+      .dual {
+        grid-column: 2;
+        display: grid;
+        grid-template-columns: 1fr 1.02fr;
+        gap: 12px;
+      }
+      .pane {
+        position: relative;
+        padding: 12px;
+        overflow: hidden;
+      }
+      .pane h3 {
+        font-size: 13px;
+        color: #3b20db;
+        margin: 0;
+      }
+      .pane svg {
+        width: 100%;
+        height: 420px;
+      }
+      .action-buttons {
+        position: absolute;
+        bottom: 12px;
+        left: 18px;
+        display: flex;
+        gap: 7px;
+        z-index: 3;
+      }
+      .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-width: 82px;
+        padding: 7px 9px;
+        border: 1px solid #d8d0f1;
+        border-radius: 9px;
+        background: #fff;
+        color: #4039a5;
+        font: 600 12px Inter, Arial, sans-serif;
+        cursor: pointer;
+        box-shadow: 0 3px 9px #30256f18;
+      }
+      .action-btn:hover { background: #f6f2ff; }
+      .action-btn:active { transform: translateY(1px); }
+      .action-switch {
+        display: inline-grid;
+        place-items: center;
+        width: 21px;
+        height: 21px;
+        border-radius: 50%;
+        background: #eeeafc;
+        color: #5a32df;
+        font-size: 12px;
+      }
+      .lock {
+        position: absolute;
+        right: 32px;
+        top: 17px;
+        border: 1px solid #e6e1f4;
+        border-radius: 10px;
+        padding: 7px;
+        color: #4d2be3;
+        font-size: 12px;
+        background: #fff;
+        box-shadow: 0 3px 9px #30256f18;
+        font-weight: 600;
+      }
+      .resbox {
+        position: absolute;
+        right: 18px;
+        top: 32px;
+        width: 170px;
+        padding: 13px;
+        font: 15px Georgia;
+        line-height: 2;
+      }
+      .resbox b {
+        font: 12px Arial;
+        color: #4c2bdb;
+      }
+      .why {
+        grid-column: 3;
+        grid-row: 2/4;
+        padding: 12px;
+        overflow-y: auto;
+        min-height: 0;
+      }
+      .why h2 {
+        margin: 2px 8px 9px;
+        color: #4824df;
+        font-size: 18px;
+      }
+      .reason {
+        border: 1px solid #e2dfec;
+        border-radius: 13px;
+        padding: 10px;
+        font-size: 14px;
+      }
+      .num {
+        display: inline-grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        background: #6338ef;
+        border-radius: 50%;
+        color: #fff;
+        margin-right: 8px;
+      }
+      .reason svg {
+        width: 100%;
+        height: 93px;
+      }
+      .drop,
+      .reveal,
+      .formula {
+        margin-top: 8px;
+        border: 1px solid #e3e0ec;
+        border-radius: 10px;
+        padding: 10px;
+      }
+      .reveal {
+        width: 100%;
+        background: linear-gradient(90deg, #4d26de, #794df4);
+        border: 0;
+        color: #fff;
+        font-size: 15px;
+      }
+      .formula {
+        text-align: center;
+        font: 19px Georgia;
+      }
+      .bottom {
+        grid-column: 2/4;
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 12px;
+      }
+      .bottom section {
+        padding: 10px;
+      }
+      .bottom h3 {
+        margin: 0;
+        color: #4e28df;
+        font-size: 13px;
+      }
+      .flow {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .flow span {
+        flex: 1;
+        height: 105px;
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #e4def4;
+        border-radius: 10px;
+        font-size: 12px;
+      }
+      .flow b {
+        font-size: 24px;
+        color: #6338ef;
+      }
+      .challenge select {
+        width: 48px;
+        padding: 9px;
+        border: 1px solid #d8d0f1;
+        border-radius: 7px;
+      }
+      .challenge button {
+        background: #6338ef;
+        border: 0;
+        border-radius: 8px;
+        padding: 10px 20px;
+        color: #fff;
+      }
+      #reset { border: 1px solid #d8d0f1 !important; border-radius: 9px; box-shadow: 0 3px 9px #30256f18; font-weight: 600; }
+      .bottom > section { min-width: 0; overflow: hidden; }
+      .bottom .flow span { min-width: 0; }
+      @media (max-width: 900px) {
+        .app {
+          height: auto;
+          display: block;
+        }
+        .nav,
+        .badges {
+          display: none;
+        }
+        .top {
+          height: 125px;
+          padding: 10px;
+        }
+        .mission,
+        .dual,
+        .why,
+        .bottom {
+          margin: 10px 0;
+        }
+        .dual,
+        .bottom {
+          display: block;
+        }
+        .pane,
+        .bottom section {
+          margin: 10px 0;
+        }
+        .pane {
+          height: 500px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="card brand"><b>✣</b>MATHS<br />UNIVERSE</div>
+      <header class="top">
+        <div class="crumb">Visual Proofs　/　Trigonometry Proofs</div>
+        <h1>
+          Sine Rule / Law of Sines　<span
+            style="color: #5e38ec; font-size: 31px"
+            >☆</span
+          >
+        </h1>
+        <p>
+          Sides of a triangle are chords of its circumcircle, and each chord has
+          length 2R times the sine of the opposite angle.
+        </p>
+      </header>
+      <div class="badges">
+        <span class="badge">▥　Advanced</span
+        ><span class="badge">◷　11 min</span>
+      </div>
+      <nav class="card nav">
+        <div class="n active"><i>Δ</i>Explore</div>
+        <div class="n"><i>♧</i>Proofs</div>
+        <div class="n"><i>♢</i>Practice</div>
+        <div class="n"><i>♧</i>Saved</div>
+        <div class="n"><i>▤</i>Notes</div>
+        <div class="n"><i>⚙</i>Settings</div>
+      </nav>
+      <section class="card mission">
+        <div class="micon">◎</div>
+        <div>
+          <b>Mission:</b> Construct angles and triangle on the circle.<br /><small
+            >Drag the rays to set ∠A, ∠B, ∠C. See the sides become
+            chords.</small
+          >
+        </div>
+        <div class="switches">
+          <button class="switch-btn active" id="angleArcsBtn" type="button">
+            <span><i>⌒</i>Angle arcs</span><span class="toggle"><span></span></span>
+          </button>
+          <button class="switch-btn active" id="circumcircleBtn" type="button">
+            <span><i>◯</i>Circumcircle</span><span class="toggle"><span></span></span>
+          </button>
+          <button class="switch-btn active" id="radiiBtn" type="button">
+            <span><i>⌁</i>Radii</span><span class="toggle"><span></span></span>
+          </button>
+          <button class="switch-btn" id="equalMarksBtn" type="button">
+            <span><i>＝</i>Equal marks</span><span class="toggle"><span></span></span>
+          </button>
+        </div>
+      </section>
+      <main class="dual">
+        <section class="card pane">
+          <h3>●　LIVE CONSTRUCTION</h3>
+          <span class="lock">▣　Lock</span
+          ><svg id="live" viewBox="0 0 520 420"></svg
+          ><div class="action-buttons">
+            <button id="reset" class="action-btn" type="button">
+              <span>↻ Reset</span><span class="action-switch">↻</span>
+            </button>
+            <button id="undo" class="action-btn" type="button">
+              <span>↶ Undo</span><span class="action-switch">↶</span>
+            </button>
+            <button id="clear" class="action-btn" type="button">
+              <span>▧ Clear</span><span class="action-switch">×</span>
+            </button>
+          </div>
+        </section>
+        <section class="card pane">
+          <h3>●　RESULT</h3>
+          <svg id="resultsvg" viewBox="0 0 520 420"></svg>
+          <div class="card resbox">
+            <b>Chord-Angle Theorem</b>
+            <hr />
+            In ΔAOB<br />sin A = <u>BC</u> / 2R = <i>a</i>/2R<br /><br />In
+            ΔBOC<br />sin B = <u>AC</u> / 2R = <i>b</i>/2R<br /><br />In ΔCOA<br />sin
+            C = <u>AB</u> / 2R = <i>c</i>/2R
+          </div>
+        </section>
+      </main>
+      <aside class="card why">
+        <h2>✧　Why it works</h2>
+        <div class="reason">
+          <b><span class="num">1</span>Sides are chords</b
+          ><svg viewBox="0 0 250 90">
+            <circle cx="60" cy="45" r="35" fill="none" stroke="#222" />
+            <path d="M35 65L58 13L89 62Z" fill="none" stroke="#3156ec" />
+          </svg>
+        </div>
+        <div class="reason">
+          <b><span class="num">2</span>Sine in a central triangle</b
+          ><svg viewBox="0 0 250 90">
+            <circle cx="60" cy="45" r="35" fill="none" stroke="#222" />
+            <path
+              d="M35 65L58 13L89 62M60 45L58 13"
+              fill="none"
+              stroke="#3156ec"
+            />
+          </svg>
+        </div>
+        <div class="reason">
+          <b><span class="num">3</span>Equal ratios emerge</b>
+          <div style="text-align: center; font: 17px Georgia; margin: 9px">
+            a/sin A　=　b/sin B　=　c/sin C
+          </div>
+        </div>
+        <div class="drop">What is the common value?　⌄</div>
+        <button class="reveal" id="reveal">◉　Reveal proof</button>
+        <div class="formula" id="formula" hidden>
+          <i>a/sin A　=　b/sin B　=　c/sin C　=　2R</i>
+          <div style="color: #079556; font: 14px Arial; margin-top: 9px">
+            ✓　You proved it!
+          </div>
+        </div>
+      </aside>
+      <section class="bottom">
+        <section class="card">
+          <h3>Proof in one line</h3>
+          <div class="flow">
+            <span>◯<br />Triangle on circumcircle</span><b>→</b
+            ><span>Sides are chords</span><b>→</b
+            ><span>Chord-Angle Theorem</span><b>→</b
+            ><span>sin A = a/2R<br />sin B = b/2R<br />sin C = c/2R</span
+            ><b>→</b
+            ><span
+              >Equal ratios<br /><b style="font-size: 22px; color: #5f35ef"
+                >2R</b
+              ></span
+            >
+          </div>
+        </section>
+        <section class="card challenge">
+          <h3>🏆　Your turn: Sine Rule Challenge</h3>
+          <p style="font-size: 12px">
+            Given R = 5 and ∠A = 50°, ∠B = 65°, ∠C = 65°. Find a : b : c.
+          </p>
+          <i>a : b : c</i> =
+          <select id="aa">
+            <option>0</option>
+            <option>7.66</option>
+          </select>
+          :
+          <select id="bb">
+            <option>0</option>
+            <option>9.06</option>
+          </select>
+          :
+          <select id="cc">
+            <option>0</option>
+            <option>9.06</option>
+          </select>
+          <button id="check">Check</button
+          ><b id="msg" style="color: #078e54"></b>
+        </section>
+      </section>
+    </div>
+    <script>
+      (() => {
+        const E = id => document.getElementById(id);
+        const live = E("live");
+        const result = E("resultsvg");
+        const O = [250, 205], R = 156;
+
+        const initial = { A: [250, 52], B: [118, 270], C: [384, 260] };
+        let vertices = JSON.parse(JSON.stringify(initial));
+        let history = [];
+        let active = null;
+        let locked = false;
+
+        const features = {
+          angleArcs: true,
+          circumcircle: true,
+          radii: true,
+          equalMarks: false
+        };
+
+        const distance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+
+        const angle = (a, b, c) => {
+          const numerator =
+            distance(a, b) ** 2 + distance(a, c) ** 2 - distance(b, c) ** 2;
+          const denominator =
+            2 * distance(a, b) * distance(a, c) || 1;
+          return Math.acos(
+            Math.max(-1, Math.min(1, numerator / denominator))
+          ) * 180 / Math.PI;
+        };
+
+        const P = point => point.join(",");
+
+        function angleArc(point) {
+          const dx = point[0] - O[0], dy = point[1] - O[1];
+          const len = Math.hypot(dx, dy) || 1;
+          const ux = dx / len, uy = dy / len;
+          const tx = -uy, ty = ux, r = 22;
+          const x1 = point[0] + tx * r - ux * 4;
+          const y1 = point[1] + ty * r - uy * 4;
+          const x2 = point[0] - tx * r - ux * 4;
+          const y2 = point[1] - ty * r - uy * 4;
+          return `<path d="M${x1} ${y1} Q${point[0]} ${point[1]} ${x2} ${y2}"
+                    fill="none" stroke="#6037ef" stroke-width="2.5"/>`;
+        }
+
+        function equalMarks(A, B, C) {
+          return [[A, B], [B, C], [A, C]].map(([a, b]) => {
+            const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+            const dx = b[0] - a[0], dy = b[1] - a[1];
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len * 7, ny = dx / len * 7;
+            return `<path d="M${mx-nx} ${my-ny} L${mx+nx} ${my+ny}"
+                      stroke="#6037ef" stroke-width="2.5"/>`;
+          }).join("");
+        }
+
+        function canvas(svg, interactive) {
+          const { A, B, C } = vertices;
+          const a = distance(B, C), b = distance(A, C), c = distance(A, B);
+          const Aang = angle(A, B, C), Bang = angle(B, A, C), Cang = angle(C, A, B);
+          let drawing = "";
+
+          if (features.circumcircle) {
+            drawing += `<circle cx="${O[0]}" cy="${O[1]}" r="${R}"
+              fill="none" stroke="#8992c6"/>`;
+          }
+
+          drawing += `<path d="M${P(A)}L${P(B)}L${P(C)}Z"
+              fill="none" stroke="#2454ec" stroke-width="2.2"/>
+            <path d="M${P(A)}L${P(B)}" stroke="#00965e" stroke-width="3"/>
+            <path d="M${P(B)}L${P(C)}" stroke="#ee2a36" stroke-width="3"/>
+            <path d="M${P(A)}L${P(C)}" stroke="#2454ec" stroke-width="3"/>`;
+
+          if (features.radii) {
+            drawing += `<path d="M${P(O)}L${P(A)}M${P(O)}L${P(B)}M${P(O)}L${P(C)}"
+              stroke="#333" stroke-dasharray="5 4"/>`;
+          }
+
+          if (features.angleArcs) drawing += angleArc(A) + angleArc(B) + angleArc(C);
+          if (features.equalMarks) drawing += equalMarks(A, B, C);
+
+          if (interactive && !locked) {
+            drawing += `<circle id="dragA" cx="${A[0]}" cy="${A[1]}" r="22" fill="transparent" style="cursor:grab"/>
+              <circle id="dragB" cx="${B[0]}" cy="${B[1]}" r="22" fill="transparent" style="cursor:grab"/>
+              <circle id="dragC" cx="${C[0]}" cy="${C[1]}" r="22" fill="transparent" style="cursor:grab"/>`;
+          }
+
+          drawing += `<g font-family="Georgia" font-size="17">
+            <text x="${A[0]-12}" y="${A[1]-14}">A ${Aang.toFixed(1)}°</text>
+            <text x="${B[0]-18}" y="${B[1]+23}">B ${Bang.toFixed(1)}°</text>
+            <text x="${C[0]+5}" y="${C[1]+20}">C ${Cang.toFixed(1)}°</text>
+            <text x="${O[0]-9}" y="${O[1]+22}">O</text>
+            <text x="${(B[0]+C[0])/2}" y="${(B[1]+C[1])/2+23}" fill="#e21d2b">a=${a.toFixed(1)}</text>
+            <text x="${(A[0]+C[0])/2+13}" y="${(A[1]+C[1])/2}" fill="#1351e9">b=${b.toFixed(1)}</text>
+            <text x="${(A[0]+B[0])/2-8}" y="${(A[1]+B[1])/2}" fill="#087f51">c=${c.toFixed(1)}</text>
+          </g>`;
+
+          svg.innerHTML = drawing;
+          return { a, b, c, Aang, Bang, Cang };
+        }
+
+        function render() {
+          const m = canvas(live, true);
+          canvas(result, false);
+
+          ["angleArcs", "circumcircle", "radii", "equalMarks"].forEach(key => {
+            const id = key === "angleArcs" ? "angleArcsBtn" :
+                       key === "circumcircle" ? "circumcircleBtn" :
+                       key === "radii" ? "radiiBtn" : "equalMarksBtn";
+            E(id).classList.toggle("active", features[key]);
+          });
+
+          let values = E("ratioLive");
+          if (!values) {
+            values = document.createElement("div");
+            values.id = "ratioLive";
+            values.style.cssText =
+              "font:12px Georgia;line-height:1.55;color:#3d3677;margin-top:7px";
+            document.querySelector(".resbox").append(values);
+          }
+          values.innerHTML =
+            `a/sin A = ${(m.a / Math.sin(m.Aang * Math.PI / 180)).toFixed(2)}<br>` +
+            `b/sin B = ${(m.b / Math.sin(m.Bang * Math.PI / 180)).toFixed(2)}<br>` +
+            `c/sin C = ${(m.c / Math.sin(m.Cang * Math.PI / 180)).toFixed(2)} = 2R (${2 * R})`;
+
+          let how = E("how");
+          if (!how) {
+            how = document.createElement("div");
+            how.id = "how";
+            how.className = "drop";
+            document.querySelector(".why").insertBefore(how, E("reveal"));
+          }
+          how.textContent =
+            `How it works: drag A, B, or C → the opposite side and angle change. ` +
+            `Each side ÷ sine of its opposite angle still equals ${2 * R}, the circle's diameter.`;
+        }
+
+        function saveState() {
+          history.push(JSON.stringify(vertices));
+          if (history.length > 30) history.shift();
+        }
+
+        function pointer(e) {
+          const q = live.createSVGPoint();
+          q.x = e.clientX;
+          q.y = e.clientY;
+          const p = q.matrixTransform(live.getScreenCTM().inverse());
+          const dx = p.x - O[0], dy = p.y - O[1];
+          const d = Math.hypot(dx, dy) || 1;
+          return [O[0] + dx / d * R, O[1] + dy / d * R];
+        }
+
+        live.onpointerdown = e => {
+          if (locked) return;
+          active = (e.target.id || "").replace("drag", "");
+          if (!["A", "B", "C"].includes(active)) {
+            active = null;
+            return;
+          }
+          saveState();
+          live.setPointerCapture(e.pointerId);
+        };
+
+        live.onpointermove = e => {
+          if (!active || locked) return;
+          vertices[active] = pointer(e);
+          render();
+        };
+
+        live.onpointerup = live.onpointercancel = () => active = null;
+
+        E("reset").onclick = () => {
+          saveState();
+          vertices = JSON.parse(JSON.stringify(initial));
+          render();
+        };
+
+        E("undo").onclick = () => {
+          if (!history.length) return;
+          vertices = JSON.parse(history.pop());
+          render();
+        };
+
+        E("clear").onclick = () => {
+          features.angleArcs = false;
+          features.circumcircle = false;
+          features.radii = false;
+          features.equalMarks = false;
+          render();
+        };
+
+        E("angleArcsBtn").onclick = () => {
+          features.angleArcs = !features.angleArcs;
+          render();
+        };
+
+        E("circumcircleBtn").onclick = () => {
+          features.circumcircle = !features.circumcircle;
+          render();
+        };
+
+        E("radiiBtn").onclick = () => {
+          features.radii = !features.radii;
+          render();
+        };
+
+        E("equalMarksBtn").onclick = () => {
+          features.equalMarks = !features.equalMarks;
+          render();
+        };
+
+        const lock = document.querySelector(".lock");
+        lock.style.cursor = "pointer";
+        lock.onclick = () => {
+          locked = !locked;
+          lock.textContent = locked ? "▣ Unlock" : "▣ Lock";
+          render();
+        };
+
+        E("reveal").onclick = () => E("formula").hidden = false;
+
+        E("check").onclick = () => {
+          E("msg").textContent =
+            E("aa").value === "7.66" &&
+            E("bb").value === "9.06" &&
+            E("cc").value === "9.06"
+              ? " ✓ Correct!"
+              : " Use 2R sin(angle).";
+        };
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
+

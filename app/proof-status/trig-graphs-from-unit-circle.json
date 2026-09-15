@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "trig-graphs-from-unit-circle",
+  "categorySlug": "trigonometry",
+  "slug": "trig-graphs-from-unit-circle",
+  "route": "/visual-proofs/trigonometry/trig-graphs-from-unit-circle",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/033_trigonometric_graphs_unit_circle_single_page.html)."
+}

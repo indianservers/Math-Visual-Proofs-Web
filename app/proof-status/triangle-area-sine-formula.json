@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "triangle-area-sine-formula",
+  "categorySlug": "trigonometry",
+  "slug": "triangle-area-sine-formula",
+  "route": "/visual-proofs/trigonometry/triangle-area-sine-formula",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/041_triangle_area_sine_formula.html)."
+}

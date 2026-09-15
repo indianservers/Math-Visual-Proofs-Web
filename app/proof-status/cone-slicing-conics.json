@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "cone-slicing-conics",
+  "categorySlug": "conic-sections",
+  "slug": "cone-slicing-conics",
+  "route": "/visual-proofs/conic-sections/cone-slicing-conics",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/142-cone-slice-conics)."
+}

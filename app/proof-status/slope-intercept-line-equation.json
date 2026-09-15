@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "slope-intercept-line-equation",
+  "categorySlug": "coordinate-geometry",
+  "slug": "slope-intercept-line-equation",
+  "route": "/visual-proofs/coordinate-geometry/slope-intercept-line-equation",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/047-slope-intercept-line-equation.html)."
+}

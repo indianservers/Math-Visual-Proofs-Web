@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "remainder-pattern-cycles",
+  "categorySlug": "number-theory",
+  "slug": "remainder-pattern-cycles",
+  "route": "/visual-proofs/number-theory/remainder-pattern-cycles",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/82/index.html)."
+}

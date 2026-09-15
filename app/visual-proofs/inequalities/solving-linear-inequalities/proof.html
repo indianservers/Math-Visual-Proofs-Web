@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solving Linear Inequalities | Interactive Mathematics</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #f3e8ff;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-red: #ef4444;
+      --accent-red-light: #fee2e2;
+      --accent-orange: #f59e0b;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Layout Structure */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout {
+        grid-template-columns: 100px 1fr;
+      }
+    }
+
+    /* Left Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* Main Workspace Container */
+    .main-wrapper {
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1850px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header Bar */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon-action {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-icon-action:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
+
+    /* Top Custom Inequality Input Card */
+    .top-input-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .input-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .natural-input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .text-inequality-input {
+      flex: 1;
+      min-width: 260px;
+      padding: 10px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-math);
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary);
+      transition: border-color 0.2s;
+    }
+
+    .text-inequality-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-solve-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-solve-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .preset-chips-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .preset-chip-btn {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-family: var(--font-math);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-chip-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-focus);
+    }
+
+    .error-alert-banner {
+      background: #fce7f3;
+      color: #9f1239;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* SPACIOUS DESKTOP GRID ARCHITECTURE */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(360px, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Main Workspace Column */
+    .workspace-main-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Split Workspace Card: Balance Model & Number Line */
+    .split-workspace-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 24px;
+      align-items: start;
+      position: relative;
+    }
+
+    @media (max-width: 850px) {
+      .split-workspace-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .section-column-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    /* Balance Model Display Box */
+    .balance-container-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+      position: relative;
+    }
+
+    svg.balance-svg {
+      width: 100%;
+      height: 190px;
+      display: block;
+    }
+
+    .inequality-formula-pill {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-family: var(--font-math);
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Right Number Line Section inside Split View */
+    .numberline-container-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .segmented-operators {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #f8fafc;
+      padding: 4px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    .btn-op-segment {
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-op-segment.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nl-viewport-container {
+      width: 100%;
+      height: 80px;
+      position: relative;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    svg.main-nl-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .drag-hint-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    /* 4-Step Visual Proof Section */
+    .visual-proof-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .proof-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) minmax(160px, 0.8fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 1000px) {
+      .proof-steps-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .proof-step-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .proof-step-card.active-step {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: var(--shadow-md);
+    }
+
+    .step-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .step-num-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .step-check-icon {
+      color: var(--accent-green);
+      font-size: 14px;
+    }
+
+    .step-mini-canvas {
+      width: 100%;
+      height: 60px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rule-reminder-card {
+      background: var(--accent-purple-light);
+      border: 1px dashed var(--accent-purple);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--text-dark);
+    }
+
+    .rule-reminder-title {
+      font-weight: 800;
+      color: var(--accent-purple);
+      font-size: 12px;
+    }
+
+    /* INDEPENDENT SCROLLING RIGHT PANEL (Why it works) */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      max-height: 880px;
+      min-width: 360px;
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 18px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-header-icon {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .why-panel-header h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar { width: 8px; }
+    .why-panel-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .why-panel-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .why-section-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .why-badge-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .boxed-formula {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 16px;
+      text-align: center;
+      margin: 8px 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Prediction Box inside Right Panel */
+    .prediction-card-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .radio-options-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-radio-option {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-radio-option.selected {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .feedback-msg {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-msg.correct { background: var(--accent-green-light); color: #065f46; }
+    .feedback-msg.incorrect { background: #fce7f3; color: #9f1239; }
+
+    /* Bottom Dashboard Challenge Card */
+    .bottom-challenge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .challenge-row-layout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .operation-chips-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn-op {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .chip-btn-op:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-focus);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Saved">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Saved
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Glossary">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            Glossary
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <h1>Solving Linear Inequalities</h1>
+          <p class="header-subtitle">Balance the equation. Reveal the solution.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 12 min</span>
+          <button class="btn-icon-action" id="btn-reset-all" title="Reset lesson">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <!-- Prominent Custom Inequality Input Card -->
+      <section class="top-input-card">
+        <div class="input-card-header">
+          <div class="input-card-title">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Try your own inequality
+          </div>
+          <span style="font-size:12px; color:var(--text-muted);">Use any single variable letter (e.g. x, y, z, a, m, p, q)</span>
+        </div>
+
+        <div class="natural-input-row">
+          <input type="text" id="input-natural-text" class="text-inequality-input" value="2x + 3 < 11" placeholder="Enter e.g. 3y - 5 >= 10, -4z + 7 < 19...">
+          <button class="btn-solve-primary" id="btn-solve-natural">Solve</button>
+        </div>
+
+        <!-- Quick Preset Chips -->
+        <div class="preset-chips-row">
+          <span>Examples:</span>
+          <button class="preset-chip-btn" data-preset="2x + 3 < 11">2x + 3 &lt; 11</button>
+          <button class="preset-chip-btn" data-preset="3y - 5 >= 10">3y &minus; 5 &ge; 10</button>
+          <button class="preset-chip-btn" data-preset="-4z + 7 < 19">&minus;4z + 7 &lt; 19</button>
+          <button class="preset-chip-btn" data-preset="5a - 2 <= 13">5a &minus; 2 &le; 13</button>
+          <button class="preset-chip-btn" data-preset="-2m + 8 > 14">&minus;2m + 8 &gt; 14</button>
+          <button class="preset-chip-btn" data-preset="7p + 3 >= 24">7p + 3 &ge; 24</button>
+          <button class="preset-chip-btn" data-preset="2.5q - 5 < 10">2.5q &minus; 5 &lt; 10</button>
+        </div>
+
+        <div id="parse-error-banner" class="error-alert-banner" style="display:none;"></div>
+      </section>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Main Workspace Column -->
+        <div class="workspace-main-col">
+          <!-- Split Workspace Card: Balance Model & Number Line -->
+          <div class="split-workspace-card">
+            <!-- Left: Balance Model -->
+            <div>
+              <h3 class="section-column-title">Balance model</h3>
+              <div class="balance-container-box">
+                <svg id="svg-balance-scale" class="balance-svg"></svg>
+                <div class="inequality-formula-pill" id="display-inequality-pill">
+                  Inequality: 2x + 3 &lt; 11
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Number Line (solution set) -->
+            <div>
+              <h3 class="section-column-title" id="nl-section-title">Number line — solution set for x</h3>
+              <div class="numberline-container-box">
+                <div class="segmented-operators" id="nl-operator-segments">
+                  <button class="btn-op-segment active" data-op="<">&lt;</button>
+                  <button class="btn-op-segment" data-op="<=">&le;</button>
+                  <button class="btn-op-segment" data-op=">">&gt;</button>
+                  <button class="btn-op-segment" data-op=">=">&ge;</button>
+                </div>
+
+                <div class="nl-viewport-container" id="nl-main-container">
+                  <svg id="svg-main-nl" class="main-nl-svg"></svg>
+                </div>
+
+                <span class="drag-hint-badge">Drag to set solution boundary</span>
+                <div style="font-family:var(--font-math); font-size:16px; font-weight:bold; color:var(--primary);" id="display-interval-text">
+                  Interval: (-&infty;, 4)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4-Step Visual Proof Section -->
+          <section class="visual-proof-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="font-size:16px; font-weight:800;">Your visual proof</h3>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button class="btn-icon-action" id="btn-prev-step" style="padding:4px 10px;">&lsaquo; Prev</button>
+                <span style="font-size:12px; font-weight:bold; color:var(--text-muted);" id="step-indicator-text">Step 4 of 4</span>
+                <button class="btn-icon-action" id="btn-next-step" style="padding:4px 10px;">Next &rsaquo;</button>
+              </div>
+            </div>
+
+            <div class="proof-steps-grid">
+              <!-- Step 1 -->
+              <div class="proof-step-card" id="card-step-1">
+                <div class="step-header-row">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="step-num-badge">1</span>
+                    <span>Start</span>
+                  </div>
+                  <span class="step-check-icon">&#10004;</span>
+                </div>
+                <div class="step-mini-canvas" id="canvas-step-1"></div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="proof-step-card" id="card-step-2">
+                <div class="step-header-row">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="step-num-badge">2</span>
+                    <span id="title-step-2">Subtract 3</span>
+                  </div>
+                  <span class="step-check-icon">&#10004;</span>
+                </div>
+                <div class="step-mini-canvas" id="canvas-step-2"></div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="proof-step-card" id="card-step-3">
+                <div class="step-header-row">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="step-num-badge">3</span>
+                    <span id="title-step-3">Divide by 2</span>
+                  </div>
+                  <span class="step-check-icon">&#10004;</span>
+                </div>
+                <div class="step-mini-canvas" id="canvas-step-3"></div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="proof-step-card" id="card-step-4">
+                <div class="step-header-row">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="step-num-badge">4</span>
+                    <span>Solution</span>
+                  </div>
+                  <span class="step-check-icon">&#10004;</span>
+                </div>
+                <div class="step-mini-canvas" id="canvas-step-4"></div>
+              </div>
+
+              <!-- Rule Reminder Card -->
+              <div class="rule-reminder-card">
+                <div class="rule-reminder-title">Rule reminder</div>
+                <p>Dividing or multiplying by a negative number reverses the inequality sign.</p>
+                <div style="text-align:center; font-family:var(--font-math); font-weight:bold; color:var(--primary); margin-top:auto;">
+                  &times; (-1) &harr;
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Viewport 3: Right Educational Panel (Why it works) -->
+        <aside class="why-panel" id="why-panel">
+          <div class="why-panel-header">
+            <span class="why-header-icon">&#9672;</span>
+            <h2>Why it works</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- SECTION 1: Additive Inverse -->
+            <section class="why-section">
+              <div class="why-section-header-title">
+                <span class="why-badge-num">1</span>
+                <span>Additive inverse property</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-1">
+                To isolate the variable term, undo the constant using its additive inverse on both sides.
+              </p>
+              <div class="boxed-formula" id="why-box-1">2x + 3 &minus; 3 &lt; 11 &minus; 3 &rArr; 2x &lt; 8</div>
+            </section>
+
+            <!-- SECTION 2: Multiplicative Inverse -->
+            <section class="why-section">
+              <div class="why-section-header-title">
+                <span class="why-badge-num">2</span>
+                <span>Multiplicative inverse property</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-2">
+                After removing the constant, divide both sides by the coefficient of x.
+              </p>
+              <div class="boxed-formula" id="why-box-2">2x / 2 &lt; 8 / 2 &rArr; x &lt; 4</div>
+            </section>
+
+            <!-- SECTION 3: Sign Flip Rule -->
+            <section class="why-section">
+              <div class="why-section-header-title">
+                <span class="why-badge-num">3</span>
+                <span>Sign flip rule</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark);">
+                Multiplying or dividing an inequality by a negative number reverses the order.
+              </p>
+              <div class="boxed-formula" style="font-size:14px;" id="why-box-3">
+                a &lt; b &nbsp;&rarr;&nbsp; &divide;(-c) &nbsp;&rarr;&nbsp; a/c &gt; b/c
+              </div>
+            </section>
+
+            <!-- Interactive Prediction Card -->
+            <div class="prediction-card-box">
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Prediction</h4>
+              <p style="font-size:12px; color:var(--text-muted);" id="predict-lead-text">Predict the final solution for x:</p>
+
+              <div class="radio-options-group" id="predict-options-grid">
+                <button class="btn-radio-option" data-op="<">x &lt; 4</button>
+                <button class="btn-radio-option" data-op="<=">x &le; 4</button>
+                <button class="btn-radio-option" data-op=">">x &gt; 4</button>
+                <button class="btn-radio-option" data-op=">=">x &ge; 4</button>
+              </div>
+
+              <button class="btn-primary" id="btn-reveal-predict">Reveal (after trying)</button>
+              <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Bottom Dashboard Challenge Card -->
+      <section class="bottom-challenge-card">
+        <div class="challenge-row-layout">
+          <div>
+            <h3 style="font-size:16px; font-weight:800;">Challenge (exact)</h3>
+            <p style="font-size:12.5px; color:var(--text-muted);">Solve and graph the solution set for the given inequality.</p>
+          </div>
+
+          <div style="font-family:var(--font-math); font-size:18px; font-weight:bold; background:#f8fafc; border:1px solid var(--border); padding:6px 16px; border-radius:var(--radius-sm); color:var(--primary);">
+            &minus;3(x &minus; 2) &ge; 12
+          </div>
+
+          <!-- Operation Chips -->
+          <div class="operation-chips-row">
+            <button class="chip-btn-op" data-chip="+2">+2</button>
+            <button class="chip-btn-op" data-chip="-2">&minus;2</button>
+            <button class="chip-btn-op" data-chip="*(-1)">&times;(-1)</button>
+            <button class="chip-btn-op" data-chip="/(-3)">&divide;(-3)</button>
+            <button class="chip-btn-op" data-chip="+6">+6</button>
+          </div>
+        </div>
+
+        <!-- Interactive Challenge Number Line -->
+        <div style="width:100%; height:75px; background:white; border-radius:var(--radius-md); border:1px solid var(--border);" id="challenge-nl-container">
+          <svg id="svg-challenge-nl" style="width:100%; height:100%;"></svg>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:12px; font-weight:bold; color:var(--text-muted);">Your Graph Target:</span>
+            <div class="segmented-operators" id="challenge-op-segments">
+              <button class="btn-op-segment" data-op="<">&lt;</button>
+              <button class="btn-op-segment active" data-op="<=">&le;</button>
+              <button class="btn-op-segment" data-op=">">&gt;</button>
+              <button class="btn-op-segment" data-op=">=">&ge;</button>
+            </div>
+          </div>
+
+          <button class="btn-primary" id="btn-check-challenge" style="width:auto; padding:10px 28px;">Check answer</button>
+        </div>
+
+        <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * Dynamic Variable & Expression Parser Engine
+     * Solving Linear Inequalities
+     */
+
+    // --- 0. Central Application State ---
+    const state = {
+      rawInput: "2x + 3 < 11",
+      variable: "x",
+      a: 2,
+      b: 3,
+      op: '<',
+      c: 11,
+
+      currentStep: 4,
+
+      // Right Panel Prediction
+      predictionSelected: null,
+
+      // Challenge State
+      challenge: {
+        targetA: -3,
+        targetB: 6,
+        targetOp: '>=',
+        targetC: 12,
+        studentBoundary: 0,
+        studentOp: '<='
+      }
+    };
+
+    // --- 1. Natural Expression Parser ---
+    function parseLinearInequality(inputStr) {
+      if (!inputStr || typeof inputStr !== 'string') {
+        return { error: 'Please enter an inequality.' };
+      }
+
+      let cleaned = inputStr
+        .trim()
+        .replace(/≤/g, '<=')
+        .replace(/≥/g, '>=')
+        .replace(/\s+/g, '');
+
+      let opMatch = cleaned.match(/(<=|>=|<|>)/);
+      if (!opMatch) {
+        return { error: 'No inequality operator (<, <=, >, >=, \u2264, \u2265) found.' };
+      }
+
+      const operator = opMatch[0];
+      const parts = cleaned.split(operator);
+      if (parts.length !== 2) {
+        return { error: 'Please enter a valid linear inequality with one operator.' };
+      }
+
+      const leftSide = parts[0];
+      const rightSideStr = parts[1];
+
+      const rightSide = parseFloat(rightSideStr);
+      if (isNaN(rightSide)) {
+        return { error: 'Right side must be a valid number.' };
+      }
+
+      // Detect Variable [a-zA-Z]
+      const vars = leftSide.match(/[a-zA-Z]/g);
+      if (!vars || vars.length === 0) {
+        return { error: 'No variable found. Please include a single variable (e.g. x, y, z, m, a).' };
+      }
+
+      const uniqueVars = Array.from(new Set(vars));
+      if (uniqueVars.length > 1) {
+        return { error: 'This lesson supports one variable at a time (e.g. 3y - 5 \u2265 10).' };
+      }
+
+      const variable = uniqueVars[0];
+
+      if (leftSide.includes('^') || leftSide.includes('*' + variable) || leftSide.includes('/' + variable)) {
+        return { error: 'Please enter a linear inequality in one variable (e.g. 3y - 5 \u2265 10).' };
+      }
+
+      // Standardize leftSide terms with signs
+      let termStr = leftSide;
+      if (!termStr.startsWith('+') && !termStr.startsWith('-')) {
+        termStr = '+' + termStr;
+      }
+
+      const termRegex = /([+-][0-9.]*([a-zA-Z])?)/g;
+      const matches = termStr.match(termRegex);
+
+      let coefficient = 0;
+      let constant = 0;
+      let hasVarTerm = false;
+
+      if (matches) {
+        for (let term of matches) {
+          if (!term || term === '+' || term === '-') continue;
+          if (term.includes(variable)) {
+            hasVarTerm = true;
+            let coeffStr = term.replace(variable, '');
+            if (coeffStr === '+' || coeffStr === '') coefficient += 1;
+            else if (coeffStr === '-') coefficient += -1;
+            else coefficient += parseFloat(coeffStr);
+          } else {
+            constant += parseFloat(term);
+          }
+        }
+      }
+
+      if (!hasVarTerm || isNaN(coefficient) || coefficient === 0) {
+        return { error: 'Could not determine a valid non-zero coefficient for variable ' + variable };
+      }
+
+      if (isNaN(constant)) constant = 0;
+
+      return {
+        variable,
+        coefficient,
+        constant,
+        operator,
+        rightSide,
+        rawInput: inputStr
+      };
+    }
+
+    // --- 2. Pure Mathematical Solver ---
+    function flipOperator(operator) {
+      switch (operator) {
+        case '<':  return '>';
+        case '>':  return '<';
+        case '<=': return '>=';
+        case '>=': return '<=';
+        default:   return operator;
+      }
+    }
+
+    function solveLinearInequality(a, b, op, c, v = 'x') {
+      const coeffStr = a === 1 ? '' : (a === -1 ? '-' : a);
+      const bSignStr = b >= 0 ? '+ ' + b : '- ' + Math.abs(b);
+
+      const step1Text = `${coeffStr}${v} ${bSignStr} ${formatOp(op)} ${c}`;
+
+      const c2 = c - b;
+      const bOpText = b >= 0 ? `Subtract ${b}` : `Add ${Math.abs(b)}`;
+      const step2Eq = `${coeffStr}${v} ${formatOp(op)} ${c2}`;
+
+      let finalOp = op;
+      if (a < 0) {
+        finalOp = flipOperator(op);
+      }
+      const boundary = c2 / a;
+      const aOpText = a < 0 ? `Divide by ${a} (Flip sign!)` : `Divide by ${a}`;
+      const bValStr = boundary.toFixed(Number.isInteger(boundary) ? 0 : 1);
+      const step3Eq = `${v} ${formatOp(finalOp)} ${bValStr}`;
+
+      let interval = '';
+      if (finalOp === '<') interval = `(-\\infty, ${bValStr})`;
+      else if (finalOp === '<=') interval = `(-\\infty, ${bValStr}]`;
+      else if (finalOp === '>') interval = `(${bValStr}, \\infty)`;
+      else if (finalOp === '>=') interval = `[${bValStr}, \\infty)`;
+
+      return {
+        v, a, b, op, c,
+        c2, boundary, finalOp,
+        bOpText, aOpText,
+        step1Text, step2Eq, step3Eq, interval,
+        isSignFlipped: a < 0
+      };
+    }
+
+    function formatOp(op) {
+      switch (op) {
+        case '<=': return '\u2264';
+        case '>=': return '\u2265';
+        default:   return op;
+      }
+    }
+
+    // --- 3. Balance Scale SVG Renderer ---
+    function renderBalanceScaleSVG(svgElem, model) {
+      if (!svgElem) return;
+      const width = svgElem.clientWidth || 360;
+      const height = svgElem.clientHeight || 190;
+      const centerX = width / 2;
+      const centerY = height / 2 + 15;
+
+      let tiltDeg = 0;
+      if (model.op === '<' || model.op === '<=') tiltDeg = -8;
+      else if (model.op === '>' || model.op === '>=') tiltDeg = 8;
+
+      const beamLength = 220;
+      const rad = (tiltDeg * Math.PI) / 180;
+      const dx = (beamLength / 2) * Math.cos(rad);
+      const dy = (beamLength / 2) * Math.sin(rad);
+
+      const leftPanX = centerX - dx;
+      const leftPanY = centerY - dy;
+      const rightPanX = centerX + dx;
+      const rightPanY = centerY + dy;
+
+      let html = `
+        <!-- Stand Base -->
+        <path d="M ${centerX - 35} ${centerY + 55} L ${centerX + 35} ${centerY + 55} L ${centerX + 15} ${centerY + 15} L ${centerX - 15} ${centerY + 15} z" fill="#cbd5e1"/>
+        <line x1="${centerX}" y1="${centerY + 15}" x2="${centerX}" y2="${centerY - 10}" stroke="#64748b" stroke-width="6"/>
+
+        <!-- Tilted Beam -->
+        <line x1="${leftPanX}" y1="${leftPanY}" x2="${rightPanX}" y2="${rightPanY}" stroke="#635bff" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="${centerX}" cy="${centerY - 10}" r="6" fill="#4f46e5"/>
+
+        <!-- Left Hanger & Pan -->
+        <line x1="${leftPanX}" y1="${leftPanY}" x2="${leftPanX - 25}" y2="${leftPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="${leftPanX}" y1="${leftPanY}" x2="${leftPanX + 25}" y2="${leftPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M ${leftPanX - 45} ${leftPanY + 45} Q ${leftPanX} ${leftPanY + 55} ${leftPanX + 45} ${leftPanY + 45} Z" fill="#8b5cf6" opacity="0.9"/>
+
+        <!-- Right Hanger & Pan -->
+        <line x1="${rightPanX}" y1="${rightPanY}" x2="${rightPanX - 25}" y2="${rightPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="${rightPanX}" y1="${rightPanY}" x2="${rightPanX + 25}" y2="${rightPanY + 45}" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M ${rightPanX - 45} ${rightPanY + 45} Q ${rightPanX} ${rightPanY + 55} ${rightPanX + 45} ${rightPanY + 45} Z" fill="#8b5cf6" opacity="0.9"/>
+
+        <!-- Left Pan Blocks -->
+        <g transform="translate(${leftPanX - 35}, ${leftPanY + 12})">
+          <rect width="36" height="30" rx="6" fill="#eeedfd" stroke="#635bff" stroke-width="2"/>
+          <text x="18" y="20" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#635bff" text-anchor="middle">${model.a}${model.v}</text>
+        </g>
+        <g transform="translate(${leftPanX + 5}, ${leftPanY + 12})">
+          <rect width="32" height="30" rx="6" fill="${model.b >= 0 ? '#fee2e2' : '#fef3c7'}" stroke="${model.b >= 0 ? '#ef4444' : '#f59e0b'}" stroke-width="2"/>
+          <text x="16" y="20" font-family="var(--font-math)" font-size="13" font-weight="bold" fill="${model.b >= 0 ? '#ef4444' : '#b45309'}" text-anchor="middle">${model.b >= 0 ? '+' + model.b : model.b}</text>
+        </g>
+
+        <!-- Right Pan Block -->
+        <g transform="translate(${rightPanX - 22}, ${rightPanY + 12})">
+          <rect width="44" height="30" rx="6" fill="#eeedfd" stroke="#635bff" stroke-width="2"/>
+          <text x="22" y="20" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#635bff" text-anchor="middle">${model.c}</text>
+        </g>
+      `;
+
+      svgElem.innerHTML = html;
+    }
+
+    // --- 4. SVG Number Line Renderer ---
+    function renderNumberLineSVG(svgElem, boundary, op, min = -10, max = 10, colorHex = '#635bff') {
+      if (!svgElem) return;
+      const width = svgElem.clientWidth || svgElem.parentNode.clientWidth || 360;
+      const height = svgElem.clientHeight || 80;
+      const padding = 35;
+      const usableWidth = width - 2 * padding;
+      const centerY = height / 2;
+
+      const isLeft = (op === '<' || op === '<=');
+      const isIncluded = (op === '<=' || op === '>=');
+
+      const mapX = (val) => padding + ((Math.max(min, Math.min(max, val)) - min) / (max - min)) * usableWidth;
+
+      let html = `<defs>
+        <marker id="nl-arr-l" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 10 1 L 0 5 L 10 9 z" fill="#64748b"/>
+        </marker>
+        <marker id="nl-arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 10 9 z" fill="#64748b"/>
+        </marker>
+      </defs>`;
+
+      // Base Axis
+      html += `<line x1="${padding - 10}" y1="${centerY}" x2="${width - padding + 10}" y2="${centerY}" stroke="#94a3b8" stroke-width="2" marker-start="url(#nl-arr-l)" marker-end="url(#nl-arr-r)"/>`;
+
+      // Ticks & Labels
+      for (let v = min; v <= max; v += 2) {
+        const tx = mapX(v);
+        html += `<line x1="${tx}" y1="${centerY - 4}" x2="${tx}" y2="${centerY + 4}" stroke="#64748b" stroke-width="1.5"/>`;
+        html += `<text x="${tx}" y="${centerY + 18}" font-family="var(--font-math)" font-size="11" font-weight="600" fill="#475569" text-anchor="middle">${v}</text>`;
+      }
+
+      // Solution Ray
+      const bX = mapX(boundary);
+      const rStart = isLeft ? (padding - 6) : bX;
+      const rEnd = isLeft ? bX : (width - padding + 6);
+
+      html += `<line x1="${rStart}" y1="${centerY}" x2="${rEnd}" y2="${centerY}" stroke="${colorHex}" stroke-width="4.5" stroke-linecap="round"/>`;
+
+      // Arrowhead
+      if (isLeft) {
+        html += `<path d="M ${rStart + 8} ${centerY - 5} L ${rStart - 2} ${centerY} L ${rStart + 8} ${centerY + 5}" fill="none" stroke="${colorHex}" stroke-width="3.5" stroke-linecap="round"/>`;
+      } else {
+        html += `<path d="M ${rEnd - 8} ${centerY - 5} L ${rEnd + 2} ${centerY} L ${rEnd - 8} ${centerY + 5}" fill="none" stroke="${colorHex}" stroke-width="3.5" stroke-linecap="round"/>`;
+      }
+
+      // Circle Marker
+      if (isIncluded) {
+        html += `<circle cx="${bX}" cy="${centerY}" r="6.5" fill="${colorHex}" stroke="#ffffff" stroke-width="2"/>`;
+      } else {
+        html += `<circle cx="${bX}" cy="${centerY}" r="6.5" fill="#ffffff" stroke="${colorHex}" stroke-width="3"/>`;
+      }
+
+      svgElem.innerHTML = html;
+    }
+
+    // --- 5. DOM Cache ---
+    const elements = {
+      inputNaturalText: document.getElementById('input-natural-text'),
+      btnSolveNatural: document.getElementById('btn-solve-natural'),
+      parseErrorBanner: document.getElementById('parse-error-banner'),
+
+      nlSectionTitle: document.getElementById('nl-section-title'),
+      displayInequalityPill: document.getElementById('display-inequality-pill'),
+      displayIntervalText: document.getElementById('display-interval-text'),
+      svgBalanceScale: document.getElementById('svg-balance-scale'),
+      svgMainNl: document.getElementById('svg-main-nl'),
+      nlMainContainer: document.getElementById('nl-main-container'),
+      nlOperatorSegments: document.getElementById('nl-operator-segments'),
+
+      btnResetAll: document.getElementById('btn-reset-all'),
+      btnPrevStep: document.getElementById('btn-prev-step'),
+      btnNextStep: document.getElementById('btn-next-step'),
+      stepIndicatorText: document.getElementById('step-indicator-text'),
+
+      // Proof Step Cards
+      cardStep1: document.getElementById('card-step-1'), canvasStep1: document.getElementById('canvas-step-1'),
+      cardStep2: document.getElementById('card-step-2'), canvasStep2: document.getElementById('canvas-step-2'), titleStep2: document.getElementById('title-step-2'),
+      cardStep3: document.getElementById('card-step-3'), canvasStep3: document.getElementById('canvas-step-3'), titleStep3: document.getElementById('title-step-3'),
+      cardStep4: document.getElementById('card-step-4'), canvasStep4: document.getElementById('canvas-step-4'),
+
+      // Why boxes & descriptions
+      whyDesc2: document.getElementById('why-desc-2'),
+      whyBox1: document.getElementById('why-box-1'),
+      whyBox2: document.getElementById('why-box-2'),
+      whyBox3: document.getElementById('why-box-3'),
+      predictLeadText: document.getElementById('predict-lead-text'),
+
+      // Prediction
+      predictOptionsGrid: document.getElementById('predict-options-grid'),
+      btnRevealPredict: document.getElementById('btn-reveal-predict'),
+      predictFeedback: document.getElementById('predict-feedback'),
+
+      // Challenge
+      svgChallengeNl: document.getElementById('svg-challenge-nl'),
+      challengeNlContainer: document.getElementById('challenge-nl-container'),
+      challengeOpSegments: document.getElementById('challenge-op-segments'),
+      btnCheckChallenge: document.getElementById('btn-check-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback')
+    };
+
+    // --- 6. Central UI Dispatcher ---
+    function renderUI() {
+      const model = solveLinearInequality(state.a, state.b, state.op, state.c, state.variable);
+
+      // Section Titles & Variable Labels
+      elements.nlSectionTitle.textContent = `Number line \u2014 solution set for ${state.variable}`;
+      elements.predictLeadText.textContent = `Predict the final solution for ${state.variable}:`;
+
+      // Balance & Formula Pill
+      renderBalanceScaleSVG(elements.svgBalanceScale, model);
+      elements.displayInequalityPill.textContent = `Inequality: ${model.step1Text}`;
+
+      // Operator Segments Active State
+      elements.nlOperatorSegments.querySelectorAll('button').forEach(btn => {
+        if (btn.dataset.op === model.finalOp) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      // Number Line Sync
+      renderNumberLineSVG(elements.svgMainNl, model.boundary, model.finalOp, -10, 10);
+      elements.displayIntervalText.textContent = `Interval: ${model.interval}`;
+
+      // 4-Step Proof Cards Sync
+      elements.titleStep2.textContent = model.bOpText;
+      elements.titleStep3.textContent = model.aOpText;
+
+      elements.canvasStep1.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">${model.step1Text}</span>`;
+      elements.canvasStep2.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">${model.step2Eq}</span>`;
+      elements.canvasStep3.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--primary);">${model.step3Eq}</span>`;
+      elements.canvasStep4.innerHTML = `<span style="font-family:var(--font-math); font-size:15px; font-weight:bold; color:var(--accent-green);">${model.step3Eq}</span>`;
+
+      // Highlight Active Step
+      [1, 2, 3, 4].forEach(stepNum => {
+        const card = elements[`cardStep${stepNum}`];
+        if (stepNum <= state.currentStep) card.classList.add('active-step');
+        else card.classList.remove('active-step');
+      });
+      elements.stepIndicatorText.textContent = `Step ${state.currentStep} of 4`;
+
+      // Why Section Boxes & Descriptions Sync
+      elements.whyDesc2.textContent = `After removing the constant, divide both sides by the coefficient of ${state.variable}.`;
+      elements.whyBox1.textContent = `${state.a}${state.variable} + ${state.b} - ${state.b} ${formatOp(state.op)} ${state.c} - ${state.b}  \u21D2  ${model.step2Eq}`;
+      elements.whyBox2.textContent = `${model.step2Eq}  \u21D2  \u00F7${state.a}  \u21D2  ${model.step3Eq}`;
+      if (model.isSignFlipped) {
+        elements.whyBox3.innerHTML = `<span style="color:var(--accent-red); font-weight:bold;">Sign Flipped!</span> &divide;(${state.a}) reverses ${formatOp(state.op)} to ${formatOp(model.finalOp)}`;
+      } else {
+        elements.whyBox3.textContent = `Dividing by positive ${state.a} preserves sign direction (${formatOp(state.op)}).`;
+      }
+
+      // Prediction Buttons Sync with detected variable name!
+      const buttons = elements.predictOptionsGrid.querySelectorAll('button');
+      buttons.forEach(btn => {
+        const op = btn.dataset.op;
+        const bStr = model.boundary.toFixed(Number.isInteger(model.boundary) ? 0 : 1);
+        btn.textContent = `${state.variable} ${formatOp(op)} ${bStr}`;
+        if (state.predictionSelected === op) btn.classList.add('selected');
+        else btn.classList.remove('selected');
+      });
+
+      // Render Challenge Number Line
+      renderNumberLineSVG(elements.svgChallengeNl, state.challenge.studentBoundary, state.challenge.studentOp, -10, 10, '#2563eb');
+    }
+
+    // Helper to handle custom inequality solving
+    function processCustomInequality(inputStr) {
+      const parsed = parseLinearInequality(inputStr);
+      if (parsed.error) {
+        elements.parseErrorBanner.textContent = `⚠️ ${parsed.error}`;
+        elements.parseErrorBanner.style.display = 'flex';
+        return;
+      }
+      elements.parseErrorBanner.style.display = 'none';
+
+      state.rawInput = parsed.rawInput;
+      state.variable = parsed.variable;
+      state.a = parsed.coefficient;
+      state.b = parsed.constant;
+      state.op = parsed.operator;
+      state.c = parsed.rightSide;
+      state.currentStep = 4;
+      state.predictionSelected = null;
+
+      renderUI();
+    }
+
+    // --- 7. Event Handlers ---
+
+    elements.btnSolveNatural.addEventListener('click', () => {
+      processCustomInequality(elements.inputNaturalText.value);
+    });
+
+    elements.inputNaturalText.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') processCustomInequality(elements.inputNaturalText.value);
+    });
+
+    document.querySelectorAll('.preset-chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const presetStr = btn.dataset.preset;
+        elements.inputNaturalText.value = presetStr;
+        processCustomInequality(presetStr);
+      });
+    });
+
+    elements.nlOperatorSegments.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.op = btn.dataset.op;
+        renderUI();
+      });
+    });
+
+    elements.btnPrevStep.addEventListener('click', () => {
+      if (state.currentStep > 1) {
+        state.currentStep--;
+        renderUI();
+      }
+    });
+
+    elements.btnNextStep.addEventListener('click', () => {
+      if (state.currentStep < 4) {
+        state.currentStep++;
+        renderUI();
+      }
+    });
+
+    elements.btnResetAll.addEventListener('click', () => {
+      elements.inputNaturalText.value = "2x + 3 < 11";
+      processCustomInequality("2x + 3 < 11");
+    });
+
+    // Direct Dragging on Main Solution Number Line
+    let isDraggingNl = false;
+    function updateNlFromMouse(e) {
+      const rect = elements.nlMainContainer.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const relX = clientX - rect.left;
+      const padding = 35;
+      const usableW = rect.width - 2 * padding;
+      const pct = Math.max(0, Math.min(1, (relX - padding) / usableW));
+      const min = -10, max = 10;
+      const newBound = min + pct * (max - min);
+      const roundedBound = Math.round(newBound);
+
+      state.c = roundedBound * state.a + state.b;
+      renderUI();
+    }
+
+    elements.nlMainContainer.addEventListener('mousedown', (e) => {
+      isDraggingNl = true;
+      updateNlFromMouse(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingNl) updateNlFromMouse(e);
+    });
+
+    window.addEventListener('mouseup', () => { isDraggingNl = false; });
+
+    // Prediction Selection & Verification
+    elements.predictOptionsGrid.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.predictionSelected = btn.dataset.op;
+        renderUI();
+      });
+    });
+
+    elements.btnRevealPredict.addEventListener('click', () => {
+      const model = solveLinearInequality(state.a, state.b, state.op, state.c, state.variable);
+      if (!state.predictionSelected) {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.textContent = `Please select a predicted inequality above first.`;
+        elements.predictFeedback.style.display = 'flex';
+        return;
+      }
+      if (state.predictionSelected === model.finalOp) {
+        elements.predictFeedback.className = 'feedback-msg correct';
+        elements.predictFeedback.innerHTML = `&#10004; Correct! Final solution is ${state.variable} ${formatOp(model.finalOp)} ${model.boundary.toFixed(Number.isInteger(model.boundary)?0:1)}.`;
+      } else {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.innerHTML = `&#10008; Not quite. The correct answer is ${state.variable} ${formatOp(model.finalOp)} ${model.boundary.toFixed(Number.isInteger(model.boundary)?0:1)}.`;
+      }
+      elements.predictFeedback.style.display = 'flex';
+    });
+
+    // Challenge Dragging & Operation Chips
+    document.querySelectorAll('.chip-btn-op').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.dataset.chip;
+        if (val === '/(-3)') {
+          state.challenge.studentBoundary = -2;
+          state.challenge.studentOp = '<=';
+        } else if (val === '-2') {
+          state.challenge.studentBoundary = 2;
+        } else if (val === '+6') {
+          state.challenge.studentBoundary = 6;
+        }
+        renderUI();
+      });
+    });
+
+    elements.challengeOpSegments.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.challenge.studentOp = btn.dataset.op;
+        elements.challengeOpSegments.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderUI();
+      });
+    });
+
+    let isDraggingChallengeNl = false;
+    function updateChallengeFromMouse(e) {
+      const rect = elements.challengeNlContainer.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const relX = clientX - rect.left;
+      const padding = 35;
+      const usableW = rect.width - 2 * padding;
+      const pct = Math.max(0, Math.min(1, (relX - padding) / usableW));
+      const min = -10, max = 10;
+      state.challenge.studentBoundary = Math.round(min + pct * (max - min));
+      renderUI();
+    }
+
+    elements.challengeNlContainer.addEventListener('mousedown', (e) => {
+      isDraggingChallengeNl = true;
+      updateChallengeFromMouse(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingChallengeNl) updateChallengeFromMouse(e);
+    });
+
+    window.addEventListener('mouseup', () => { isDraggingChallengeNl = false; });
+
+    elements.btnCheckChallenge.addEventListener('click', () => {
+      const targetBound = -2;
+      const targetOp = '<=';
+
+      if (state.challenge.studentBoundary === targetBound && state.challenge.studentOp === targetOp) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = '&#10004; Excellent! Correct solution is x \u2264 -2 (dividing by -3 flipped &ge; to &le;).';
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = '&#10008; Not quite. Target solution is x \u2264 -2. Remember dividing by -3 flips the sign!';
+      }
+      elements.challengeFeedback.style.display = 'flex';
+    });
+
+    // Initial Execution
+    processCustomInequality("2x + 3 < 11");
+  </script>
+</body>
+</html>

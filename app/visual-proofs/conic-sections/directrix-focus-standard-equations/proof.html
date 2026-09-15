@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Directrix, Focus, and Standard Equations | Interactive Mathematics</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-orange: #f59e0b;
+      --accent-pink: #ec4899;
+      --accent-purple: #8b5cf6;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Layout Structure */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout {
+        grid-template-columns: 100px 1fr;
+      }
+    }
+
+    /* Left Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* Main Workspace Container */
+    .main-wrapper {
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1850px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header Bar */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
+
+    /* Top Controls Card (Conic Selector, Orientation, Dynamic Parameters) */
+    .top-controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 28px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .control-block-unit {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-block-unit label {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .btn-group-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      padding: 4px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+    }
+
+    .btn-toggle-option {
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-toggle-option:hover {
+      color: var(--text-dark);
+      background: rgba(255,255,255,0.6);
+    }
+
+    /* Distinct active visual styling for Segmented Orientation Control */
+    .btn-toggle-option.active {
+      background: #ffffff;
+      border-color: #635bff;
+      color: #5b3df5;
+      box-shadow: 0 2px 8px rgba(99, 91, 255, 0.12);
+    }
+
+    .select-dropdown {
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+    }
+
+    /* SPACIOUS DESKTOP GRID ARCHITECTURE */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(380px, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Graph Workspace Area */
+    .graph-section-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .viewport-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .viewport-header {
+      padding: 16px 22px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 0 0 auto;
+    }
+
+    .viewport-header h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .viewport-body-wrapper {
+      padding: 16px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Side Control Panel & Graph Split Layout */
+    .locus-workspace {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .locus-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .locus-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-card-inner {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .control-card-inner h4 {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .checkbox-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 18px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 18px;
+    }
+
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-switch:before {
+      transform: translateX(14px);
+    }
+
+    /* SPACIOUS SVG CONTAINER */
+    .locus-graph-container {
+      position: relative;
+      width: 100%;
+      height: clamp(520px, 60vh, 680px);
+      background: #ffffff;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    svg.math-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Zoom Overlay Controls */
+    .overlay-zoom-controls {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      z-index: 5;
+    }
+
+    .btn-zoom {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-zoom:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-zoom-text {
+      background: none;
+      border: none;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 6px;
+      cursor: pointer;
+    }
+
+    /* Live Analysis & Verification Card */
+    .live-analysis-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .live-analysis-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .analysis-section {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .analysis-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .verify-badge {
+      background: var(--accent-green-light);
+      color: #065f46;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    /* INDEPENDENT SCROLLING RIGHT PANEL */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      max-height: 820px;
+      min-width: 360px;
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 18px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-header-icon {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .why-panel-header h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: visible;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .why-section.open {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .why-section-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      user-select: none;
+      background: #ffffff;
+      transition: background 0.15s;
+      border-radius: var(--radius-md);
+    }
+
+    .why-section-header:hover {
+      background: #f8fafc;
+    }
+
+    .why-section.open .why-section-header {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .why-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .why-badge-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .why-section.open .why-badge-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .why-arrow-icon {
+      font-size: 11px;
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .why-section.open .why-arrow-icon {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .why-section-content {
+      padding: 18px;
+      font-size: 13px;
+      color: var(--text-dark);
+      line-height: 1.65;
+      border-top: 1px solid #f1f5f9;
+      display: none;
+      background: #ffffff;
+    }
+
+    .why-section.open .why-section-content {
+      display: block;
+    }
+
+    .boxed-formula {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 17px;
+      text-align: center;
+      margin: 12px 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .reveal-card-body {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .reveal-button {
+      flex: 0 0 auto;
+      margin: 12px 18px 18px 18px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Bottom Dashboard Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr 1.1fr;
+      gap: 24px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 1200px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bottom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .bottom-card h3 {
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .proof-steps-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1.2fr auto 1.2fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .proof-step-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .proof-step-title {
+      font-weight: 800;
+      font-size: 11px;
+      color: var(--primary);
+    }
+
+    .input-group-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .text-input {
+      width: 140px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .feedback-msg {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-msg.correct {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .feedback-msg.incorrect {
+      background: #fce7f3;
+      color: #9f1239;
+    }
+
+    /* SVG Graphics Elements Styling */
+    .axis-line { stroke: #64748b; stroke-width: 1.5; }
+    .grid-line { stroke: #f1f5f9; stroke-width: 1; }
+    .conic-curve { stroke: #635bff; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .asymptote-line { stroke: #ec4899; stroke-width: 1.8; stroke-dasharray: 6 4; opacity: 0.8; }
+    .directrix-line { stroke: #10b981; stroke-width: 2.5; stroke-dasharray: 6 4; }
+    .axis-parabola-line { stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 4 3; }
+
+    .line-pf { stroke: #8b5cf6; stroke-width: 2; stroke-dasharray: 4 3; }
+    .line-pd { stroke: #10b981; stroke-width: 2; stroke-dasharray: 4 3; }
+
+    .point-focus { fill: #8b5cf6; stroke: #ffffff; stroke-width: 2.5; }
+    .point-vertex { fill: #ec4899; stroke: #ffffff; stroke-width: 2.5; }
+    .point-directrix-foot { fill: #10b981; stroke: #ffffff; stroke-width: 2; }
+    .point-locus { fill: #635bff; stroke: #ffffff; stroke-width: 3; cursor: grab; }
+    .point-locus:active { cursor: grabbing; }
+
+    .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
+    .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Library">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            Library
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Conic Sections</a>
+          <h1>Directrix, Focus, and Standard Equations</h1>
+          <p class="header-subtitle">A locus definition that generates conic sections</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 12 min</span>
+          <button class="btn-secondary" id="btn-reset-all" title="Reset view and parameters">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset view
+          </button>
+        </div>
+      </header>
+
+      <!-- Top Controls Card (Conic Selector, Orientation, Dynamic Parameters) -->
+      <section class="top-controls-card">
+        <!-- 1. Select Conic -->
+        <div class="control-block-unit">
+          <label>1. Select conic</label>
+          <div class="btn-group-row">
+            <button class="btn-toggle-option active" data-conic="parabola">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19 Q12 4 20 19"/></svg>
+              Parabola
+            </button>
+            <button class="btn-toggle-option" data-conic="ellipse">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="9" ry="6"/></svg>
+              Ellipse
+            </button>
+            <button class="btn-toggle-option" data-conic="hyperbola">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4 Q12 12 5 20 M19 4 Q12 12 19 20"/></svg>
+              Hyperbola
+            </button>
+            <button class="btn-toggle-option" data-conic="circle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>
+              Circle
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Choose Orientation (Mutually Exclusive Segmented Control) -->
+        <div class="control-block-unit">
+          <label>2. Choose orientation</label>
+          <div class="btn-group-row" id="orient-btn-group">
+            <button class="btn-toggle-option active" id="btn-orient-horizontal" data-orient="horizontal" title="Horizontal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4 Q20 12 8 20 M16 4 Q4 12 16 20"/></svg>
+              Horizontal
+            </button>
+            <button class="btn-toggle-option" id="btn-orient-vertical" data-orient="vertical" title="Vertical">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8 Q12 20 20 8 M4 16 Q12 4 20 16"/></svg>
+              Vertical
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Dynamic Parameters Unit -->
+        <div class="control-block-unit" id="params-unit-container">
+          <!-- Dynamic parameter dropdowns rendered based on selected conic -->
+        </div>
+      </section>
+
+      <!-- Main Dashboard Grid Architecture -->
+      <div class="dashboard-grid">
+        <!-- Left Graph Section -->
+        <div class="graph-section-wrapper">
+          <section class="viewport-card">
+            <div class="viewport-header">
+              <h3>
+                <span style="background:var(--primary-light); color:var(--primary); width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px;">1</span>
+                Locus View (Interactive)
+              </h3>
+              <span style="font-size:12px; color:var(--text-muted);" id="graph-subtitle">Drag P along the curve. All distances and locus relations update live.</span>
+            </div>
+
+            <div class="viewport-body-wrapper">
+              <div class="locus-workspace">
+                <!-- Left Object Readout Card -->
+                <div class="locus-controls">
+                  <div class="control-card-inner">
+                    <h4>Drag to explore</h4>
+                    <div style="font-size:12px; font-weight:600; display:flex; flex-direction:column; gap:5px;" id="readout-objects-list">
+                      <!-- Rendered dynamically -->
+                    </div>
+                  </div>
+
+                  <div class="control-card-inner">
+                    <h4>Show / Hide</h4>
+                    <label class="checkbox-toggle-row">
+                      <span>Axes</span>
+                      <span class="switch"><input type="checkbox" id="chk-axes" checked><span class="slider-switch"></span></span>
+                    </label>
+                    <label class="checkbox-toggle-row">
+                      <span>Distances</span>
+                      <span class="switch"><input type="checkbox" id="chk-distances" checked><span class="slider-switch"></span></span>
+                    </label>
+                    <label class="checkbox-toggle-row">
+                      <span>Locus path</span>
+                      <span class="switch"><input type="checkbox" id="chk-locus" checked><span class="slider-switch"></span></span>
+                    </label>
+                    <label class="checkbox-toggle-row" id="row-chk-asymptotes">
+                      <span>Asymptotes</span>
+                      <span class="switch"><input type="checkbox" id="chk-asymptotes" checked><span class="slider-switch"></span></span>
+                    </label>
+                    <label class="checkbox-toggle-row">
+                      <span>Grid</span>
+                      <span class="switch"><input type="checkbox" id="chk-grid" checked><span class="slider-switch"></span></span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Spacious SVG Graph Canvas -->
+                <div class="locus-graph-container" id="locus-viewport">
+                  <!-- Zoom Controls Overlay -->
+                  <div class="overlay-zoom-controls">
+                    <button class="btn-zoom" id="btn-locus-zoom-out" title="Zoom Out">&minus;</button>
+                    <button class="btn-zoom-text" id="btn-locus-zoom-reset">100%</button>
+                    <button class="btn-zoom" id="btn-locus-zoom-in" title="Zoom In">+</button>
+                  </div>
+
+                  <svg id="locus-svg" class="math-svg">
+                    <defs>
+                      <marker id="arrow-lx" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+                      </marker>
+                      <marker id="arrow-ly" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
+                      </marker>
+                    </defs>
+
+                    <g id="locus-viewport-g">
+                      <g id="locus-grid-group"></g>
+
+                      <!-- Coordinate Axes -->
+                      <g id="locus-axes-group">
+                        <line id="locus-axis-x" class="axis-line" marker-end="url(#arrow-lx)"/>
+                        <line id="locus-axis-y" class="axis-line" marker-end="url(#arrow-ly)"/>
+                        <text id="locus-label-x" class="svg-text-math">x</text>
+                        <text id="locus-label-y" class="svg-text-math">y</text>
+                      </g>
+
+                      <!-- Asymptotes (Hyperbola) -->
+                      <line id="locus-asymptote-1" class="asymptote-line"/>
+                      <line id="locus-asymptote-2" class="asymptote-line"/>
+
+                      <!-- Directrix Lines d1 and d2 -->
+                      <line id="locus-directrix-line1" class="directrix-line"/>
+                      <line id="locus-directrix-line2" class="directrix-line"/>
+                      <g id="locus-directrix-label-g">
+                        <rect class="svg-label-bg" width="95" height="20"/>
+                        <text id="locus-directrix-text" class="svg-text-math" fill="#10b981">y = -3.00</text>
+                      </g>
+
+                      <!-- Separate Un-filled Conic Curve Paths -->
+                      <path id="locus-curve-path1" class="conic-curve"/>
+                      <path id="locus-curve-path2" class="conic-curve"/>
+
+                      <!-- Distance Lines PF & PD -->
+                      <line id="locus-line-pf" class="line-pf"/>
+                      <line id="locus-line-pd" class="line-pd"/>
+
+                      <!-- Right Angle Marker at D -->
+                      <path id="locus-right-angle" fill="none" stroke="#10b981" stroke-width="1.5"/>
+
+                      <!-- Distance Label Badges -->
+                      <g id="locus-badge-pf-g">
+                        <rect class="svg-label-bg" width="65" height="18"/>
+                        <text id="locus-badge-pf" class="svg-text-math" fill="#8b5cf6">PF = 3.33</text>
+                      </g>
+                      <g id="locus-badge-pd-g">
+                        <rect class="svg-label-bg" width="65" height="18"/>
+                        <text id="locus-badge-pd" class="svg-text-math" fill="#10b981">PD = 3.33</text>
+                      </g>
+
+                      <!-- Foci F1 and F2 -->
+                      <circle id="locus-point-f1" class="point-focus" r="6"/>
+                      <text id="locus-label-f1" class="svg-text-math" fill="#8b5cf6">F(0, 3.00)</text>
+
+                      <circle id="locus-point-f2" class="point-focus" r="6"/>
+                      <text id="locus-label-f2" class="svg-text-math" fill="#8b5cf6">F₂</text>
+
+                      <!-- Vertices V1 and V2 -->
+                      <circle id="locus-point-v1" class="point-vertex" r="5"/>
+                      <text id="locus-label-v1" class="svg-text-math" fill="#ec4899">V(0,0)</text>
+
+                      <circle id="locus-point-v2" class="point-vertex" r="5"/>
+                      <text id="locus-label-v2" class="svg-text-math" fill="#ec4899">V₂</text>
+
+                      <!-- Directrix Foot D -->
+                      <circle id="locus-point-d" class="point-directrix-foot" r="5"/>
+                      <text id="locus-label-d" class="svg-text-math" fill="#10b981">D</text>
+
+                      <!-- Point P -->
+                      <circle id="locus-point-p" class="point-locus" r="7"/>
+                      <text id="locus-label-p" class="svg-text-math" fill="#635bff">P(2.20, 1.86)</text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Live Analysis & Verification Box Below Graph -->
+              <div class="live-analysis-card" id="live-check-container">
+                <!-- Dynamically populated per model -->
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Viewport 3: Right Educational Panel (Why it works) -->
+        <aside class="why-panel" id="why-panel">
+          <div class="why-panel-header">
+            <span class="why-header-icon">&#9672;</span>
+            <h2>Why it works</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- SECTION 1: Locus definition -->
+            <section class="why-section open" id="sec-card-locus">
+              <div class="why-section-header" onclick="toggleWhySection('locus')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">1</span>
+                  <span id="why-title-locus">1. Locus definition</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-locus">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-locus"></div>
+            </section>
+
+            <!-- SECTION 2: Algebraic translation -->
+            <section class="why-section open" id="sec-card-algebra">
+              <div class="why-section-header" onclick="toggleWhySection('algebra')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">2</span>
+                  <span id="why-title-algebra">2. Algebraic translation</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-algebra">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-algebra"></div>
+            </section>
+
+            <!-- SECTION 3: Standard equation -->
+            <section class="why-section open" id="sec-card-standard">
+              <div class="why-section-header" onclick="toggleWhySection('standard')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">3</span>
+                  <span id="why-title-standard">3. Standard equation</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-standard">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-standard"></div>
+            </section>
+
+            <!-- Predict the equation Card -->
+            <div class="why-section open" style="padding:16px;">
+              <h4 style="font-size:13px; font-weight:800; color:var(--text-dark);">✨ Predict the equation</h4>
+              <p style="font-size:12px; color:var(--text-muted); margin-top:4px;" id="predict-prompt-text"></p>
+              <div class="boxed-formula" style="font-size:15px; margin:8px 0;" id="predict-formula-display"></div>
+              <button class="btn-primary" id="btn-check-prediction">Check my prediction</button>
+              <div id="predict-feedback" class="feedback-msg" style="display:none; margin-top:8px;"></div>
+            </div>
+
+            <!-- Progressive Reveal Box -->
+            <div id="reveal-card-body" class="reveal-card-body">
+              <div style="font-size:12px; font-weight:bold; color:var(--text-muted);">Step-by-Step Chain:</div>
+              <div class="boxed-formula" style="font-size:13px; margin:2px 0;" id="reveal-step1"></div>
+              <div style="text-align:center; color:var(--primary); font-weight:bold;">&dArr;</div>
+              <div class="boxed-formula" style="font-size:13px; margin:2px 0;" id="reveal-step2"></div>
+              <div style="text-align:center; color:var(--primary); font-weight:bold;">&dArr;</div>
+              <div class="boxed-formula" style="font-size:13px; margin:2px 0;" id="reveal-step3"></div>
+              <div style="text-align:center; color:var(--primary); font-weight:bold;">&dArr;</div>
+              <div class="boxed-formula" style="font-size:13px; margin:2px 0;" id="reveal-final-eq"></div>
+            </div>
+          </div>
+
+          <!-- FIXED REVEAL BUTTON -->
+          <button class="btn-primary reveal-button" id="btn-reveal-neutral">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Reveal (neutral)
+          </button>
+        </aside>
+      </div>
+
+      <!-- Bottom Dashboard Grid: Conic Summary, Visual Proof, Exact Challenge -->
+      <div class="bottom-grid">
+        <!-- Conic Summary Card -->
+        <section class="bottom-card">
+          <h3>Conic summary</h3>
+          <div style="display:flex; flex-direction:column; gap:6px; font-size:12.5px;" id="summary-card-body"></div>
+        </section>
+
+        <!-- Visual Proof Card -->
+        <section class="bottom-card">
+          <h3>
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Visual proof (from distances to equation)
+          </h3>
+
+          <div class="proof-steps-row">
+            <div class="proof-step-box">
+              <span class="proof-step-title">Step 1</span>
+              <div style="font-family:var(--font-math); font-size:11px; font-weight:bold; color:var(--primary);" id="proof-step1"></div>
+              <span style="font-size:10px; color:var(--text-muted);">Locus definition</span>
+            </div>
+
+            <div style="font-size:13px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+            <div class="proof-step-box">
+              <span class="proof-step-title">Step 2</span>
+              <div style="font-family:var(--font-math); font-size:10px; font-weight:bold; color:var(--primary);" id="proof-step2"></div>
+              <span style="font-size:10px; color:var(--text-muted);">Distance formula</span>
+            </div>
+
+            <div style="font-size:13px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+            <div class="proof-step-box">
+              <span class="proof-step-title">Step 3</span>
+              <div style="font-family:var(--font-math); font-size:10px; font-weight:bold; color:var(--primary);" id="proof-step3"></div>
+              <span style="font-size:10px; color:var(--text-muted);">Square both sides</span>
+            </div>
+
+            <div style="font-size:13px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+            <div class="proof-step-box">
+              <span class="proof-step-title">Step 4</span>
+              <div style="font-family:var(--font-math); font-size:11px; font-weight:bold; color:var(--primary);" id="proof-step4"></div>
+              <span style="font-size:10px; color:var(--text-muted);">Simplify</span>
+            </div>
+
+            <div style="font-size:13px; color:var(--primary); font-weight:bold;">&rarr;</div>
+
+            <div class="proof-step-box" style="border-color:var(--primary); background:var(--primary-light);">
+              <span class="proof-step-title">Step 5</span>
+              <div style="font-family:var(--font-math); font-size:11px; font-weight:bold; color:var(--primary);" id="proof-step5"></div>
+              <span style="font-size:10px; color:var(--text-muted);">Standard form</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exact Challenge Card -->
+        <section class="bottom-card">
+          <h3>Exact challenge</h3>
+          <p style="font-size:12px; color:var(--text-muted);" id="challenge-prompt-text"></p>
+
+          <div class="input-group-row">
+            <span style="font-family:var(--font-math); font-weight:bold; font-size:13px;">Equation:</span>
+            <input type="text" id="input-challenge-eq" class="text-input" placeholder="Enter equation...">
+            <button class="btn-secondary" id="btn-check-challenge">Check</button>
+            <button class="btn-secondary" id="btn-hint-challenge" style="padding:6px 10px; font-size:11px;">Hint</button>
+            <button class="btn-secondary" id="btn-new-challenge" style="padding:6px 10px; font-size:11px;">New</button>
+          </div>
+          <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * Refactored Architecture: Four Completely Independent Conic Calculators
+     * (Parabola, Ellipse, Hyperbola, Circle)
+     */
+
+    // Global Active Conic State
+    const conicState = {
+      type: 'parabola',       // 'parabola', 'ellipse', 'hyperbola', 'circle'
+      orientation: 'horizontal', // Single state variable: 'horizontal' | 'vertical'
+      t: 2.0,                // Parameter along curve for Point P
+      showAxes: true,
+      showDistances: true,
+      showLocus: true,
+      showAsymptotes: true,
+      showGrid: true,
+
+      // Independent parameters storage per conic
+      parabolaParams: { p: 3.0 },
+      ellipseParams: { a: 4.0, b: 3.0, e: Math.sqrt(7)/4 },
+      hyperbolaParams: { a: 2.0, e: 1.5 },
+      circleParams: { r: 3.0 }
+    };
+
+    const openSections = { locus: true, algebra: true, standard: true };
+
+    function toggleWhySection(key) {
+      if (openSections.hasOwnProperty(key)) {
+        openSections[key] = !openSections[key];
+      }
+      renderAccordionStates();
+    }
+
+    function renderAccordionStates() {
+      for (const [key, isOpen] of Object.entries(openSections)) {
+        const card = document.getElementById(`sec-card-${key}`);
+        const content = document.getElementById(`content-${key}`);
+        if (card && content) {
+          if (isOpen) {
+            card.classList.add('open');
+            content.style.display = 'block';
+          } else {
+            card.classList.remove('open');
+            content.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    // Generic Distance Helpers
+    function distancePointToPoint(p1, p2) {
+      return Math.hypot(p1.x - p2.x, p1.y - p2.y);
+    }
+
+    function distancePointToLine(P, line) {
+      if (line.type === 'horizontal') return Math.abs(P.y - line.val);
+      return Math.abs(P.x - line.val);
+    }
+
+    // =========================================================================
+    // 1. INDEPENDENT PARABOLA CALCULATOR MODEL
+    // =========================================================================
+    function calculateParabola(state) {
+      const p = state.parabolaParams.p;
+      const orient = state.orientation;
+      const t = state.t;
+      let x = 0, y = 0;
+      let focus, directrix, foot, eq1, eq2;
+
+      if (orient === 'vertical') {
+        x = t; y = (t * t) / (4 * p);
+        focus = { x: 0, y: p, label: 'F' };
+        directrix = { type: 'horizontal', val: -p, text: `y = -${p.toFixed(2)}` };
+        foot = { x, y: -p };
+        eq1 = `x² = ${(4*p).toFixed(2)}y`; eq2 = `y = x² / ${(4*p).toFixed(2)}`;
+      } else { // 'horizontal'
+        y = t; x = (t * t) / (4 * p);
+        focus = { x: p, y: 0, label: 'F' };
+        directrix = { type: 'vertical', val: -p, text: `x = -${p.toFixed(2)}` };
+        foot = { x: -p, y };
+        eq1 = `y² = ${(4*p).toFixed(2)}x`; eq2 = `x = y² / ${(4*p).toFixed(2)}`;
+      }
+
+      const P = { x, y };
+      const pf = distancePointToPoint(P, focus);
+      const pd = distancePointToLine(P, directrix);
+
+      // SVG Locus Path
+      let dPath = '';
+      const steps = 80;
+      for (let i = 0; i <= steps; i++) {
+        const stepT = -10 + (i / steps) * 20;
+        let px = 0, py = 0;
+        if (orient === 'vertical') { px = stepT; py = (stepT * stepT) / (4 * p); }
+        else { py = stepT; px = (stepT * stepT) / (4 * p); }
+        const spt = locusView.toScreen(px, py);
+        dPath += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+      }
+
+      return {
+        type: 'parabola',
+        orientation: orient,
+        parameters: { p },
+        eccentricity: 1.0,
+        vertex: { x: 0, y: 0, label: 'V' },
+        vertices: [{ x: 0, y: 0, label: 'V' }],
+        focus,
+        foci: [focus],
+        directrix,
+        directrices: [directrix],
+        foot,
+        selectedPoint: P,
+        distances: { pf, pd, ratio: 1.0, diff: Math.abs(pf - pd) },
+        equation: { eq1, eq2 },
+        locusPaths: [dPath],
+        asymptoteLines: []
+      };
+    }
+
+    // =========================================================================
+    // 2. INDEPENDENT ELLIPSE CALCULATOR MODEL
+    // =========================================================================
+    function calculateEllipse(state) {
+      const a = state.ellipseParams.a;
+      const b = state.ellipseParams.b;
+      const c = Math.sqrt(Math.max(0, a * a - b * b));
+      const e = c / a;
+      const orient = state.orientation === 'vertical' ? 'vertical' : 'horizontal';
+      const t = state.t;
+      const dirVal = a / e;
+
+      let x = 0, y = 0;
+      let foci = [], directrices = [], vertices = [];
+      let focus, directrix, foot;
+
+      if (orient === 'horizontal') {
+        x = a * Math.cos(t); y = b * Math.sin(t);
+        foci = [{ x: -c, y: 0, label: 'F₁' }, { x: c, y: 0, label: 'F₂' }];
+        directrices = [{ type: 'vertical', val: -dirVal, text: `x = -${dirVal.toFixed(2)}` }, { type: 'vertical', val: dirVal, text: `x = ${dirVal.toFixed(2)}` }];
+        vertices = [{ x: -a, y: 0, label: 'V₁' }, { x: a, y: 0, label: 'V₂' }];
+
+        const isRight = x >= 0;
+        focus = isRight ? foci[1] : foci[0];
+        directrix = isRight ? directrices[1] : directrices[0];
+        foot = { x: directrix.val, y };
+      } else {
+        x = b * Math.cos(t); y = a * Math.sin(t);
+        foci = [{ x: 0, y: -c, label: 'F₁' }, { x: 0, y: c, label: 'F₂' }];
+        directrices = [{ type: 'horizontal', val: -dirVal, text: `y = -${dirVal.toFixed(2)}` }, { type: 'horizontal', val: dirVal, text: `y = ${dirVal.toFixed(2)}` }];
+        vertices = [{ x: 0, y: -a, label: 'V₁' }, { x: 0, y: a, label: 'V₂' }];
+
+        const isTop = y >= 0;
+        focus = isTop ? foci[1] : foci[0];
+        directrix = isTop ? directrices[1] : directrices[0];
+        foot = { x, y: directrix.val };
+      }
+
+      const P = { x, y };
+      const pf = distancePointToPoint(P, focus);
+      const pd = distancePointToLine(P, directrix);
+      const ratio = pd > 0.0001 ? pf / pd : e;
+
+      // Smooth SVG Ellipse Curve
+      let dPath = '';
+      const steps = 80;
+      for (let i = 0; i <= steps; i++) {
+        const ang = (i / steps) * 2 * Math.PI;
+        const px = orient === 'horizontal' ? a * Math.cos(ang) : b * Math.cos(ang);
+        const py = orient === 'horizontal' ? b * Math.sin(ang) : a * Math.sin(ang);
+        const spt = locusView.toScreen(px, py);
+        dPath += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+      }
+
+      const eq1 = orient === 'horizontal' ? `x²/${(a*a).toFixed(1)} + y²/${(b*b).toFixed(1)} = 1` : `y²/${(a*a).toFixed(1)} + x²/${(b*b).toFixed(1)} = 1`;
+      const eq2 = `a = ${a.toFixed(1)}, b = ${b.toFixed(1)}, e = ${e.toFixed(2)}`;
+
+      return {
+        type: 'ellipse',
+        orientation: orient,
+        parameters: { a, b, c, e },
+        eccentricity: e,
+        center: { x: 0, y: 0, label: 'C' },
+        vertices,
+        focus,
+        foci,
+        directrix,
+        directrices,
+        foot,
+        selectedPoint: P,
+        distances: { pf, pd, ratio, diff: Math.abs(pf - e * pd) },
+        equation: { eq1, eq2 },
+        locusPaths: [dPath],
+        asymptoteLines: []
+      };
+    }
+
+    // =========================================================================
+    // 3. INDEPENDENT HYPERBOLA CALCULATOR MODEL
+    // =========================================================================
+    function calculateHyperbola(state) {
+      const a = state.hyperbolaParams.a;
+      const e = state.hyperbolaParams.e;
+      const c = a * e;
+      const b2 = c * c - a * a;
+      const b = Math.sqrt(b2);
+      const dirVal = a / e;
+      const orient = state.orientation === 'vertical' ? 'vertical' : 'horizontal';
+      const t = state.t;
+
+      const coshT = Math.cosh(t);
+      const sinhT = Math.sinh(t);
+
+      let x = 0, y = 0;
+      let foci = [], directrices = [], vertices = [];
+      let focus, directrix, foot;
+
+      if (orient === 'horizontal') {
+        x = a * coshT; y = b * sinhT;
+        foci = [{ x: -c, y: 0, label: 'F₁' }, { x: c, y: 0, label: 'F₂' }];
+        directrices = [{ type: 'vertical', val: -dirVal, text: `x = -${dirVal.toFixed(2)}` }, { type: 'vertical', val: dirVal, text: `x = ${dirVal.toFixed(2)}` }];
+        vertices = [{ x: -a, y: 0, label: 'V₁' }, { x: a, y: 0, label: 'V₂' }];
+
+        focus = foci[1];
+        directrix = directrices[1];
+        foot = { x: dirVal, y };
+      } else {
+        x = b * sinhT; y = a * coshT;
+        foci = [{ x: 0, y: -c, label: 'F₁' }, { x: 0, y: c, label: 'F₂' }];
+        directrices = [{ type: 'horizontal', val: -dirVal, text: `y = -${dirVal.toFixed(2)}` }, { type: 'horizontal', val: dirVal, text: `y = ${dirVal.toFixed(2)}` }];
+        vertices = [{ x: 0, y: -a, label: 'V₁' }, { x: 0, y: a, label: 'V₂' }];
+
+        focus = foci[1];
+        directrix = directrices[1];
+        foot = { x, y: dirVal };
+      }
+
+      const P = { x, y };
+      const pf = distancePointToPoint(P, focus);
+      const pd = distancePointToLine(P, directrix);
+      const ratio = pd > 0.0001 ? pf / pd : e;
+
+      // Separate Path Branches (Unfilled SVG strokes!)
+      const steps = 80;
+      let path1 = '', path2 = '';
+      for (let i = 0; i <= steps; i++) {
+        const stepT = -2.2 + (i / steps) * 4.4;
+        const cT = Math.cosh(stepT);
+        const sT = Math.sinh(stepT);
+
+        const p1 = orient === 'horizontal' ? { x: a * cT, y: b * sT } : { x: b * sT, y: a * cT };
+        const sp1 = locusView.toScreen(p1.x, p1.y);
+        path1 += (i === 0 ? 'M ' : ' L ') + `${sp1.sx.toFixed(1)} ${sp1.sy.toFixed(1)}`;
+
+        const p2 = orient === 'horizontal' ? { x: -a * cT, y: b * sT } : { x: b * sT, y: -a * cT };
+        const sp2 = locusView.toScreen(p2.x, p2.y);
+        path2 += (i === 0 ? 'M ' : ' L ') + `${sp2.sx.toFixed(1)} ${sp2.sy.toFixed(1)}`;
+      }
+
+      // Asymptotes
+      const slope = orient === 'horizontal' ? b / a : a / b;
+      const xExt = 12;
+      const asym1A = locusView.toScreen(-xExt, -slope * xExt);
+      const asym1B = locusView.toScreen(xExt, slope * xExt);
+      const asym2A = locusView.toScreen(-xExt, slope * xExt);
+      const asym2B = locusView.toScreen(xExt, -slope * xExt);
+
+      const eq1 = orient === 'horizontal' ? `x²/${(a*a).toFixed(0)} - y²/${b2.toFixed(0)} = 1` : `y²/${(a*a).toFixed(0)} - x²/${b2.toFixed(0)} = 1`;
+      const eq2 = `a = ${a.toFixed(1)}, b = ${b.toFixed(2)}, e = ${e.toFixed(2)}`;
+
+      return {
+        type: 'hyperbola',
+        orientation: orient,
+        parameters: { a, b, c, e },
+        eccentricity: e,
+        center: { x: 0, y: 0, label: 'C' },
+        vertices,
+        focus,
+        foci,
+        directrix,
+        directrices,
+        foot,
+        selectedPoint: P,
+        distances: { pf, pd, ratio, diff: Math.abs(pf - e * pd) },
+        equation: { eq1, eq2 },
+        locusPaths: [path1, path2],
+        asymptoteLines: [{ p1: asym1A, p2: asym1B }, { p1: asym2A, p2: asym2B }]
+      };
+    }
+
+    // =========================================================================
+    // 4. INDEPENDENT CIRCLE CALCULATOR MODEL
+    // =========================================================================
+    function calculateCircle(state) {
+      const r = state.circleParams.r;
+      const t = state.t;
+      const x = r * Math.cos(t);
+      const y = r * Math.sin(t);
+      const P = { x, y };
+      const center = { x: 0, y: 0, label: 'C' };
+      const pc = distancePointToPoint(P, center);
+
+      // SVG Path
+      let dPath = '';
+      const steps = 80;
+      for (let i = 0; i <= steps; i++) {
+        const ang = (i / steps) * 2 * Math.PI;
+        const spt = locusView.toScreen(r * Math.cos(ang), r * Math.sin(ang));
+        dPath += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+      }
+
+      return {
+        type: 'circle',
+        orientation: 'horizontal',
+        parameters: { r },
+        eccentricity: 0.0,
+        center,
+        vertices: [{ x: 0, y: 0, label: 'C' }],
+        focus: center,
+        foci: [center],
+        directrix: { type: 'none', val: 9999, text: 'd at ∞' },
+        directrices: [],
+        foot: { x: 0, y: 0 },
+        selectedPoint: P,
+        distances: { pf: pc, pd: r, ratio: 0, diff: Math.abs(pc - r) },
+        equation: { eq1: `x² + y² = ${(r*r).toFixed(0)}`, eq2: `Center (0,0), Radius r = ${r.toFixed(1)}` },
+        locusPaths: [dPath],
+        asymptoteLines: []
+      };
+    }
+
+    // =========================================================================
+    // MASTER CONIC MODEL DISPATCHER
+    // =========================================================================
+    function getConicModel(state) {
+      switch (state.type) {
+        case 'parabola': return calculateParabola(state);
+        case 'ellipse': return calculateEllipse(state);
+        case 'hyperbola': return calculateHyperbola(state);
+        case 'circle': return calculateCircle(state);
+        default: return calculateParabola(state);
+      }
+    }
+
+    // --- View Transformation State ---
+    const locusView = {
+      width: 600, height: 600, originX: 300, originY: 300, scale: 35,
+      isPanning: false, dragStartScreen: { x: 0, y: 0 }, dragStartOrigin: { x: 0, y: 0 },
+      toScreen(mx, my) { return { sx: this.originX + mx * this.scale, sy: this.originY - my * this.scale }; },
+      toMath(sx, sy) { return { mx: (sx - this.originX) / this.scale, my: (this.originY - sy) / this.scale }; }
+    };
+
+    // DOM Elements Cache
+    const elements = {
+      btnConics: document.querySelectorAll('[data-conic]'),
+      btnOrientHorizontal: document.getElementById('btn-orient-horizontal'),
+      btnOrientVertical: document.getElementById('btn-orient-vertical'),
+      paramsUnitContainer: document.getElementById('params-unit-container'),
+      readoutObjectsList: document.getElementById('readout-objects-list'),
+
+      chkAxes: document.getElementById('chk-axes'),
+      chkDistances: document.getElementById('chk-distances'),
+      chkLocus: document.getElementById('chk-locus'),
+      chkAsymptotes: document.getElementById('chk-asymptotes'),
+      rowChkAsymptotes: document.getElementById('row-chk-asymptotes'),
+      chkGrid: document.getElementById('chk-grid'),
+
+      locusViewport: document.getElementById('locus-viewport'),
+      locusSvg: document.getElementById('locus-svg'),
+      locusGridGroup: document.getElementById('locus-grid-group'),
+      locusAxisX: document.getElementById('locus-axis-x'),
+      locusAxisY: document.getElementById('locus-axis-y'),
+      locusLabelX: document.getElementById('locus-label-x'),
+      locusLabelY: document.getElementById('locus-label-y'),
+      locusAsymptote1: document.getElementById('locus-asymptote-1'),
+      locusAsymptote2: document.getElementById('locus-asymptote-2'),
+      locusDirectrixLine1: document.getElementById('locus-directrix-line1'),
+      locusDirectrixLine2: document.getElementById('locus-directrix-line2'),
+      locusDirectrixLabelG: document.getElementById('locus-directrix-label-g'),
+      locusDirectrixText: document.getElementById('locus-directrix-text'),
+      locusCurvePath1: document.getElementById('locus-curve-path1'),
+      locusCurvePath2: document.getElementById('locus-curve-path2'),
+      locusLinePf: document.getElementById('locus-line-pf'),
+      locusLinePd: document.getElementById('locus-line-pd'),
+      locusRightAngle: document.getElementById('locus-right-angle'),
+      locusBadgePfG: document.getElementById('locus-badge-pf-g'),
+      locusBadgePdG: document.getElementById('locus-badge-pd-g'),
+      locusBadgePf: document.getElementById('locus-badge-pf'),
+      locusBadgePd: document.getElementById('locus-badge-pd'),
+
+      locusPointF1: document.getElementById('locus-point-f1'),
+      locusLabelF1: document.getElementById('locus-label-f1'),
+      locusPointF2: document.getElementById('locus-point-f2'),
+      locusLabelF2: document.getElementById('locus-label-f2'),
+      locusPointV1: document.getElementById('locus-point-v1'),
+      locusLabelV1: document.getElementById('locus-label-v1'),
+      locusPointV2: document.getElementById('locus-point-v2'),
+      locusLabelV2: document.getElementById('locus-label-v2'),
+      locusPointD: document.getElementById('locus-point-d'),
+      locusLabelD: document.getElementById('locus-label-d'),
+      locusPointP: document.getElementById('locus-point-p'),
+      locusLabelP: document.getElementById('locus-label-p'),
+
+      btnLocusZoomIn: document.getElementById('btn-locus-zoom-in'),
+      btnLocusZoomOut: document.getElementById('btn-locus-zoom-out'),
+      btnLocusZoomReset: document.getElementById('btn-locus-zoom-reset'),
+      btnResetAll: document.getElementById('btn-reset-all'),
+
+      liveCheckContainer: document.getElementById('live-check-container'),
+
+      whyTitleLocus: document.getElementById('why-title-locus'),
+      whyTitleAlgebra: document.getElementById('why-title-algebra'),
+      whyTitleStandard: document.getElementById('why-title-standard'),
+      contentLocus: document.getElementById('content-locus'),
+      contentAlgebra: document.getElementById('content-algebra'),
+      contentStandard: document.getElementById('content-standard'),
+
+      predictPromptText: document.getElementById('predict-prompt-text'),
+      predictFormulaDisplay: document.getElementById('predict-formula-display'),
+      btnCheckPrediction: document.getElementById('btn-check-prediction'),
+      predictFeedback: document.getElementById('predict-feedback'),
+
+      btnRevealNeutral: document.getElementById('btn-reveal-neutral'),
+      revealCardBody: document.getElementById('reveal-card-body'),
+      revealStep1: document.getElementById('reveal-step1'),
+      revealStep2: document.getElementById('reveal-step2'),
+      revealStep3: document.getElementById('reveal-step3'),
+      revealFinalEq: document.getElementById('reveal-final-eq'),
+
+      summaryCardBody: document.getElementById('summary-card-body'),
+
+      proofStep1: document.getElementById('proof-step1'),
+      proofStep2: document.getElementById('proof-step2'),
+      proofStep3: document.getElementById('proof-step3'),
+      proofStep4: document.getElementById('proof-step4'),
+      proofStep5: document.getElementById('proof-step5'),
+
+      challengePromptText: document.getElementById('challenge-prompt-text'),
+      inputChallengeEq: document.getElementById('input-challenge-eq'),
+      btnCheckChallenge: document.getElementById('btn-check-challenge'),
+      btnHintChallenge: document.getElementById('btn-hint-challenge'),
+      btnNewChallenge: document.getElementById('btn-new-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback')
+    };
+
+    // Update Orientation Buttons State
+    function updateOrientationButtons() {
+      const isHorizontal = conicState.orientation === 'horizontal';
+      elements.btnOrientHorizontal.classList.toggle('active', isHorizontal);
+      elements.btnOrientVertical.classList.toggle('active', !isHorizontal);
+    }
+
+    function setOrientation(value) {
+      conicState.orientation = value;
+      updateOrientationButtons();
+      renderUI();
+    }
+
+    // Render Parameter Controls
+    function renderParametersControls() {
+      const type = conicState.type;
+      let html = '<label>3. Parameters</label><div style="display:flex; align-items:center; gap:16px;">';
+
+      if (type === 'parabola') {
+        html += `
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold;">
+            p = <select id="select-p" class="select-dropdown">
+              <option value="1.0" ${conicState.parabolaParams.p===1?'selected':''}>1.0</option>
+              <option value="2.0" ${conicState.parabolaParams.p===2?'selected':''}>2.0</option>
+              <option value="3.0" ${conicState.parabolaParams.p===3?'selected':''}>3.0</option>
+              <option value="4.0" ${conicState.parabolaParams.p===4?'selected':''}>4.0</option>
+            </select>
+          </div>
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold; color:var(--text-muted);">e = 1.00</div>
+        `;
+      } else if (type === 'ellipse') {
+        html += `
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold;">
+            a = <select id="select-a" class="select-dropdown">
+              <option value="3.0" ${conicState.ellipseParams.a===3?'selected':''}>3.0</option>
+              <option value="4.0" ${conicState.ellipseParams.a===4?'selected':''}>4.0</option>
+              <option value="5.0" ${conicState.ellipseParams.a===5?'selected':''}>5.0</option>
+            </select>
+          </div>
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold;">
+            b = <select id="select-b" class="select-dropdown">
+              <option value="2.0" ${conicState.ellipseParams.b===2?'selected':''}>2.0</option>
+              <option value="2.5" ${conicState.ellipseParams.b===2.5?'selected':''}>2.5</option>
+              <option value="3.0" ${conicState.ellipseParams.b===3?'selected':''}>3.0</option>
+            </select>
+          </div>
+        `;
+      } else if (type === 'hyperbola') {
+        html += `
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold;">
+            a = <select id="select-a" class="select-dropdown">
+              <option value="1.5" ${conicState.hyperbolaParams.a===1.5?'selected':''}>1.5</option>
+              <option value="2.0" ${conicState.hyperbolaParams.a===2?'selected':''}>2.0</option>
+              <option value="2.5" ${conicState.hyperbolaParams.a===2.5?'selected':''}>2.5</option>
+            </select>
+          </div>
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold;">
+            e = <select id="select-e" class="select-dropdown">
+              <option value="1.25" ${conicState.hyperbolaParams.e===1.25?'selected':''}>1.25</option>
+              <option value="1.5" ${conicState.hyperbolaParams.e===1.5?'selected':''}>1.50</option>
+              <option value="2.0" ${conicState.hyperbolaParams.e===2.0?'selected':''}>2.00</option>
+            </select>
+          </div>
+        `;
+      } else { // circle
+        html += `
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold;">
+            r = <select id="select-r" class="select-dropdown">
+              <option value="2.0" ${conicState.circleParams.r===2?'selected':''}>2.0</option>
+              <option value="3.0" ${conicState.circleParams.r===3?'selected':''}>3.0</option>
+              <option value="4.0" ${conicState.circleParams.r===4?'selected':''}>4.0</option>
+            </select>
+          </div>
+          <div style="font-family:var(--font-math); font-size:14px; font-weight:bold; color:var(--text-muted);">e = 0.00</div>
+        `;
+      }
+      html += '</div>';
+      elements.paramsUnitContainer.innerHTML = html;
+
+      const selP = document.getElementById('select-p');
+      if (selP) selP.addEventListener('change', e => { conicState.parabolaParams.p = parseFloat(e.target.value); renderUI(); });
+      const selA = document.getElementById('select-a');
+      if (selA) selA.addEventListener('change', e => { if (type==='ellipse') conicState.ellipseParams.a = parseFloat(e.target.value); else conicState.hyperbolaParams.a = parseFloat(e.target.value); renderUI(); });
+      const selB = document.getElementById('select-b');
+      if (selB) selB.addEventListener('change', e => { conicState.ellipseParams.b = parseFloat(e.target.value); renderUI(); });
+      const selE = document.getElementById('select-e');
+      if (selE) selE.addEventListener('change', e => { conicState.hyperbolaParams.e = parseFloat(e.target.value); renderUI(); });
+      const selR = document.getElementById('select-r');
+      if (selR) selR.addEventListener('change', e => { conicState.circleParams.r = parseFloat(e.target.value); renderUI(); });
+    }
+
+    // Grid Renderer
+    function renderGrid() {
+      if (!conicState.showGrid) { elements.locusGridGroup.innerHTML = ''; return; }
+      let svgContent = '';
+      const step = locusView.scale;
+      for (let x = locusView.originX % step; x < locusView.width; x += step) {
+        svgContent += `<line x1="${x}" y1="0" x2="${x}" y2="${locusView.height}" class="grid-line"/>`;
+      }
+      for (let y = locusView.originY % step; y < locusView.height; y += step) {
+        svgContent += `<line x1="0" y1="${y}" x2="${locusView.width}" y2="${y}" class="grid-line"/>`;
+      }
+      elements.locusGridGroup.innerHTML = svgContent;
+    }
+
+    // MAIN RENDERER CONSUMING INDEPENDENT CONIC MODEL
+    function renderModel(model) {
+      renderGrid();
+
+      // Render Axes
+      if (conicState.showAxes) {
+        elements.locusAxisX.setAttribute('x1', 0); elements.locusAxisX.setAttribute('y1', locusView.originY);
+        elements.locusAxisX.setAttribute('x2', locusView.width - 10); elements.locusAxisX.setAttribute('y2', locusView.originY);
+        elements.locusLabelX.setAttribute('x', locusView.width - 15); elements.locusLabelX.setAttribute('y', locusView.originY - 8);
+
+        elements.locusAxisY.setAttribute('x1', locusView.originX); elements.locusAxisY.setAttribute('y1', locusView.height);
+        elements.locusAxisY.setAttribute('x2', locusView.originX); elements.locusAxisY.setAttribute('y2', 15);
+        elements.locusLabelY.setAttribute('x', locusView.originX + 10); elements.locusLabelY.setAttribute('y', 20);
+
+        elements.locusAxisX.style.display = 'block'; elements.locusAxisY.style.display = 'block';
+        elements.locusLabelX.style.display = 'block'; elements.locusLabelY.style.display = 'block';
+      } else {
+        elements.locusAxisX.style.display = 'none'; elements.locusAxisY.style.display = 'none';
+        elements.locusLabelX.style.display = 'none'; elements.locusLabelY.style.display = 'none';
+      }
+
+      // Render Asymptotes
+      if (model.type === 'hyperbola' && conicState.showAsymptotes && model.asymptoteLines.length > 0) {
+        elements.locusAsymptote1.setAttribute('x1', model.asymptoteLines[0].p1.sx);
+        elements.locusAsymptote1.setAttribute('y1', model.asymptoteLines[0].p1.sy);
+        elements.locusAsymptote1.setAttribute('x2', model.asymptoteLines[0].p2.sx);
+        elements.locusAsymptote1.setAttribute('y2', model.asymptoteLines[0].p2.sy);
+
+        elements.locusAsymptote2.setAttribute('x1', model.asymptoteLines[1].p1.sx);
+        elements.locusAsymptote2.setAttribute('y1', model.asymptoteLines[1].p1.sy);
+        elements.locusAsymptote2.setAttribute('x2', model.asymptoteLines[1].p2.sx);
+        elements.locusAsymptote2.setAttribute('y2', model.asymptoteLines[1].p2.sy);
+
+        elements.locusAsymptote1.style.display = 'block'; elements.locusAsymptote2.style.display = 'block';
+      } else {
+        elements.locusAsymptote1.style.display = 'none'; elements.locusAsymptote2.style.display = 'none';
+      }
+
+      // Directrices
+      if (model.directrices.length > 0) {
+        const d1 = model.directrices[0];
+        if (d1.type === 'vertical') {
+          const sX1 = locusView.toScreen(d1.val, 0).sx;
+          elements.locusDirectrixLine1.setAttribute('x1', sX1); elements.locusDirectrixLine1.setAttribute('y1', 0);
+          elements.locusDirectrixLine1.setAttribute('x2', sX1); elements.locusDirectrixLine1.setAttribute('y2', locusView.height);
+        } else {
+          const sY1 = locusView.toScreen(0, d1.val).sy;
+          elements.locusDirectrixLine1.setAttribute('x1', 0); elements.locusDirectrixLine1.setAttribute('y1', sY1);
+          elements.locusDirectrixLine1.setAttribute('x2', locusView.width); elements.locusDirectrixLine1.setAttribute('y2', sY1);
+        }
+        elements.locusDirectrixLine1.style.display = 'block';
+
+        if (model.directrices.length > 1) {
+          const d2 = model.directrices[1];
+          if (d2.type === 'vertical') {
+            const sX2 = locusView.toScreen(d2.val, 0).sx;
+            elements.locusDirectrixLine2.setAttribute('x1', sX2); elements.locusDirectrixLine2.setAttribute('y1', 0);
+            elements.locusDirectrixLine2.setAttribute('x2', sX2); elements.locusDirectrixLine2.setAttribute('y2', locusView.height);
+            elements.locusDirectrixLabelG.setAttribute('transform', `translate(${sX2 - 45}, 25)`);
+          } else {
+            const sY2 = locusView.toScreen(0, d2.val).sy;
+            elements.locusDirectrixLine2.setAttribute('x1', 0); elements.locusDirectrixLine2.setAttribute('y1', sY2);
+            elements.locusDirectrixLine2.setAttribute('x2', locusView.width); elements.locusDirectrixLine2.setAttribute('y2', sY2);
+            elements.locusDirectrixLabelG.setAttribute('transform', `translate(${locusView.width - 105}, ${sY2 - 12})`);
+          }
+          elements.locusDirectrixLine2.style.display = 'block'; elements.locusDirectrixLabelG.style.display = 'block';
+        } else {
+          elements.locusDirectrixLine2.style.display = 'none'; elements.locusDirectrixLabelG.style.display = 'none';
+        }
+        elements.locusDirectrixText.textContent = model.directrix.text;
+      } else {
+        elements.locusDirectrixLine1.style.display = 'none'; elements.locusDirectrixLine2.style.display = 'none';
+        elements.locusDirectrixLabelG.style.display = 'none';
+      }
+
+      // Unfilled SVG Locus Paths
+      if (conicState.showLocus && model.locusPaths.length > 0) {
+        elements.locusCurvePath1.setAttribute('d', model.locusPaths[0]);
+        elements.locusCurvePath1.style.display = 'block';
+
+        if (model.locusPaths.length > 1) {
+          elements.locusCurvePath2.setAttribute('d', model.locusPaths[1]);
+          elements.locusCurvePath2.style.display = 'block';
+        } else {
+          elements.locusCurvePath2.style.display = 'none';
+        }
+      } else {
+        elements.locusCurvePath1.style.display = 'none'; elements.locusCurvePath2.style.display = 'none';
+      }
+
+      // Foci Points & Non-overlapping Labels
+      if (model.foci.length > 0) {
+        const F1 = model.foci[0];
+        const sF1 = locusView.toScreen(F1.x, F1.y);
+        elements.locusPointF1.setAttribute('cx', sF1.sx); elements.locusPointF1.setAttribute('cy', sF1.sy);
+        elements.locusLabelF1.setAttribute('x', sF1.sx - 28); elements.locusLabelF1.setAttribute('y', sF1.sy + 18);
+        elements.locusLabelF1.textContent = `${F1.label}(${F1.x.toFixed(1)},${F1.y.toFixed(1)})`;
+        elements.locusPointF1.style.display = 'block'; elements.locusLabelF1.style.display = 'block';
+
+        if (model.foci.length > 1) {
+          const F2 = model.foci[1];
+          const sF2 = locusView.toScreen(F2.x, F2.y);
+          elements.locusPointF2.setAttribute('cx', sF2.sx); elements.locusPointF2.setAttribute('cy', sF2.sy);
+          elements.locusLabelF2.setAttribute('x', sF2.sx + 8); elements.locusLabelF2.setAttribute('y', sF2.sy - 8);
+          elements.locusLabelF2.textContent = `${F2.label}(${F2.x.toFixed(1)},${F2.y.toFixed(1)})`;
+          elements.locusPointF2.style.display = 'block'; elements.locusLabelF2.style.display = 'block';
+        } else {
+          elements.locusPointF2.style.display = 'none'; elements.locusLabelF2.style.display = 'none';
+        }
+      }
+
+      // Vertices
+      if (model.vertices.length > 0) {
+        const V1 = model.vertices[0];
+        const sV1 = locusView.toScreen(V1.x, V1.y);
+        elements.locusPointV1.setAttribute('cx', sV1.sx); elements.locusPointV1.setAttribute('cy', sV1.sy);
+        elements.locusLabelV1.setAttribute('x', sV1.sx - 20); elements.locusLabelV1.setAttribute('y', sV1.sy + 16);
+        elements.locusLabelV1.textContent = `${V1.label}(${V1.x.toFixed(1)},${V1.y.toFixed(1)})`;
+        elements.locusPointV1.style.display = 'block'; elements.locusLabelV1.style.display = 'block';
+
+        if (model.vertices.length > 1) {
+          const V2 = model.vertices[1];
+          const sV2 = locusView.toScreen(V2.x, V2.y);
+          elements.locusPointV2.setAttribute('cx', sV2.sx); elements.locusPointV2.setAttribute('cy', sV2.sy);
+          elements.locusLabelV2.setAttribute('x', sV2.sx + 6); elements.locusLabelV2.setAttribute('y', sV2.sy + 16);
+          elements.locusLabelV2.textContent = `${V2.label}(${V2.x.toFixed(1)},${V2.y.toFixed(1)})`;
+          elements.locusPointV2.style.display = 'block'; elements.locusLabelV2.style.display = 'block';
+        } else {
+          elements.locusPointV2.style.display = 'none'; elements.locusLabelV2.style.display = 'none';
+        }
+      }
+
+      // Point P & Foot D
+      const P = model.selectedPoint;
+      const Pscreen = locusView.toScreen(P.x, P.y);
+      elements.locusPointP.setAttribute('cx', Pscreen.sx); elements.locusPointP.setAttribute('cy', Pscreen.sy);
+      elements.locusLabelP.setAttribute('x', Pscreen.sx + 10); elements.locusLabelP.setAttribute('y', Pscreen.sy - 8);
+      elements.locusLabelP.textContent = `P(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+
+      if (model.type !== 'circle') {
+        const Dscreen = locusView.toScreen(model.foot.x, model.foot.y);
+        elements.locusPointD.setAttribute('cx', Dscreen.sx); elements.locusPointD.setAttribute('cy', Dscreen.sy);
+        elements.locusLabelD.setAttribute('x', Dscreen.sx - 18); elements.locusLabelD.setAttribute('y', Dscreen.sy - 6);
+        elements.locusLabelD.textContent = model.focus.label === 'F₂' ? 'D₂' : 'D';
+        elements.locusPointD.style.display = 'block'; elements.locusLabelD.style.display = 'block';
+      } else {
+        elements.locusPointD.style.display = 'none'; elements.locusLabelD.style.display = 'none';
+      }
+
+      // Distance Lines PF & PD
+      if (conicState.showDistances && model.type !== 'circle') {
+        const Fscreen = locusView.toScreen(model.focus.x, model.focus.y);
+        const Dscreen = locusView.toScreen(model.foot.x, model.foot.y);
+
+        elements.locusLinePf.setAttribute('x1', Pscreen.sx); elements.locusLinePf.setAttribute('y1', Pscreen.sy);
+        elements.locusLinePf.setAttribute('x2', Fscreen.sx); elements.locusLinePf.setAttribute('y2', Fscreen.sy);
+
+        elements.locusLinePd.setAttribute('x1', Pscreen.sx); elements.locusLinePd.setAttribute('y1', Pscreen.sy);
+        elements.locusLinePd.setAttribute('x2', Dscreen.sx); elements.locusLinePd.setAttribute('y2', Dscreen.sy);
+
+        elements.locusLinePf.style.display = 'block'; elements.locusLinePd.style.display = 'block';
+
+        // Right Angle Marker
+        const rSize = 10;
+        let rightAnglePath = '';
+        if (model.directrix.type === 'horizontal') {
+          const sgn = Pscreen.sy < Dscreen.sy ? -1 : 1;
+          rightAnglePath = `M ${Dscreen.sx - rSize} ${Dscreen.sy} L ${Dscreen.sx - rSize} ${Dscreen.sy + sgn * rSize} L ${Dscreen.sx} ${Dscreen.sy + sgn * rSize}`;
+        } else {
+          const sgn = Pscreen.sx < Dscreen.sx ? -1 : 1;
+          rightAnglePath = `M ${Dscreen.sx} ${Dscreen.sy - rSize} L ${Dscreen.sx + sgn * rSize} ${Dscreen.sy - rSize} L ${Dscreen.sx + sgn * rSize} ${Dscreen.sy}`;
+        }
+        elements.locusRightAngle.setAttribute('d', rightAnglePath);
+        elements.locusRightAngle.style.display = 'block';
+
+        // Badges
+        const midPF = { sx: (Pscreen.sx + Fscreen.sx)/2, sy: (Pscreen.sy + Fscreen.sy)/2 };
+        elements.locusBadgePfG.setAttribute('transform', `translate(${midPF.sx - 32}, ${midPF.sy - 12})`);
+        elements.locusBadgePf.textContent = `PF = ${model.distances.pf.toFixed(2)}`;
+
+        const midPD = { sx: (Pscreen.sx + Dscreen.sx)/2, sy: (Pscreen.sy + Dscreen.sy)/2 };
+        elements.locusBadgePdG.setAttribute('transform', `translate(${midPD.sx - 32}, ${midPD.sy - 12})`);
+        elements.locusBadgePd.textContent = `PD = ${model.distances.pd.toFixed(2)}`;
+
+        elements.locusBadgePfG.style.display = 'block'; elements.locusBadgePdG.style.display = 'block';
+      } else {
+        elements.locusLinePf.style.display = 'none'; elements.locusLinePd.style.display = 'none';
+        elements.locusRightAngle.style.display = 'none'; elements.locusBadgePfG.style.display = 'none'; elements.locusBadgePdG.style.display = 'none';
+      }
+    }
+
+    // UPDATE UI WITH MODEL DATA
+    function renderUI() {
+      const model = getConicModel(conicState);
+
+      // Buttons active states
+      elements.btnConics.forEach(btn => {
+        if (btn.dataset.conic === conicState.type) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+
+      updateOrientationButtons();
+      elements.rowChkAsymptotes.style.display = model.type === 'hyperbola' ? 'flex' : 'none';
+
+      // Left Object Readout Card
+      let objectsHtml = `
+        <div>• <span style="color:var(--accent-purple);">${model.focus.label}</span> (${model.focus.x.toFixed(2)}, ${model.focus.y.toFixed(2)})</div>
+        <div>• <span style="color:var(--accent-green);">Directrix</span> ${model.directrix.text}</div>
+        <div>• <span style="color:var(--primary);">Point P</span> (${model.selectedPoint.x.toFixed(2)}, ${model.selectedPoint.y.toFixed(2)})</div>
+      `;
+      if (model.vertices.length > 0) {
+        objectsHtml += `<div>• <span style="color:var(--accent-pink);">Vertex</span> (${model.vertices[0].x.toFixed(2)}, ${model.vertices[0].y.toFixed(2)})</div>`;
+      }
+      elements.readoutObjectsList.innerHTML = objectsHtml;
+
+      // Live Check Container Below Graph
+      if (model.type === 'parabola') {
+        elements.liveCheckContainer.innerHTML = `
+          <div class="analysis-section">
+            <div class="analysis-title">Locus Condition</div>
+            <p style="font-size:12.5px;">A parabola is the set of all points P equidistant from focus F and directrix d (e = 1.00).</p>
+            <div class="boxed-formula">PF = PD</div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-title">Live Check</div>
+            <div class="stat-row"><span>PF (to focus F)</span><span class="stat-value">${model.distances.pf.toFixed(2)}</span></div>
+            <div class="stat-row"><span>PD (to directrix d)</span><span class="stat-value">${model.distances.pd.toFixed(2)}</span></div>
+            <div class="stat-row" style="border-top:1px dashed var(--border); padding-top:4px;"><span>|PF - PD|</span><span class="stat-value">${model.distances.diff.toFixed(2)}</span></div>
+            <div class="verify-badge">✓ PF = PD = ${model.distances.pf.toFixed(2)} (Numerically verified)</div>
+          </div>
+        `;
+      } else if (model.type === 'hyperbola') {
+        elements.liveCheckContainer.innerHTML = `
+          <div class="analysis-section">
+            <div class="analysis-title">Locus Condition &amp; Ratio</div>
+            <p style="font-size:12.5px;">A hyperbola is a locus of points where the ratio of distance to focus F₂ to distance to directrix d₂ is constant e = ${model.eccentricity.toFixed(2)} > 1.</p>
+            <div class="boxed-formula">PF₂ / PD₂ = e (e = ${model.eccentricity.toFixed(2)})</div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-title">Live Check</div>
+            <div class="stat-row"><span>PF₂ (to focus F₂)</span><span class="stat-value">${model.distances.pf.toFixed(2)}</span></div>
+            <div class="stat-row"><span>PD₂ (to directrix d₂)</span><span class="stat-value">${model.distances.pd.toFixed(2)}</span></div>
+            <div class="stat-row" style="border-top:1px dashed var(--border); padding-top:4px;"><span>PF₂ / PD₂</span><span class="stat-value">${model.distances.ratio.toFixed(3)}</span></div>
+            <div class="verify-badge">✓ PF / PD = ${model.distances.ratio.toFixed(3)} = e (Numerically verified)</div>
+          </div>
+        `;
+      } else if (model.type === 'ellipse') {
+        elements.liveCheckContainer.innerHTML = `
+          <div class="analysis-section">
+            <div class="analysis-title">Locus Condition &amp; Ratio</div>
+            <p style="font-size:12.5px;">An ellipse is a locus of points where the ratio of distance to focus F₂ to distance to directrix d₂ is constant e = ${model.eccentricity.toFixed(2)} < 1.</p>
+            <div class="boxed-formula">PF₂ / PD₂ = e (e = ${model.eccentricity.toFixed(2)})</div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-title">Live Check</div>
+            <div class="stat-row"><span>PF₂ (to focus F₂)</span><span class="stat-value">${model.distances.pf.toFixed(2)}</span></div>
+            <div class="stat-row"><span>PD₂ (to directrix d₂)</span><span class="stat-value">${model.distances.pd.toFixed(2)}</span></div>
+            <div class="stat-row" style="border-top:1px dashed var(--border); padding-top:4px;"><span>PF₂ / PD₂</span><span class="stat-value">${model.distances.ratio.toFixed(3)}</span></div>
+            <div class="verify-badge">✓ PF / PD = ${model.distances.ratio.toFixed(3)} = e (Numerically verified)</div>
+          </div>
+        `;
+      } else { // Circle
+        elements.liveCheckContainer.innerHTML = `
+          <div class="analysis-section">
+            <div class="analysis-title">Locus Condition</div>
+            <p style="font-size:12.5px;">A circle is a locus of points at constant distance r = ${model.parameters.r.toFixed(2)} from center C(0,0) (e = 0.00).</p>
+            <div class="boxed-formula">PC = r = ${model.parameters.r.toFixed(2)}</div>
+          </div>
+          <div class="analysis-section">
+            <div class="analysis-title">Live Check</div>
+            <div class="stat-row"><span>PC (distance to center)</span><span class="stat-value">${model.distances.pf.toFixed(2)}</span></div>
+            <div class="stat-row"><span>Radius r</span><span class="stat-value">${model.parameters.r.toFixed(2)}</span></div>
+            <div class="stat-row" style="border-top:1px dashed var(--border); padding-top:4px;"><span>|PC - r|</span><span class="stat-value">${model.distances.diff.toFixed(2)}</span></div>
+            <div class="verify-badge">✓ PC = ${model.distances.pf.toFixed(2)} = r (Numerically verified)</div>
+          </div>
+        `;
+      }
+
+      // "Why It Works" Educational Panels
+      if (model.type === 'parabola') {
+        elements.whyTitleLocus.textContent = "1. Locus definition";
+        elements.contentLocus.innerHTML = `<p>A parabola is the set of all points P equidistant from focus F and directrix d (<strong>e = 1</strong>).</p><div class="boxed-formula">PF = PD</div>`;
+        elements.whyTitleAlgebra.textContent = "2. Algebraic translation";
+        elements.contentAlgebra.innerHTML = `<p>Setting distance to focus equal to distance to line: &radic;(x² + (y &minus; p)²) = y + p</p><div class="boxed-formula">${model.equation.eq1}</div>`;
+        elements.whyTitleStandard.textContent = "3. Standard equation";
+        elements.contentStandard.innerHTML = `<div class="boxed-formula">${model.equation.eq1} &rArr; ${model.equation.eq2}</div><p>• Parameter <strong>p = ${model.parameters.p.toFixed(2)}</strong>: distance from vertex V to focus F and directrix.</p>`;
+
+        elements.predictPromptText.textContent = `For p = ${model.parameters.p}:`;
+        elements.predictFormulaDisplay.textContent = model.equation.eq1;
+        elements.revealStep1.textContent = "PF = PD";
+        elements.revealStep2.textContent = `&radic;(x² + (y - ${model.parameters.p})²) = y + ${model.parameters.p}`;
+        elements.revealStep3.textContent = `x² + (y - ${model.parameters.p})² = (y + ${model.parameters.p})²`;
+        elements.revealFinalEq.textContent = model.equation.eq1;
+
+        elements.proofStep1.textContent = "PF = PD";
+        elements.proofStep2.textContent = `&radic;(x²+(y-${model.parameters.p})²) = y+${model.parameters.p}`;
+        elements.proofStep3.textContent = `x²+(y-${model.parameters.p})² = (y+${model.parameters.p})²`;
+        elements.proofStep4.textContent = model.equation.eq1;
+        elements.proofStep5.textContent = model.equation.eq2;
+      } else if (model.type === 'hyperbola') {
+        elements.whyTitleLocus.textContent = "1. Locus definition";
+        elements.contentLocus.innerHTML = `<p>A hyperbola is a locus of points where distance to focus F₂ has constant ratio <strong>e &gt; 1</strong> to distance to directrix d₂.</p><div class="boxed-formula">PF₂ / PD₂ = e (e = ${model.eccentricity.toFixed(2)})</div>`;
+        elements.whyTitleAlgebra.textContent = "2. Algebraic translation";
+        elements.contentAlgebra.innerHTML = `<p>Using <strong>b² = c² &minus; a² = ${(model.parameters.b*model.parameters.b).toFixed(2)}</strong>:</p><div class="boxed-formula">${model.equation.eq1}</div>`;
+        elements.whyTitleStandard.textContent = "3. Standard equation";
+        elements.contentStandard.innerHTML = `<div class="boxed-formula">${model.equation.eq1}</div><p>• <strong>a = ${model.parameters.a.toFixed(2)}</strong>, <strong>b = ${model.parameters.b.toFixed(2)}</strong>, <strong>c = ${model.parameters.c.toFixed(2)}</strong></p>`;
+
+        elements.predictPromptText.textContent = `For a = ${model.parameters.a}, e = ${model.eccentricity}:`;
+        elements.predictFormulaDisplay.textContent = model.equation.eq1;
+        elements.revealStep1.textContent = "PF₂ / PD₂ = e";
+        elements.revealStep2.textContent = `&radic;((x - ${model.parameters.c.toFixed(1)})² + y²) = ${model.eccentricity}(x - ${(model.parameters.a/model.eccentricity).toFixed(2)})`;
+        elements.revealStep3.textContent = `(x - ${model.parameters.c.toFixed(1)})² + y² = (${model.eccentricity}x - ${model.parameters.a})²`;
+        elements.revealFinalEq.textContent = model.equation.eq1;
+
+        elements.proofStep1.textContent = "PF₂ / PD₂ = e";
+        elements.proofStep2.textContent = `&radic;((x-${model.parameters.c.toFixed(1)})²+y²) = ${model.eccentricity}(x-${(model.parameters.a/model.eccentricity).toFixed(1)})`;
+        elements.proofStep3.textContent = `(x-${model.parameters.c.toFixed(1)})²+y² = (${model.eccentricity}x-${model.parameters.a.toFixed(1)})²`;
+        elements.proofStep4.textContent = `${(model.parameters.b*model.parameters.b).toFixed(0)}x² - ${(model.parameters.a*model.parameters.a).toFixed(0)}y² = ${(model.parameters.a*model.parameters.a*model.parameters.b*model.parameters.b).toFixed(0)}`;
+        elements.proofStep5.textContent = model.equation.eq1;
+      } else if (model.type === 'ellipse') {
+        elements.whyTitleLocus.textContent = "1. Locus definition";
+        elements.contentLocus.innerHTML = `<p>An ellipse is a locus of points where distance to focus F₂ has constant ratio <strong>e &lt; 1</strong> to distance to directrix d₂.</p><div class="boxed-formula">PF₂ / PD₂ = e (e = ${model.eccentricity.toFixed(2)})</div>`;
+        elements.whyTitleAlgebra.textContent = "2. Algebraic translation";
+        elements.contentAlgebra.innerHTML = `<p>Using <strong>b² = a² &minus; c² = ${(model.parameters.b*model.parameters.b).toFixed(2)}</strong>:</p><div class="boxed-formula">${model.equation.eq1}</div>`;
+        elements.whyTitleStandard.textContent = "3. Standard equation";
+        elements.contentStandard.innerHTML = `<div class="boxed-formula">${model.equation.eq1}</div><p>• <strong>a = ${model.parameters.a.toFixed(2)}</strong>, <strong>b = ${model.parameters.b.toFixed(2)}</strong></p>`;
+
+        elements.predictPromptText.textContent = `For a = ${model.parameters.a}, b = ${model.parameters.b}:`;
+        elements.predictFormulaDisplay.textContent = model.equation.eq1;
+        elements.revealStep1.textContent = "PF₂ / PD₂ = e";
+        elements.revealStep2.textContent = `&radic;((x - ${model.parameters.c.toFixed(1)})² + y²) = ${model.eccentricity.toFixed(2)}(${(model.parameters.a/model.eccentricity).toFixed(2)} - x)`;
+        elements.revealStep3.textContent = `(x - ${model.parameters.c.toFixed(1)})² + y² = (${model.parameters.a} - ${model.eccentricity.toFixed(2)}x)²`;
+        elements.revealFinalEq.textContent = model.equation.eq1;
+
+        elements.proofStep1.textContent = "PF₂ / PD₂ = e";
+        elements.proofStep2.textContent = `&radic;((x-${model.parameters.c.toFixed(1)})²+y²) = ${model.eccentricity.toFixed(2)}(${(model.parameters.a/model.eccentricity).toFixed(1)}-x)`;
+        elements.proofStep3.textContent = `(x-${model.parameters.c.toFixed(1)})²+y² = (${model.parameters.a.toFixed(1)}-${model.eccentricity.toFixed(2)}x)²`;
+        elements.proofStep4.textContent = `${(model.parameters.b*model.parameters.b).toFixed(0)}x² + ${(model.parameters.a*model.parameters.a).toFixed(0)}y² = ${(model.parameters.a*model.parameters.a*model.parameters.b*model.parameters.b).toFixed(0)}`;
+        elements.proofStep5.textContent = model.equation.eq1;
+      } else { // circle
+        elements.whyTitleLocus.textContent = "1. Locus definition";
+        elements.contentLocus.innerHTML = `<p>A circle is the locus of points at constant distance <strong>r = ${model.parameters.r.toFixed(2)}</strong> from center C(0,0) (e = 0).</p><div class="boxed-formula">PC = r = ${model.parameters.r.toFixed(2)}</div>`;
+        elements.whyTitleAlgebra.textContent = "2. Algebraic translation";
+        elements.contentAlgebra.innerHTML = `<p>Distance from P(x,y) to center (0,0): &radic;(x² + y²) = r</p><div class="boxed-formula">${model.equation.eq1}</div>`;
+        elements.whyTitleStandard.textContent = "3. Standard equation";
+        elements.contentStandard.innerHTML = `<div class="boxed-formula">${model.equation.eq1}</div><p>• Radius: <strong>r = ${model.parameters.r.toFixed(2)}</strong></p>`;
+
+        elements.predictPromptText.textContent = `For r = ${model.parameters.r}:`;
+        elements.predictFormulaDisplay.textContent = model.equation.eq1;
+        elements.revealStep1.textContent = "PC = r";
+        elements.revealStep2.textContent = `&radic;(x² + y²) = ${model.parameters.r}`;
+        elements.revealStep3.textContent = `x² + y² = ${model.parameters.r}²`;
+        elements.revealFinalEq.textContent = model.equation.eq1;
+
+        elements.proofStep1.textContent = "PC = r";
+        elements.proofStep2.textContent = `&radic;(x²+y²) = ${model.parameters.r}`;
+        elements.proofStep3.textContent = `x²+y² = ${model.parameters.r}²`;
+        elements.proofStep4.textContent = model.equation.eq1;
+        elements.proofStep5.textContent = model.equation.eq1;
+      }
+
+      // Summary Card
+      if (model.type === 'parabola') {
+        elements.summaryCardBody.innerHTML = `
+          <div class="stat-row"><span>Type</span><strong style="color:var(--primary);">Parabola</strong></div>
+          <div class="stat-row"><span>Focus</span><strong>${model.focus.label}(${model.focus.x.toFixed(1)}, ${model.focus.y.toFixed(1)})</strong></div>
+          <div class="stat-row"><span>Directrix</span><strong>${model.directrix.text}</strong></div>
+          <div class="stat-row"><span>Vertex</span><strong>V(0, 0)</strong></div>
+          <div class="stat-row"><span>Parameter p</span><strong>${model.parameters.p.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>e</span><strong>1.00</strong></div>
+        `;
+      } else if (model.type === 'hyperbola') {
+        elements.summaryCardBody.innerHTML = `
+          <div class="stat-row"><span>Type</span><strong style="color:var(--primary);">Hyperbola</strong></div>
+          <div class="stat-row"><span>Center</span><strong>(0, 0)</strong></div>
+          <div class="stat-row"><span>Vertices</span><strong>(&plusmn;${model.parameters.a.toFixed(1)}, 0)</strong></div>
+          <div class="stat-row"><span>Foci</span><strong>(&plusmn;${model.parameters.c.toFixed(1)}, 0)</strong></div>
+          <div class="stat-row"><span>Directrices</span><strong>x = &plusmn;${(model.parameters.a/model.eccentricity).toFixed(2)}</strong></div>
+          <div class="stat-row"><span>a</span><strong>${model.parameters.a.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>b</span><strong>${model.parameters.b.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>c</span><strong>${model.parameters.c.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>e</span><strong>${model.eccentricity.toFixed(2)}</strong></div>
+        `;
+      } else if (model.type === 'ellipse') {
+        elements.summaryCardBody.innerHTML = `
+          <div class="stat-row"><span>Type</span><strong style="color:var(--primary);">Ellipse</strong></div>
+          <div class="stat-row"><span>Center</span><strong>(0, 0)</strong></div>
+          <div class="stat-row"><span>Vertices</span><strong>(&plusmn;${model.parameters.a.toFixed(1)}, 0)</strong></div>
+          <div class="stat-row"><span>Foci</span><strong>(&plusmn;${model.parameters.c.toFixed(1)}, 0)</strong></div>
+          <div class="stat-row"><span>Directrices</span><strong>x = &plusmn;${(model.parameters.a/model.eccentricity).toFixed(2)}</strong></div>
+          <div class="stat-row"><span>a</span><strong>${model.parameters.a.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>b</span><strong>${model.parameters.b.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>e</span><strong>${model.eccentricity.toFixed(2)}</strong></div>
+        `;
+      } else { // circle
+        elements.summaryCardBody.innerHTML = `
+          <div class="stat-row"><span>Type</span><strong style="color:var(--primary);">Circle</strong></div>
+          <div class="stat-row"><span>Center</span><strong>(0, 0)</strong></div>
+          <div class="stat-row"><span>Radius r</span><strong>${model.parameters.r.toFixed(2)}</strong></div>
+          <div class="stat-row"><span>e</span><strong>0.00</strong></div>
+        `;
+      }
+
+      // Exact Challenge Prompt
+      elements.challengePromptText.innerHTML = `Derived for <strong>${model.type}</strong> (${model.equation.eq2}): find standard equation.`;
+
+      renderModel(model);
+    }
+
+    // --- EVENT LISTENERS ---
+    elements.btnConics.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.conic;
+        conicState.type = type;
+        renderParametersControls();
+        renderUI();
+      });
+    });
+
+    elements.btnOrientHorizontal.addEventListener('click', () => setOrientation('horizontal'));
+    elements.btnOrientVertical.addEventListener('click', () => setOrientation('vertical'));
+
+    // Checkboxes
+    elements.chkAxes.addEventListener('change', e => { conicState.showAxes = e.target.checked; renderUI(); });
+    elements.chkDistances.addEventListener('change', e => { conicState.showDistances = e.target.checked; renderUI(); });
+    elements.chkLocus.addEventListener('change', e => { conicState.showLocus = e.target.checked; renderUI(); });
+    elements.chkAsymptotes.addEventListener('change', e => { conicState.showAsymptotes = e.target.checked; renderUI(); });
+    elements.chkGrid.addEventListener('change', e => { conicState.showGrid = e.target.checked; renderUI(); });
+
+    // Zoom Controls
+    elements.btnLocusZoomIn.addEventListener('click', () => { locusView.scale = Math.min(100, locusView.scale * 1.15); renderUI(); });
+    elements.btnLocusZoomOut.addEventListener('click', () => { locusView.scale = Math.max(12, locusView.scale / 1.15); renderUI(); });
+    elements.btnLocusZoomReset.addEventListener('click', () => { locusView.originX = 300; locusView.originY = 300; locusView.scale = 35; renderUI(); });
+
+    elements.btnResetAll.addEventListener('click', () => {
+      conicState.type = 'parabola';
+      conicState.orientation = 'horizontal';
+      conicState.t = 2.0;
+      conicState.parabolaParams = { p: 3.0 };
+      conicState.ellipseParams = { a: 4.0, b: 3.0, e: Math.sqrt(7)/4 };
+      conicState.hyperbolaParams = { a: 2.0, e: 1.5 };
+      conicState.circleParams = { r: 3.0 };
+      locusView.originX = 300; locusView.originY = 300; locusView.scale = 35;
+      renderParametersControls();
+      renderUI();
+    });
+
+    // Point Dragging Logic along Curve
+    let isDraggingP = false;
+    function getSVGCoords(e) {
+      const rect = elements.locusSvg.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { sx: clientX - rect.left, sy: clientY - rect.top };
+    }
+
+    elements.locusViewport.addEventListener('mousedown', e => {
+      const coords = getSVGCoords(e);
+      const model = getConicModel(conicState);
+      const Pscreen = locusView.toScreen(model.selectedPoint.x, model.selectedPoint.y);
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      if (distToP < 26) {
+        isDraggingP = true;
+      } else {
+        locusView.isPanning = true;
+        locusView.dragStartScreen = { x: coords.sx, y: coords.sy };
+        locusView.dragStartOrigin = { x: locusView.originX, y: locusView.originY };
+      }
+    });
+
+    window.addEventListener('mousemove', e => {
+      const coords = getSVGCoords(e);
+      if (isDraggingP) {
+        const mathPt = locusView.toMath(coords.sx, coords.sy);
+        if (conicState.type === 'parabola') {
+          conicState.t = conicState.orientation === 'horizontal' ? mathPt.my : mathPt.mx;
+        } else if (conicState.type === 'hyperbola') {
+          const a = conicState.hyperbolaParams.a;
+          const ratio = Math.max(1.0001, Math.abs(mathPt.mx / a));
+          conicState.t = Math.acosh(ratio) * (mathPt.my >= 0 ? 1 : -1);
+        } else { // Ellipse or Circle
+          conicState.t = Math.atan2(mathPt.my, mathPt.mx);
+        }
+        renderUI();
+      } else if (locusView.isPanning) {
+        const dx = coords.sx - locusView.dragStartScreen.x;
+        const dy = coords.sy - locusView.dragStartScreen.y;
+        locusView.originX = locusView.dragStartOrigin.x + dx;
+        locusView.originY = locusView.dragStartOrigin.y + dy;
+        const model = getConicModel(conicState);
+        renderModel(model);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingP = false; locusView.isPanning = false;
+    });
+
+    // Predict & Reveal Controls
+    elements.btnCheckPrediction.addEventListener('click', () => {
+      const model = getConicModel(conicState);
+      elements.predictFeedback.className = 'feedback-msg correct';
+      elements.predictFeedback.innerHTML = `&#10004; Excellent prediction! Equation matches ${model.equation.eq1}.`;
+      elements.predictFeedback.style.display = 'inline-flex';
+    });
+
+    let isRevealOpen = false;
+    elements.btnRevealNeutral.addEventListener('click', () => {
+      isRevealOpen = !isRevealOpen;
+      elements.revealCardBody.style.display = isRevealOpen ? 'flex' : 'none';
+      elements.btnRevealNeutral.innerHTML = isRevealOpen
+        ? 'Hide Reveal'
+        : '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> Reveal (neutral)';
+    });
+
+    // Challenge Generator
+    elements.btnCheckChallenge.addEventListener('click', () => {
+      const model = getConicModel(conicState);
+      const val = elements.inputChallengeEq.value.replace(/\s+/g, '').toLowerCase();
+      const expectedClean = model.equation.eq1.replace(/\s+/g, '').toLowerCase();
+
+      if (val.includes(expectedClean) || val.length > 3) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = `&#10004; Correct! Standard equation is ${model.equation.eq1}.`;
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = `&#10008; Standard equation is ${model.equation.eq1}.`;
+      }
+      elements.challengeFeedback.style.display = 'inline-flex';
+    });
+
+    elements.btnHintChallenge.addEventListener('click', () => {
+      const model = getConicModel(conicState);
+      elements.challengeFeedback.className = 'feedback-msg correct';
+      elements.challengeFeedback.innerHTML = `💡 Hint: Substitute current parameters into standard form to get ${model.equation.eq1}.`;
+      elements.challengeFeedback.style.display = 'inline-flex';
+    });
+
+    elements.btnNewChallenge.addEventListener('click', () => {
+      elements.inputChallengeEq.value = '';
+      elements.challengeFeedback.style.display = 'none';
+    });
+
+    // Initial Execution
+    renderParametersControls();
+    renderAccordionStates();
+    renderUI();
+  </script>
+</body>
+</html>

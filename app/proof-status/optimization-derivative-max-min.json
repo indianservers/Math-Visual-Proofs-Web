@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "optimization-derivative-max-min",
+  "categorySlug": "calculus",
+  "slug": "optimization-derivative-max-min",
+  "route": "/visual-proofs/calculus/optimization-derivative-max-min",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/72-optimization-derivative-max-min)."
+}

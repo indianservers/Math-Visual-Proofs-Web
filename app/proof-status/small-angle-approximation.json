@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "small-angle-approximation",
+  "categorySlug": "trigonometry",
+  "slug": "small-angle-approximation",
+  "route": "/visual-proofs/trigonometry/small-angle-approximation",
+  "status": "interactive",
+  "owner": "Sai",
+  "notes": "Integrated team-developed self-contained HTML proof (Sai/visuals res/042_small_angle_approximation.html)."
+}

@@ -1,0 +1,2902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimization: Maximum and Minimum from Derivative - Maths Universe</title>
+  
+  <!-- KaTeX for rendering mathematical formulas -->
+  <link rel="stylesheet" href="/vendor/katex/katex.min.css" crossorigin="anonymous">
+  <script src="/vendor/katex/katex.min.js" crossorigin="anonymous"></script>
+  <script src="/vendor/katex/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg-main: #f5f6fc;
+      --card-bg: #ffffff;
+      --text-main: #1e1b4b;
+      --text-muted: #6b7280;
+      --text-purple: #4c1d95;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #ede9fe;
+      --primary-dark: #4338ca;
+
+      --purple-curve: #7c3aed;
+      --purple-point: #c084fc;
+      --purple-point-fill: #a855f7;
+      
+      --green-positive: #16a34a;
+      --green-light: #dcfce7;
+      --red-negative: #dc2626;
+      --red-light: #fee2e2;
+
+      --orange-accent: #ea580c;
+      --orange-light: #fff7ed;
+
+      --border-color: #e2e8f0;
+      --border-purple: #ddd6fe;
+      
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+      --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* Left Navigation Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: var(--card-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      padding: 0 8px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    .brand-subtitle {
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: var(--primary);
+      letter-spacing: 1px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item a:hover {
+      background-color: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .nav-item.active a {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1600px;
+      overflow-y: auto;
+    }
+
+    /* Header Bar */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .main-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .main-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-purple {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .badge-gray {
+      background-color: #e2e8f0;
+      color: #475569;
+    }
+
+    .bookmark-btn {
+      background: white;
+      border: 1px solid var(--border-color);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .bookmark-btn:hover, .bookmark-btn.active {
+      color: var(--primary);
+      border-color: var(--border-purple);
+      background-color: var(--primary-light);
+    }
+
+    /* Mission Concept Card */
+    .mission-card {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mission-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mission-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mission-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+
+    .mission-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Mode Toolbar */
+    .mode-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .mode-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      background: white;
+      border: 1px solid var(--border-color);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mode-btn:hover {
+      background-color: #f8fafc;
+      color: var(--text-main);
+    }
+
+    .mode-btn.active {
+      background-color: white;
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+      outline: 2px solid var(--primary-light);
+    }
+
+    .mode-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+    }
+
+    /* Main Dashboard Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+    }
+
+    .center-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Graph Workstation Grid Layout */
+    .workstation-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    /* Left Control Panel inside Workstation */
+    .control-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .control-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .control-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .func-select, .input-text {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.88rem;
+      outline: none;
+      background: white;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .func-select:focus, .input-text:focus {
+      border-color: var(--primary);
+    }
+
+    .toggle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .slider-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slider-val-input {
+      width: 60px;
+      padding: 3px 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: right;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .range-inputs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .range-inputs input {
+      width: 45px;
+      padding: 4px 6px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .btn-reset-range {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .btn-reset-range:hover {
+      color: var(--primary);
+      border-color: var(--border-purple);
+    }
+
+    /* Canvas Graph Container */
+    .graph-container {
+      position: relative;
+      width: 100%;
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid #f1f5f9;
+      overflow: hidden;
+    }
+
+    canvas.main-canvas {
+      display: block;
+      width: 100%;
+      height: 400px;
+      cursor: crosshair;
+    }
+
+    /* Zoom / Pan Floating Toolbar */
+    .graph-tools {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      z-index: 5;
+    }
+
+    .tool-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tool-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    /* Derivative Graph & Sign Chart Section */
+    .derivative-card {
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .derivative-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .derivative-formula {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-purple);
+    }
+
+    canvas.derivative-canvas {
+      display: block;
+      width: 100%;
+      height: 100px;
+    }
+
+    /* Right Column: Why It Works Panel */
+    .right-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 20px;
+      max-height: 780px;
+      overflow-y: auto;
+    }
+
+    .why-card::-webkit-scrollbar {
+      width: 6px;
+    }
+    .why-card::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 3px;
+    }
+    .why-card::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    .why-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 16px;
+    }
+
+    .explain-step {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 800;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .step-diagram {
+      width: 100%;
+      height: 75px;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin: 8px 0;
+      overflow: hidden;
+    }
+
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Prediction Card */
+    .predict-card {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .predict-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 4px;
+    }
+
+    .predict-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .predict-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .predict-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: #f8fafc;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .predict-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .predict-feedback {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: none;
+    }
+
+    /* Reveal Card */
+    .reveal-card {
+      background: #f8fafc;
+      border: 1px dashed var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-top: 12px;
+    }
+
+    .reveal-btn {
+      background: transparent;
+      border: none;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+    }
+
+    .reveal-content {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .extrema-item {
+      font-weight: 600;
+    }
+    .extrema-max { color: var(--green-positive); }
+    .extrema-min { color: var(--red-negative); }
+
+    /* Bottom Section Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+    }
+
+    .proof-summary-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 18px 22px;
+    }
+
+    .proof-flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .proof-node {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .proof-node-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .proof-node-sub {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .proof-arrow {
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    /* Challenge Card */
+    .challenge-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .challenge-form {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .challenge-form input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.85rem;
+    }
+
+    .btn-action {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+    }
+
+    .score-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 4px 10px;
+      border-radius: 12px;
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 12px 16px;
+      }
+      .nav-list {
+        flex-direction: row;
+        overflow-x: auto;
+      }
+      .workstation-grid {
+        grid-template-columns: 1fr;
+      }
+      .main-content {
+        padding: 16px;
+      }
+    }
+  </style>
+<style>
+
+/* UNIFIED MATHS UNIVERSE APPLICATION SHELL STYLES */
+:root {
+  --bg-main: #f5f6fc;
+  --card-bg: #ffffff;
+  --text-main: #1e1b4b;
+  --text-muted: #6b7280;
+  --text-purple: #4c1d95;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #ede9fe;
+  --primary-dark: #4338ca;
+  --border-color: #e2e8f0;
+  --border-purple: #ddd6fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 220px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  margin-left: 8px;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-item.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  overflow-y: auto;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.main-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-purple {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.bookmark-btn {
+  background: white;
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-btn:hover, .bookmark-btn.active {
+  color: var(--primary);
+  border-color: var(--border-purple);
+  background-color: var(--primary-light);
+}
+
+/* REQUIREMENT 4: COUNTER TRAY OVERFLOW FIX */
+.controls-panel, .live-values-panel, .counter-box, .stats-panel, .info-tray, .control-panel, .control-box-list {
+  max-height: 520px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px;
+}
+
+.controls-panel::-webkit-scrollbar, .live-values-panel::-webkit-scrollbar, .control-panel::-webkit-scrollbar {
+  width: 5px;
+}
+.controls-panel::-webkit-scrollbar-thumb, .live-values-panel::-webkit-scrollbar-thumb, .control-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.val-num, .counter-value, .stat-value, .value-num {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* REQUIREMENT 5: ZOOM VIEWPORT CONTAINMENT FIX */
+.canvas-container, .graph-container, .viewport-container, .svg-container, #canvas-container, .render-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-md, 14px);
+  z-index: 1;
+}
+
+.graph-tools, .zoom-controls, .floating-tools {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+/* Responsive queries */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-content {
+    padding: 16px;
+  }
+}
+
+</style>
+<style>
+
+/* UNIFIED MATHS UNIVERSE APPLICATION SHELL STYLES */
+:root {
+  --bg-main: #f5f6fc;
+  --card-bg: #ffffff;
+  --text-main: #1e1b4b;
+  --text-muted: #6b7280;
+  --text-purple: #4c1d95;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #ede9fe;
+  --primary-dark: #4338ca;
+  --border-color: #e2e8f0;
+  --border-purple: #ddd6fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 14px rgba(99, 102, 241, 0.08);
+  --shadow-lg: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 220px;
+  background-color: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  flex-shrink: 0;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo-img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  margin-left: 8px;
+}
+
+.brand-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+}
+
+.brand-subtitle {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item a:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+}
+
+.nav-item.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Content Layout */
+.main-content {
+  flex: 1;
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  overflow-y: auto;
+}
+
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.breadcrumb {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.main-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-purple {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.badge-gray {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.bookmark-btn {
+  background: white;
+  border: 1px solid var(--border-color);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.bookmark-btn:hover, .bookmark-btn.active {
+  color: var(--primary);
+  border-color: var(--border-purple);
+  background-color: var(--primary-light);
+}
+
+/* REQUIREMENT 4: COUNTER TRAY OVERFLOW FIX */
+.controls-panel, .live-values-panel, .counter-box, .stats-panel, .info-tray, .control-panel, .control-box-list {
+  max-height: 520px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-right: 4px;
+}
+
+.controls-panel::-webkit-scrollbar, .live-values-panel::-webkit-scrollbar, .control-panel::-webkit-scrollbar {
+  width: 5px;
+}
+.controls-panel::-webkit-scrollbar-thumb, .live-values-panel::-webkit-scrollbar-thumb, .control-panel::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.val-num, .counter-value, .stat-value, .value-num {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* REQUIREMENT 5: ZOOM VIEWPORT CONTAINMENT FIX */
+.canvas-container, .graph-container, .viewport-container, .svg-container, #canvas-container, .render-container {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-md, 14px);
+  z-index: 1;
+}
+
+.graph-tools, .zoom-controls, .floating-tools {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 10 !important;
+}
+
+/* Responsive queries */
+@media (max-width: 900px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 12px 16px;
+  }
+  .nav-list {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .main-content {
+    padding: 16px;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- Left Navigation Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <a href="#" class="brand-link" title="Return to All Visualizations">
+        <img src="/vendor/pavan-assets/logo.png" alt="Maths Universe Logo" class="brand-logo-img">
+      </a>
+      <div class="brand-text">
+        <span class="brand-title">MATHS</span>
+        <span class="brand-subtitle">UNIVERSE</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active" data-nav="explore">
+        <a href="#explore">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></svg>
+          <span>Explore</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="proofs">
+        <a href="#proofs">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+          <span>Proofs</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="practice">
+        <a href="#practice">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span>Practice</span>
+        </a>
+      </li>
+      <li class="nav-item" data-nav="saved">
+        <a href="#saved">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+          <span>Saved</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Content Workspace -->
+  <main class="main-content">
+
+    <!-- Header Bar -->
+    <header class="header-bar">
+      <div>
+        <div class="breadcrumb"><a href="#" class="back-link">← All Visualizations</a> / Calculus</div>
+        <h1 class="main-title">Optimization: Maximum and Minimum from Derivative</h1>
+        <p class="main-subtitle">Move the point to explore tangents, derivative sign changes and extrema.</p>
+      </div>
+
+      <div class="header-badges">
+        <span class="badge badge-purple">Intermediate</span>
+        <span class="badge badge-gray">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          12 min
+        </span>
+        <button class="bookmark-btn" id="bookmark-btn" title="Save Lesson">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mission Target Banner -->
+    <div class="mission-card">
+      <div class="mission-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      </div>
+      <div class="mission-text">
+        <span class="mission-title">Drag the purple point on the curve.</span>
+        <span class="mission-desc">Watch the tangent move, the derivative change sign, and identify local maxima and minima.</span>
+      </div>
+    </div>
+
+    <!-- Visualization Mode Toolbar -->
+    <div class="mode-toolbar"><button class="mode-btn" id="btn-animate-opt" style="margin-left:auto;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animate x</button>
+      <button class="mode-btn active" data-mode="tangent">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Tangent
+      </button>
+      <button class="mode-btn" data-mode="secant">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/><line x1="8.5" y1="15.5" x2="15.5" y2="8.5"/></svg>
+        Secant
+      </button>
+      <button class="mode-btn" data-mode="partition">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 4"/></svg>
+        Partition
+      </button>
+      <button class="mode-btn" data-mode="area">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Area (∫)
+      </button>
+      <button class="mode-btn" data-mode="taylor">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19C4 19 8 7 12 7C16 7 20 19 20 19"/></svg>
+        Approx. (Taylor)
+      </button>
+    </div>
+
+    <!-- Dashboard Content Grid -->
+    <div class="content-grid">
+
+      <!-- Center Workstation Column -->
+      <div class="center-section">
+
+        <div class="card">
+          <div class="workstation-grid">
+
+            <!-- Control Box Panel -->
+            <div class="control-panel">
+
+              <!-- Function Selector -->
+              <div class="control-box">
+                <div class="control-label">Function</div>
+                <select class="func-select" id="func-select">
+                  <option value="x^3 - 3*x">f(x) = x³ − 3x</option>
+                  <option value="x^2">f(x) = x²</option>
+                  <option value="-x^2">f(x) = −x²</option>
+                  <option value="x^3">f(x) = x³</option>
+                  <option value="2*x^3 - 3*x">f(x) = 2x³ − 3x</option>
+                  <option value="x^2 - 4*x + 3">f(x) = x² − 4x + 3</option>
+                  <option value="sin(x)">f(x) = sin(x)</option>
+                  <option value="cos(x)">f(x) = cos(x)</option>
+                  <option value="custom">Custom Expression...</option>
+                </select>
+                <input type="text" class="input-text" id="custom-func-input" value="x^3 - 3*x" style="display:none; margin-top:8px;" placeholder="e.g. x^3 - 6*x^2 + 9*x - 1">
+              </div>
+
+              <!-- Toggles / Checkboxes -->
+              <div class="control-box">
+                <div class="control-label">Show / Hide</div>
+                <div class="toggle-list">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="chk-tangent" checked> Tangent line
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="chk-secant"> Secant line
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="chk-partition"> Partition
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="chk-area" checked> Area (from a)
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="chk-critical" checked> Critical points
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="chk-sign" checked> Derivative sign
+                  </label>
+                </div>
+              </div>
+
+              <!-- x Drag / Slider Box -->
+              <div class="control-box slider-box">
+                <div class="slider-header">
+                  <span class="control-label" style="margin:0;">x (drag me)</span>
+                  <input type="number" class="slider-val-input" id="x-num-input" value="-1.00" step="0.05">
+                </div>
+                <input type="range" id="x-slider" min="-3" max="3" step="0.01" value="-1.00">
+              </div>
+
+              <!-- Range Box -->
+              <div class="control-box">
+                <div class="control-label">Range</div>
+                <div class="range-inputs">
+                  <span>x ∈ [</span>
+                  <input type="number" id="range-min" value="-3" step="0.5">
+                  <span>,</span>
+                  <input type="number" id="range-max" value="3" step="0.5">
+                  <span>]</span>
+                  <button class="btn-reset-range" id="btn-reset-all" title="Reset View & State">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Main Interactive Canvas -->
+            <div class="graph-container" id="graph-container">
+              <canvas class="main-canvas" id="main-canvas"></canvas>
+
+              <!-- Zoom & Pan Floating Controls -->
+              <div class="graph-tools">
+                <button class="tool-btn" id="btn-zoom-out" title="Zoom Out">−</button>
+                <span style="font-size:0.75rem; font-weight:700; display:flex; align-items:center; padding:0 4px;" id="zoom-label">100%</span>
+                <button class="tool-btn" id="btn-zoom-in" title="Zoom In">+</button>
+                <button class="tool-btn" id="btn-zoom-reset" title="Reset View">↺</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Derivative Graph & Sign Chart Card -->
+        <div class="derivative-card">
+          <div class="derivative-title">
+            <span>Derivative and Sign Chart</span>
+            <span class="derivative-formula" id="derivative-formula">f′(x) = 3x² − 3</span>
+          </div>
+          <canvas class="derivative-canvas" id="derivative-canvas"></canvas>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Why It Works Panel -->
+      <div class="right-section">
+
+        <div class="why-card">
+          <div class="why-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Why it works
+          </div>
+
+          <!-- Step 1 -->
+          <div class="explain-step">
+            <div class="step-header">
+              <div class="step-num">1</div>
+              <div class="step-title">Tangent slope is \(f'(x)\).</div>
+            </div>
+            <div class="step-desc">
+              The derivative \(f'(x)\) measures the instantaneous rate of change and slope of the tangent line to \(y = f(x)\) at point \((c, f(c))\).
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="explain-step">
+            <div class="step-header">
+              <div class="step-num">2</div>
+              <div class="step-title">Horizontal tangent \(\Rightarrow f'(c) = 0\).</div>
+            </div>
+            <div class="step-desc">
+              At a local peak or valley, the curve transitions between increasing and decreasing. At this turning point, the tangent line is horizontal with slope \(0\).
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="explain-step">
+            <div class="step-header">
+              <div class="step-num">3</div>
+              <div class="step-title">Sign change in \(f'\) \(\Rightarrow\) extremum.</div>
+            </div>
+            <div class="step-desc">
+              • <b>+ to −</b>: Curve goes from rising to falling \(\Rightarrow\) <b>Local Maximum</b>.<br>
+              • <b>− to +</b>: Curve goes from falling to rising \(\Rightarrow\) <b>Local Minimum</b>.
+            </div>
+          </div>
+
+          <!-- Prediction Card -->
+          <div class="predict-card">
+            <div class="predict-title">Make a prediction</div>
+            <div class="predict-sub">What happens at the next critical point?</div>
+            <div class="predict-btn-group">
+              <button class="predict-btn" id="btn-predict-max">Local Maximum</button>
+              <button class="predict-btn" id="btn-predict-min">Local Minimum</button>
+            </div>
+            <div class="predict-feedback" id="predict-feedback"></div>
+          </div>
+
+          <!-- Reveal Card -->
+          <div class="reveal-card">
+            <button class="reveal-btn" id="reveal-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Reveal Extrema
+            </button>
+            <div class="reveal-content" id="reveal-content"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Section: Visual Proof Summary & Interactive Challenge -->
+    <div class="bottom-grid">
+
+      <!-- One-line Visual Proof -->
+      <div class="proof-summary-card">
+        <div class="control-label" style="margin-bottom:6px;">One-line Visual Proof</div>
+        <div class="proof-flow">
+          <div class="proof-node">
+            <div class="proof-node-title">\(f'(x)\)</div>
+            <div class="proof-node-sub">Slope of tangent</div>
+          </div>
+          <div class="proof-arrow">→</div>
+          <div class="proof-node">
+            <div class="proof-node-title">\(= 0\)</div>
+            <div class="proof-node-sub">Horizontal tangent</div>
+          </div>
+          <div class="proof-arrow">→</div>
+          <div class="proof-node">
+            <div class="proof-node-title">Sign change of \(f'\)</div>
+            <div class="proof-node-sub">+ to − or − to +</div>
+          </div>
+          <div class="proof-arrow">→</div>
+          <div class="proof-node" style="background:var(--green-light); border-color:#86efac;">
+            <div class="proof-node-title" style="color:var(--green-positive);">Extremum</div>
+            <div class="proof-node-sub">Local max or min</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Your Challenge Card -->
+      <div class="challenge-card">
+        <div class="control-label">Your challenge</div>
+        <div style="font-size:0.85rem; font-weight:600;">
+          For \(f(x) = x^3 - 6x^2 + 9x - 1\), find all critical points and classify them.
+        </div>
+        <div class="challenge-form">
+          <input type="text" id="challenge-input" placeholder="Enter critical points (e.g. 1, 3)">
+          <button class="btn-action" id="btn-challenge-check">Check</button>
+          <button class="btn-action btn-secondary" id="btn-load-example">Load example</button>
+        </div>
+        <div id="challenge-feedback" style="font-size:0.82rem; font-weight:700;"></div>
+
+        <div class="score-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          Score <span id="score-val">0</span> / 10
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- Core Mathematics Engine & Interactive Application Logic -->
+<script>
+  // Central Application State
+  const state = {
+    funcStr: 'x^3 - 3*x',
+    minX: -3,
+    maxX: 3,
+    minY: -4,
+    maxY: 4,
+    x: -1.00,
+    deltaX: 0.5,
+    areaStart: -1.0,
+    showTangent: true,
+    showSecant: false,
+    showPartition: false,
+    showArea: true,
+    showCriticalPoints: true,
+    showDerivativeSign: true,
+    partitionCount: 10,
+    zoomLevel: 1.0,
+    panX: 0,
+    panY: 0,
+    selectedMode: 'tangent',
+    isBookmarked: false,
+    score: 0,
+    criticalPoints: [] // Array of { x, y, type: 'max' | 'min' | 'inflection' }
+  };
+
+  // Math Expression Parser & Evaluator
+  function evalFunc(exprStr, xVal) {
+    try {
+      let s = exprStr.toLowerCase().trim();
+      s = s.replace(/π/g, 'Math.PI');
+      s = s.replace(/\bpi\b/g, 'Math.PI');
+      s = s.replace(/\be\b/g, 'Math.E');
+      s = s.replace(/\bsin\b/g, 'Math.sin');
+      s = s.replace(/\bcos\b/g, 'Math.cos');
+      s = s.replace(/\btan\b/g, 'Math.tan');
+      s = s.replace(/\bsqrt\b/g, 'Math.sqrt');
+      s = s.replace(/\bexp\b/g, 'Math.exp');
+      s = s.replace(/\blog\b/g, 'Math.log');
+      s = s.replace(/\babs\b/g, 'Math.abs');
+
+      // Replace x^n with Math.pow(x, n)
+      s = s.replace(/([a-z0-9\.\)\s]+)\^([0-9\.\s]+|\([^\)]+\))/g, 'Math.pow($1, $2)');
+      
+      // Implicit multiplication like 3x or 2(x+1)
+      s = s.replace(/(\d+)\s*x/g, '$1*x');
+
+      const fn = new Function('x', `return ${s};`);
+      const res = fn(xVal);
+      return isNaN(res) || !isFinite(res) ? 0 : res;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  // High Accuracy Numerical Derivative
+  function evalDerivative(exprStr, xVal, h = 1e-5) {
+    const fPlus = evalFunc(exprStr, xVal + h);
+    const fMinus = evalFunc(exprStr, xVal - h);
+    return (fPlus - fMinus) / (2 * h);
+  }
+
+  // Second Derivative for Taylor & Extrema Checks
+  function evalSecondDerivative(exprStr, xVal, h = 1e-4) {
+    const fPlus = evalFunc(exprStr, xVal + h);
+    const fCenter = evalFunc(exprStr, xVal);
+    const fMinus = evalFunc(exprStr, xVal - h);
+    return (fPlus - 2 * fCenter + fMinus) / (h * h);
+  }
+
+  // Numerical Integration (Simpson's Rule)
+  function integrate(exprStr, start, end, steps = 100) {
+    if (start === end) return 0;
+    if (start > end) return -integrate(exprStr, end, start, steps);
+    if (steps % 2 !== 0) steps++;
+    const h = (end - start) / steps;
+    let sum = evalFunc(exprStr, start) + evalFunc(exprStr, end);
+    for (let i = 1; i < steps; i++) {
+      const x = start + i * h;
+      sum += (i % 2 === 0 ? 2 : 4) * evalFunc(exprStr, x);
+    }
+    return (h / 3) * sum;
+  }
+
+  // Root Finding Engine for Critical Points (f'(x) = 0)
+  function findCriticalPoints() {
+    const points = [];
+    const step = 0.05;
+    
+    for (let x = state.minX - 1; x <= state.maxX + 1; x += step) {
+      const d1 = evalDerivative(state.funcStr, x);
+      const d2 = evalDerivative(state.funcStr, x + step);
+
+      if (Math.abs(d1) < 1e-3 || (d1 * d2 <= 0)) {
+        // Refine root via Bisection
+        let low = x;
+        let high = x + step;
+        let root = (low + high) / 2;
+        
+        for (let iter = 0; iter < 20; iter++) {
+          root = (low + high) / 2;
+          const val = evalDerivative(state.funcStr, root);
+          if (Math.abs(val) < 1e-6) break;
+          if (evalDerivative(state.funcStr, low) * val < 0) high = root;
+          else low = root;
+        }
+
+        // Avoid duplicate roots
+        const existing = points.find(p => Math.abs(p.x - root) < 0.1);
+        if (!existing) {
+          const yVal = evalFunc(state.funcStr, root);
+          
+          // First Derivative Test for Extrema Classification
+          const leftSign = Math.sign(evalDerivative(state.funcStr, root - 0.08));
+          const rightSign = Math.sign(evalDerivative(state.funcStr, root + 0.08));
+          
+          let classification = 'inflection';
+          if (leftSign > 0 && rightSign < 0) classification = 'max';
+          else if (leftSign < 0 && rightSign > 0) classification = 'min';
+
+          points.push({
+            x: parseFloat(root.toFixed(3)),
+            y: parseFloat(yVal.toFixed(3)),
+            type: classification
+          });
+        }
+      }
+    }
+    state.criticalPoints = points;
+  }
+
+  // Coordinate Conversion Helpers (Math Space <-> Screen Pixels)
+  function mathToScreen(x, y, width, height) {
+    const margin = 40;
+    const graphWidth = width - 2 * margin;
+    const graphHeight = height - 2 * margin;
+
+    let sx = margin + ((x - state.minX) / (state.maxX - state.minX)) * graphWidth;
+    let sy = height - margin - ((y - state.minY) / (state.maxY - state.minY)) * graphHeight;
+
+    // Apply Zoom & Pan
+    const cx = width / 2;
+    const cy = height / 2;
+    sx = cx + (sx - cx) * state.zoomLevel + state.panX;
+    sy = cy + (sy - cy) * state.zoomLevel + state.panY;
+
+    return { x: sx, y: sy };
+  }
+
+  function screenToMath(sx, sy, width, height) {
+    const margin = 40;
+    const graphWidth = width - 2 * margin;
+    const graphHeight = height - 2 * margin;
+
+    const cx = width / 2;
+    const cy = height / 2;
+
+    const unZoomX = cx + (sx - state.panX - cx) / state.zoomLevel;
+    const unZoomY = cy + (sy - state.panY - cy) / state.zoomLevel;
+
+    const x = state.minX + ((unZoomX - margin) / graphWidth) * (state.maxX - state.minX);
+    const y = state.minY + ((height - margin - unZoomY) / graphHeight) * (state.maxY - state.minY);
+
+    return { x, y };
+  }
+
+  // Main Canvas Render Loop
+  function renderMainGraph() {
+    const container = document.getElementById('graph-container');
+    const canvas = document.getElementById('main-canvas');
+    const rect = container.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = rect.width * dpr;
+    canvas.height = 400 * dpr;
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const w = rect.width;
+    const h = 400;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+
+    // Axes & Ticks
+    const origin = mathToScreen(0, 0, w, h);
+    
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1.5;
+
+    // X-axis
+    ctx.beginPath();
+    ctx.moveTo(0, origin.y);
+    ctx.lineTo(w, origin.y);
+    ctx.stroke();
+
+    // Y-axis
+    ctx.beginPath();
+    ctx.moveTo(origin.x, 0);
+    ctx.lineTo(origin.x, h);
+    ctx.stroke();
+
+    // Axis Arrows & Labels
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 12px sans-serif';
+    ctx.fillText('x', w - 15, origin.y + 15);
+    ctx.fillText('y', origin.x + 8, 18);
+
+    // Grid Ticks
+    for (let x = Math.ceil(state.minX); x <= Math.floor(state.maxX); x++) {
+      if (x === 0) continue;
+      const pt = mathToScreen(x, 0, w, h);
+      ctx.beginPath();
+      ctx.moveTo(pt.x, origin.y - 4);
+      ctx.lineTo(pt.x, origin.y + 4);
+      ctx.stroke();
+      ctx.fillText(x.toString(), pt.x - 5, origin.y + 18);
+    }
+
+    for (let y = Math.ceil(state.minY); y <= Math.floor(state.maxY); y++) {
+      if (y === 0) continue;
+      const pt = mathToScreen(0, y, w, h);
+      ctx.beginPath();
+      ctx.moveTo(origin.x - 4, pt.y);
+      ctx.lineTo(origin.x + 4, pt.y);
+      ctx.stroke();
+      ctx.fillText(y.toString(), origin.x - 20, pt.y + 4);
+    }
+
+    // 1. Shaded Area (from areaStart to x)
+    if (state.showArea) {
+      ctx.beginPath();
+      const pStart = mathToScreen(state.areaStart, 0, w, h);
+      ctx.moveTo(pStart.x, pStart.y);
+
+      const steps = 100;
+      for (let i = 0; i <= steps; i++) {
+        const u = state.areaStart + (i / steps) * (state.x - state.areaStart);
+        const yVal = evalFunc(state.funcStr, u);
+        const pt = mathToScreen(u, yVal, w, h);
+        ctx.lineTo(pt.x, pt.y);
+      }
+
+      const pEnd = mathToScreen(state.x, 0, w, h);
+      ctx.lineTo(pEnd.x, pEnd.y);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(124, 58, 237, 0.15)';
+      ctx.fill();
+    }
+
+    // 2. Riemann Partitions
+    if (state.showPartition) {
+      const step = (state.x - state.areaStart) / state.partitionCount;
+      ctx.fillStyle = 'rgba(196, 181, 253, 0.3)';
+      ctx.strokeStyle = 'rgba(124, 58, 237, 0.3)';
+
+      for (let i = 0; i < state.partitionCount; i++) {
+        const uLeft = state.areaStart + i * step;
+        const yVal = evalFunc(state.funcStr, uLeft);
+        const p1 = mathToScreen(uLeft, yVal, w, h);
+        const p2 = mathToScreen(uLeft + step, 0, w, h);
+        const rectW = p2.x - p1.x;
+        const rectH = origin.y - p1.y;
+
+        ctx.fillRect(p1.x, p1.y, rectW, rectH);
+        ctx.strokeRect(p1.x, p1.y, rectW, rectH);
+      }
+    }
+
+    // 3. Smooth Function Curve y = f(x)
+    ctx.beginPath();
+    const samples = 300;
+    for (let i = 0; i <= samples; i++) {
+      const u = state.minX + (i / samples) * (state.maxX - state.minX);
+      const yVal = evalFunc(state.funcStr, u);
+      const pt = mathToScreen(u, yVal, w, h);
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // 4. Taylor Approximation Curve
+    if (state.selectedMode === 'taylor') {
+      ctx.beginPath();
+      const fx = evalFunc(state.funcStr, state.x);
+      const d1 = evalDerivative(state.funcStr, state.x);
+      const d2 = evalSecondDerivative(state.funcStr, state.x);
+
+      for (let i = 0; i <= samples; i++) {
+        const u = state.minX + (i / samples) * (state.maxX - state.minX);
+        const du = u - state.x;
+        // Second-order Taylor polynomial T_2(u)
+        const tVal = fx + d1 * du + 0.5 * d2 * du * du;
+        const pt = mathToScreen(u, tVal, w, h);
+        if (i === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      }
+      ctx.strokeStyle = '#ea580c';
+      ctx.setLineDash([6, 4]);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // 5. Tangent Line at current x
+    if (state.showTangent) {
+      const slope = evalDerivative(state.funcStr, state.x);
+      const fx = evalFunc(state.funcStr, state.x);
+
+      const u1 = state.x - 2.5;
+      const u2 = state.x + 2.5;
+      const y1 = fx + slope * (u1 - state.x);
+      const y2 = fx + slope * (u2 - state.x);
+
+      const pTan1 = mathToScreen(u1, y1, w, h);
+      const pTan2 = mathToScreen(u2, y2, w, h);
+
+      ctx.beginPath();
+      ctx.moveTo(pTan1.x, pTan1.y);
+      ctx.lineTo(pTan2.x, pTan2.y);
+      ctx.strokeStyle = '#16a34a';
+      ctx.setLineDash([6, 4]);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // 6. Secant Line
+    if (state.showSecant) {
+      const fx = evalFunc(state.funcStr, state.x);
+      const x2 = state.x + state.deltaX;
+      const fx2 = evalFunc(state.funcStr, x2);
+
+      const p1 = mathToScreen(state.x, fx, w, h);
+      const p2 = mathToScreen(x2, fx2, w, h);
+
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.strokeStyle = '#ea580c';
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // 7. Dashed Vertical Guide for current x
+    const fx = evalFunc(state.funcStr, state.x);
+    const ptXNode = mathToScreen(state.x, fx, w, h);
+    const ptXBase = mathToScreen(state.x, 0, w, h);
+
+    ctx.beginPath();
+    ctx.setLineDash([4, 4]);
+    ctx.moveTo(ptXBase.x, ptXBase.y);
+    ctx.lineTo(ptXNode.x, ptXNode.y);
+    ctx.strokeStyle = '#7c3aed';
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 8. Critical Points & Callout Labels
+    if (state.showCriticalPoints) {
+      state.criticalPoints.forEach(cp => {
+        if (cp.x >= state.minX && cp.x <= state.maxX) {
+          const pt = mathToScreen(cp.x, cp.y, w, h);
+
+          // Draw Critical Point Dot
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, 6, 0, 2 * Math.PI);
+          ctx.fillStyle = cp.type === 'max' ? '#c084fc' : '#f472b6';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Callout Tag Box
+          const labelText = `(${cp.x}, ${cp.y})`;
+          const subText = `f′(${cp.x}) = 0`;
+          
+          ctx.font = '700 11px sans-serif';
+          const boxW = Math.max(ctx.measureText(labelText).width, ctx.measureText(subText).width) + 16;
+          const boxH = 36;
+          const boxX = pt.x + 12;
+          const boxY = pt.y - 18;
+
+          ctx.fillStyle = cp.type === 'max' ? 'rgba(253, 242, 248, 0.95)' : 'rgba(240, 253, 244, 0.95)';
+          ctx.strokeStyle = cp.type === 'max' ? '#f472b6' : '#86efac';
+          ctx.lineWidth = 1;
+
+          // Rounded Rectangle Callout
+          ctx.beginPath();
+          ctx.roundRect(boxX, boxY, boxW, boxH, 8);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#1e1b4b';
+          ctx.fillText(labelText, boxX + 8, boxY + 14);
+          ctx.fillStyle = '#16a34a';
+          ctx.fillText(subText, boxX + 8, boxY + 28);
+        }
+      });
+    }
+
+    // 9. Draggable Purple Point on Curve
+    ctx.beginPath();
+    ctx.arc(ptXNode.x, ptXNode.y, 9, 0, 2 * Math.PI);
+    ctx.fillStyle = '#7c3aed';
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#ffffff';
+    ctx.stroke();
+
+    // Point Halo Shadow
+    ctx.beginPath();
+    ctx.arc(ptXNode.x, ptXNode.y, 14, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(124, 58, 237, 0.25)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Floating Tangent Legend on Canvas
+    ctx.font = '700 12px sans-serif';
+    ctx.fillStyle = '#4c1d95';
+    ctx.fillText(`f(x) = ${state.funcStr}`, 50, 40);
+    
+    if (state.showTangent) {
+      const dVal = evalDerivative(state.funcStr, state.x).toFixed(2);
+      ctx.fillStyle = '#16a34a';
+      ctx.fillText(`Tangent at x = ${state.x.toFixed(2)} (f′ = ${dVal})`, 50, 58);
+    }
+  }
+
+  // Derivative Graph & Sign Chart Canvas Render
+  function renderDerivativeGraph() {
+    const canvas = document.getElementById('derivative-canvas');
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = rect.width * dpr;
+    canvas.height = 100 * dpr;
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const w = rect.width;
+    const h = 100;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, w, h);
+
+    const margin = 40;
+    const graphWidth = w - 2 * margin;
+
+    // Zero Axis Line
+    const zeroY = 45;
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(margin, zeroY);
+    ctx.lineTo(w - margin, zeroY);
+    ctx.stroke();
+
+    // Plot Derivative Curve f'(x)
+    ctx.beginPath();
+    const samples = 200;
+    for (let i = 0; i <= samples; i++) {
+      const u = state.minX + (i / samples) * (state.maxX - state.minX);
+      const dVal = evalDerivative(state.funcStr, u);
+      const sx = margin + ((u - state.minX) / (state.maxX - state.minX)) * graphWidth;
+      // Scale derivative to canvas height
+      const sy = zeroY - dVal * 8;
+      if (i === 0) ctx.moveTo(sx, sy);
+      else ctx.lineTo(sx, sy);
+    }
+    ctx.strokeStyle = '#7c3aed';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Sign Chart Line & Extrema Labels
+    if (state.showDerivativeSign) {
+      const signY = 78;
+      
+      // Horizontal Baseline for Sign Chart
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(margin, signY);
+      ctx.lineTo(w - margin, signY);
+      ctx.stroke();
+
+      // Plot Sign Regions & Critical Zeros
+      const steps = 150;
+
+      for (let i = 0; i <= steps; i++) {
+        const u = state.minX + (i / steps) * (state.maxX - state.minX);
+        const dVal = evalDerivative(state.funcStr, u);
+        const sx = margin + ((u - state.minX) / (state.maxX - state.minX)) * graphWidth;
+        const currentSign = Math.abs(dVal) < 0.1 ? 0 : Math.sign(dVal);
+
+        if (currentSign > 0) {
+          ctx.strokeStyle = '#16a34a';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(sx - 2, signY);
+          ctx.lineTo(sx + 2, signY);
+          ctx.stroke();
+        } else if (currentSign < 0) {
+          ctx.strokeStyle = '#dc2626';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(sx - 2, signY);
+          ctx.lineTo(sx + 2, signY);
+          ctx.stroke();
+        }
+      }
+
+      // Mark Critical Points on Sign Chart
+      state.criticalPoints.forEach(cp => {
+        if (cp.x >= state.minX && cp.x <= state.maxX) {
+          const sx = margin + ((cp.x - state.minX) / (state.maxX - state.minX)) * graphWidth;
+
+          // Zero circle tick
+          ctx.beginPath();
+          ctx.arc(sx, signY, 5, 0, 2 * Math.PI);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.strokeStyle = '#475569';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.font = '800 11px sans-serif';
+          ctx.fillStyle = '#475569';
+          ctx.fillText('0', sx - 3, signY + 3);
+
+          ctx.fillText(cp.x.toString(), sx - 6, zeroY + 15);
+
+          // Type Tag (max / min)
+          ctx.font = '700 10px sans-serif';
+          ctx.fillStyle = cp.type === 'max' ? '#16a34a' : '#dc2626';
+          ctx.fillText(cp.type, sx - 8, signY + 16);
+        }
+      });
+    }
+  }
+
+  // Update Derivative Formula Text in Header
+  function updateDerivativeFormulaText() {
+    const el = document.getElementById('derivative-formula');
+    let dStr = "f′(x)";
+    if (state.funcStr === 'x^3 - 3*x') dStr = "f′(x) = 3x² − 3";
+    else if (state.funcStr === 'x^2') dStr = "f′(x) = 2x";
+    else if (state.funcStr === '-x^2') dStr = "f′(x) = −2x";
+    else if (state.funcStr === 'x^3') dStr = "f′(x) = 3x²";
+    else if (state.funcStr === '2*x^3 - 3*x') dStr = "f′(x) = 6x² − 3";
+    else if (state.funcStr === 'x^2 - 4*x + 3') dStr = "f′(x) = 2x − 4";
+    else if (state.funcStr === 'sin(x)') dStr = "f′(x) = cos(x)";
+    else if (state.funcStr === 'cos(x)') dStr = "f′(x) = −sin(x)";
+    else dStr = `f′(x) = derivative of ${state.funcStr}`;
+    el.innerText = dStr;
+  }
+
+  // Update Everything (Recompute State -> Re-render Views)
+  function updateAll() {
+    findCriticalPoints();
+    updateDerivativeFormulaText();
+    renderMainGraph();
+    renderDerivativeGraph();
+
+    // Sync Slider & Numerical Inputs
+    document.getElementById('x-slider').value = state.x;
+    document.getElementById('x-num-input').value = state.x.toFixed(2);
+  }
+
+  // Pointer Dragging & Graph Pan Interactions
+  function initPointerInteractions() {
+    const canvas = document.getElementById('main-canvas');
+    let isDragging = false;
+    let dragTarget = null; // 'point' | 'pan'
+    let startX = 0;
+    let startY = 0;
+
+    canvas.addEventListener('pointerdown', e => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      const fx = evalFunc(state.funcStr, state.x);
+      const nodePt = mathToScreen(state.x, fx, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
+
+      const dist = Math.hypot(clickX - nodePt.x, clickY - nodePt.y);
+
+      if (dist < 25) {
+        isDragging = true;
+        dragTarget = 'point';
+      } else {
+        isDragging = true;
+        dragTarget = 'pan';
+        startX = e.clientX;
+        startY = e.clientY;
+      }
+
+      canvas.setPointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener('pointermove', e => {
+      if (!isDragging) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      if (dragTarget === 'point') {
+        const mathPt = screenToMath(clickX, clickY, canvas.width / (window.devicePixelRatio || 1), canvas.height / (window.devicePixelRatio || 1));
+        state.x = Math.max(state.minX, Math.min(state.maxX, mathPt.x));
+        updateAll();
+
+let optAnimId = null;
+let optAnimating = false;
+document.getElementById('btn-animate-opt')?.addEventListener('click', function() {
+  if (optAnimating) {
+    optAnimating = false;
+    cancelAnimationFrame(optAnimId);
+    this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animate x';
+    return;
+  }
+  optAnimating = true;
+  this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause';
+  if (state.x >= state.maxX) state.x = state.minX;
+  
+  function stepOpt() {
+    if (!optAnimating) return;
+    state.x += 0.02 * (state.maxX - state.minX) / 3;
+    if (state.x > state.maxX) {
+      state.x = state.maxX;
+      optAnimating = false;
+      document.getElementById('btn-animate-opt').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animate x';
+    }
+    updateAll();
+    if (optAnimating) optAnimId = requestAnimationFrame(stepOpt);
+  }
+  optAnimId = requestAnimationFrame(stepOpt);
+});
+
+      } else if (dragTarget === 'pan') {
+        state.panX += e.clientX - startX;
+        state.panY += e.clientY - startY;
+        startX = e.clientX;
+        startY = e.clientY;
+        renderMainGraph();
+      }
+    });
+
+    const stopDrag = () => {
+      isDragging = false;
+      dragTarget = null;
+    };
+
+    canvas.addEventListener('pointerup', stopDrag);
+    canvas.addEventListener('pointercancel', stopDrag);
+
+    // Mouse Wheel Zoom
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+      state.zoomLevel *= zoomFactor;
+      document.getElementById('zoom-label').innerText = `${Math.round(state.zoomLevel * 100)}%`;
+      renderMainGraph();
+    }, { passive: false });
+  }
+
+  // Bind All UI Controls
+  function bindControls() {
+    // Mode Toolbar
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.selectedMode = btn.dataset.mode;
+        
+        state.showTangent = (state.selectedMode === 'tangent');
+        state.showSecant = (state.selectedMode === 'secant');
+        state.showPartition = (state.selectedMode === 'partition');
+        state.showArea = (state.selectedMode === 'area');
+        
+        document.getElementById('chk-tangent').checked = state.showTangent;
+        document.getElementById('chk-secant').checked = state.showSecant;
+        document.getElementById('chk-partition').checked = state.showPartition;
+        document.getElementById('chk-area').checked = state.showArea;
+        
+        updateAll();
+      });
+    });
+
+    // Function Preset Selector
+    document.getElementById('func-select').addEventListener('change', e => {
+      const val = e.target.value;
+      const customInput = document.getElementById('custom-func-input');
+      if (val === 'custom') {
+        customInput.style.display = 'block';
+      } else {
+        customInput.style.display = 'none';
+        state.funcStr = val;
+        updateAll();
+      }
+    });
+
+    document.getElementById('custom-func-input').addEventListener('input', e => {
+      state.funcStr = e.target.value;
+      updateAll();
+    });
+
+    // Checkbox Toggles
+    document.getElementById('chk-tangent').addEventListener('change', e => { state.showTangent = e.target.checked; renderMainGraph(); });
+    document.getElementById('chk-secant').addEventListener('change', e => { state.showSecant = e.target.checked; renderMainGraph(); });
+    document.getElementById('chk-partition').addEventListener('change', e => { state.showPartition = e.target.checked; renderMainGraph(); });
+    document.getElementById('chk-area').addEventListener('change', e => { state.showArea = e.target.checked; renderMainGraph(); });
+    document.getElementById('chk-critical').addEventListener('change', e => { state.showCriticalPoints = e.target.checked; renderMainGraph(); });
+    document.getElementById('chk-sign').addEventListener('change', e => { state.showDerivativeSign = e.target.checked; renderDerivativeGraph(); });
+
+    // Slider & x Input
+    document.getElementById('x-slider').addEventListener('input', e => {
+      state.x = parseFloat(e.target.value);
+      updateAll();
+    });
+
+    document.getElementById('x-num-input').addEventListener('change', e => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val)) {
+        state.x = Math.max(state.minX, Math.min(state.maxX, val));
+        updateAll();
+      }
+    });
+
+    // Range Controls
+    document.getElementById('range-min').addEventListener('change', e => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val) && val < state.maxX) {
+        state.minX = val;
+        document.getElementById('x-slider').min = val;
+        updateAll();
+      }
+    });
+
+    document.getElementById('range-max').addEventListener('change', e => {
+      const val = parseFloat(e.target.value);
+      if (!isNaN(val) && val > state.minX) {
+        state.maxX = val;
+        document.getElementById('x-slider').max = val;
+        updateAll();
+      }
+    });
+
+    // Zoom Buttons
+    document.getElementById('btn-zoom-in').addEventListener('click', () => {
+      state.zoomLevel *= 1.2;
+      document.getElementById('zoom-label').innerText = `${Math.round(state.zoomLevel * 100)}%`;
+      renderMainGraph();
+    });
+
+    document.getElementById('btn-zoom-out').addEventListener('click', () => {
+      state.zoomLevel /= 1.2;
+      document.getElementById('zoom-label').innerText = `${Math.round(state.zoomLevel * 100)}%`;
+      renderMainGraph();
+    });
+
+    document.getElementById('btn-zoom-reset').addEventListener('click', () => {
+      state.zoomLevel = 1.0;
+      state.panX = 0;
+      state.panY = 0;
+      document.getElementById('zoom-label').innerText = `100%`;
+      renderMainGraph();
+    });
+
+    // Reset All State
+    document.getElementById('btn-reset-all').addEventListener('click', () => {
+      state.funcStr = 'x^3 - 3*x';
+      state.minX = -3;
+      state.maxX = 3;
+      state.x = -1.00;
+      state.zoomLevel = 1.0;
+      state.panX = 0;
+      state.panY = 0;
+      state.showTangent = true;
+      state.showSecant = false;
+      state.showPartition = false;
+      state.showArea = true;
+      state.showCriticalPoints = true;
+      state.showDerivativeSign = true;
+
+      document.getElementById('func-select').value = 'x^3 - 3*x';
+      document.getElementById('custom-func-input').style.display = 'none';
+      document.getElementById('range-min').value = -3;
+      document.getElementById('range-max').value = 3;
+      document.getElementById('chk-tangent').checked = true;
+      document.getElementById('chk-secant').checked = false;
+      document.getElementById('chk-partition').checked = false;
+      document.getElementById('chk-area').checked = true;
+      document.getElementById('chk-critical').checked = true;
+      document.getElementById('chk-sign').checked = true;
+
+      updateAll();
+    });
+
+    // Bookmark Toggle
+    document.getElementById('bookmark-btn').addEventListener('click', function() {
+      state.isBookmarked = !state.isBookmarked;
+      this.classList.toggle('active', state.isBookmarked);
+    });
+
+    // Prediction Buttons
+    document.getElementById('btn-predict-max').addEventListener('click', () => checkPrediction('max'));
+    document.getElementById('btn-predict-min').addEventListener('click', () => checkPrediction('min'));
+
+    // Reveal Button
+    document.getElementById('reveal-btn').addEventListener('click', () => {
+      const container = document.getElementById('reveal-content');
+      container.style.display = container.style.display === 'flex' ? 'none' : 'flex';
+      container.innerHTML = state.criticalPoints.map(cp => `
+        <div class="extrema-item extrema-${cp.type}">
+          At x = ${cp.x} ⇒ local ${cp.type === 'max' ? 'maximum' : 'minimum'}, f(${cp.x}) = ${cp.y}
+        </div>
+      `).join('');
+    });
+
+    // Challenge Evaluation
+    document.getElementById('btn-challenge-check').addEventListener('click', () => {
+      const val = document.getElementById('challenge-input').value.trim();
+      const feedback = document.getElementById('challenge-feedback');
+      
+      if (val.includes('1') && val.includes('3')) {
+        feedback.style.color = '#16a34a';
+        feedback.innerText = '✓ Correct! Critical points at x = 1 (local max) and x = 3 (local min).';
+        if (state.score < 10) {
+          state.score += 2;
+          document.getElementById('score-val').innerText = state.score;
+        }
+      } else {
+        feedback.style.color = '#dc2626';
+        feedback.innerText = 'Incorrect. Hint: f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3) = 0.';
+      }
+    });
+
+    // Load Example Button
+    document.getElementById('btn-load-example').addEventListener('click', () => {
+      state.funcStr = 'x^3 - 6*x^2 + 9*x - 1';
+      state.minX = -1;
+      state.maxX = 5;
+      state.x = 1.0;
+      document.getElementById('func-select').value = 'custom';
+      document.getElementById('custom-func-input').style.display = 'block';
+      document.getElementById('custom-func-input').value = 'x^3 - 6*x^2 + 9*x - 1';
+      document.getElementById('range-min').value = -1;
+      document.getElementById('range-max').value = 5;
+      updateAll();
+    });
+
+    window.addEventListener('resize', () => {
+      renderMainGraph();
+      renderDerivativeGraph();
+    });
+  }
+
+  // Check User Prediction
+  function checkPrediction(userChoice) {
+    const feedback = document.getElementById('predict-feedback');
+    feedback.style.display = 'block';
+
+    // Find next critical point to the right of current x
+    const nextCp = state.criticalPoints.find(cp => cp.x > state.x + 0.05);
+    const targetCp = nextCp || state.criticalPoints[0];
+
+    if (targetCp && targetCp.type === userChoice) {
+      feedback.style.color = '#16a34a';
+      feedback.innerText = `✓ Correct! At x = ${targetCp.x}, it is a local ${userChoice === 'max' ? 'maximum' : 'minimum'}.`;
+      if (state.score < 10) {
+        state.score += 1;
+        document.getElementById('score-val').innerText = state.score;
+      }
+    } else if (targetCp) {
+      feedback.style.color = '#dc2626';
+      feedback.innerText = `Incorrect. At x = ${targetCp.x}, it is actually a local ${targetCp.type === 'max' ? 'maximum' : 'minimum'}.`;
+    }
+  }
+
+  // Initialization
+  window.addEventListener('DOMContentLoaded', () => {
+    bindControls();
+    initPointerInteractions();
+    updateAll();
+
+    // Render KaTeX Formulas
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true }
+      ]
+    });
+  });
+</script>
+
+<script>
+
+/* UNIFIED NAVIGATION & SAVED SYSTEM JAVASCRIPT */
+(function() {
+  function getProjectId() {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || 'current-project';
+  }
+
+  function initShell() {
+    const pid = getProjectId();
+    
+    // Sidebar nav handlers
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = item.dataset.nav || item.querySelector('a')?.getAttribute('href')?.replace('#', '');
+        
+        document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        if (target === 'explore') {
+          const el = document.querySelector('.content-grid') || document.querySelector('.main-content') || document.querySelector('#explore') || document.querySelector('.canvas-container') || document.querySelector('.card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'proofs') {
+          const el = document.querySelector('.why-card') || document.querySelector('.why-panel') || document.querySelector('#proofs') || document.querySelector('.explanation-card') || document.querySelector('.proof-section') || document.querySelector('.card:nth-of-type(2)');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'practice') {
+          const el = document.querySelector('.challenge-card') || document.querySelector('#practice') || document.querySelector('#your-challenge') || document.querySelector('.practice-card') || document.querySelector('.score-card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'saved') {
+          toggleSaved(pid);
+        }
+      });
+    });
+
+    // Bookmark button
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) {
+      bkmkBtn.addEventListener('click', () => toggleSaved(pid));
+      updateSavedState(pid);
+    }
+  }
+
+  function toggleSaved(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const idx = saved.indexOf(pid);
+    let isSaved = false;
+    if (idx >= 0) {
+      saved.splice(idx, 1);
+      isSaved = false;
+    } else {
+      saved.push(pid);
+      isSaved = true;
+    }
+    localStorage.setItem('math_universe_saved', JSON.stringify(saved));
+    updateSavedState(pid);
+    showToast(isSaved ? '✓ Lesson saved to your favorites' : 'Removed from saved lessons');
+  }
+
+  function updateSavedState(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const isSaved = saved.includes(pid);
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) bkmkBtn.classList.toggle('active', isSaved);
+    const navSaved = document.querySelector('.sidebar .nav-item[data-nav="saved"]');
+    if (navSaved) navSaved.classList.toggle('active', isSaved);
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('math-toast-msg');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'math-toast-msg';
+      toast.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#1e1b4b; color:#ffffff; padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 14px rgba(0,0,0,0.2); z-index:9999; transition:all 0.3s ease; opacity:0; pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShell);
+  } else {
+    initShell();
+  }
+})();
+
+</script>
+<script>
+
+/* UNIFIED NAVIGATION & SAVED SYSTEM JAVASCRIPT */
+(function() {
+  function getProjectId() {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || 'current-project';
+  }
+
+  function initShell() {
+    const pid = getProjectId();
+    
+    // Sidebar nav handlers
+    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = item.dataset.nav || item.querySelector('a')?.getAttribute('href')?.replace('#', '');
+        
+        document.querySelectorAll('.sidebar .nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        if (target === 'explore') {
+          const el = document.querySelector('.content-grid') || document.querySelector('.main-content') || document.querySelector('#explore') || document.querySelector('.canvas-container') || document.querySelector('.card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'proofs') {
+          const el = document.querySelector('.why-card') || document.querySelector('.why-panel') || document.querySelector('#proofs') || document.querySelector('.explanation-card') || document.querySelector('.proof-section') || document.querySelector('.card:nth-of-type(2)');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'practice') {
+          const el = document.querySelector('.challenge-card') || document.querySelector('#practice') || document.querySelector('#your-challenge') || document.querySelector('.practice-card') || document.querySelector('.score-card');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        } else if (target === 'saved') {
+          toggleSaved(pid);
+        }
+      });
+    });
+
+    // Bookmark button
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) {
+      bkmkBtn.addEventListener('click', () => toggleSaved(pid));
+      updateSavedState(pid);
+    }
+  }
+
+  function toggleSaved(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const idx = saved.indexOf(pid);
+    let isSaved = false;
+    if (idx >= 0) {
+      saved.splice(idx, 1);
+      isSaved = false;
+    } else {
+      saved.push(pid);
+      isSaved = true;
+    }
+    localStorage.setItem('math_universe_saved', JSON.stringify(saved));
+    updateSavedState(pid);
+    showToast(isSaved ? '✓ Lesson saved to your favorites' : 'Removed from saved lessons');
+  }
+
+  function updateSavedState(pid) {
+    let saved = JSON.parse(localStorage.getItem('math_universe_saved') || '[]');
+    const isSaved = saved.includes(pid);
+    const bkmkBtn = document.getElementById('bookmark-btn');
+    if (bkmkBtn) bkmkBtn.classList.toggle('active', isSaved);
+    const navSaved = document.querySelector('.sidebar .nav-item[data-nav="saved"]');
+    if (navSaved) navSaved.classList.toggle('active', isSaved);
+  }
+
+  function showToast(msg) {
+    let toast = document.getElementById('math-toast-msg');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'math-toast-msg';
+      toast.style.cssText = 'position:fixed; bottom:24px; right:24px; background:#1e1b4b; color:#ffffff; padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; box-shadow:0 4px 14px rgba(0,0,0,0.2); z-index:9999; transition:all 0.3s ease; opacity:0; pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2200);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShell);
+  } else {
+    initShell();
+  }
+})();
+
+</script>
+</body>
+</html>

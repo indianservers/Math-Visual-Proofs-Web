@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "am-gm-inequality",
+  "categorySlug": "inequalities",
+  "slug": "am-gm-inequality",
+  "route": "/visual-proofs/inequalities/am-gm-inequality",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/149-am-gm-inequality)."
+}

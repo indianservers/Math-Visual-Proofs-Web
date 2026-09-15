@@ -1,0 +1,2853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eccentricity: Circle, Ellipse, Parabola, Hyperbola | Interactive Math Visualization</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-orange: #f59e0b;
+      --accent-pink: #ec4899;
+      --accent-purple: #8b5cf6;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Container Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout {
+        grid-template-columns: 100px 1fr;
+      }
+    }
+
+    /* Left Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* Main Workspace */
+    .main-wrapper {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
+
+    /* Top Classifier Slider Bar Card */
+    .classifier-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .classifier-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .classifier-title-row h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Continuous Slider Track */
+    .scale-track-wrapper {
+      position: relative;
+      padding: 10px 0;
+    }
+
+    .scale-background-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, #635bff 0%, #2563eb 30%, #10b981 50%, #ec4899 100%);
+      width: 100%;
+      position: relative;
+    }
+
+    .scale-labels-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr 2fr;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .scale-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s;
+    }
+
+    .scale-item:hover {
+      background: #f8fafc;
+    }
+
+    .scale-item.active-conic {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .scale-item .sub-range {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+
+    .range-input-scale {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+      margin-top: -11px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Dashboard Grid with Constrained Height */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 410px;
+      gap: 20px;
+      align-items: start;
+      height: 650px; /* Constrains row height to enable internal flex scrolling */
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+    }
+
+    /* Graph Card */
+    .graph-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      height: 650px;
+    }
+
+    /* Canvas / SVG Viewport Container */
+    .graph-viewport-container {
+      position: relative;
+      width: 100%;
+      flex: 1 1 auto;
+      background: #ffffff;
+      overflow: hidden;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    .graph-viewport-container.mode-pan {
+      cursor: grab;
+    }
+
+    .graph-viewport-container.mode-pan:active {
+      cursor: grabbing;
+    }
+
+    svg.math-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Overlays on Graph */
+    .overlay-card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-md);
+      z-index: 5;
+    }
+
+    /* Left-side Objects Panel */
+    .overlay-objects {
+      top: 16px;
+      left: 16px;
+      width: 220px;
+    }
+
+    .overlay-objects h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .object-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .object-item-row .obj-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    .param-e-row {
+      margin-top: 10px;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+
+    .param-e-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .param-e-input {
+      width: 60px;
+      padding: 4px 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .btn-step {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+
+    .btn-step:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .checkbox-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    /* Switch styling */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 22px;
+    }
+
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-switch:before {
+      transform: translateX(16px);
+    }
+
+    /* Live values Overlay Card */
+    .overlay-live-values {
+      top: 16px;
+      right: 16px;
+      width: 180px;
+    }
+
+    .live-values-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .live-val-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .live-val-row.pf-val { color: var(--accent-purple); }
+    .live-val-row.pd-val { color: var(--accent-blue); }
+    .live-val-row.ratio-val {
+      color: var(--primary);
+      font-size: 14px;
+      border-top: 1px dashed var(--border);
+      padding-top: 4px;
+      margin-top: 4px;
+    }
+
+    /* View Controls Overlay (Reset View / Pan / Zoom) */
+    .overlay-zoom-controls {
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+    }
+
+    .btn-zoom {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+
+    .btn-zoom:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-zoom-text {
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .btn-zoom-text:hover {
+      color: var(--primary);
+    }
+
+    /* Bottom Animation Control Bar */
+    .anim-bar {
+      padding: 10px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      flex: 0 0 auto;
+    }
+
+    .anim-controls-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-play {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .btn-play:hover {
+      background: var(--primary-hover);
+    }
+
+    .anim-slider {
+      width: 220px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .speed-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-speed {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-speed.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* PERFECT FLEX SCROLLING RIGHT PANEL FIX */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      height: 650px; /* Constrained height matching graph card */
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-header-icon {
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .why-panel-header h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    /* ONLY THIS CONTAINER SCROLLS INDEPENDENTLY */
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Visible Custom Scrollbar */
+    .why-panel-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .reveal-button {
+      flex: 0 0 auto;
+      margin: 12px 16px 16px 16px;
+    }
+
+    /* Section Cards inside Scroll Container */
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: visible;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .why-section.open {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .why-section-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      user-select: none;
+      background: #ffffff;
+      transition: background 0.15s;
+      border-radius: var(--radius-md);
+    }
+
+    .why-section-header:hover {
+      background: #f8fafc;
+    }
+
+    .why-section.open .why-section-header {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .why-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-badge-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .why-section.open .why-badge-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .why-arrow-icon {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .why-section.open .why-arrow-icon {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    /* Content Area inside Section */
+    .why-section-content {
+      padding: 16px;
+      font-size: 13.5px;
+      color: var(--text-dark);
+      line-height: 1.65;
+      border-top: 1px solid #f1f5f9;
+      display: none;
+      background: #ffffff;
+      height: auto;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .why-section.open .why-section-content {
+      display: block;
+    }
+
+    .boxed-formula {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 20px;
+      text-align: center;
+      margin: 12px 0;
+      color: var(--primary);
+      font-weight: bold;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .def-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 12px 0;
+      font-size: 13px;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .def-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .def-var {
+      font-weight: 800;
+      font-family: var(--font-math);
+      color: var(--primary);
+      min-width: 28px;
+      font-size: 15px;
+    }
+
+    .svg-container-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      margin: 12px 0;
+      text-align: center;
+    }
+
+    .live-calc-panel {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 12px 14px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 12px 0;
+      font-weight: 600;
+      font-size: 13.5px;
+      color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .case-box {
+      background: #f8fafc;
+      border-left: 4px solid var(--border-focus);
+      padding: 10px 14px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: 10px;
+    }
+
+    .case-box.circle { border-left-color: #635bff; }
+    .case-box.ellipse { border-left-color: #2563eb; }
+    .case-box.parabola { border-left-color: #10b981; }
+    .case-box.hyperbola { border-left-color: #ec4899; }
+
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Verification Card Rebuilt */
+    .verification-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 4px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13.5px;
+    }
+
+    .verify-step-row {
+      background: #f8fafc;
+      border-left: 3.5px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .verify-step-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .verify-step-math {
+      font-family: var(--font-math);
+      font-weight: 700;
+      color: var(--text-dark);
+      font-size: 14px;
+    }
+
+    .verification-status-banner {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .verification-status-banner.valid {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .verification-status-banner.invalid {
+      background: #fce7f3;
+      color: #9f1239;
+    }
+
+    /* Bottom Section Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1000px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Visual proof in one line Section */
+    .proof-one-line-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .proof-one-line-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .proof-one-line-body {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .proof-illustration-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: center;
+      text-align: center;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .mini-conics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      flex: 1;
+    }
+
+    .mini-conic-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mini-conic-box:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .mini-conic-box.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mini-conic-range {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .mini-conic-title {
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .mini-svg {
+      width: 100%;
+      height: 65px;
+    }
+
+    /* Exact challenge Card */
+    .exact-challenge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .exact-challenge-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-group-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .text-input {
+      width: 110px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .feedback-msg {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-msg.correct {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .feedback-msg.incorrect {
+      background: #fce7f3;
+      color: #9f1239;
+    }
+
+    /* Error Toast */
+    .error-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #ef4444;
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-toast.show {
+      display: flex;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SVG styling elements */
+    .axis-line { stroke: #64748b; stroke-width: 1.5; }
+    .grid-line { stroke: #e2e8f0; stroke-width: 1; }
+    .conic-curve { stroke: #635bff; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .directrix-line { stroke: #2563eb; stroke-width: 2.2; stroke-dasharray: 6 4; }
+    
+    .line-pf { stroke: #8b5cf6; stroke-width: 2.5; stroke-dasharray: 5 4; }
+    .line-pd { stroke: #2563eb; stroke-width: 2.5; stroke-dasharray: 5 4; }
+
+    .point-focus { fill: #8b5cf6; stroke: #ffffff; stroke-width: 2.5; }
+    .point-directrix-foot { fill: #2563eb; stroke: #ffffff; stroke-width: 2; }
+    .point-center { fill: #1e293b; stroke: #ffffff; stroke-width: 2; }
+    .point-locus { fill: #10b981; stroke: #ffffff; stroke-width: 3; cursor: grab; }
+    .point-locus:active { cursor: grabbing; }
+
+    .svg-text { font-family: var(--font-main); font-size: 12px; fill: #475569; user-select: none; }
+    .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
+    .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
+    .trail-dot { fill: #10b981; opacity: 0.5; }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Library">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            Library
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Conic Sections</a>
+          <h1>
+            Eccentricity: Circle, Ellipse, Parabola, Hyperbola
+          </h1>
+          <p class="header-subtitle">All conics from one idea: balance of distances.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 12–15 min</span>
+          <button class="btn-secondary" id="btn-reset-view" title="Reset view and parameters">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset View
+          </button>
+        </div>
+      </header>
+
+      <!-- Top Classifier Continuous Slider Bar Card -->
+      <section class="classifier-card">
+        <div class="classifier-title-row">
+          <h3>
+            Classifier: Conic by eccentricity <em>e</em>
+          </h3>
+        </div>
+
+        <div class="scale-track-wrapper">
+          <div class="scale-background-bar"></div>
+          <input type="range" id="slider-eccentricity-scale" class="range-input-scale" min="0" max="2.2" step="0.01" value="0.58">
+          
+          <div class="scale-labels-grid">
+            <div class="scale-item" id="scale-item-circle" data-e="0">
+              <span class="sub-range">e = 0</span>
+              <span>Circle</span>
+              <span class="sub-range">e = 0</span>
+            </div>
+            <div class="scale-item active-conic" id="scale-item-ellipse" data-e="0.58">
+              <span class="sub-range">0 &lt; e &lt; 1</span>
+              <span>Ellipse</span>
+              <span class="sub-range">0 &lt; e &lt; 1</span>
+            </div>
+            <div class="scale-item" id="scale-item-parabola" data-e="1">
+              <span class="sub-range">e = 1</span>
+              <span>Parabola</span>
+              <span class="sub-range">e = 1</span>
+            </div>
+            <div class="scale-item" id="scale-item-hyperbola" data-e="1.8">
+              <span class="sub-range">e &gt; 1</span>
+              <span>Hyperbola</span>
+              <span class="sub-range">e &gt; 1</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Interactive Graph Area -->
+        <section class="graph-card">
+          <!-- Canvas / SVG Viewport Container -->
+          <div class="graph-viewport-container" id="viewport-container">
+            <!-- Overlay: Left-side Objects Panel -->
+            <div class="overlay-card overlay-objects">
+              <h4>
+                <span>Objects</span>
+              </h4>
+              
+              <div class="object-item-row">
+                <span><span class="obj-dot" style="background:#8b5cf6;"></span>Focus F</span>
+                <strong id="readout-focus-coords">(-1.20, 0.60)</strong>
+              </div>
+
+              <div class="object-item-row">
+                <span><span class="obj-dot" style="background:#2563eb;"></span>Directrix ℓ</span>
+                <strong id="readout-directrix-coords">x = 3.40</strong>
+              </div>
+
+              <div class="object-item-row">
+                <span><span class="obj-dot" style="background:#10b981;"></span>Point P</span>
+                <strong id="readout-point-coords">(1.20, 1.60)</strong>
+              </div>
+
+              <div class="param-e-row">
+                <div class="object-item-row">
+                  <span>Target e</span>
+                  <div class="param-e-controls">
+                    <button class="btn-step" id="btn-e-dec" title="Decrease e">-</button>
+                    <input type="number" id="input-e-val" class="param-e-input" value="0.58" step="0.01" min="0" max="5">
+                    <button class="btn-step" id="btn-e-inc" title="Increase e">+</button>
+                  </div>
+                </div>
+                
+                <label class="checkbox-toggle-row">
+                  <span>Show distances</span>
+                  <span class="switch">
+                    <input type="checkbox" id="chk-show-distances" checked>
+                    <span class="slider-switch"></span>
+                  </span>
+                </label>
+
+                <label class="checkbox-toggle-row">
+                  <span>Trace locus</span>
+                  <span class="switch">
+                    <input type="checkbox" id="chk-trace-locus" checked>
+                    <span class="slider-switch"></span>
+                  </span>
+                </label>
+                
+                <button class="btn-secondary" id="btn-reset-construction" style="width: 100%; margin-top: 10px; font-size: 12px; padding: 6px 10px; justify-content: center;">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  Reset construction
+                </button>
+              </div>
+            </div>
+
+            <!-- Overlay: Live values Card -->
+            <div class="overlay-card overlay-live-values">
+              <div class="live-values-header">Live values</div>
+              <div class="live-val-row pf-val">
+                <span>FP =</span>
+                <span id="dist-fp-val">2.46</span>
+              </div>
+              <div class="live-val-row pd-val">
+                <span>PD =</span>
+                <span id="dist-pd-val">4.23</span>
+              </div>
+              <div class="live-val-row ratio-val">
+                <span>FP / PD =</span>
+                <span id="ratio-calc-val">0.582</span>
+              </div>
+              <div class="live-val-row" style="font-size:12px; color:var(--text-muted); margin-top:4px;">
+                <span>e ≈</span>
+                <span id="target-e-readout">0.58</span>
+              </div>
+            </div>
+
+            <!-- Overlay: View Controls (Reset View / Pan / Zoom) -->
+            <div class="overlay-card overlay-zoom-controls">
+              <button class="btn-zoom" id="btn-zoom-in" title="Zoom In">+</button>
+              <button class="btn-zoom-text" id="btn-zoom-reset" title="Reset View">Reset View</button>
+              <button class="btn-zoom" id="btn-zoom-out" title="Zoom Out">&minus;</button>
+            </div>
+
+            <!-- SVG Graph -->
+            <svg id="math-svg" class="math-svg">
+              <defs>
+                <marker id="arrow-x" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+                </marker>
+                <marker id="arrow-y" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
+                </marker>
+              </defs>
+
+              <g id="viewport-g">
+                <!-- Grid Layer -->
+                <g id="grid-group"></g>
+
+                <!-- Axes Layer -->
+                <g id="axes-group">
+                  <line id="axis-x" class="axis-line" marker-end="url(#arrow-x)"/>
+                  <line id="axis-y" class="axis-line" marker-end="url(#arrow-y)"/>
+                  <text id="axis-x-label" class="svg-text-math">x</text>
+                  <text id="axis-y-label" class="svg-text-math">y</text>
+                </g>
+
+                <!-- Directrix Line & Label -->
+                <line id="directrix-line" class="directrix-line"/>
+                <g id="directrix-label-g">
+                  <rect class="svg-label-bg" width="90" height="20"/>
+                  <text id="directrix-text" class="svg-text-math" fill="#2563eb">&ell;: x = 3.40</text>
+                </g>
+
+                <!-- Conic Curve (Ellipse / Parabola / Hyperbola / Circle) -->
+                <path id="conic-curve-path" class="conic-curve"/>
+                <path id="conic-curve-path2" class="conic-curve"/>
+
+                <!-- Trail Locus Points Group -->
+                <g id="trail-group"></g>
+
+                <!-- Construction Lines PF and PD -->
+                <line id="line-pf" class="line-pf"/>
+                <line id="line-pd" class="line-pd"/>
+
+                <!-- Perpendicular Foot Indicator Box at D -->
+                <path id="path-perp-indicator" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+
+                <!-- Labels on Construction Lines -->
+                <g id="label-pf-g">
+                  <rect class="svg-label-bg" width="75" height="18"/>
+                  <text id="text-pf-val" class="svg-text-math" fill="#8b5cf6">FP = 2.46</text>
+                </g>
+                <g id="label-pd-g">
+                  <rect class="svg-label-bg" width="75" height="18"/>
+                  <text id="text-pd-val" class="svg-text-math" fill="#2563eb">PD = 4.23</text>
+                </g>
+
+                <!-- Center O(0,0) -->
+                <circle id="point-center" class="point-center" r="4"/>
+                <text id="label-center" class="svg-text" x="8" y="14">O(0,0)</text>
+
+                <!-- Directrix Foot D(d, y_P) -->
+                <circle id="point-foot-d" class="point-directrix-foot" r="5"/>
+                <text id="label-foot-d" class="svg-text-math" fill="#2563eb">D</text>
+
+                <!-- Focus F -->
+                <circle id="point-focus" class="point-focus" r="6"/>
+                <g id="label-focus-g">
+                  <rect class="svg-label-bg" width="110" height="18"/>
+                  <text id="text-focus-label" class="svg-text-math" fill="#8b5cf6">F(-1.20, 0.60)</text>
+                </g>
+
+                <!-- Point P (Locus) -->
+                <circle id="point-locus-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
+                <circle id="point-locus" class="point-locus" r="7"/>
+                <g id="label-locus-g">
+                  <rect class="svg-label-bg" width="125" height="22" rx="4"/>
+                  <text id="text-locus-label" class="svg-text-math" fill="#047857">P(1.20, 1.60)</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Bottom Animation Bar -->
+          <div class="anim-bar">
+            <div class="anim-controls-left">
+              <button class="btn-play" id="btn-play-pause" title="Play/Pause Locus Motion">
+                <svg id="svg-play-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <input type="range" id="anim-progress-slider" class="anim-slider" min="0" max="360" value="124">
+              <span style="font-size:12px; font-weight:600; color:var(--text-muted);" id="anim-step-counter">
+                Trace step: 124 / 360
+              </span>
+            </div>
+
+            <div class="speed-btn-group">
+              <button class="btn-speed" data-speed="0.5">0.5x</button>
+              <button class="btn-speed active" data-speed="1.0">1.0x v</button>
+              <button class="btn-speed" data-speed="2.0">2.0x</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- REBUILT RIGHT-SIDE EDUCATIONAL PANEL WITH INDEPENDENT FLEX SCROLLING -->
+        <aside class="why-panel" id="why-panel">
+          <div class="why-panel-header">
+            <span class="why-header-icon">&#9672;</span>
+            <h2>Why it works</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- SECTION 1: 1. Distances define the rule -->
+            <section class="why-section open" id="sec-card-distances">
+              <div class="why-section-header" onclick="toggleWhySection('distances')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">1</span>
+                  <span>1. Distances define the rule</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-distances">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-distances">
+                <blockquote style="border-left: 3px solid var(--primary); padding-left: 12px; margin-bottom: 12px; color: var(--text-dark); font-style: italic; background:#f8fafc; padding:10px 14px; border-radius:0 6px 6px 0;">
+                  A conic is the set of points <strong>P</strong> such that the ratio between the distance from <strong>P</strong> to a fixed focus <strong>F</strong> and the perpendicular distance from <strong>P</strong> to a fixed directrix <strong>&ell;</strong> is constant.
+                </blockquote>
+
+                <div class="boxed-formula">
+                  PF / PD = e
+                </div>
+
+                <p style="font-weight: 700; margin-top: 10px;">Symbol Definitions:</p>
+                <div class="def-grid">
+                  <div class="def-row"><span class="def-var">P</span> = point on the conic curve</div>
+                  <div class="def-row"><span class="def-var">F</span> = fixed focus point</div>
+                  <div class="def-row"><span class="def-var">D</span> = perpendicular foot from P to directrix &ell;</div>
+                  <div class="def-row"><span class="def-var">PD</span> = perpendicular distance from P to directrix</div>
+                  <div class="def-row"><span class="def-var">PF</span> = Euclidean distance from P to focus F</div>
+                  <div class="def-row"><span class="def-var">e</span> = eccentricity constant</div>
+                </div>
+
+                <p style="margin-top: 8px;">
+                  As you drag <strong>P</strong> along the curve, both individual lengths <strong>PF</strong> and <strong>PD</strong> change continuously. However, for every point belonging to the conic, their ratio remains constant and equal to <strong>e</strong> ($PF = e \cdot PD$).
+                </p>
+
+                <!-- Visual Diagram -->
+                <div class="svg-container-card">
+                  <svg width="240" height="110" viewBox="0 0 240 110">
+                    <!-- Directrix -->
+                    <line x1="200" y1="10" x2="200" y2="100" stroke="#2563eb" stroke-width="2.2" stroke-dasharray="5 3"/>
+                    <text x="206" y="95" font-size="11" fill="#2563eb" font-weight="bold">&ell;</text>
+
+                    <!-- Focus F -->
+                    <circle cx="50" cy="75" r="4.5" fill="#8b5cf6"/>
+                    <text x="32" y="92" font-size="11" fill="#8b5cf6" font-weight="bold">F</text>
+
+                    <!-- Point P -->
+                    <circle cx="130" cy="30" r="5" fill="#10b981"/>
+                    <text x="120" y="18" font-size="11" fill="#10b981" font-weight="bold">P</text>
+
+                    <!-- Foot D -->
+                    <circle cx="200" cy="30" r="4" fill="#2563eb"/>
+                    <text x="208" y="34" font-size="11" fill="#2563eb" font-weight="bold">D</text>
+
+                    <!-- Line PF -->
+                    <line x1="130" y1="30" x2="50" y2="75" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 3"/>
+                    <text x="80" y="46" font-size="11" fill="#8b5cf6" font-weight="bold">PF</text>
+
+                    <!-- Line PD -->
+                    <line x1="130" y1="30" x2="200" y2="30" stroke="#2563eb" stroke-width="2" stroke-dasharray="4 3"/>
+                    <text x="160" y="24" font-size="11" fill="#2563eb" font-weight="bold">PD</text>
+
+                    <!-- Right angle -->
+                    <path d="M 190 30 L 190 40 L 200 40" fill="none" stroke="#2563eb" stroke-width="1.2"/>
+                  </svg>
+                </div>
+
+                <!-- Live Calculation Display -->
+                <div class="live-calc-panel">
+                  <div>PF = <span id="sec1-live-pf">2.46</span></div>
+                  <div>PD = <span id="sec1-live-pd">4.23</span></div>
+                  <div style="border-top:1px dashed var(--border-focus); padding-top:4px; margin-top:2px; font-size:14.5px;">
+                    PF / PD = <span id="sec1-live-ratio">0.582</span>
+                  </div>
+                  <div style="font-size:12px; color:var(--text-dark); opacity:0.9;">Target e = <span id="sec1-live-target-e">0.58</span></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION 2: 2. e classifies the conic -->
+            <section class="why-section open" id="sec-card-classification">
+              <div class="why-section-header" onclick="toggleWhySection('classification')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">2</span>
+                  <span>2. e classifies the conic</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-classification">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-classification">
+                <p style="margin-bottom: 12px;">
+                  The magnitude of eccentricity <strong>e</strong> dictates how rapidly the point <strong>P</strong> moves away from focus <strong>F</strong> relative to directrix <strong>&ell;</strong>, uniquely determining the shape of the curve:
+                </p>
+
+                <div class="case-box circle">
+                  <div class="case-header">
+                    <span>Circle (e = 0)</span>
+                    <span style="color:#635bff; font-family:var(--font-math);">e = 0</span>
+                  </div>
+                  <p style="font-size:12.5px;">
+                    The circular limiting case where focus coincides with center and directrix is at infinity. Point <strong>P</strong> remains at a constant radius distance from focus.
+                  </p>
+                </div>
+
+                <div class="case-box ellipse">
+                  <div class="case-header">
+                    <span>Ellipse (0 &lt; e &lt; 1)</span>
+                    <span style="color:#2563eb; font-family:var(--font-math);">0 &lt; e &lt; 1</span>
+                  </div>
+                  <p style="font-size:12.5px;">
+                    The focus-directrix distance ratio is strictly less than 1 ($PF &lt; PD$). Because the focus pulls stronger than the directrix, the locus forms a closed oval curve ($\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$).
+                  </p>
+                </div>
+
+                <div class="case-box parabola">
+                  <div class="case-header">
+                    <span>Parabola (e = 1)</span>
+                    <span style="color:#10b981; font-family:var(--font-math);">e = 1</span>
+                  </div>
+                  <p style="font-size:12.5px;">
+                    Exact balance of distances ($PF = PD$). The curve breaks open into a single infinite parabolic branch ($y^2 = 4px$).
+                  </p>
+                </div>
+
+                <div class="case-box hyperbola">
+                  <div class="case-header">
+                    <span>Hyperbola (e &gt; 1)</span>
+                    <span style="color:#ec4899; font-family:var(--font-math);">e &gt; 1</span>
+                  </div>
+                  <p style="font-size:12.5px;">
+                    Focus distance grows faster than directrix distance ($PF &gt; PD$), creating two symmetric open branches ($\frac{x^2}{a^2} - \frac{y^2}{b^2} = 1$).
+                  </p>
+                </div>
+
+                <!-- Classification Diagram -->
+                <div class="svg-container-card">
+                  <div style="font-size:11px; font-weight:bold; color:var(--text-muted); margin-bottom:4px;">Classification Scale</div>
+                  <svg width="240" height="55" viewBox="0 0 240 55">
+                    <line x1="20" y1="20" x2="220" y2="20" stroke="#cbd5e1" stroke-width="3"/>
+                    <circle cx="20" cy="20" r="5" fill="#635bff"/>
+                    <circle cx="85" cy="20" r="5" fill="#2563eb"/>
+                    <circle cx="150" cy="20" r="5" fill="#10b981"/>
+                    <circle cx="215" cy="20" r="5" fill="#ec4899"/>
+
+                    <text x="20" y="38" font-size="10" font-weight="bold" fill="#635bff" text-anchor="middle">Circle</text>
+                    <text x="20" y="50" font-size="9" fill="#64748b" text-anchor="middle">e = 0</text>
+
+                    <text x="85" y="38" font-size="10" font-weight="bold" fill="#2563eb" text-anchor="middle">Ellipse</text>
+                    <text x="85" y="50" font-size="9" fill="#64748b" text-anchor="middle">0&lt;e&lt;1</text>
+
+                    <text x="150" y="38" font-size="10" font-weight="bold" fill="#10b981" text-anchor="middle">Parabola</text>
+                    <text x="150" y="50" font-size="9" fill="#64748b" text-anchor="middle">e = 1</text>
+
+                    <text x="215" y="38" font-size="10" font-weight="bold" fill="#ec4899" text-anchor="middle">Hyperbola</text>
+                    <text x="215" y="50" font-size="9" fill="#64748b" text-anchor="middle">e &gt; 1</text>
+
+                    <!-- Active indicator arrow -->
+                    <path id="sec2-indicator-arrow" d="M 85 4 L 85 12" stroke="#635bff" stroke-width="2.5" marker-end="url(#arrow-x)"/>
+                  </svg>
+                </div>
+              </div>
+            </section>
+
+            <!-- SECTION 3: 3. Drag & observe -->
+            <section class="why-section open" id="sec-card-dragObserve">
+              <div class="why-section-header" onclick="toggleWhySection('dragObserve')">
+                <div class="why-title-group">
+                  <span class="why-badge-num">3</span>
+                  <span>3. Drag &amp; observe</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-dragObserve">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-dragObserve">
+                <blockquote style="border-left: 3px solid var(--accent-green); padding-left: 12px; margin-bottom: 12px; background:#f8fafc; padding:10px 14px; border-radius:0 6px 6px 0;">
+                  Move point <strong>P</strong> along the conic and observe how the distances change.
+                </blockquote>
+
+                <p style="margin-bottom:8px;">
+                  Notice how <strong>PF changes</strong> and <strong>PD changes</strong>, but their ratio:
+                </p>
+
+                <div class="boxed-formula" style="font-size:18px; border-color:var(--accent-green); color:#047857;">
+                  PF / PD = e (constant)
+                </div>
+
+                <!-- Live Numerical Panel -->
+                <div class="live-calc-panel" style="border-left-color:var(--accent-green); color:#047857; background:#ecfdf5;">
+                  <div style="font-weight:800; text-transform:uppercase; font-size:11px; color:#065f46;">Current Point P Position</div>
+                  <div>P = <span id="sec3-live-p-coords">(1.20, 1.60)</span></div>
+                  <div>PF = <span id="sec3-live-pf">2.46</span></div>
+                  <div>PD = <span id="sec3-live-pd">4.23</span></div>
+                  <div style="border-top:1px dashed #a7f3d0; padding-top:4px; margin-top:2px;">
+                    PF / PD = <span id="sec3-live-ratio">0.582</span>
+                  </div>
+                  <div>Target e = <span id="sec3-live-target-e">0.58</span></div>
+                  <div style="font-size:12px; color:#065f46;">Difference = <span id="sec3-live-diff">0.002</span></div>
+                </div>
+
+                <!-- Animated Motion SVG Diagram -->
+                <div class="svg-container-card">
+                  <svg width="240" height="70" viewBox="0 0 240 70">
+                    <ellipse cx="120" cy="35" rx="100" ry="25" stroke="#635bff" stroke-width="1.5" fill="none" stroke-dasharray="4 2"/>
+                    
+                    <!-- P1 -->
+                    <circle cx="45" cy="26" r="4.5" fill="#10b981"/>
+                    <text x="40" y="16" font-size="10" fill="#10b981" font-weight="bold">P₁</text>
+
+                    <!-- P2 -->
+                    <circle cx="120" cy="10" r="4.5" fill="#10b981"/>
+                    <text x="116" y="26" font-size="10" fill="#10b981" font-weight="bold">P₂</text>
+
+                    <!-- P3 -->
+                    <circle cx="195" cy="26" r="4.5" fill="#10b981"/>
+                    <text x="195" y="16" font-size="10" fill="#10b981" font-weight="bold">P₃</text>
+
+                    <!-- Motion arrows -->
+                    <path d="M 52 23 Q 85 13 112 11" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#arrow-x)"/>
+                    <path d="M 128 11 Q 160 13 188 23" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#arrow-x)"/>
+                  </svg>
+                </div>
+
+                <blockquote style="border-left: 3px solid var(--accent-orange); padding-left: 12px; margin-top: 10px; background:#fffbeb; padding:10px 14px; border-radius:0 6px 6px 0; font-size:12.5px;">
+                  <strong>Meaning of Locus:</strong> The collection of all positions of P satisfying the distance-ratio condition forms the complete conic curve.
+                </blockquote>
+              </div>
+            </section>
+
+            <!-- SECTION 4: What happens at the borders? -->
+            <section class="why-section" id="sec-card-borders">
+              <div class="why-section-header" onclick="toggleWhySection('borders')">
+                <div class="why-title-group">
+                  <span>What happens at the borders?</span>
+                </div>
+                <span class="why-arrow-icon" id="arrow-borders">&#9660;</span>
+              </div>
+              <div class="why-section-content" id="content-borders">
+                <p style="margin-bottom:10px;">
+                  Understanding boundary transitions provides deep mathematical insight into why conic sections transition into one another:
+                </p>
+
+                <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                  <li style="background:#f8fafc; padding:8px 12px; border-radius:6px;">
+                    <strong>e = 0 (Circle):</strong> Directrix is at infinity ($\ell \to \infty$). Distance to focus is constant ($PF = r$).
+                  </li>
+                  <li style="background:#f8fafc; padding:8px 12px; border-radius:6px;">
+                    <strong>0 &lt; e &lt; 1 (Ellipse):</strong> Focus pull dominates over directrix distance ($PF &lt; PD$), keeping the locus bound within a closed ellipse.
+                  </li>
+                  <li style="background:#faf5ff; padding:8px 12px; border-radius:6px; border:1px solid #e9d5ff;">
+                    <strong>e = 1 (Parabola Boundary):</strong> Critical threshold ($PF = PD$). The closed right side of the ellipse stretches to infinity, transforming into an open parabola!
+                  </li>
+                  <li style="background:#f8fafc; padding:8px 12px; border-radius:6px;">
+                    <strong>e &gt; 1 (Hyperbola):</strong> Directrix distance is overwhelmed ($PF &gt; PD$), breaking the curve into two distinct open branches.
+                  </li>
+                </ul>
+
+                <div style="text-align:center; font-weight:800; font-size:13px; color:var(--primary); background:var(--primary-light); padding:8px; border-radius:6px;">
+                  Circle &rarr; Ellipse &rarr; Parabola &rarr; Hyperbola
+                </div>
+              </div>
+            </section>
+
+            <!-- LARGE VERIFICATION AREA INSIDE SCROLL CONTAINER WHEN REVEAL IS CLICKED -->
+            <div class="verification-card" id="content-verification" style="display: flex;">
+              <h4 style="font-size:15px; font-weight:800; color:var(--text-dark); margin-bottom:4px;">Mathematical Verification Details</h4>
+
+              <div class="verify-step-row">
+                <div class="verify-step-title">Current point P</div>
+                <div class="verify-step-math" id="vstep-p-coords">P = (1.20, 1.60)</div>
+              </div>
+
+              <div class="verify-step-row">
+                <div class="verify-step-title">Focus distance (PF)</div>
+                <div class="verify-step-math" id="vstep1-text">PF = &radic;((x - x_F)² + (y - y_F)²) = 2.460</div>
+              </div>
+
+              <div class="verify-step-row">
+                <div class="verify-step-title">Directrix distance (PD)</div>
+                <div class="verify-step-math" id="vstep2-text">PD = |x - x_&ell;| = 4.230</div>
+              </div>
+
+              <div class="verify-step-row">
+                <div class="verify-step-title">Calculated Ratio (PF / PD)</div>
+                <div class="verify-step-math" id="vstep3-text">PF / PD = 2.460 / 4.230 = 0.582</div>
+              </div>
+
+              <div class="verify-step-row">
+                <div class="verify-step-title">Target Eccentricity Comparison</div>
+                <div class="verify-step-math" id="vstep4-text">Calculated ratio = 0.582 &approx; Target e = 0.580</div>
+              </div>
+
+              <div class="verification-status-banner valid" id="verify-banner">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="verify-banner-text">✓ Accurate! The rule holds.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FIXED REVEAL BUTTON AT BOTTOM OF PANEL -->
+          <button class="btn-primary reveal-button" id="btn-reveal-verify" onclick="toggleWhySection('verification')">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Reveal (verify)
+          </button>
+        </aside>
+      </div>
+
+      <!-- Bottom Section Grid -->
+      <div class="bottom-grid">
+        <!-- Bottom-left section: Visual proof in one line -->
+        <section class="proof-one-line-card">
+          <h3>Visual proof in one line</h3>
+          
+          <div class="proof-one-line-body">
+            <div class="proof-illustration-text">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#635bff"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 6l9 4 9-4M3 6v10l9 4 9-4V6M12 10v10"/></svg>
+              <span style="font-size:12px; font-weight:600; margin-top:4px;">Keep <strong>PF / PD</strong> constant</span>
+              <span style="font-size:11px; color:var(--text-muted);">and the locus appears.</span>
+            </div>
+
+            <div class="mini-conics-grid">
+              <!-- e = 0 Circle -->
+              <div class="mini-conic-box" id="mini-box-circle" data-e="0">
+                <div class="mini-conic-range">e = 0</div>
+                <div class="mini-conic-title">Circle</div>
+                <svg class="mini-svg" viewBox="0 0 100 70">
+                  <circle cx="50" cy="35" r="22" stroke="#635bff" stroke-width="2" fill="none"/>
+                  <circle cx="50" cy="35" r="2.5" fill="#8b5cf6"/>
+                  <line x1="20" y1="5" x2="20" y2="65" stroke="#2563eb" stroke-width="1.2" stroke-dasharray="2 2"/>
+                </svg>
+              </div>
+
+              <!-- 0 < e < 1 Ellipse -->
+              <div class="mini-conic-box active" id="mini-box-ellipse" data-e="0.58">
+                <div class="mini-conic-range">0 &lt; e &lt; 1</div>
+                <div class="mini-conic-title">Ellipse</div>
+                <svg class="mini-svg" viewBox="0 0 100 70">
+                  <ellipse cx="50" cy="35" rx="28" ry="16" stroke="#2563eb" stroke-width="2" fill="none"/>
+                  <line x1="85" y1="5" x2="85" y2="65" stroke="#2563eb" stroke-width="1.2" stroke-dasharray="2 2"/>
+                  <circle cx="66" cy="35" r="2.5" fill="#8b5cf6"/>
+                </svg>
+              </div>
+
+              <!-- e = 1 Parabola -->
+              <div class="mini-conic-box" id="mini-box-parabola" data-e="1">
+                <div class="mini-conic-range">e = 1</div>
+                <div class="mini-conic-title">Parabola</div>
+                <svg class="mini-svg" viewBox="0 0 100 70">
+                  <path d="M 82 8 Q 28 35 82 62" stroke="#10b981" stroke-width="2" fill="none"/>
+                  <line x1="22" y1="5" x2="22" y2="65" stroke="#2563eb" stroke-width="1.2" stroke-dasharray="2 2"/>
+                  <circle cx="48" cy="35" r="2.5" fill="#8b5cf6"/>
+                </svg>
+              </div>
+
+              <!-- e > 1 Hyperbola -->
+              <div class="mini-conic-box" id="mini-box-hyperbola" data-e="1.8">
+                <div class="mini-conic-range">e &gt; 1</div>
+                <div class="mini-conic-title">Hyperbola</div>
+                <svg class="mini-svg" viewBox="0 0 100 70">
+                  <path d="M 44 8 Q 22 35 44 62" stroke="#ec4899" stroke-width="2" fill="none"/>
+                  <path d="M 56 8 Q 78 35 56 62" stroke="#ec4899" stroke-width="2" fill="none"/>
+                  <circle cx="32" cy="35" r="2" fill="#8b5cf6"/>
+                  <circle cx="68" cy="35" r="2" fill="#8b5cf6"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bottom-right section: Exact challenge -->
+        <section class="exact-challenge-card">
+          <h3>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Exact challenge
+          </h3>
+          <p style="font-size: 13px; color: var(--text-muted);">
+            Make an ellipse with <strong>e = 0.60</strong>. Then place <strong>P</strong> so that $x(P) = 0$. What should $y(P)$ be (approx.)?
+          </p>
+
+          <div class="input-group-row">
+            <span style="font-family:var(--font-math); font-weight:bold; font-size:14px;">y(P) &approx;</span>
+            <input type="number" id="input-challenge-y" class="text-input" placeholder="Enter value" step="0.01">
+            <button class="btn-secondary" id="btn-check-exact-challenge">Check</button>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted);">Tip: use symmetry with respect to the x-axis.</div>
+          <div id="exact-feedback" class="feedback-msg" style="display: none;"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="error-toast" id="error-toast">
+    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span id="error-msg">Invalid eccentricity. Eccentricity must be non-negative (e >= 0).</span>
+  </div>
+
+  <script>
+    /**
+     * Eccentricity & Conic Classification Engine
+     * Pure JavaScript - No external dependencies
+     */
+
+    // --- 0. Independent Accordion Section State Management ---
+    const openSections = {
+      distances: true,
+      classification: true,
+      dragObserve: true,
+      borders: false,
+      verification: true
+    };
+
+    function toggleWhySection(key) {
+      if (openSections.hasOwnProperty(key)) {
+        openSections[key] = !openSections[key];
+      }
+      renderAccordionStates();
+    }
+
+    function renderAccordionStates() {
+      for (const [key, isOpen] of Object.entries(openSections)) {
+        const card = document.getElementById(`sec-card-${key}`);
+        const content = document.getElementById(`content-${key}`);
+        const arrow = document.getElementById(`arrow-${key}`);
+
+        if (key === 'verification') {
+          const vcard = document.getElementById('content-verification');
+          if (vcard) vcard.style.display = isOpen ? 'flex' : 'none';
+          continue;
+        }
+
+        if (card && content) {
+          if (isOpen) {
+            card.classList.add('open');
+            content.style.display = 'block';
+          } else {
+            card.classList.remove('open');
+            content.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    // --- 1. Centralized Mathematical Engine ---
+    const MathEngine = {
+      classifyConic(e, eps = 1e-3) {
+        if (e < 0) return { type: "Invalid", range: "e < 0", color: "#ef4444" };
+        if (Math.abs(e) < eps) return { type: "Circle", range: "e = 0", color: "#635bff" };
+        if (e < 1.0 - eps) return { type: "Ellipse", range: "0 < e < 1", color: "#2563eb" };
+        if (Math.abs(e - 1.0) < eps) return { type: "Parabola", range: "e = 1", color: "#10b981" };
+        return { type: "Hyperbola", range: "e > 1", color: "#ec4899" };
+      },
+
+      calculatePF(x, y, focus) {
+        const dx = x - focus.x;
+        const dy = y - focus.y;
+        return Math.sqrt(dx * dx + dy * dy);
+      },
+
+      calculatePD(x, directrixX) {
+        return Math.abs(x - directrixX);
+      },
+
+      calculateRatio(x, y, focus, directrixX) {
+        const pd = this.calculatePD(x, directrixX);
+        if (pd < 1e-6) return 0;
+        return this.calculatePF(x, y, focus) / pd;
+      },
+
+      getConicGeometry(e) {
+        const classification = this.classifyConic(e);
+
+        if (classification.type === "Circle") {
+          const r = 3.0;
+          return {
+            type: "Circle",
+            r: r,
+            focus: { x: 0, y: 0 },
+            directrixX: 9999, // Degenerate infinite directrix
+            pointFromParam: (t) => ({ x: r * Math.cos(t), y: r * Math.sin(t) })
+          };
+        }
+
+        if (classification.type === "Ellipse") {
+          const a = 4.0;
+          const c = e * a;
+          const b = Math.sqrt(a * a - c * c);
+          const d = a / e; // directrix x = a/e
+          const focusX = c;
+
+          return {
+            type: "Ellipse",
+            a, b, c, d,
+            focus: { x: focusX, y: 0 },
+            directrixX: d,
+            pointFromParam: (t) => ({ x: a * Math.cos(t), y: b * Math.sin(t) })
+          };
+        }
+
+        if (classification.type === "Parabola") {
+          const p = 2.0; // focus at (p, 0), directrix at x = -p
+          const focusX = p;
+          const directrixX = -p;
+
+          return {
+            type: "Parabola",
+            p,
+            focus: { x: focusX, y: 0 },
+            directrixX: directrixX,
+            pointFromParam: (t) => {
+              // t from -2.2 to 2.2 maps y parameter
+              const y = t * 2.2;
+              const x = (y * y) / (4 * p);
+              return { x, y };
+            }
+          };
+        }
+
+        // Hyperbola (e > 1)
+        const a = 2.5;
+        const c = e * a;
+        const b = Math.sqrt(c * c - a * a);
+        const d = a / e; // directrix x = a/e
+        const focusX = c;
+
+        return {
+          type: "Hyperbola",
+          a, b, c, d,
+          focus: { x: focusX, y: 0 },
+          directrixX: d,
+          pointFromParam: (t, branch = 'right') => {
+            const coshT = Math.cosh(t);
+            const sinhT = Math.sinh(t);
+            const signX = branch === 'right' ? 1 : -1;
+            return { x: signX * a * coshT, y: b * sinhT };
+          }
+        };
+      }
+    };
+
+    // --- 2. Application State ---
+    const state = {
+      eccentricity: 0.58,
+      paramT: 0.6,          // Parameter for point P along conic curve
+      branch: 'right',      // For hyperbola branches
+      mode: 'select',       // 'select', 'pan', 'locus'
+      showGrid: true,
+      showDistances: true,
+      traceEnabled: true,
+      isPlaying: false,
+      animSpeed: 1.0,
+      animStep: 124,
+      trailPoints: []
+    };
+
+    // --- 3. View & Coordinate Transformation State ---
+    const view = {
+      width: 800,
+      height: 560,
+      originX: 380, // SVG canvas center X for math (0,0)
+      originY: 280, // SVG canvas Y for math (0,0)
+      scale: 45,    // Pixels per mathematical unit
+      isPanning: false,
+      dragStartScreen: { x: 0, y: 0 },
+      dragStartOrigin: { x: 0, y: 0 },
+
+      toScreen(mx, my) {
+        return {
+          sx: this.originX + mx * this.scale,
+          sy: this.originY - my * this.scale
+        };
+      },
+
+      toMath(sx, sy) {
+        return {
+          mx: (sx - this.originX) / this.scale,
+          my: (this.originY - sy) / this.scale
+        };
+      }
+    };
+
+    // --- 4. DOM Elements Cache ---
+    const elements = {
+      viewportContainer: document.getElementById('viewport-container'),
+      svg: document.getElementById('math-svg'),
+      viewportG: document.getElementById('viewport-g'),
+      gridGroup: document.getElementById('grid-group'),
+      trailGroup: document.getElementById('trail-group'),
+      axisX: document.getElementById('axis-x'),
+      axisY: document.getElementById('axis-y'),
+      axisXLabel: document.getElementById('axis-x-label'),
+      axisYLabel: document.getElementById('axis-y-label'),
+      directrixLine: document.getElementById('directrix-line'),
+      directrixLabelG: document.getElementById('directrix-label-g'),
+      directrixText: document.getElementById('directrix-text'),
+      conicCurvePath: document.getElementById('conic-curve-path'),
+      conicCurvePath2: document.getElementById('conic-curve-path2'),
+      linePf: document.getElementById('line-pf'),
+      linePd: document.getElementById('line-pd'),
+      pathPerpIndicator: document.getElementById('path-perp-indicator'),
+      textPfVal: document.getElementById('text-pf-val'),
+      textPdVal: document.getElementById('text-pd-val'),
+      labelPfG: document.getElementById('label-pf-g'),
+      labelPdG: document.getElementById('label-pd-g'),
+      pointCenter: document.getElementById('point-center'),
+      pointFootD: document.getElementById('point-foot-d'),
+      labelFootD: document.getElementById('label-foot-d'),
+      pointFocus: document.getElementById('point-focus'),
+      labelFocusG: document.getElementById('label-focus-g'),
+      textFocusLabel: document.getElementById('text-focus-label'),
+      pointLocus: document.getElementById('point-locus'),
+      pointLocusHalo: document.getElementById('point-locus-halo'),
+      labelLocusG: document.getElementById('label-locus-g'),
+      textLocusLabel: document.getElementById('text-locus-label'),
+
+      // Top Slider
+      sliderEccentricityScale: document.getElementById('slider-eccentricity-scale'),
+
+      // UI Overlays
+      readoutFocusCoords: document.getElementById('readout-focus-coords'),
+      readoutDirectrixCoords: document.getElementById('readout-directrix-coords'),
+      readoutPointCoords: document.getElementById('readout-point-coords'),
+      inputEVal: document.getElementById('input-e-val'),
+      btnEDec: document.getElementById('btn-e-dec'),
+      btnEInc: document.getElementById('btn-e-inc'),
+      chkShowDistances: document.getElementById('chk-show-distances'),
+      chkTraceLocus: document.getElementById('chk-trace-locus'),
+      btnResetConstruction: document.getElementById('btn-reset-construction'),
+      distFpVal: document.getElementById('dist-fp-val'),
+      distPdVal: document.getElementById('dist-pd-val'),
+      ratioCalcVal: document.getElementById('ratio-calc-val'),
+      targetEReadout: document.getElementById('target-e-readout'),
+
+      // Rebuilt Panel Live Elements
+      sec1LivePf: document.getElementById('sec1-live-pf'),
+      sec1LivePd: document.getElementById('sec1-live-pd'),
+      sec1LiveRatio: document.getElementById('sec1-live-ratio'),
+      sec1LiveTargetE: document.getElementById('sec1-live-target-e'),
+      sec3LivePCoords: document.getElementById('sec3-live-p-coords'),
+      sec3LivePf: document.getElementById('sec3-live-pf'),
+      sec3LivePd: document.getElementById('sec3-live-pd'),
+      sec3LiveRatio: document.getElementById('sec3-live-ratio'),
+      sec3LiveTargetE: document.getElementById('sec3-live-target-e'),
+      sec3LiveDiff: document.getElementById('sec3-live-diff'),
+
+      // Verification Elements
+      vstepPCoords: document.getElementById('vstep-p-coords'),
+      vstep1Text: document.getElementById('vstep1-text'),
+      vstep2Text: document.getElementById('vstep2-text'),
+      vstep3Text: document.getElementById('vstep3-text'),
+      vstep4Text: document.getElementById('vstep4-text'),
+      verifyBanner: document.getElementById('verify-banner'),
+      verifyBannerText: document.getElementById('verify-banner-text'),
+
+      // Zoom Controls
+      btnZoomIn: document.getElementById('btn-zoom-in'),
+      btnZoomOut: document.getElementById('btn-zoom-out'),
+      btnZoomReset: document.getElementById('btn-zoom-reset'),
+
+      // Animation Bar
+      btnPlayPause: document.getElementById('btn-play-pause'),
+      svgPlayIcon: document.getElementById('svg-play-icon'),
+      animProgressSlider: document.getElementById('anim-progress-slider'),
+      animStepCounter: document.getElementById('anim-step-counter'),
+      speedBtns: document.querySelectorAll('.btn-speed'),
+
+      // Exact Challenge
+      inputChallengeY: document.getElementById('input-challenge-y'),
+      btnCheckExactChallenge: document.getElementById('btn-check-exact-challenge'),
+      exactFeedback: document.getElementById('exact-feedback'),
+
+      btnResetView: document.getElementById('btn-reset-view'),
+      errorToast: document.getElementById('error-toast'),
+      errorMsg: document.getElementById('error-msg')
+    };
+
+    // --- 5. Rendering Pipeline ---
+
+    function updateViewportDimensions() {
+      const rect = elements.viewportContainer.getBoundingClientRect();
+      view.width = rect.width || 800;
+      view.height = rect.height || 560;
+      render();
+    }
+
+    function renderGrid() {
+      elements.gridGroup.innerHTML = '';
+      if (!state.showGrid) return;
+
+      const minMath = view.toMath(0, view.height);
+      const maxMath = view.toMath(view.width, 0);
+
+      const startX = Math.floor(minMath.mx) - 1;
+      const endX = Math.ceil(maxMath.mx) + 1;
+      const startY = Math.floor(minMath.my) - 1;
+      const endY = Math.ceil(maxMath.my) + 1;
+
+      const frag = document.createDocumentFragment();
+
+      // Vertical Grid Lines
+      for (let x = startX; x <= endX; x++) {
+        const pt1 = view.toScreen(x, startY);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', pt1.sx);
+        line.setAttribute('y1', 0);
+        line.setAttribute('x2', pt1.sx);
+        line.setAttribute('y2', view.height);
+        line.setAttribute('class', 'grid-line');
+        frag.appendChild(line);
+
+        if (x !== 0) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const axisYPos = Math.min(Math.max(view.originY + 14, 20), view.height - 10);
+          text.setAttribute('x', pt1.sx);
+          text.setAttribute('y', axisYPos);
+          text.setAttribute('class', 'svg-text');
+          text.setAttribute('text-anchor', 'middle');
+          text.textContent = x;
+          frag.appendChild(text);
+        }
+      }
+
+      // Horizontal Grid Lines
+      for (let y = startY; y <= endY; y++) {
+        const pt1 = view.toScreen(startX, y);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', 0);
+        line.setAttribute('y1', pt1.sy);
+        line.setAttribute('x2', view.width);
+        line.setAttribute('y2', pt1.sy);
+        line.setAttribute('class', 'grid-line');
+        frag.appendChild(line);
+
+        if (y !== 0) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const axisXPos = Math.min(Math.max(view.originX - 8, 15), view.width - 20);
+          text.setAttribute('x', axisXPos);
+          text.setAttribute('y', pt1.sy + 4);
+          text.setAttribute('class', 'svg-text');
+          text.setAttribute('text-anchor', 'end');
+          text.textContent = y;
+          frag.appendChild(text);
+        }
+      }
+
+      elements.gridGroup.appendChild(frag);
+    }
+
+    function renderAxes() {
+      // X-Axis
+      elements.axisX.setAttribute('x1', 0);
+      elements.axisX.setAttribute('y1', view.originY);
+      elements.axisX.setAttribute('x2', view.width - 10);
+      elements.axisX.setAttribute('y2', view.originY);
+
+      elements.axisXLabel.setAttribute('x', view.width - 15);
+      elements.axisXLabel.setAttribute('y', view.originY - 8);
+
+      // Y-Axis
+      elements.axisY.setAttribute('x1', view.originX);
+      elements.axisY.setAttribute('y1', view.height);
+      elements.axisY.setAttribute('x2', view.originX);
+      elements.axisY.setAttribute('y2', 15);
+
+      elements.axisYLabel.setAttribute('x', view.originX + 10);
+      elements.axisYLabel.setAttribute('y', 20);
+
+      // Center O(0,0)
+      elements.pointCenter.setAttribute('cx', view.originX);
+      elements.pointCenter.setAttribute('cy', view.originY);
+    }
+
+    function renderConicAndDirectrix() {
+      const e = state.eccentricity;
+      const geom = MathEngine.getConicGeometry(e);
+      const steps = 120;
+
+      // Render Directrix Line & Text
+      if (geom.type === "Circle") {
+        elements.directrixLine.style.display = 'none';
+        elements.directrixLabelG.style.display = 'none';
+        elements.readoutDirectrixCoords.textContent = 'Degenerate (∞)';
+      } else {
+        const directrixSX = view.toScreen(geom.directrixX, 0).sx;
+        elements.directrixLine.setAttribute('x1', directrixSX);
+        elements.directrixLine.setAttribute('y1', 0);
+        elements.directrixLine.setAttribute('x2', directrixSX);
+        elements.directrixLine.setAttribute('y2', view.height);
+        elements.directrixLine.style.display = 'block';
+
+        elements.directrixText.textContent = `\u2113: x = ${geom.directrixX.toFixed(2)}`;
+        elements.directrixLabelG.setAttribute('transform', `translate(${directrixSX - 45}, 20)`);
+        elements.directrixLabelG.style.display = 'block';
+
+        elements.readoutDirectrixCoords.textContent = `x = ${geom.directrixX.toFixed(2)}`;
+      }
+
+      // Render Focus Point
+      const focusScreen = view.toScreen(geom.focus.x, geom.focus.y);
+      elements.pointFocus.setAttribute('cx', focusScreen.sx);
+      elements.pointFocus.setAttribute('cy', focusScreen.sy);
+      elements.textFocusLabel.textContent = `F(${geom.focus.x.toFixed(2)}, ${geom.focus.y.toFixed(2)})`;
+      elements.labelFocusG.setAttribute('transform', `translate(${focusScreen.sx - 50}, ${focusScreen.sy + 14})`);
+      elements.readoutFocusCoords.textContent = `(${geom.focus.x.toFixed(2)}, ${geom.focus.y.toFixed(2)})`;
+
+      // Render Conic Curve Path
+      elements.conicCurvePath2.style.display = 'none';
+
+      if (geom.type === "Circle") {
+        let d = '';
+        for (let i = 0; i <= steps; i++) {
+          const t = (i / steps) * 2 * Math.PI;
+          const pt = geom.pointFromParam(t);
+          const spt = view.toScreen(pt.x, pt.y);
+          d += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+        }
+        elements.conicCurvePath.setAttribute('d', d);
+      } else if (geom.type === "Ellipse") {
+        let d = '';
+        for (let i = 0; i <= steps; i++) {
+          const t = (i / steps) * 2 * Math.PI;
+          const pt = geom.pointFromParam(t);
+          const spt = view.toScreen(pt.x, pt.y);
+          d += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+        }
+        elements.conicCurvePath.setAttribute('d', d);
+      } else if (geom.type === "Parabola") {
+        let d = '';
+        for (let i = 0; i <= steps; i++) {
+          const t = -1.8 + (i / steps) * 3.6;
+          const pt = geom.pointFromParam(t);
+          const spt = view.toScreen(pt.x, pt.y);
+          d += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+        }
+        elements.conicCurvePath.setAttribute('d', d);
+      } else if (geom.type === "Hyperbola") {
+        let dRight = '';
+        for (let i = 0; i <= steps; i++) {
+          const t = -1.8 + (i / steps) * 3.6;
+          const pt = geom.pointFromParam(t, 'right');
+          const spt = view.toScreen(pt.x, pt.y);
+          dRight += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+        }
+        elements.conicCurvePath.setAttribute('d', dRight);
+
+        let dLeft = '';
+        for (let i = 0; i <= steps; i++) {
+          const t = -1.8 + (i / steps) * 3.6;
+          const pt = geom.pointFromParam(t, 'left');
+          const spt = view.toScreen(pt.x, pt.y);
+          dLeft += (i === 0 ? 'M ' : ' L ') + `${spt.sx.toFixed(1)} ${spt.sy.toFixed(1)}`;
+        }
+        elements.conicCurvePath2.setAttribute('d', dLeft);
+        elements.conicCurvePath2.style.display = 'block';
+      }
+
+      // Color tuning based on conic classification
+      const classification = MathEngine.classifyConic(e);
+      elements.conicCurvePath.setAttribute('stroke', classification.color);
+      elements.conicCurvePath2.setAttribute('stroke', classification.color);
+    }
+
+    function renderLocusPointAndDistances() {
+      const e = state.eccentricity;
+      const geom = MathEngine.getConicGeometry(e);
+
+      // Current Point P(x, y)
+      let P = { x: 0, y: 0 };
+      if (geom.type === 'Hyperbola') {
+        P = geom.pointFromParam(state.paramT, state.branch);
+      } else {
+        P = geom.pointFromParam(state.paramT);
+      }
+
+      const Pscreen = view.toScreen(P.x, P.y);
+      elements.pointLocus.setAttribute('cx', Pscreen.sx);
+      elements.pointLocus.setAttribute('cy', Pscreen.sy);
+      elements.pointLocusHalo.setAttribute('cx', Pscreen.sx);
+      elements.pointLocusHalo.setAttribute('cy', Pscreen.sy);
+
+      elements.textLocusLabel.textContent = `P(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+      elements.labelLocusG.setAttribute('transform', `translate(${Pscreen.sx + 10}, ${Pscreen.sy - 10})`);
+      elements.readoutPointCoords.textContent = `(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+
+      // Trail Locus Record
+      if (state.traceEnabled) {
+        state.trailPoints.push({ sx: Pscreen.sx, sy: Pscreen.sy });
+        if (state.trailPoints.length > 250) state.trailPoints.shift();
+      }
+      renderTrailGroup();
+
+      // Distances PF and PD
+      const pf = MathEngine.calculatePF(P.x, P.y, geom.focus);
+      const pd = geom.type === 'Circle' ? 0 : MathEngine.calculatePD(P.x, geom.directrixX);
+      const ratio = pd > 1e-4 ? (pf / pd) : 0;
+      const diff = Math.abs(ratio - e);
+
+      const focusScreen = view.toScreen(geom.focus.x, geom.focus.y);
+
+      if (state.showDistances) {
+        // PF Construction Line
+        elements.linePf.setAttribute('x1', Pscreen.sx);
+        elements.linePf.setAttribute('y1', Pscreen.sy);
+        elements.linePf.setAttribute('x2', focusScreen.sx);
+        elements.linePf.setAttribute('y2', focusScreen.sy);
+        elements.linePf.style.display = 'block';
+
+        elements.textPfVal.textContent = `FP = ${pf.toFixed(2)}`;
+        const midPfX = (Pscreen.sx + focusScreen.sx) / 2;
+        const midPfY = (Pscreen.sy + focusScreen.sy) / 2;
+        elements.labelPfG.setAttribute('transform', `translate(${midPfX - 35}, ${midPfY - 12})`);
+        elements.labelPfG.style.display = 'block';
+
+        if (geom.type !== 'Circle') {
+          // Foot D on Directrix Line: (directrixX, P.y)
+          const footDScreen = view.toScreen(geom.directrixX, P.y);
+          elements.pointFootD.setAttribute('cx', footDScreen.sx);
+          elements.pointFootD.setAttribute('cy', footDScreen.sy);
+          elements.labelFootD.setAttribute('x', footDScreen.sx + 8);
+          elements.labelFootD.setAttribute('y', footDScreen.sy + 4);
+          elements.pointFootD.style.display = 'block';
+          elements.labelFootD.style.display = 'block';
+
+          // PD Construction Line
+          elements.linePd.setAttribute('x1', Pscreen.sx);
+          elements.linePd.setAttribute('y1', Pscreen.sy);
+          elements.linePd.setAttribute('x2', footDScreen.sx);
+          elements.linePd.setAttribute('y2', footDScreen.sy);
+          elements.linePd.style.display = 'block';
+
+          elements.textPdVal.textContent = `PD = ${pd.toFixed(2)}`;
+          const midPdX = (Pscreen.sx + footDScreen.sx) / 2;
+          elements.labelPdG.setAttribute('transform', `translate(${midPdX - 35}, ${Pscreen.sy - 14})`);
+          elements.labelPdG.style.display = 'block';
+
+          // Perpendicular Foot Box Indicator
+          const dirSign = P.x < geom.directrixX ? -1 : 1;
+          const pPath = `M ${footDScreen.sx + dirSign * 8} ${footDScreen.sy} L ${footDScreen.sx + dirSign * 8} ${footDScreen.sy - 8} L ${footDScreen.sx} ${footDScreen.sy - 8}`;
+          elements.pathPerpIndicator.setAttribute('d', pPath);
+          elements.pathPerpIndicator.style.display = 'block';
+        } else {
+          elements.pointFootD.style.display = 'none';
+          elements.labelFootD.style.display = 'none';
+          elements.linePd.style.display = 'none';
+          elements.labelPdG.style.display = 'none';
+          elements.pathPerpIndicator.style.display = 'none';
+        }
+      } else {
+        elements.linePf.style.display = 'none';
+        elements.labelPfG.style.display = 'none';
+        elements.linePd.style.display = 'none';
+        elements.labelPdG.style.display = 'none';
+        elements.pointFootD.style.display = 'none';
+        elements.labelFootD.style.display = 'none';
+        elements.pathPerpIndicator.style.display = 'none';
+      }
+
+      // Update Overlay Live Readouts
+      elements.distFpVal.textContent = pf.toFixed(2);
+      elements.distPdVal.textContent = geom.type === 'Circle' ? 'N/A' : pd.toFixed(2);
+      elements.ratioCalcVal.textContent = geom.type === 'Circle' ? '0.000' : ratio.toFixed(3);
+      elements.targetEReadout.textContent = e.toFixed(2);
+
+      // Update Section 1 Live Readouts
+      if (elements.sec1LivePf) elements.sec1LivePf.textContent = pf.toFixed(2);
+      if (elements.sec1LivePd) elements.sec1LivePd.textContent = geom.type === 'Circle' ? 'N/A' : pd.toFixed(2);
+      if (elements.sec1LiveRatio) elements.sec1LiveRatio.textContent = geom.type === 'Circle' ? '0.000' : ratio.toFixed(3);
+      if (elements.sec1LiveTargetE) elements.sec1LiveTargetE.textContent = e.toFixed(2);
+
+      // Update Section 3 Live Readouts
+      if (elements.sec3LivePCoords) elements.sec3LivePCoords.textContent = `(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+      if (elements.sec3LivePf) elements.sec3LivePf.textContent = pf.toFixed(2);
+      if (elements.sec3LivePd) elements.sec3LivePd.textContent = geom.type === 'Circle' ? 'N/A' : pd.toFixed(2);
+      if (elements.sec3LiveRatio) elements.sec3LiveRatio.textContent = geom.type === 'Circle' ? '0.000' : ratio.toFixed(3);
+      if (elements.sec3LiveTargetE) elements.sec3LiveTargetE.textContent = e.toFixed(2);
+      if (elements.sec3LiveDiff) elements.sec3LiveDiff.textContent = geom.type === 'Circle' ? '0.000' : diff.toFixed(3);
+
+      // Update Section 2 Scale Indicator Arrow X Position
+      const indicatorArrow = document.getElementById('sec2-indicator-arrow');
+      if (indicatorArrow) {
+        let posX = 85;
+        if (e === 0) posX = 20;
+        else if (e < 1) posX = 20 + (e / 1) * 130;
+        else if (e === 1) posX = 150;
+        else posX = Math.min(220, 150 + ((e - 1) / 1.2) * 65);
+        indicatorArrow.setAttribute('d', `M ${posX} 4 L ${posX} 12`);
+      }
+
+      // Update Large Verification Elements
+      if (elements.vstepPCoords) elements.vstepPCoords.textContent = `P = (${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+      if (elements.vstep1Text) elements.vstep1Text.textContent = `PF = \u221A((${P.x.toFixed(2)} - ${geom.focus.x.toFixed(2)})\u00B2 + (${P.y.toFixed(2)} - ${geom.focus.y.toFixed(2)})\u00B2) = ${pf.toFixed(3)}`;
+      if (elements.vstep2Text) elements.vstep2Text.textContent = geom.type === 'Circle' ? 'PD = N/A (Directrix \u2113 at \u221E)' : `PD = |${P.x.toFixed(2)} - ${geom.directrixX.toFixed(2)}| = ${pd.toFixed(3)}`;
+      if (elements.vstep3Text) elements.vstep3Text.textContent = geom.type === 'Circle' ? 'PF / PD = Degenerate circular ratio' : `PF / PD = ${pf.toFixed(3)} / ${pd.toFixed(3)} = ${ratio.toFixed(3)}`;
+      if (elements.vstep4Text) elements.vstep4Text.textContent = `Calculated ratio = ${ratio.toFixed(3)} \u2248 Target e = ${e.toFixed(3)}`;
+
+      const isRatioEqual = Math.abs(ratio - e) < 0.05 || (geom.type === 'Circle' && e === 0);
+      if (isRatioEqual) {
+        elements.verifyBanner.className = 'verification-status-banner valid';
+        elements.verifyBannerText.textContent = '✓ Accurate! The rule holds.';
+      } else {
+        elements.verifyBanner.className = 'verification-status-banner invalid';
+        elements.verifyBannerText.textContent = '✗ The point does not satisfy the selected conic condition.';
+      }
+    }
+
+    function renderTrailGroup() {
+      elements.trailGroup.innerHTML = '';
+      if (!state.traceEnabled || state.trailPoints.length === 0) return;
+
+      const frag = document.createDocumentFragment();
+      state.trailPoints.forEach(pt => {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pt.sx);
+        circle.setAttribute('cy', pt.sy);
+        circle.setAttribute('r', '3');
+        circle.setAttribute('class', 'trail-dot');
+        frag.appendChild(circle);
+      });
+      elements.trailGroup.appendChild(frag);
+    }
+
+    function updateClassifierUI() {
+      const e = state.eccentricity;
+      const classification = MathEngine.classifyConic(e);
+
+      // Slider & Input syncing
+      elements.sliderEccentricityScale.value = e;
+      elements.inputEVal.value = e.toFixed(2);
+
+      // Highlights on Top Bar Items
+      document.querySelectorAll('.scale-item').forEach(item => item.classList.remove('active-conic'));
+      if (classification.type === "Circle") document.getElementById('scale-item-circle').classList.add('active-conic');
+      if (classification.type === "Ellipse") document.getElementById('scale-item-ellipse').classList.add('active-conic');
+      if (classification.type === "Parabola") document.getElementById('scale-item-parabola').classList.add('active-conic');
+      if (classification.type === "Hyperbola") document.getElementById('scale-item-hyperbola').classList.add('active-conic');
+
+      // Mini Conic Box Highlights
+      document.querySelectorAll('.mini-conic-box').forEach(box => box.classList.remove('active'));
+      const miniId = `mini-box-${classification.type.toLowerCase()}`;
+      const targetMini = document.getElementById(miniId);
+      if (targetMini) targetMini.classList.add('active');
+    }
+
+    function render() {
+      renderGrid();
+      renderAxes();
+      renderConicAndDirectrix();
+      renderLocusPointAndDistances();
+      updateClassifierUI();
+    }
+
+    // --- 6. Event Handlers & User Interactions ---
+
+    function showError(msg) {
+      elements.errorMsg.textContent = msg;
+      elements.errorToast.classList.add('show');
+      setTimeout(() => {
+        elements.errorToast.classList.remove('show');
+      }, 3500);
+    }
+
+    function setEccentricity(newE) {
+      const parsedE = parseFloat(newE);
+      if (isNaN(parsedE) || parsedE < 0) {
+        showError('Invalid eccentricity. Eccentricity must be non-negative (e >= 0).');
+        elements.inputEVal.value = state.eccentricity.toFixed(2);
+        return;
+      }
+
+      state.eccentricity = parsedE;
+      state.trailPoints = [];
+      render();
+    }
+
+    // Top Slider Listener
+    elements.sliderEccentricityScale.addEventListener('input', (e) => {
+      setEccentricity(e.target.value);
+    });
+
+    // Scale Items Click
+    document.querySelectorAll('.scale-item').forEach(item => {
+      item.addEventListener('click', () => {
+        setEccentricity(item.dataset.e);
+      });
+    });
+
+    // Mini Conic Boxes Click
+    document.querySelectorAll('.mini-conic-box').forEach(box => {
+      box.addEventListener('click', () => {
+        setEccentricity(box.dataset.e);
+      });
+    });
+
+    // Input Box & Buttons
+    elements.inputEVal.addEventListener('change', (e) => {
+      setEccentricity(e.target.value);
+    });
+
+    elements.btnEDec.addEventListener('click', () => {
+      if (state.eccentricity >= 0.05) {
+        setEccentricity(state.eccentricity - 0.05);
+      }
+    });
+
+    elements.btnEInc.addEventListener('click', () => {
+      setEccentricity(state.eccentricity + 0.05);
+    });
+
+    // Objects Panel Toggles
+    elements.chkShowDistances.addEventListener('change', (e) => {
+      state.showDistances = e.target.checked;
+      render();
+    });
+
+    elements.chkTraceLocus.addEventListener('change', (e) => {
+      state.traceEnabled = e.target.checked;
+      if (!state.traceEnabled) state.trailPoints = [];
+      render();
+    });
+
+    elements.btnResetConstruction.addEventListener('click', () => {
+      state.trailPoints = [];
+      state.eccentricity = 0.58;
+      state.paramT = 0.6;
+      render();
+    });
+
+    // Zoom & Reset View Controls
+    elements.btnZoomIn.addEventListener('click', () => {
+      view.scale = Math.min(160, view.scale * 1.15);
+      render();
+    });
+
+    elements.btnZoomOut.addEventListener('click', () => {
+      view.scale = Math.max(15, view.scale / 1.15);
+      render();
+    });
+
+    elements.btnZoomReset.addEventListener('click', () => {
+      view.originX = 380;
+      view.originY = 280;
+      view.scale = 45;
+      render();
+    });
+
+    elements.btnResetView.addEventListener('click', () => {
+      state.eccentricity = 0.58;
+      state.paramT = 0.6;
+      state.branch = 'right';
+      state.showDistances = true;
+      state.traceEnabled = true;
+      state.isPlaying = false;
+      state.trailPoints = [];
+
+      view.originX = 380;
+      view.originY = 280;
+      view.scale = 45;
+
+      elements.chkShowDistances.checked = true;
+      elements.chkTraceLocus.checked = true;
+      elements.svgPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+      elements.exactFeedback.style.display = 'none';
+
+      render();
+    });
+
+    // Exact challenge Handler
+    elements.btnCheckExactChallenge.addEventListener('click', () => {
+      const userY = parseFloat(elements.inputChallengeY.value);
+      if (isNaN(userY)) {
+        elements.exactFeedback.className = 'feedback-msg incorrect';
+        elements.exactFeedback.innerHTML = '&#10008; Please enter a numeric value.';
+        elements.exactFeedback.style.display = 'inline-flex';
+        return;
+      }
+
+      // Ellipse e = 0.60, a = 4, c = 2.4, b = sqrt(16 - 5.76) = 3.20
+      const expectedY = 3.20;
+      if (Math.abs(Math.abs(userY) - expectedY) < 0.15) {
+        elements.exactFeedback.className = 'feedback-msg correct';
+        elements.exactFeedback.innerHTML = `&#10004; Excellent! At x=0, y(P) = \u00B1b = \u00B13.20.`;
+      } else {
+        elements.exactFeedback.className = 'feedback-msg incorrect';
+        elements.exactFeedback.innerHTML = `&#10008; Try again. At x=0, y(P) = \u00B1b \u2248 3.20.`;
+      }
+      elements.exactFeedback.style.display = 'inline-flex';
+    });
+
+    // --- 7. Animation Loop Engine ---
+    let animTimer = null;
+
+    function toggleAnimation() {
+      state.isPlaying = !state.isPlaying;
+      if (state.isPlaying) {
+        elements.svgPlayIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+        runAnimLoop();
+      } else {
+        elements.svgPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        cancelAnimationFrame(animTimer);
+      }
+    }
+
+    function runAnimLoop() {
+      if (!state.isPlaying) return;
+
+      state.animStep = (state.animStep + 1 * state.animSpeed) % 360;
+      elements.animProgressSlider.value = Math.floor(state.animStep);
+      elements.animStepCounter.textContent = `Trace step: ${Math.floor(state.animStep)} / 360`;
+
+      // Map step 0..360 to parameter t
+      state.paramT = (state.animStep / 360) * 2 * Math.PI - Math.PI;
+
+      render();
+      animTimer = requestAnimationFrame(runAnimLoop);
+    }
+
+    elements.btnPlayPause.addEventListener('click', toggleAnimation);
+
+    elements.animProgressSlider.addEventListener('input', (e) => {
+      state.animStep = parseFloat(e.target.value);
+      elements.animStepCounter.textContent = `Trace step: ${Math.floor(state.animStep)} / 360`;
+      state.paramT = (state.animStep / 360) * 2 * Math.PI - Math.PI;
+      render();
+    });
+
+    elements.speedBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        elements.speedBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.animSpeed = parseFloat(btn.dataset.speed);
+      });
+    });
+
+    // --- 8. Mouse & Touch Dragging Engine ---
+    let isDraggingP = false;
+
+    function getSVGCoordinates(e) {
+      const rect = elements.svg.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        sx: clientX - rect.left,
+        sy: clientY - rect.top
+      };
+    }
+
+    elements.viewportContainer.addEventListener('mousedown', (e) => {
+      const coords = getSVGCoordinates(e);
+      const mathPt = view.toMath(coords.sx, coords.sy);
+      
+      const geom = MathEngine.getConicGeometry(state.eccentricity);
+      let P = { x: 0, y: 0 };
+      if (geom.type === 'Hyperbola') {
+        P = geom.pointFromParam(state.paramT, state.branch);
+      } else {
+        P = geom.pointFromParam(state.paramT);
+      }
+      const Pscreen = view.toScreen(P.x, P.y);
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      // Dragging Point P handle
+      if (distToP < 24 && state.mode !== 'pan') {
+        isDraggingP = true;
+        updatePointFromMouse(mathPt);
+        return;
+      }
+
+      // Free 2D Viewport Panning
+      if (state.mode === 'pan' || state.mode === 'locus' || distToP >= 24) {
+        if (state.mode !== 'locus' || distToP >= 24) {
+          view.isPanning = true;
+          view.dragStartScreen = { x: coords.sx, y: coords.sy };
+          view.dragStartOrigin = { x: view.originX, y: view.originY };
+        }
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingP) {
+        const coords = getSVGCoordinates(e);
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updatePointFromMouse(mathPt);
+      } else if (view.isPanning) {
+        const coords = getSVGCoordinates(e);
+        const dx = coords.sx - view.dragStartScreen.x;
+        const dy = coords.sy - view.dragStartScreen.y;
+        view.originX = view.dragStartOrigin.x + dx;
+        view.originY = view.dragStartOrigin.y + dy;
+        render();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingP = false;
+      view.isPanning = false;
+    });
+
+    // Touch Support
+    elements.viewportContainer.addEventListener('touchstart', (e) => {
+      const coords = getSVGCoordinates(e);
+      const geom = MathEngine.getConicGeometry(state.eccentricity);
+      let P = { x: 0, y: 0 };
+      if (geom.type === 'Hyperbola') {
+        P = geom.pointFromParam(state.paramT, state.branch);
+      } else {
+        P = geom.pointFromParam(state.paramT);
+      }
+      const Pscreen = view.toScreen(P.x, P.y);
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      if (distToP < 30 && state.mode !== 'pan') {
+        isDraggingP = true;
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updatePointFromMouse(mathPt);
+        e.preventDefault();
+      } else {
+        view.isPanning = true;
+        view.dragStartScreen = { x: coords.sx, y: coords.sy };
+        view.dragStartOrigin = { x: view.originX, y: view.originY };
+      }
+    }, { passive: false });
+
+    elements.viewportContainer.addEventListener('touchmove', (e) => {
+      const coords = getSVGCoordinates(e);
+      if (isDraggingP) {
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updatePointFromMouse(mathPt);
+        e.preventDefault();
+      } else if (view.isPanning) {
+        const dx = coords.sx - view.dragStartScreen.x;
+        const dy = coords.sy - view.dragStartScreen.y;
+        view.originX = view.dragStartOrigin.x + dx;
+        view.originY = view.dragStartOrigin.y + dy;
+        render();
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    elements.viewportContainer.addEventListener('touchend', () => {
+      isDraggingP = false;
+      view.isPanning = false;
+    });
+
+    function updatePointFromMouse(mathPt) {
+      const geom = MathEngine.getConicGeometry(state.eccentricity);
+
+      if (geom.type === 'Circle' || geom.type === 'Ellipse') {
+        state.paramT = Math.atan2(mathPt.my / (geom.b || geom.r), mathPt.mx / (geom.a || geom.r));
+      } else if (geom.type === 'Parabola') {
+        state.paramT = mathPt.my / 2.2;
+      } else if (geom.type === 'Hyperbola') {
+        state.branch = mathPt.mx >= 0 ? 'right' : 'left';
+        state.paramT = Math.asinh(mathPt.my / geom.b);
+      }
+      render();
+    }
+
+    // Wheel Zooming
+    elements.viewportContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      const mouseCoords = getSVGCoordinates(e);
+      const mathBefore = view.toMath(mouseCoords.sx, mouseCoords.sy);
+
+      const newScale = Math.min(Math.max(15, view.scale * zoomFactor), 160);
+      view.scale = newScale;
+
+      view.originX = mouseCoords.sx - mathBefore.mx * view.scale;
+      view.originY = mouseCoords.sy + mathBefore.my * view.scale;
+
+      render();
+    }, { passive: false });
+
+    // Resize Event
+    window.addEventListener('resize', updateViewportDimensions);
+
+    // Initial Execution
+    renderAccordionStates();
+    updateViewportDimensions();
+    render();
+  </script>
+</body>
+</html>

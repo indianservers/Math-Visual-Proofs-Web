@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quadratic Inequalities by Graph Regions | Interactive Mathematics</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #f3e8ff;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-red: #ef4444;
+      --accent-red-light: #fee2e2;
+      --accent-orange: #f59e0b;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Layout Structure */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout { grid-template-columns: 100px 1fr; }
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .brand-logo svg { width: 36px; height: 36px; }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover { color: var(--primary); background: var(--primary-light); }
+    .nav-item.active button { color: var(--primary); background: var(--primary-light); font-weight: 600; }
+    .nav-item svg { width: 22px; height: 22px; }
+    .sidebar-footer { margin-top: auto; }
+
+    /* Main Content Wrapper */
+    .main-wrapper {
+      padding: 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      max-width: 1850px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-subtitle { color: var(--text-muted); font-size: 14px; margin-top: 2px; }
+
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon-action {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-icon-action:hover { background: #f8fafc; border-color: var(--border-focus); color: var(--primary); }
+
+    /* Top Controls Bar Card */
+    .top-controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .controls-left-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .natural-input-field {
+      padding: 8px 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-math);
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--primary);
+      width: 220px;
+    }
+
+    .natural-input-field:focus { outline: none; border-color: var(--primary); }
+
+    .coeff-stepper-unit {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .stepper-box {
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2px;
+    }
+
+    .btn-step {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-step:hover { background: var(--primary-light); color: var(--primary); border-radius: 4px; }
+
+    .step-input-num {
+      width: 38px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .ineq-select-dropdown {
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--primary);
+      background: var(--primary-light);
+      font-family: var(--font-math);
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .quick-ineq-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ineq-pill {
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      font-family: var(--font-math);
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-ineq-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .error-alert-banner {
+      background: #fce7f3;
+      color: #9f1239;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    /* Dashboard Grid Architecture */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(360px, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    .workspace-main-col { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Central Interactive Canvas Viewport */
+    .graph-viewport-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .graph-canvas-container {
+      width: 100%;
+      height: 440px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      touch-action: none;
+    }
+
+    svg.main-parabola-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    svg.main-parabola-svg.panning {
+      cursor: grabbing;
+    }
+
+    .point-p-handle {
+      cursor: grab;
+    }
+    .point-p-handle:active {
+      cursor: grabbing;
+    }
+
+    /* Bottom Right Zoom Control Panel */
+    .zoom-control-overlay {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-md);
+      z-index: 6;
+    }
+
+    .btn-zoom-action {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: white;
+      font-weight: bold;
+      font-size: 15px;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .btn-zoom-action:hover { background: var(--primary-light); color: var(--primary); border-color: var(--border-focus); }
+
+    .zoom-level-text {
+      font-family: var(--font-math);
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text-dark);
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .btn-reset-view-pill {
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-reset-view-pill:hover { background: var(--primary-light); border-color: var(--border-focus); }
+
+    /* Canvas Legend Box */
+    .canvas-legend-box {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+    /* Interactive Point Info Card on Canvas Top Right */
+    .point-eval-card {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--border-focus);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* Sign Chart on Number Line Section */
+    .sign-chart-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .svg-sign-chart { width: 100%; height: 60px; display: block; }
+
+    /* Card 3: Visual Proof Flowchart */
+    .visual-proof-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .proof-flowchart-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .proof-flowchart-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .proof-flow-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .proof-flow-title { font-weight: 800; color: var(--text-dark); font-size: 12.5px; }
+
+    /* Right Panel (Why it works) */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      max-height: 880px;
+      min-width: 360px;
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 18px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-panel-header h2 { font-size: 17px; font-weight: 800; color: var(--text-dark); }
+
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar { width: 8px; }
+    .why-panel-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .why-panel-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .why-section-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .why-num-badge {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .boxed-formula {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 15px;
+      text-align: center;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* Prediction Box inside Right Panel */
+    .prediction-card-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .feedback-msg {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feedback-msg.correct { background: var(--accent-green-light); color: #065f46; }
+    .feedback-msg.incorrect { background: #fce7f3; color: #9f1239; }
+
+    /* Challenge Bottom Card */
+    .challenge-bottom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Saved">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Saved
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Progress">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            Progress
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <h1>Quadratic Inequalities by Graph Regions</h1>
+          <p class="header-subtitle">See how a quadratic curve splits the number line into positive and negative intervals.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 12 min</span>
+          <button class="btn-icon-action" id="btn-reset-all" title="Reset whole lesson">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset
+          </button>
+        </div>
+      </header>
+
+      <!-- Top Controls Bar -->
+      <section class="top-controls-card">
+        <div class="controls-left-group">
+          <!-- Natural Equation Input -->
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Quadratic expression:</label>
+            <input type="text" id="input-natural-quad" class="natural-input-field" value="x² - 2x">
+          </div>
+
+          <!-- Steppers a, b, c -->
+          <div class="coeff-stepper-unit">
+            <span>a</span>
+            <div class="stepper-box">
+              <button class="btn-step" id="btn-dec-a">&lt;</button>
+              <input type="number" id="input-val-a" class="step-input-num" value="1">
+              <button class="btn-step" id="btn-inc-a">&gt;</button>
+            </div>
+          </div>
+
+          <div class="coeff-stepper-unit">
+            <span>b</span>
+            <div class="stepper-box">
+              <button class="btn-step" id="btn-dec-b">&lt;</button>
+              <input type="number" id="input-val-b" class="step-input-num" value="-2">
+              <button class="btn-step" id="btn-inc-b">&gt;</button>
+            </div>
+          </div>
+
+          <div class="coeff-stepper-unit">
+            <span>c</span>
+            <div class="stepper-box">
+              <button class="btn-step" id="btn-dec-c">&lt;</button>
+              <input type="number" id="input-val-c" class="step-input-num" value="0">
+              <button class="btn-step" id="btn-inc-c">&gt;</button>
+            </div>
+          </div>
+
+          <!-- Inequality Select -->
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Inequality:</label>
+            <select id="select-inequality" class="ineq-select-dropdown">
+              <option value=">">f(x) &gt; 0</option>
+              <option value=">=">f(x) &ge; 0</option>
+              <option value="<">f(x) &lt; 0</option>
+              <option value="<=">f(x) &le; 0</option>
+            </select>
+          </div>
+
+          <!-- Quick Inequality Toggle Pills -->
+          <div class="quick-ineq-pills" style="margin-top:14px;">
+            <button class="btn-ineq-pill active" data-op=">">&gt; 0</button>
+            <button class="btn-ineq-pill" data-op=">=">&ge; 0</button>
+            <button class="btn-ineq-pill" data-op="<">&lt; 0</button>
+            <button class="btn-ineq-pill" data-op="<=">&le; 0</button>
+          </div>
+        </div>
+
+        <div id="parse-error-banner" class="error-alert-banner" style="display:none;"></div>
+      </section>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Main Workspace Column -->
+        <div class="workspace-main-col">
+          <!-- Central Interactive Graph Canvas -->
+          <section class="graph-viewport-card">
+            <div style="font-size:13px; font-weight:700; color:var(--text-muted);">
+              Drag point P along parabola, drag graph area to pan, or mouse wheel to zoom around cursor.
+            </div>
+
+            <div class="graph-canvas-container" id="graph-canvas-container">
+              <!-- SVG Canvas -->
+              <svg id="svg-parabola" class="main-parabola-svg"></svg>
+
+              <!-- Zoom Controls Overlay (Bottom Right) -->
+              <div class="zoom-control-overlay">
+                <button class="btn-zoom-action" id="btn-zoom-out" title="Zoom Out">&minus;</button>
+                <span class="zoom-level-text" id="zoom-level-txt">100%</span>
+                <button class="btn-zoom-action" id="btn-zoom-in" title="Zoom In">+</button>
+                <button class="btn-reset-view-pill" id="btn-reset-view" title="Reset Viewport Only">Reset View</button>
+              </div>
+
+              <!-- Legend Overlay (Bottom Left) -->
+              <div class="canvas-legend-box">
+                <div class="legend-item"><div class="legend-swatch" style="background:#eeedfd; border:1px solid #818cf8;"></div><span>Solution Region Shading</span></div>
+                <div class="legend-item"><div class="legend-swatch" style="background:#635bff; height:3px;"></div><span>y = f(x) Parabola</span></div>
+                <div class="legend-item"><div class="legend-swatch" style="background:#64748b; height:2px;"></div><span>Coordinate Axes (y=0, x=0)</span></div>
+              </div>
+
+              <!-- Live Point P Evaluation Card (Top Right) -->
+              <div class="point-eval-card" id="point-eval-card">
+                <div style="font-weight:bold; color:var(--primary);" id="card-p-coord">Point (1, -1)</div>
+                <div style="font-family:var(--font-math); font-size:12.5px;" id="card-p-calc">f(1) = 1² &minus; 2(1) = &minus;1</div>
+                <div style="font-weight:bold;" id="card-p-status">Status: below x-axis</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Sign Chart on Number Line Section -->
+          <section class="sign-chart-card">
+            <div style="font-size:14px; font-weight:800; color:var(--text-dark);" id="sign-chart-title">
+              Sign chart &amp; solution on the number line
+            </div>
+            <svg id="svg-sign-chart" class="svg-sign-chart"></svg>
+          </section>
+
+          <!-- Card 3: Visual Proof Flowchart -->
+          <section class="visual-proof-card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h3 style="font-size:15px; font-weight:800;">Visual Proof</h3>
+              <span class="pill-badge" style="background:var(--accent-green-light); color:#065f46; font-weight:bold;">✔ Proved</span>
+            </div>
+
+            <div class="proof-flowchart-grid">
+              <!-- Step 1 -->
+              <div class="proof-flow-box">
+                <div class="proof-flow-title">1. Find Roots</div>
+                <p id="proof-step1-txt">f(x) = 0 where x = 0, 2.</p>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="proof-flow-box">
+                <div class="proof-flow-title">2. Test Intervals</div>
+                <p id="proof-step2-txt">Pick test values in (&minus;&infty;,0), (0,2), (2,&infty;).</p>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="proof-flow-box">
+                <div class="proof-flow-title">3. Apply Inequality</div>
+                <p id="proof-step3-txt">Shade regions satisfying f(x) &gt; 0.</p>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="proof-flow-box" style="background:var(--primary-light); border-color:var(--primary);">
+                <div class="proof-flow-title" style="color:var(--primary);">4. Solution Set</div>
+                <p style="font-family:var(--font-math); font-weight:bold; color:var(--primary);" id="proof-step4-txt">
+                  (&minus;&infty;, 0) &cup; (2, &infty;)
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Viewport 3: Right Educational Panel (Why it works) -->
+        <aside class="why-panel" id="why-panel">
+          <div class="why-panel-header">
+            <span style="color:var(--primary); font-size:18px;">&#9672;</span>
+            <h2>Why it works</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- Section 1 -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">1</span>
+                <span>The x-intercepts split the line</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-1">
+                For f(x) = x&sup2; &minus; 2x, the curve crosses the x-axis at x = 0 and x = 2.
+              </p>
+            </section>
+
+            <!-- Section 2 -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">2</span>
+                <span>Parabola direction (a &gt; 0)</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-2">
+                So the graph is above the x-axis outside the roots and below between them.
+              </p>
+            </section>
+
+            <!-- Section 3 -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">3</span>
+                <span>Match inequality to regions</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--text-dark);" id="why-desc-3">
+                For f(x) &gt; 0, take x &lt; 0 or x &gt; 2.
+              </p>
+              <div class="boxed-formula" id="why-box-sol">
+                Solution: (&minus;&infty;, 0) &cup; (2, &infty;)
+              </div>
+            </section>
+
+            <!-- Prediction Section -->
+            <div class="prediction-card-box">
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Your prediction ❓</h4>
+              <p style="font-size:12px; color:var(--text-muted);" id="predict-lead-lbl">What is the solution to f(x) &gt; 0?</p>
+
+              <select id="select-prediction-option" class="ineq-select-dropdown" style="font-size:13.5px; padding:6px 10px;">
+                <!-- Generated dynamically -->
+              </select>
+
+              <button class="btn-primary" id="btn-check-prediction">Check</button>
+              <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Challenge Bottom Card -->
+      <section class="challenge-bottom-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h3 style="font-size:16px; font-weight:800;">Challenge (Exact)</h3>
+            <p style="font-size:12.5px; color:var(--text-muted);">Find the solution set for the given quadratic inequality.</p>
+          </div>
+
+          <div style="font-family:var(--font-math); font-size:18px; font-weight:bold; background:#f8fafc; border:1px solid var(--border); padding:6px 16px; border-radius:var(--radius-sm); color:var(--primary);">
+            x&sup2; + 4x &minus; 5 &lt; 0
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:13px; font-weight:bold;">x =</span>
+            <input type="number" id="ch-input-r1" class="step-input-num" style="width:50px; border:1px solid var(--border);" placeholder="-5">
+            <span style="font-size:13px; font-weight:bold;">and x =</span>
+            <input type="number" id="ch-input-r2" class="step-input-num" style="width:50px; border:1px solid var(--border);" placeholder="1">
+            <button class="btn-primary" id="btn-reveal-challenge" style="width:auto; padding:8px 20px;">Reveal</button>
+          </div>
+        </div>
+
+        <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * Quadratic Inequalities Visualizer Engine
+     * Strict Mathematical Rendering & Single Source of Truth Model
+     */
+
+    // --- 0. Central Application State & Viewport ---
+    const state = {
+      variable: 'x',
+      a: 1,
+      b: -2,
+      c: 0,
+      inequality: '>',
+
+      px: 1, // Draggable Point P x-coordinate (at vertex initially)
+
+      // Camera Viewport bounds
+      view: {
+        xMin: -4,
+        xMax: 6,
+        yMin: -3,
+        yMax: 5,
+        baseRangeX: 10
+      }
+    };
+
+    // --- 1. Natural Expression Formatter & Parser ---
+    function formatQuadratic(a, b, c, v = 'x') {
+      let str = '';
+      if (a === 1) str += `${v}²`;
+      else if (a === -1) str += `-${v}²`;
+      else str += `${a}${v}²`;
+
+      if (b > 0) {
+        str += ` + ${b === 1 ? '' : b}${v}`;
+      } else if (b < 0) {
+        str += ` - ${Math.abs(b) === 1 ? '' : Math.abs(b)}${v}`;
+      }
+
+      if (c > 0) {
+        str += ` + ${c}`;
+      } else if (c < 0) {
+        str += ` - ${Math.abs(c)}`;
+      }
+
+      return str;
+    }
+
+    function parseQuadraticInput(inputStr) {
+      if (!inputStr || typeof inputStr !== 'string') return { error: 'Please enter a quadratic expression.' };
+
+      let cleaned = inputStr.trim()
+        .replace(/f\([a-zA-Z]\)\s*=/gi, '')
+        .replace(/[a-zA-Z]\s*=/gi, '')
+        .replace(/\s+/g, '')
+        .replace(/\*/g, '')
+        .replace(/²/g, '^2');
+
+      const vars = cleaned.match(/[a-zA-Z]/g);
+      const variable = (vars && vars.length > 0) ? vars[0] : 'x';
+
+      let termStr = cleaned;
+      if (!termStr.startsWith('+') && !termStr.startsWith('-')) termStr = '+' + termStr;
+
+      let coeffA = 0, coeffB = 0, coeffC = 0;
+      let hasA = false;
+
+      const regex = new RegExp(`([+-][0-9.]*(${variable}(\\^2)?)?)`, 'g');
+      const matches = termStr.match(regex);
+      if (matches) {
+        for (let term of matches) {
+          if (!term || term === '+' || term === '-') continue;
+          if (term.includes('^2')) {
+            hasA = true;
+            let cStr = term.replace(variable + '^2', '');
+            if (cStr === '+' || cStr === '') coeffA += 1;
+            else if (cStr === '-') coeffA += -1;
+            else coeffA += parseFloat(cStr);
+          } else if (term.includes(variable)) {
+            let cStr = term.replace(variable, '');
+            if (cStr === '+' || cStr === '') coeffB += 1;
+            else if (cStr === '-') coeffB += -1;
+            else coeffB += parseFloat(cStr);
+          } else {
+            const val = parseFloat(term);
+            if (!isNaN(val)) coeffC += val;
+          }
+        }
+      }
+
+      if (!hasA || isNaN(coeffA) || coeffA === 0) {
+        return { error: 'Not a valid quadratic: coefficient a cannot be 0.' };
+      }
+
+      if (isNaN(coeffB)) coeffB = 0;
+      if (isNaN(coeffC)) coeffC = 0;
+
+      return { variable, a: coeffA, b: coeffB, c: coeffC, rawInput: inputStr };
+    }
+
+    // --- 2. Pure Mathematical Solver (Single Source of Truth) ---
+    function solveQuadraticMath(a, b, c, ineq, v = 'x') {
+      const disc = b * b - 4 * a * c;
+      const xv = -b / (2 * a);
+      const yv = a * xv * xv + b * xv + c;
+
+      const isInclusive = (ineq === '>=' || ineq === '<=');
+
+      let roots = [];
+      let rootType = 'none'; // 'two' | 'one' | 'none'
+      let solutionInterval = '';
+      let isAllReal = false;
+      let isNoSolution = false;
+
+      const evaluateQuadratic = (xVal) => a * xVal * xVal + b * xVal + c;
+
+      const satisfies = (xVal) => {
+        const val = evaluateQuadratic(xVal);
+        if (ineq === '>=') return val >= -1e-8;
+        if (ineq === '>') return val > 1e-8;
+        if (ineq === '<=') return val <= 1e-8;
+        if (ineq === '<') return val < -1e-8;
+        return false;
+      };
+
+      if (disc > 1e-9) {
+        rootType = 'two';
+        const r1_raw = (-b - Math.sqrt(disc)) / (2 * a);
+        const r2_raw = (-b + Math.sqrt(disc)) / (2 * a);
+        const r1 = Math.min(r1_raw, r2_raw);
+        const r2 = Math.max(r1_raw, r2_raw);
+        roots = [r1, r2];
+
+        const r1Str = r1.toFixed(Number.isInteger(r1) ? 0 : 1);
+        const r2Str = r2.toFixed(Number.isInteger(r2) ? 0 : 1);
+
+        if (a > 0) {
+          if (ineq === '>=' || ineq === '>') {
+            solutionInterval = `(-\\infty, ${r1Str}${isInclusive ? ']' : ')'}) \\cup (${isInclusive ? '[' : '('}${r2Str}, \\infty)`;
+          } else {
+            solutionInterval = `${isInclusive ? '[' : '('}${r1Str}, ${r2Str}${isInclusive ? ']' : ')'}`;
+          }
+        } else { // a < 0
+          if (ineq === '>=' || ineq === '>') {
+            solutionInterval = `${isInclusive ? '[' : '('}${r1Str}, ${r2Str}${isInclusive ? ']' : ')'}`;
+          } else {
+            solutionInterval = `(-\\infty, ${r1Str}${isInclusive ? ']' : ')'}) \\cup (${isInclusive ? '[' : '('}${r2Str}, \\infty)`;
+          }
+        }
+      } else if (Math.abs(disc) <= 1e-9) {
+        rootType = 'one';
+        roots = [xv];
+        const rStr = xv.toFixed(Number.isInteger(xv) ? 0 : 1);
+
+        if (a > 0) {
+          if (ineq === '>=') { isAllReal = true; solutionInterval = '(-\\infty, \\infty)'; }
+          else if (ineq === '>') { solutionInterval = `(-\\infty, ${rStr}) \\cup (${rStr}, \\infty)`; }
+          else if (ineq === '<=') { solutionInterval = `{${rStr}}`; }
+          else { isNoSolution = true; solutionInterval = '\\varnothing'; }
+        } else { // a < 0
+          if (ineq === '<=') { isAllReal = true; solutionInterval = '(-\\infty, \\infty)'; }
+          else if (ineq === '<') { solutionInterval = `(-\\infty, ${rStr}) \\cup (${rStr}, \\infty)`; }
+          else if (ineq === '>=') { solutionInterval = `{${rStr}}`; }
+          else { isNoSolution = true; solutionInterval = '\\varnothing'; }
+        }
+      } else { // disc < 0
+        rootType = 'none';
+        roots = [];
+
+        if ((a > 0 && (ineq === '>' || ineq === '>=')) || (a < 0 && (ineq === '<' || ineq === '<='))) {
+          isAllReal = true;
+          solutionInterval = '(-\\infty, \\infty)';
+        } else {
+          isNoSolution = true;
+          solutionInterval = '\\varnothing';
+        }
+      }
+
+      return {
+        v, a, b, c, ineq, disc, xv, yv,
+        roots, rootType, isInclusive, satisfies, evaluateQuadratic,
+        solutionInterval, isAllReal, isNoSolution
+      };
+    }
+
+    function formatOp(op) {
+      switch (op) {
+        case '<=': return '\u2264';
+        case '>=': return '\u2265';
+        default: return op;
+      }
+    }
+
+    // --- 3. Mathematical Coordinate System Transformations ---
+    function getPlotDimensions(svgElem) {
+      const width = svgElem.clientWidth || 550;
+      const height = svgElem.clientHeight || 440;
+      const plotLeft = 50;
+      const plotRight = width - 25;
+      const plotTop = 25;
+      const plotBottom = height - 40;
+      const plotWidth = Math.max(10, plotRight - plotLeft);
+      const plotHeight = Math.max(10, plotBottom - plotTop);
+
+      return { width, height, plotLeft, plotRight, plotTop, plotBottom, plotWidth, plotHeight };
+    }
+
+    function toScreenX(x, dims) {
+      return dims.plotLeft + ((x - state.view.xMin) / (state.view.xMax - state.view.xMin)) * dims.plotWidth;
+    }
+
+    function toScreenY(y, dims) {
+      return dims.plotTop + ((state.view.yMax - y) / (state.view.yMax - state.view.yMin)) * dims.plotHeight;
+    }
+
+    function toMathX(screenX, dims) {
+      return state.view.xMin + ((screenX - dims.plotLeft) / dims.plotWidth) * (state.view.xMax - state.view.xMin);
+    }
+
+    function toMathY(screenY, dims) {
+      return state.view.yMax - ((screenY - dims.plotTop) / dims.plotHeight) * (state.view.yMax - state.view.yMin);
+    }
+
+    // --- 4. 1:1 Pixel Aspect Ratio Viewport System ---
+    function resetViewportToFit(model, svgElem) {
+      const dims = getPlotDimensions(svgElem || elements.svgParabola);
+      const AR = dims.plotWidth / dims.plotHeight; // Screen aspect ratio
+
+      let keyX = [0, model.xv, state.px];
+      if (model.rootType === 'two') {
+        keyX.push(model.roots[0], model.roots[1]);
+      } else if (model.rootType === 'one') {
+        keyX.push(model.roots[0]);
+      }
+
+      let minX = Math.min(...keyX);
+      let maxX = Math.max(...keyX);
+      let spanX = Math.max(6, maxX - minX);
+
+      spanX += Math.max(4, spanX * 0.4);
+      const centerX = (minX + maxX) / 2;
+
+      const py = model.evaluateQuadratic(state.px);
+      let keyY = [0, model.c, model.yv, py];
+      let minY = Math.min(...keyY);
+      let maxY = Math.max(...keyY);
+      let spanY = Math.max(5, maxY - minY);
+
+      let rangeX = spanX;
+      let rangeY = rangeX / AR;
+
+      if (spanY > rangeY * 0.75) {
+        rangeY = spanY / 0.75;
+        rangeX = rangeY * AR;
+      }
+
+      const centerY = (minY + maxY) / 2;
+
+      state.view.xMin = centerX - rangeX / 2;
+      state.view.xMax = centerX + rangeX / 2;
+      state.view.yMin = centerY - rangeY / 2;
+      state.view.yMax = centerY + rangeY / 2;
+      state.view.baseRangeX = rangeX;
+    }
+
+    function ensurePointPVisible(model) {
+      const py = model.evaluateQuadratic(state.px);
+      const marginX = (state.view.xMax - state.view.xMin) * 0.05;
+      const marginY = (state.view.yMax - state.view.yMin) * 0.05;
+
+      let modified = false;
+
+      if (state.px < state.view.xMin + marginX) {
+        const width = state.view.xMax - state.view.xMin;
+        state.view.xMin = state.px - marginX;
+        state.view.xMax = state.view.xMin + width;
+        modified = true;
+      } else if (state.px > state.view.xMax - marginX) {
+        const width = state.view.xMax - state.view.xMin;
+        state.view.xMax = state.px + marginX;
+        state.view.xMin = state.view.xMax - width;
+        modified = true;
+      }
+
+      if (py < state.view.yMin + marginY) {
+        const height = state.view.yMax - state.view.yMin;
+        state.view.yMin = py - marginY;
+        state.view.yMax = state.view.yMin + height;
+        modified = true;
+      } else if (py > state.view.yMax - marginY) {
+        const height = state.view.yMax - state.view.yMin;
+        state.view.yMax = py + marginY;
+        state.view.yMin = state.view.yMax - height;
+        modified = true;
+      }
+
+      return modified;
+    }
+
+    function getSmartTickStep(range) {
+      if (range > 500) return 100;
+      if (range > 200) return 50;
+      if (range > 100) return 20;
+      if (range > 40) return 10;
+      if (range > 20) return 5;
+      if (range > 8) return 2;
+      if (range > 3) return 1;
+      if (range > 1) return 0.5;
+      return 0.1;
+    }
+
+    // --- 5. SVG Graph Renderer with Strict Layering Architecture ---
+    function renderParabolaSVG(svgElem, model) {
+      if (!svgElem) return;
+      const dims = getPlotDimensions(svgElem);
+
+      const screenX0 = toScreenX(0, dims);
+      const screenY0 = toScreenY(0, dims);
+
+      const clampedAxisY = Math.max(dims.plotTop, Math.min(dims.plotBottom, screenY0));
+      const clampedAxisX = Math.max(dims.plotLeft, Math.min(dims.plotRight, screenX0));
+
+      let html = `<defs>
+        <pattern id="grid-pattern-quad" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f8fafc" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <!-- Layer 1: Grid Background & Lines -->
+      <rect width="100%" height="100%" fill="url(#grid-pattern-quad)" />`;
+
+      const xRange = state.view.xMax - state.view.xMin;
+      const xStep = getSmartTickStep(xRange);
+      const startX = Math.ceil(state.view.xMin / xStep) * xStep;
+
+      for (let x = startX; x <= state.view.xMax; x += xStep) {
+        const tx = toScreenX(x, dims);
+        if (tx >= dims.plotLeft && tx <= dims.plotRight) {
+          html += `<line x1="${tx}" y1="${dims.plotTop}" x2="${tx}" y2="${dims.plotBottom}" stroke="#f1f5f9" stroke-width="1"/>`;
+        }
+      }
+
+      const yRange = state.view.yMax - state.view.yMin;
+      const yStep = getSmartTickStep(yRange);
+      const startY = Math.ceil(state.view.yMin / yStep) * yStep;
+
+      for (let y = startY; y <= state.view.yMax; y += yStep) {
+        const ty = toScreenY(y, dims);
+        if (ty >= dims.plotTop && ty <= dims.plotBottom) {
+          html += `<line x1="${dims.plotLeft}" y1="${ty}" x2="${dims.plotRight}" y2="${ty}" stroke="#f1f5f9" stroke-width="1"/>`;
+        }
+      }
+
+      // Layer 2: Background Inequality Region Shading (soft fill between curve & x-axis)
+      const sampleCurve = (xStart, xEnd) => {
+        let pts = [];
+        const num = 40;
+        const dt = (xEnd - xStart) / num;
+        for (let i = 0; i <= num; i++) {
+          const x = xStart + i * dt;
+          const y = model.evaluateQuadratic(x);
+          pts.push(`${toScreenX(x, dims)},${toScreenY(y, dims)}`);
+        }
+        return pts;
+      };
+
+      let intervalsToTest = [];
+      if (model.rootType === 'two') {
+        const r1 = model.roots[0];
+        const r2 = model.roots[1];
+        intervalsToTest = [
+          { start: state.view.xMin, end: r1 },
+          { start: r1, end: r2 },
+          { start: r2, end: state.view.xMax }
+        ];
+      } else if (model.rootType === 'one') {
+        const r0 = model.roots[0];
+        intervalsToTest = [
+          { start: state.view.xMin, end: r0 },
+          { start: r0, end: state.view.xMax }
+        ];
+      } else { // 'none'
+        intervalsToTest = [
+          { start: state.view.xMin, end: state.view.xMax }
+        ];
+      }
+
+      for (let iv of intervalsToTest) {
+        if (iv.end <= iv.start) continue;
+        const midX = (iv.start + iv.end) / 2;
+        if (model.satisfies(midX)) {
+          const cPts = sampleCurve(iv.start, iv.end);
+          const startPx = toScreenX(iv.start, dims);
+          const endPx = toScreenX(iv.end, dims);
+          const pathStr = `M ${startPx},${clampedAxisY} L ${cPts.join(' L ')} L ${endPx},${clampedAxisY} Z`;
+          html += `<path d="${pathStr}" fill="#eeedfd" opacity="0.65"/>`;
+        }
+      }
+
+      // Layer 3: Cartesian Axes (Standard x-axis y=0 and y-axis x=0)
+      html += `<line x1="${dims.plotLeft}" y1="${clampedAxisY}" x2="${dims.plotRight}" y2="${clampedAxisY}" stroke="#64748b" stroke-width="2"/>`;
+      html += `<line x1="${clampedAxisX}" y1="${dims.plotBottom}" x2="${clampedAxisX}" y2="${dims.plotTop}" stroke="#64748b" stroke-width="2"/>`;
+
+      html += `<text x="${dims.plotRight + 5}" y="${clampedAxisY + 4}" font-family="var(--font-math)" font-size="13" font-weight="bold" fill="#475569">${model.v}</text>`;
+      html += `<text x="${clampedAxisX + 6}" y="${dims.plotTop - 8}" font-family="var(--font-math)" font-size="13" font-weight="bold" fill="#475569">y</text>`;
+
+      // Axis Ticks & Numerical Labels
+      for (let x = startX; x <= state.view.xMax; x += xStep) {
+        if (Math.abs(x) < 1e-5) continue;
+        const tx = toScreenX(x, dims);
+        if (tx >= dims.plotLeft && tx <= dims.plotRight) {
+          html += `<line x1="${tx}" y1="${clampedAxisY - 4}" x2="${tx}" y2="${clampedAxisY + 4}" stroke="#94a3b8" stroke-width="1.5"/>`;
+          html += `<text x="${tx}" y="${clampedAxisY + 16}" font-family="var(--font-math)" font-size="11" font-weight="600" fill="#64748b" text-anchor="middle">${Number.isInteger(x)?x:x.toFixed(1)}</text>`;
+        }
+      }
+
+      for (let y = startY; y <= state.view.yMax; y += yStep) {
+        if (Math.abs(y) < 1e-5) continue;
+        const ty = toScreenY(y, dims);
+        if (ty >= dims.plotTop && ty <= dims.plotBottom) {
+          html += `<line x1="${clampedAxisX - 4}" y1="${ty}" x2="${clampedAxisX + 4}" y2="${ty}" stroke="#94a3b8" stroke-width="1.5"/>`;
+          html += `<text x="${clampedAxisX - 8}" y="${ty + 4}" font-family="var(--font-math)" font-size="11" font-weight="600" fill="#64748b" text-anchor="end">${Number.isInteger(y)?y:y.toFixed(1)}</text>`;
+        }
+      }
+
+      // Layer 4: Quadratic Parabola Curve (y = f(x))
+      let pathD = '';
+      const nSteps = 180;
+      const stepWidth = xRange / nSteps;
+      for (let i = 0; i <= nSteps; i++) {
+        const x = state.view.xMin + i * stepWidth;
+        const y = model.evaluateQuadratic(x);
+        const px = toScreenX(x, dims);
+        const py = toScreenY(y, dims);
+        if (i === 0) pathD += `M ${px} ${py}`;
+        else pathD += ` L ${px} ${py}`;
+      }
+      html += `<path d="${pathD}" fill="none" stroke="#635bff" stroke-width="3.5" stroke-linecap="round"/>`;
+
+      // Function Label Badge on Curve (Formatted dynamically from single source of truth)
+      const bMathX = model.xv + xRange * 0.15;
+      const bMathY = model.evaluateQuadratic(bMathX);
+      const bx = toScreenX(bMathX, dims);
+      const by = toScreenY(bMathY, dims);
+      const eqStr = `f(${model.v}) = ${formatQuadratic(model.a, model.b, model.c, model.v)}`;
+
+      if (bx > dims.plotLeft + 20 && bx < dims.plotRight - 100 && by > dims.plotTop + 10 && by < dims.plotBottom - 10) {
+        html += `<g transform="translate(${bx}, ${by - 15})">
+          <rect width="140" height="24" rx="12" fill="#ffffff" stroke="#818cf8" stroke-width="1.5" opacity="0.95"/>
+          <text x="70" y="16" font-family="var(--font-math)" font-size="12" font-weight="bold" fill="#635bff" text-anchor="middle">${eqStr}</text>
+        </g>`;
+      }
+
+      // Layer 5: Root Markers (Open vs Closed circles on x-axis)
+      for (let r of model.roots) {
+        const rx = toScreenX(r, dims);
+        if (rx >= dims.plotLeft && rx <= dims.plotRight) {
+          const rStr = r.toFixed(Number.isInteger(r) ? 0 : 1);
+          if (model.isInclusive) {
+            // Closed Circle ●
+            html += `<circle cx="${rx}" cy="${clampedAxisY}" r="7" fill="#635bff" stroke="#ffffff" stroke-width="2.5"/>`;
+          } else {
+            // Open Circle ○
+            html += `<circle cx="${rx}" cy="${clampedAxisY}" r="7" fill="#ffffff" stroke="#635bff" stroke-width="3"/>`;
+          }
+          html += `<g transform="translate(${rx - 15}, ${clampedAxisY + 12})">
+            <rect width="30" height="20" rx="4" fill="#eeedfd" stroke="#635bff" stroke-width="1"/>
+            <text x="15" y="14" font-family="var(--font-math)" font-size="12" font-weight="bold" fill="#635bff" text-anchor="middle">${rStr}</text>
+          </g>`;
+        }
+      }
+
+      // Layer 6: Vertex Marker (V)
+      const vx = toScreenX(model.xv, dims);
+      const vy = toScreenY(model.yv, dims);
+      if (vx >= dims.plotLeft && vx <= dims.plotRight && vy >= dims.plotTop && vy <= dims.plotBottom) {
+        html += `<circle cx="${vx}" cy="${vy}" r="5" fill="#10b981" stroke="#ffffff" stroke-width="2"/>`;
+      }
+
+      // Layer 7: Draggable Point P
+      const py = model.evaluateQuadratic(state.px);
+      const spx = toScreenX(state.px, dims);
+      const spy = toScreenY(py, dims);
+
+      if (spx >= dims.plotLeft - 10 && spx <= dims.plotRight + 10) {
+        html += `<line x1="${spx}" y1="${spy}" x2="${spx}" y2="${clampedAxisY}" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4"/>`;
+        html += `<circle cx="${spx}" cy="${spy}" r="9" fill="#8b5cf6" stroke="#ffffff" stroke-width="3" id="handle-point-p" class="point-p-handle"/>`;
+      }
+
+      svgElem.innerHTML = html;
+    }
+
+    // Number Line & Sign Chart SVG Renderer (Authoritative Visual Solution Representation)
+    function renderSignChartSVG(svgElem, model) {
+      if (!svgElem) return;
+      const width = svgElem.clientWidth || 500;
+      const height = 60;
+      const centerY = height / 2;
+      const padding = 50;
+      const usableW = width - 2 * padding;
+
+      let html = `<line x1="${padding - 15}" y1="${centerY}" x2="${width - padding + 15}" y2="${centerY}" stroke="#94a3b8" stroke-width="2"/>`;
+
+      if (model.rootType === 'two') {
+        const r1 = model.roots[0];
+        const r2 = model.roots[1];
+        const minVal = r1 - 3;
+        const maxVal = r2 + 3;
+
+        const mapX = (val) => padding + ((val - minVal) / (maxVal - minVal)) * usableW;
+
+        const rx1 = mapX(r1);
+        const rx2 = mapX(r2);
+
+        const r1Str = r1.toFixed(Number.isInteger(r1) ? 0 : 1);
+        const r2Str = r2.toFixed(Number.isInteger(r2) ? 0 : 1);
+
+        // Test values for interval evaluation
+        const t1 = r1 - 1;
+        const t2 = (r1 + r2) / 2;
+        const t3 = r2 + 1;
+
+        const sign1 = model.evaluateQuadratic(t1) > 0 ? '+' : '-';
+        const sign2 = model.evaluateQuadratic(t2) > 0 ? '+' : '-';
+        const sign3 = model.evaluateQuadratic(t3) > 0 ? '+' : '-';
+
+        const sol1 = model.satisfies(t1);
+        const sol2 = model.satisfies(t2);
+        const sol3 = model.satisfies(t3);
+
+        // Segment 1: (-inf, r1)
+        html += `<line x1="${padding}" y1="${centerY}" x2="${rx1}" y2="${centerY}" stroke="${sol1 ? '#635bff' : '#cbd5e1'}" stroke-width="${sol1 ? 5 : 2}"/>`;
+        html += `<text x="${(padding + rx1)/2}" y="${centerY - 12}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="${sign1==='+' ? '#635bff' : '#ef4444'}" text-anchor="middle">${sign1}</text>`;
+
+        // Segment 2: (r1, r2)
+        html += `<line x1="${rx1}" y1="${centerY}" x2="${rx2}" y2="${centerY}" stroke="${sol2 ? '#635bff' : '#cbd5e1'}" stroke-width="${sol2 ? 5 : 2}"/>`;
+        html += `<text x="${(rx1 + rx2)/2}" y="${centerY - 12}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="${sign2==='+' ? '#635bff' : '#ef4444'}" text-anchor="middle">${sign2}</text>`;
+
+        // Segment 3: (r2, +inf)
+        html += `<line x1="${rx2}" y1="${centerY}" x2="${width - padding}" y2="${centerY}" stroke="${sol3 ? '#635bff' : '#cbd5e1'}" stroke-width="${sol3 ? 5 : 2}"/>`;
+        html += `<text x="${(rx2 + width - padding)/2}" y="${centerY - 12}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="${sign3==='+' ? '#635bff' : '#ef4444'}" text-anchor="middle">${sign3}</text>`;
+
+        // Root 1 circle (Open vs Closed)
+        if (model.isInclusive) {
+          html += `<circle cx="${rx1}" cy="${centerY}" r="6" fill="#635bff" stroke="#ffffff" stroke-width="2"/>`;
+        } else {
+          html += `<circle cx="${rx1}" cy="${centerY}" r="6" fill="#ffffff" stroke="#635bff" stroke-width="2.5"/>`;
+        }
+        html += `<text x="${rx1}" y="${centerY + 20}" font-family="var(--font-math)" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">${r1Str}</text>`;
+
+        // Root 2 circle (Open vs Closed)
+        if (model.isInclusive) {
+          html += `<circle cx="${rx2}" cy="${centerY}" r="6" fill="#635bff" stroke="#ffffff" stroke-width="2"/>`;
+        } else {
+          html += `<circle cx="${rx2}" cy="${centerY}" r="6" fill="#ffffff" stroke="#635bff" stroke-width="2.5"/>`;
+        }
+        html += `<text x="${rx2}" y="${centerY + 20}" font-family="var(--font-math)" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">${r2Str}</text>`;
+
+      } else if (model.rootType === 'one') {
+        const r0 = model.roots[0];
+        const rx0 = width / 2;
+        const rStr = r0.toFixed(Number.isInteger(r0) ? 0 : 1);
+
+        const solLeft = model.satisfies(r0 - 1);
+        const solRight = model.satisfies(r0 + 1);
+        const signLeft = model.evaluateQuadratic(r0 - 1) > 0 ? '+' : '-';
+        const signRight = model.evaluateQuadratic(r0 + 1) > 0 ? '+' : '-';
+
+        html += `<line x1="${padding}" y1="${centerY}" x2="${rx0}" y2="${centerY}" stroke="${solLeft ? '#635bff' : '#cbd5e1'}" stroke-width="${solLeft ? 5 : 2}"/>`;
+        html += `<text x="${(padding + rx0)/2}" y="${centerY - 12}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="${signLeft==='+' ? '#635bff' : '#ef4444'}" text-anchor="middle">${signLeft}</text>`;
+
+        html += `<line x1="${rx0}" y1="${centerY}" x2="${width - padding}" y2="${centerY}" stroke="${solRight ? '#635bff' : '#cbd5e1'}" stroke-width="${solRight ? 5 : 2}"/>`;
+        html += `<text x="${(rx0 + width - padding)/2}" y="${centerY - 12}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="${signRight==='+' ? '#635bff' : '#ef4444'}" text-anchor="middle">${signRight}</text>`;
+
+        const isRootSol = model.satisfies(r0);
+        if (model.isInclusive && isRootSol) {
+          html += `<circle cx="${rx0}" cy="${centerY}" r="6" fill="#635bff" stroke="#ffffff" stroke-width="2"/>`;
+        } else if (solLeft || solRight) {
+          html += `<circle cx="${rx0}" cy="${centerY}" r="6" fill="#ffffff" stroke="#635bff" stroke-width="2.5"/>`;
+        } else if (isRootSol) {
+          html += `<circle cx="${rx0}" cy="${centerY}" r="6" fill="#635bff" stroke="#ffffff" stroke-width="2"/>`;
+        } else {
+          html += `<circle cx="${rx0}" cy="${centerY}" r="6" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>`;
+        }
+        html += `<text x="${rx0}" y="${centerY + 20}" font-family="var(--font-math)" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">${rStr}</text>`;
+
+      } else { // no real roots
+        const isSol = model.isAllReal;
+        const signMid = model.evaluateQuadratic(0) > 0 ? '+' : '-';
+        html += `<line x1="${padding}" y1="${centerY}" x2="${width - padding}" y2="${centerY}" stroke="${isSol ? '#635bff' : '#cbd5e1'}" stroke-width="${isSol ? 5 : 2}"/>`;
+        html += `<text x="${width / 2}" y="${centerY - 12}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="${signMid==='+' ? '#635bff' : '#ef4444'}" text-anchor="middle">${signMid} ${isSol ? '(All real numbers)' : '(No real solution)'}</text>`;
+      }
+
+      svgElem.innerHTML = html;
+    }
+
+    // --- 6. DOM Elements Cache ---
+    const elements = {
+      inputNaturalQuad: document.getElementById('input-natural-quad'),
+      inputValA: document.getElementById('input-val-a'), btnDecA: document.getElementById('btn-dec-a'), btnIncA: document.getElementById('btn-inc-a'),
+      inputValB: document.getElementById('input-val-b'), btnDecB: document.getElementById('btn-dec-b'), btnIncB: document.getElementById('btn-inc-b'),
+      inputValC: document.getElementById('input-val-c'), btnDecC: document.getElementById('btn-dec-c'), btnIncC: document.getElementById('btn-inc-c'),
+
+      selectInequality: document.getElementById('select-inequality'),
+      parseErrorBanner: document.getElementById('parse-error-banner'),
+
+      svgParabola: document.getElementById('svg-parabola'),
+      graphCanvasContainer: document.getElementById('graph-canvas-container'),
+      pointEvalCard: document.getElementById('point-eval-card'),
+      cardPCoord: document.getElementById('card-p-coord'),
+      cardPCalc: document.getElementById('card-p-calc'),
+      cardPStatus: document.getElementById('card-p-status'),
+
+      btnZoomOut: document.getElementById('btn-zoom-out'),
+      btnZoomIn: document.getElementById('btn-zoom-in'),
+      zoomLevelTxt: document.getElementById('zoom-level-txt'),
+      btnResetView: document.getElementById('btn-reset-view'),
+
+      svgSignChart: document.getElementById('svg-sign-chart'),
+
+      proofStep1Txt: document.getElementById('proof-step1-txt'),
+      proofStep2Txt: document.getElementById('proof-step2-txt'),
+      proofStep3Txt: document.getElementById('proof-step3-txt'),
+      proofStep4Txt: document.getElementById('proof-step4-txt'),
+
+      whyDesc1: document.getElementById('why-desc-1'),
+      whyDesc2: document.getElementById('why-desc-2'),
+      whyDesc3: document.getElementById('why-desc-3'),
+      whyBoxSol: document.getElementById('why-box-sol'),
+
+      predictLeadLbl: document.getElementById('predict-lead-lbl'),
+      selectPredictionOption: document.getElementById('select-prediction-option'),
+      btnCheckPrediction: document.getElementById('btn-check-prediction'),
+      predictFeedback: document.getElementById('predict-feedback'),
+
+      chInputR1: document.getElementById('ch-input-r1'),
+      chInputR2: document.getElementById('ch-input-r2'),
+      btnRevealChallenge: document.getElementById('btn-reveal-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback'),
+
+      btnResetAll: document.getElementById('btn-reset-all')
+    };
+
+    // --- 7. Central UI Redraw Dispatcher (Single Source of Truth) ---
+    function renderUI() {
+      const model = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
+
+      // Preserve camera position unless Point P is out of bounds
+      ensurePointPVisible(model);
+
+      // 1. Sync Coefficient & Inequality Controls
+      elements.inputValA.value = state.a;
+      elements.inputValB.value = state.b;
+      elements.inputValC.value = state.c;
+      elements.selectInequality.value = state.inequality;
+
+      // 2. Always sync displayed equation input box with single-source-of-truth state
+      const canonicalEqStr = formatQuadratic(state.a, state.b, state.c, state.variable);
+      if (document.activeElement !== elements.inputNaturalQuad) {
+        elements.inputNaturalQuad.value = canonicalEqStr;
+      }
+
+      document.querySelectorAll('.btn-ineq-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.op === state.inequality);
+      });
+
+      // Zoom Percentage Readout
+      const currRange = state.view.xMax - state.view.xMin;
+      const zoomPct = Math.round((state.view.baseRangeX / currRange) * 100);
+      elements.zoomLevelTxt.textContent = `${zoomPct}%`;
+
+      // Render Graph & Sign Chart
+      renderParabolaSVG(elements.svgParabola, model);
+      renderSignChartSVG(elements.svgSignChart, model);
+
+      // Point P Evaluation Sync
+      const py = model.evaluateQuadratic(state.px);
+      const pYStr = py.toFixed(Number.isInteger(py) ? 0 : 2);
+      const pXStr = state.px.toFixed(Number.isInteger(state.px) ? 0 : 2);
+
+      elements.cardPCoord.textContent = `Point (${pXStr}, ${pYStr})`;
+      elements.cardPCalc.textContent = `f(${pXStr}) = ${formatQuadratic(state.a, state.b, state.c, state.variable).replace(new RegExp(state.variable, 'g'), `(${pXStr})`)} = ${pYStr}`;
+
+      if (py > 0) {
+        elements.cardPStatus.textContent = 'Status: above x-axis';
+        elements.cardPStatus.style.color = 'var(--primary)';
+      } else if (py < 0) {
+        elements.cardPStatus.textContent = 'Status: below x-axis';
+        elements.cardPStatus.style.color = 'var(--accent-red)';
+      } else {
+        elements.cardPStatus.textContent = 'Status: on x-axis (root)';
+        elements.cardPStatus.style.color = 'var(--accent-green)';
+      }
+
+      // Visual Proof Flowchart Sync
+      if (model.rootType === 'two') {
+        const r1Str = model.roots[0].toFixed(Number.isInteger(model.roots[0]) ? 0 : 2);
+        const r2Str = model.roots[1].toFixed(Number.isInteger(model.roots[1]) ? 0 : 2);
+        elements.proofStep1Txt.textContent = `f(${model.v}) = 0 where ${model.v} = ${r1Str}, ${r2Str}.`;
+        elements.proofStep2Txt.textContent = `Pick test values in (-\\infty,${r1Str}), (${r1Str},${r2Str}), (${r2Str},\\infty).`;
+        elements.proofStep3Txt.textContent = `Shade regions satisfying f(${model.v}) ${formatOp(model.inequality)} 0.`;
+      } else if (model.rootType === 'one') {
+        const rStr = model.roots[0].toFixed(Number.isInteger(model.roots[0]) ? 0 : 2);
+        elements.proofStep1Txt.textContent = `Repeated root at ${model.v} = ${rStr}.`;
+        elements.proofStep2Txt.textContent = `Discriminant \u0394 = 0.`;
+        elements.proofStep3Txt.textContent = `Evaluate f(${model.v}) ${formatOp(model.inequality)} 0.`;
+      } else {
+        elements.proofStep1Txt.textContent = `No real roots (\u0394 < 0).`;
+        elements.proofStep2Txt.textContent = `Parabola is entirely ${model.a > 0 ? 'above' : 'below'} x-axis.`;
+        elements.proofStep3Txt.textContent = `Evaluate f(${model.v}) ${formatOp(model.inequality)} 0.`;
+      }
+      elements.proofStep4Txt.textContent = model.solutionInterval;
+
+      // Educational Panel Sync
+      if (model.rootType === 'two') {
+        const r1Str = model.roots[0].toFixed(Number.isInteger(model.roots[0]) ? 0 : 2);
+        const r2Str = model.roots[1].toFixed(Number.isInteger(model.roots[1]) ? 0 : 2);
+        elements.whyDesc1.textContent = `For f(${model.v}) = ${canonicalEqStr}, the curve crosses the axis at ${model.v} = ${r1Str} and ${model.v} = ${r2Str}.`;
+        elements.whyDesc2.textContent = model.a > 0
+          ? `The parabola opens upward (a > 0), so it is positive outside the roots and negative between them.`
+          : `The parabola opens downward (a < 0), so it is positive between the roots and negative outside them.`;
+        elements.whyDesc3.textContent = `For f(${model.v}) ${formatOp(model.inequality)} 0, select the matching sign intervals.`;
+      } else if (model.rootType === 'one') {
+        const r0Str = model.roots[0].toFixed(Number.isInteger(model.roots[0]) ? 0 : 2);
+        elements.whyDesc1.textContent = `For f(${model.v}) = ${canonicalEqStr}, the parabola touches the axis at repeated root ${model.v} = ${r0Str}.`;
+        elements.whyDesc2.textContent = model.a > 0 ? `f(${model.v}) \u2265 0 for all real numbers.` : `f(${model.v}) \u2264 0 for all real numbers.`;
+        elements.whyDesc3.textContent = `Match inequality condition at the root boundary.`;
+      } else {
+        elements.whyDesc1.textContent = `For f(${model.v}) = ${canonicalEqStr}, there are no x-intercepts (\u0394 < 0). Curve does not cross x-axis.`;
+        elements.whyDesc2.textContent = model.a > 0 ? `f(${model.v}) > 0 everywhere.` : `f(${model.v}) < 0 everywhere.`;
+        elements.whyDesc3.textContent = `The solution set is either all real numbers or empty set.`;
+      }
+      elements.whyBoxSol.textContent = `Solution: ${model.solutionInterval}`;
+
+      // Prediction Options Sync
+      elements.predictLeadLbl.textContent = `What is the solution to f(${model.v}) ${formatOp(model.inequality)} 0?`;
+      const options = [
+        model.solutionInterval,
+        `[-1, 3]`,
+        `(-\\infty, 3]`,
+        `[-1, \\infty)`
+      ];
+      const uniqueOptions = Array.from(new Set(options));
+      let optHtml = '';
+      uniqueOptions.forEach(opt => {
+        optHtml += `<option value="${opt}">${opt}</option>`;
+      });
+      elements.selectPredictionOption.innerHTML = optHtml;
+
+      // Consistency Check (Development & Runtime Validation)
+      validateMathState();
+    }
+
+    function validateMathState() {
+      const expected = formatQuadratic(state.a, state.b, state.c, state.variable);
+      console.assert(
+        elements.inputNaturalQuad.value === expected,
+        `State sync error! Displayed: "${elements.inputNaturalQuad.value}", Expected: "${expected}"`
+      );
+    }
+
+    function processCustomQuadratic(str) {
+      const parsed = parseQuadraticInput(str);
+      if (parsed.error) {
+        elements.parseErrorBanner.textContent = `⚠️ ${parsed.error}`;
+        elements.parseErrorBanner.style.display = 'flex';
+        return;
+      }
+      elements.parseErrorBanner.style.display = 'none';
+
+      state.variable = parsed.variable;
+      state.a = parsed.a;
+      state.b = parsed.b;
+      state.c = parsed.c;
+
+      const model = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
+      resetViewportToFit(model);
+      renderUI();
+    }
+
+    // --- 8. Zoom & Pan Camera System ---
+    function zoomAt(mathX, mathY, factor) {
+      const v = state.view;
+      const currWidth = v.xMax - v.xMin;
+      const currHeight = v.yMax - v.yMin;
+
+      let newWidth = currWidth * factor;
+      let newHeight = currHeight * factor;
+
+      const MIN_RANGE = 0.05;
+      const MAX_RANGE = 100000;
+
+      if (newWidth < MIN_RANGE) newWidth = MIN_RANGE;
+      if (newWidth > MAX_RANGE) newWidth = MAX_RANGE;
+      if (newHeight < MIN_RANGE) newHeight = MIN_RANGE;
+      if (newHeight > MAX_RANGE) newHeight = MAX_RANGE;
+
+      const leftRatio = (mathX - v.xMin) / currWidth;
+      const bottomRatio = (mathY - v.yMin) / currHeight;
+
+      v.xMin = mathX - leftRatio * newWidth;
+      v.xMax = v.xMin + newWidth;
+      v.yMin = mathY - bottomRatio * newHeight;
+      v.yMax = v.yMin + newHeight;
+
+      renderUI();
+    }
+
+    // Interaction Modes & State
+    let currentMode = null; // 'dragPoint' | 'pan' | 'pinch' | null
+    let panStart = null;
+    let initialPinchDist = 0;
+    let initialPinchMathCenter = null;
+
+    // Mouse Down
+    elements.svgParabola.addEventListener('mousedown', (e) => {
+      const rect = elements.svgParabola.getBoundingClientRect();
+      const screenX = e.clientX - rect.left;
+      const screenY = e.clientY - rect.top;
+      const dims = getPlotDimensions(elements.svgParabola);
+
+      // Check distance to Point P
+      const py = state.a * state.px * state.px + state.b * state.px + state.c;
+      const spx = toScreenX(state.px, dims);
+      const spy = toScreenY(py, dims);
+      const distP = Math.hypot(screenX - spx, screenY - spy);
+
+      if (e.target.id === 'handle-point-p' || distP <= 14) {
+        currentMode = 'dragPoint';
+        elements.svgParabola.style.cursor = 'grabbing';
+      } else {
+        currentMode = 'pan';
+        elements.svgParabola.classList.add('panning');
+        panStart = {
+          mouseX: e.clientX,
+          mouseY: e.clientY,
+          xMin: state.view.xMin,
+          xMax: state.view.xMax,
+          yMin: state.view.yMin,
+          yMax: state.view.yMax
+        };
+      }
+    });
+
+    // Mouse Move
+    window.addEventListener('mousemove', (e) => {
+      if (!currentMode) return;
+
+      const dims = getPlotDimensions(elements.svgParabola);
+      const rect = elements.svgParabola.getBoundingClientRect();
+      const screenX = e.clientX - rect.left;
+
+      if (currentMode === 'dragPoint') {
+        state.px = toMathX(screenX, dims);
+        renderUI();
+      } else if (currentMode === 'pan' && panStart) {
+        const dxPixels = e.clientX - panStart.mouseX;
+        const dyPixels = e.clientY - panStart.mouseY;
+
+        const dxMath = (dxPixels / dims.plotWidth) * (panStart.xMax - panStart.xMin);
+        const dyMath = (dyPixels / dims.plotHeight) * (panStart.yMax - panStart.yMin);
+
+        state.view.xMin = panStart.xMin - dxMath;
+        state.view.xMax = panStart.xMax - dxMath;
+        state.view.yMin = panStart.yMin + dyMath;
+        state.view.yMax = panStart.yMax + dyMath;
+
+        renderUI();
+      }
+    });
+
+    // Mouse Up
+    window.addEventListener('mouseup', () => {
+      if (currentMode) {
+        currentMode = null;
+        panStart = null;
+        elements.svgParabola.classList.remove('panning');
+        elements.svgParabola.style.cursor = 'grab';
+      }
+    });
+
+    // Mouse Wheel Zooming around Cursor
+    elements.graphCanvasContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const rect = elements.svgParabola.getBoundingClientRect();
+      const screenX = e.clientX - rect.left;
+      const screenY = e.clientY - rect.top;
+      const dims = getPlotDimensions(elements.svgParabola);
+
+      const mathX = toMathX(screenX, dims);
+      const mathY = toMathY(screenY, dims);
+
+      const factor = e.deltaY < 0 ? 0.85 : (1 / 0.85);
+      zoomAt(mathX, mathY, factor);
+    }, { passive: false });
+
+    // Touch Support for Touchscreens & Mobile Devices
+    elements.svgParabola.addEventListener('touchstart', (e) => {
+      const dims = getPlotDimensions(elements.svgParabola);
+      const rect = elements.svgParabola.getBoundingClientRect();
+
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const screenX = touch.clientX - rect.left;
+        const screenY = touch.clientY - rect.top;
+
+        const py = state.a * state.px * state.px + state.b * state.px + state.c;
+        const spx = toScreenX(state.px, dims);
+        const spy = toScreenY(py, dims);
+        const distP = Math.hypot(screenX - spx, screenY - spy);
+
+        if (distP <= 20) {
+          currentMode = 'dragPoint';
+        } else {
+          currentMode = 'pan';
+          panStart = {
+            mouseX: touch.clientX,
+            mouseY: touch.clientY,
+            xMin: state.view.xMin,
+            xMax: state.view.xMax,
+            yMin: state.view.yMin,
+            yMax: state.view.yMax
+          };
+        }
+      } else if (e.touches.length === 2) {
+        currentMode = 'pinch';
+        initialPinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+        const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+        initialPinchMathCenter = {
+          x: toMathX(centerX, dims),
+          y: toMathY(centerY, dims)
+        };
+      }
+    }, { passive: false });
+
+    elements.svgParabola.addEventListener('touchmove', (e) => {
+      if (!currentMode) return;
+      e.preventDefault();
+
+      const dims = getPlotDimensions(elements.svgParabola);
+      const rect = elements.svgParabola.getBoundingClientRect();
+
+      if (currentMode === 'dragPoint' && e.touches.length === 1) {
+        const screenX = e.touches[0].clientX - rect.left;
+        state.px = toMathX(screenX, dims);
+        renderUI();
+      } else if (currentMode === 'pan' && e.touches.length === 1 && panStart) {
+        const dxPixels = e.touches[0].clientX - panStart.mouseX;
+        const dyPixels = e.touches[0].clientY - panStart.mouseY;
+
+        const dxMath = (dxPixels / dims.plotWidth) * (panStart.xMax - panStart.xMin);
+        const dyMath = (dyPixels / dims.plotHeight) * (panStart.yMax - panStart.yMin);
+
+        state.view.xMin = panStart.xMin - dxMath;
+        state.view.xMax = panStart.xMax - dxMath;
+        state.view.yMin = panStart.yMin + dyMath;
+        state.view.yMax = panStart.yMax + dyMath;
+
+        renderUI();
+      } else if (currentMode === 'pinch' && e.touches.length === 2 && initialPinchDist > 0) {
+        const currentDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        if (currentDist > 5) {
+          const factor = initialPinchDist / currentDist;
+          zoomAt(initialPinchMathCenter.x, initialPinchMathCenter.y, factor);
+          initialPinchDist = currentDist;
+        }
+      }
+    }, { passive: false });
+
+    elements.svgParabola.addEventListener('touchend', () => {
+      currentMode = null;
+      panStart = null;
+    });
+
+    // --- 9. Control Event Listeners ---
+    elements.inputNaturalQuad.addEventListener('change', () => processCustomQuadratic(elements.inputNaturalQuad.value));
+    elements.inputNaturalQuad.addEventListener('keydown', e => { if (e.key === 'Enter') processCustomQuadratic(elements.inputNaturalQuad.value); });
+
+    elements.btnDecA.addEventListener('click', () => { if (state.a > 1 || state.a < -1) state.a -= 1; else state.a = state.a === 1 ? -1 : 1; renderUI(); });
+    elements.btnIncA.addEventListener('click', () => { if (state.a >= 1 || state.a < -1) state.a += 1; else state.a = 1; renderUI(); });
+    elements.inputValA.addEventListener('change', e => { const v = parseFloat(e.target.value); if (v !== 0 && !isNaN(v)) { state.a = v; renderUI(); } });
+
+    elements.btnDecB.addEventListener('click', () => { state.b -= 1; renderUI(); });
+    elements.btnIncB.addEventListener('click', () => { state.b += 1; renderUI(); });
+    elements.inputValB.addEventListener('change', e => { state.b = parseFloat(e.target.value)||0; renderUI(); });
+
+    elements.btnDecC.addEventListener('click', () => { state.c -= 1; renderUI(); });
+    elements.btnIncC.addEventListener('click', () => { state.c += 1; renderUI(); });
+    elements.inputValC.addEventListener('change', e => { state.c = parseFloat(e.target.value)||0; renderUI(); });
+
+    elements.selectInequality.addEventListener('change', e => { state.inequality = e.target.value; renderUI(); });
+
+    document.querySelectorAll('.btn-ineq-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.inequality = btn.dataset.op;
+        renderUI();
+      });
+    });
+
+    // Zoom Buttons & Reset View
+    elements.btnZoomIn.addEventListener('click', () => {
+      const centerX = (state.view.xMin + state.view.xMax) / 2;
+      const centerY = (state.view.yMin + state.view.yMax) / 2;
+      zoomAt(centerX, centerY, 0.85);
+    });
+
+    elements.btnZoomOut.addEventListener('click', () => {
+      const centerX = (state.view.xMin + state.view.xMax) / 2;
+      const centerY = (state.view.yMin + state.view.yMax) / 2;
+      zoomAt(centerX, centerY, 1 / 0.85);
+    });
+
+    elements.btnResetView.addEventListener('click', () => {
+      const model = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
+      resetViewportToFit(model);
+      renderUI();
+    });
+
+    // Prediction Verification
+    elements.btnCheckPrediction.addEventListener('click', () => {
+      const selected = elements.selectPredictionOption.value;
+      const model = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
+
+      if (selected === model.solutionInterval) {
+        elements.predictFeedback.className = 'feedback-msg correct';
+        elements.predictFeedback.innerHTML = `&#10004; Correct! The solution set is ${model.solutionInterval}.`;
+      } else {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.innerHTML = `&#10008; Not quite. Correct solution is ${model.solutionInterval}.`;
+      }
+      elements.predictFeedback.style.display = 'flex';
+    });
+
+    // Challenge Verification
+    elements.btnRevealChallenge.addEventListener('click', () => {
+      const r1 = parseFloat(elements.chInputR1.value);
+      const r2 = parseFloat(elements.chInputR2.value);
+
+      if (r1 === -5 && r2 === 1) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = '&#10004; Excellent! Roots x = -5 and x = 1 divide the line into solution interval (-5, 1).';
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = '&#10008; Target roots for x² + 4x - 5 = 0 are x = -5 and x = 1.';
+      }
+      elements.challengeFeedback.style.display = 'flex';
+    });
+
+    // Reset All Button
+    elements.btnResetAll.addEventListener('click', () => {
+      elements.inputNaturalQuad.value = "x² - 2x";
+      state.variable = 'x';
+      state.a = 1;
+      state.b = -2;
+      state.c = 0;
+      state.inequality = '>';
+      state.px = 1;
+      const model = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
+      resetViewportToFit(model);
+      renderUI();
+    });
+
+    // Initial Execution
+    const initModel = solveQuadraticMath(state.a, state.b, state.c, state.inequality, state.variable);
+    resetViewportToFit(initModel);
+    renderUI();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hyperbola as Constant Difference of Distances | Interactive Math Visualization</title>
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-pink: #ec4899;
+      --accent-pink-light: #fce7f3;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #f3e8ff;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* App Container Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout {
+        grid-template-columns: 100px 1fr;
+      }
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      width: 64px;
+    }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .header-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: var(--border-focus);
+      color: var(--primary);
+    }
+
+    /* Content Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+    }
+
+    @media (max-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Graph Card */
+    .graph-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Toolbar */
+    .graph-toolbar {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #fafafa;
+      flex-wrap: wrap;
+    }
+
+    .tool-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .tool-btn {
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .tool-btn:hover {
+      color: var(--text-dark);
+      background: rgba(255,255,255,0.6);
+    }
+
+    .tool-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tool-btn .dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    /* Switch styling */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 38px;
+      height: 22px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-switch {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 22px;
+    }
+
+    .slider-switch:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-switch {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-switch:before {
+      transform: translateX(16px);
+    }
+
+    /* Canvas / SVG Container */
+    .graph-viewport-container {
+      position: relative;
+      width: 100%;
+      height: 580px;
+      background: #ffffff;
+      overflow: hidden;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    .graph-viewport-container.mode-pan {
+      cursor: grab;
+    }
+
+    .graph-viewport-container.mode-pan:active {
+      cursor: grabbing;
+    }
+
+    svg.math-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Overlays on Graph */
+    .overlay-card {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-md);
+      z-index: 5;
+    }
+
+    .overlay-parameters {
+      top: 16px;
+      left: 16px;
+      width: 230px;
+    }
+
+    .overlay-parameters h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .param-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .param-label {
+      font-family: var(--font-math);
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .param-input-box {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .param-input {
+      width: 64px;
+      padding: 4px 6px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .param-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-step {
+      width: 24px;
+      height: 24px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+
+    .btn-step:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .slider-range {
+      width: 100%;
+      accent-color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .readout-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    .readout-item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .readout-item .label-f { color: var(--accent-blue); font-weight: 600; }
+    .readout-item .label-d { color: var(--accent-green); font-weight: 600; }
+    .readout-item .label-e { color: var(--accent-purple); font-weight: 600; }
+    .readout-item .label-asymp { color: var(--primary); font-weight: 600; }
+
+    /* Distances Overlay */
+    .overlay-distances {
+      top: 16px;
+      right: 16px;
+      width: 200px;
+    }
+
+    .distances-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .distance-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .distance-row.pf1-val { color: var(--accent-blue); }
+    .distance-row.pf2-val { color: var(--accent-pink); }
+    .distance-row.diff-val { color: var(--primary); font-size: 14px; border-top: 1px dashed var(--border); padding-top: 4px; }
+
+    .status-badge {
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .status-badge.equal {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .status-badge.unequal {
+      background: var(--accent-pink-light);
+      color: #9f1239;
+    }
+
+    /* Inequality Shading Legend Overlay */
+    .overlay-inequality {
+      bottom: 16px;
+      left: 16px;
+      width: 230px;
+    }
+
+    .inequality-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .swatch-inside { background: rgba(99, 91, 255, 0.2); }
+    .swatch-outside { background: rgba(236, 72, 153, 0.2); }
+
+    /* Zoom Controls Overlay */
+    .overlay-zoom-controls {
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 10px;
+    }
+
+    .btn-zoom {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+    }
+
+    .btn-zoom:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-zoom-text {
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 0 8px;
+      cursor: pointer;
+    }
+
+    .btn-zoom-text:hover {
+      color: var(--primary);
+    }
+
+    /* Bottom Live Status Bar */
+    .live-status-bar {
+      padding: 10px 20px;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Right Explanation Column: Independent Expandable Sections */
+    .explanation-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-height: 850px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .learn-panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .learn-header-bar {
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .learn-header-bar h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .learn-select {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .learn-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .accordion-list {
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 10px;
+    }
+
+    /* Independent Expandable Cards */
+    .accordion-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .accordion-card.active {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .accordion-header {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      user-select: none;
+      background: #ffffff;
+      transition: background 0.15s;
+    }
+
+    .accordion-header:hover {
+      background: #f8fafc;
+    }
+
+    .accordion-card.active .accordion-header {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .accordion-title-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .accordion-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .accordion-card.active .accordion-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .accordion-arrow {
+      font-size: 12px;
+      transition: transform 0.2s;
+      color: var(--text-muted);
+    }
+
+    .accordion-card.active .accordion-arrow {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .accordion-content {
+      padding: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      border-top: 1px solid #f1f5f9;
+      display: none;
+      background: #ffffff;
+    }
+
+    .accordion-card.active .accordion-content {
+      display: block;
+    }
+
+    .formula-badge {
+      background: #f8fafc;
+      border: 1px dashed var(--border-focus);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 16px;
+      text-align: center;
+      margin: 8px 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .mini-diagram-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .prediction-box {
+      background: var(--primary-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .prediction-box h5 {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--primary);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .prediction-equation {
+      font-family: var(--font-math);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Bottom Section Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Visual Proof Card */
+    .proof-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .proof-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .proof-steps-flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .proof-step-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      min-width: 140px;
+      flex: 1;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .proof-step-box:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .proof-step-box.highlight {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .proof-step-box.final {
+      border-color: var(--accent-green);
+      background: var(--accent-green-light);
+    }
+
+    .step-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .step-math {
+      font-family: var(--font-math);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .proof-arrow {
+      color: var(--text-light);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* Challenge & Test Point Cards */
+    .interactive-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .challenge-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-family: var(--font-math);
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .text-input {
+      width: 76px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .feedback-msg {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .feedback-msg.correct {
+      background: var(--accent-green-light);
+      color: #065f46;
+    }
+
+    .feedback-msg.incorrect {
+      background: var(--accent-pink-light);
+      color: #9f1239;
+    }
+
+    /* Error Toast */
+    .error-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #ef4444;
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-toast.show {
+      display: flex;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SVG styling elements */
+    .axis-line { stroke: #64748b; stroke-width: 1.5; }
+    .grid-line { stroke: #e2e8f0; stroke-width: 1; }
+    .hyperbola-curve { stroke: #635bff; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .asymptote-dash { stroke: #2563eb; stroke-width: 1.8; stroke-dasharray: 6 4; }
+    .directrix-dash { stroke: #10b981; stroke-width: 2.2; stroke-dasharray: 6 4; }
+    .line-pf1 { stroke: #2563eb; stroke-width: 2; stroke-dasharray: 5 4; }
+    .line-pf2 { stroke: #ec4899; stroke-width: 2; stroke-dasharray: 5 4; }
+    
+    .point-focus1 { fill: #2563eb; stroke: #ffffff; stroke-width: 2.5; cursor: pointer; }
+    .point-focus2 { fill: #ec4899; stroke: #ffffff; stroke-width: 2.5; cursor: pointer; }
+    .point-vertex1 { fill: #8b5cf6; stroke: #ffffff; stroke-width: 2; }
+    .point-vertex2 { fill: #8b5cf6; stroke: #ffffff; stroke-width: 2; }
+    .point-center { fill: #1e293b; stroke: #ffffff; stroke-width: 2; }
+    .point-locus { fill: #10b981; stroke: #ffffff; stroke-width: 3; cursor: grab; }
+    .point-locus:active { cursor: grabbing; }
+
+    .svg-text { font-family: var(--font-main); font-size: 12px; fill: #475569; user-select: none; }
+    .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
+    .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
+    .construction-trail-circle { fill: #10b981; opacity: 0.6; }
+  </style>
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Library">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            Library
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Conic Sections</a>
+          <h1>
+            Hyperbola as Constant Difference of Distances
+            <span class="badge-tag">Analytic Geometry</span>
+          </h1>
+          <p class="header-subtitle">A two-focus model: every point P on the curve satisfies |PF₁ - PF₂| = 2a.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 14 min</span>
+          <button class="btn-secondary" id="btn-reset" title="Reset all parameters to default">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Reset View
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Interactive Graph Area -->
+        <section class="graph-card">
+          <!-- Toolbar -->
+          <div class="graph-toolbar">
+            <div class="tool-group" role="radiogroup" aria-label="Interaction Modes">
+              <button class="tool-btn active" id="tool-select" data-mode="select" title="Select & Inspect">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+                Select
+              </button>
+              <button class="tool-btn" id="tool-pan" data-mode="pan" title="Pan Plane (Free Drag)">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m3-5.5V11m0-5.5a1.5 1.5 0 013 0V11"/></svg>
+                Pan
+              </button>
+              <button class="tool-btn" id="tool-locus" data-mode="locus" title="Drag Locus Point P">
+                <span class="dot-indicator" style="background:#10b981;"></span>
+                Locus Point
+              </button>
+              <button class="tool-btn" id="tool-asymptotes" data-mode="asymptotes" title="Highlight Asymptotes">
+                <span class="dot-indicator" style="background:#2563eb;"></span>
+                Asymptotes
+              </button>
+              <button class="tool-btn" id="tool-construction" data-mode="construction" title="Animate Construction">
+                <span class="dot-indicator" style="background:#ec4899;"></span>
+                Construction
+              </button>
+            </div>
+
+            <div class="toggle-group">
+              <label class="toggle-label" title="Toggle Inequality Region Shading">
+                <span>Inequality Regions</span>
+                <span class="switch">
+                  <input type="checkbox" id="toggle-inequality">
+                  <span class="slider-switch"></span>
+                </span>
+              </label>
+              <label class="toggle-label" title="Toggle Coordinate Grid">
+                <span>Grid</span>
+                <span class="switch">
+                  <input type="checkbox" id="toggle-grid" checked>
+                  <span class="slider-switch"></span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Canvas / SVG Container -->
+          <div class="graph-viewport-container" id="viewport-container">
+            <!-- Overlay: Parameter Controls -->
+            <div class="overlay-card overlay-parameters">
+              <h4>Parameters</h4>
+              
+              <!-- Semi-transverse axis a -->
+              <div class="param-row">
+                <span class="param-label">a =</span>
+                <div class="param-input-box">
+                  <button class="btn-step" id="btn-a-dec" title="Decrease a">-</button>
+                  <input type="number" id="input-a" class="param-input" value="2.00" step="0.1" min="0.5" max="8.0" aria-label="Semi-transverse axis a">
+                  <button class="btn-step" id="btn-a-inc" title="Increase a">+</button>
+                </div>
+              </div>
+              <input type="range" id="slider-a" class="slider-range" value="2.0" min="0.5" max="6.0" step="0.1" aria-label="a slider">
+
+              <!-- Semi-conjugate axis b -->
+              <div class="param-row">
+                <span class="param-label">b =</span>
+                <div class="param-input-box">
+                  <button class="btn-step" id="btn-b-dec" title="Decrease b">-</button>
+                  <input type="number" id="input-b" class="param-input" value="3.00" step="0.1" min="0.5" max="8.0" aria-label="Semi-conjugate axis b">
+                  <button class="btn-step" id="btn-b-inc" title="Increase b">+</button>
+                </div>
+              </div>
+              <input type="range" id="slider-b" class="slider-range" value="3.0" min="0.5" max="6.0" step="0.1" aria-label="b slider">
+
+              <!-- Readouts -->
+              <div class="readout-list">
+                <div class="readout-item">
+                  <span>Focal Distance (c):</span>
+                  <span class="label-f" id="readout-c">c = 3.606</span>
+                </div>
+                <div class="readout-item">
+                  <span>Transverse (2a):</span>
+                  <strong id="readout-2a">4.000</strong>
+                </div>
+                <div class="readout-item">
+                  <span>Eccentricity (e):</span>
+                  <span class="label-e" id="readout-e">e = 1.803</span>
+                </div>
+                <div class="readout-item">
+                  <span>Asymptotes (y):</span>
+                  <span class="label-asymp" id="readout-asymp">y = ±1.50x</span>
+                </div>
+                <div class="readout-item">
+                  <span>Directrices (x):</span>
+                  <span class="label-d" id="readout-directrices">x = ±1.109</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Overlay: Distances Inspection Card -->
+            <div class="overlay-card overlay-distances">
+              <div class="distances-header">Live Distances</div>
+              <div class="distance-row pf1-val">
+                <span>PF₁ =</span>
+                <span id="dist-pf1-val">8.244</span>
+              </div>
+              <div class="distance-row pf2-val">
+                <span>PF₂ =</span>
+                <span id="dist-pf2-val">4.244</span>
+              </div>
+              <div class="distance-row diff-val">
+                <span>|PF₁ - PF₂| =</span>
+                <span id="dist-diff-val">4.000</span>
+              </div>
+              <div class="distance-row" style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                <span>Target 2a =</span>
+                <span id="target-2a-val">4.000</span>
+              </div>
+              <div class="status-badge equal" id="equality-badge">
+                ✓ Constant difference
+              </div>
+            </div>
+
+            <!-- Overlay: Inequality Legend (when enabled) -->
+            <div class="overlay-card overlay-inequality" id="inequality-card" style="display: none;">
+              <div class="inequality-checkbox-row">
+                <input type="checkbox" id="chk-ineq-inside" checked>
+                <span class="color-swatch swatch-inside"></span>
+                <span style="font-family: var(--font-math); font-weight: bold;">x²/a² - y²/b² &gt; 1 (Inside Branches)</span>
+              </div>
+              <div class="inequality-checkbox-row">
+                <input type="checkbox" id="chk-ineq-outside">
+                <span class="color-swatch swatch-outside"></span>
+                <span style="font-family: var(--font-math); font-weight: bold;">x²/a² - y²/b² &lt; 1 (Between Branches)</span>
+              </div>
+            </div>
+
+            <!-- Overlay: Zoom Controls -->
+            <div class="overlay-card overlay-zoom-controls">
+              <button class="btn-zoom" id="btn-zoom-in" title="Zoom In">+</button>
+              <button class="btn-zoom-text" id="btn-zoom-reset" title="Reset Viewport Zoom & Pan">100%</button>
+              <button class="btn-zoom" id="btn-zoom-out" title="Zoom Out">&minus;</button>
+            </div>
+
+            <!-- SVG Graph -->
+            <svg id="math-svg" class="math-svg">
+              <defs>
+                <marker id="arrow-x" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+                </marker>
+                <marker id="arrow-y" viewBox="0 0 10 10" refX="5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 1 10 L 5 0 L 9 10 z" fill="#64748b"/>
+                </marker>
+              </defs>
+
+              <g id="viewport-g">
+                <!-- Inequality Shading Paths -->
+                <path id="path-ineq-inside" fill="rgba(99, 91, 255, 0.18)" style="display:none;"></path>
+                <path id="path-ineq-outside" fill="rgba(236, 72, 153, 0.18)" style="display:none;"></path>
+
+                <!-- Grid Layer -->
+                <g id="grid-group"></g>
+
+                <!-- Axes Layer -->
+                <g id="axes-group">
+                  <line id="axis-x" class="axis-line" marker-end="url(#arrow-x)"/>
+                  <line id="axis-y" class="axis-line" marker-end="url(#arrow-y)"/>
+                  <text id="axis-x-label" class="svg-text-math">x</text>
+                  <text id="axis-y-label" class="svg-text-math">y</text>
+                </g>
+
+                <!-- Asymptotes y = ± (b/a)x -->
+                <line id="asymptote-pos" class="asymptote-dash"/>
+                <line id="asymptote-neg" class="asymptote-dash"/>
+                <g id="asymptote-labels-g">
+                  <rect class="svg-label-bg" width="85" height="18"/>
+                  <text id="text-asymp-pos" class="svg-text-math" fill="#2563eb">y = (b/a)x</text>
+
+                  <rect class="svg-label-bg" width="90" height="18"/>
+                  <text id="text-asymp-neg" class="svg-text-math" fill="#2563eb">y = -(b/a)x</text>
+                </g>
+
+                <!-- Directrices d1 and d2 -->
+                <line id="directrix-d1" class="directrix-dash"/>
+                <line id="directrix-d2" class="directrix-dash"/>
+                <g id="directrix-labels-g">
+                  <rect id="d1-bg" class="svg-label-bg" width="95" height="20"/>
+                  <text id="d1-text" class="svg-text-math" fill="#10b981">d₁: x = -a/e</text>
+
+                  <rect id="d2-bg" class="svg-label-bg" width="95" height="20"/>
+                  <text id="d2-text" class="svg-text-math" fill="#10b981">d₂: x = a/e</text>
+                </g>
+
+                <!-- Left and Right Hyperbola Curves -->
+                <path id="hyperbola-left-path" class="hyperbola-curve"/>
+                <path id="hyperbola-right-path" class="hyperbola-curve"/>
+                
+                <g id="hyperbola-label-g">
+                  <rect class="svg-label-bg" width="160" height="20"/>
+                  <text id="text-hyperbola-eq" class="svg-text-math" fill="#635bff">x²/2.00² - y²/3.00² = 1</text>
+                </g>
+
+                <!-- Construction Trail Layer -->
+                <g id="construction-trail-g"></g>
+
+                <!-- Distance Lines PF1 and PF2 -->
+                <line id="line-pf1" class="line-pf1"/>
+                <line id="line-pf2" class="line-pf2"/>
+
+                <!-- Distance Labels on Lines -->
+                <g id="label-pf1-g">
+                  <rect class="svg-label-bg" width="80" height="18"/>
+                  <text id="text-pf1-label" class="svg-text-math" fill="#2563eb">PF₁ = 8.244</text>
+                </g>
+                <g id="label-pf2-g">
+                  <rect class="svg-label-bg" width="80" height="18"/>
+                  <text id="text-pf2-label" class="svg-text-math" fill="#ec4899">PF₂ = 4.244</text>
+                </g>
+
+                <!-- Center O(0,0) -->
+                <circle id="point-center" class="point-center" r="4.5"/>
+                <text id="label-center" class="svg-text" x="8" y="14">O(0,0)</text>
+
+                <!-- Vertices V1(-a,0) and V2(a,0) -->
+                <circle id="point-vertex1" class="point-vertex1" r="5"/>
+                <text id="label-vertex1" class="svg-text" fill="#8b5cf6">V₁(-a,0)</text>
+
+                <circle id="point-vertex2" class="point-vertex2" r="5"/>
+                <text id="label-vertex2" class="svg-text" fill="#8b5cf6">V₂(a,0)</text>
+
+                <!-- Foci F1(-c,0) and F2(c,0) -->
+                <circle id="point-focus1" class="point-focus1" r="6"/>
+                <g id="label-focus1-g">
+                  <rect class="svg-label-bg" width="90" height="18"/>
+                  <text id="text-focus1-label" class="svg-text-math" fill="#2563eb">F₁(-3.606, 0)</text>
+                </g>
+
+                <circle id="point-focus2" class="point-focus2" r="6"/>
+                <g id="label-focus2-g">
+                  <rect class="svg-label-bg" width="90" height="18"/>
+                  <text id="text-focus2-label" class="svg-text-math" fill="#ec4899">F₂(3.606, 0)</text>
+                </g>
+
+                <!-- Locus Point P -->
+                <circle id="point-locus-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
+                <circle id="point-locus" class="point-locus" r="7"/>
+                <g id="label-locus-g">
+                  <rect class="svg-label-bg" width="130" height="22" rx="4"/>
+                  <text id="text-locus-label" class="svg-text-math" fill="#047857">P(4.36, 2.32)</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Bottom Live Parameter Information Bar -->
+          <div class="live-status-bar">
+            <div class="status-item">
+              <span>Parameters:</span>
+              <strong id="bar-params">a = 2.000, b = 3.000, c = 3.606</strong>
+            </div>
+            <div class="status-item">
+              <span>Eccentricity:</span>
+              <strong id="bar-eccentricity" style="color:var(--accent-purple);">e = c/a = 1.803 &gt; 1 &#10004;</strong>
+            </div>
+            <div class="status-item">
+              <span id="bar-badge-status" class="status-badge equal">✓ Constant Difference</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Explanation Column: Independent Expandable Sections -->
+        <aside class="explanation-column">
+          <div class="learn-panel-card">
+            <div class="learn-header-bar">
+              <h3>
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Learn About the Hyperbola
+              </h3>
+              <select class="learn-select" id="learn-dropdown" aria-label="Select Learning Topic">
+                <option value="" disabled selected>Learn ▼</option>
+                <option value="1">1. What is a hyperbola?</option>
+                <option value="2">2. The two foci</option>
+                <option value="3">3. Constant difference</option>
+                <option value="4">4. Vertices</option>
+                <option value="5">5. Center</option>
+                <option value="6">6. Asymptotes</option>
+                <option value="7">7. Eccentricity</option>
+                <option value="8">8. Directrices</option>
+                <option value="9">9. Deriving the equation</option>
+                <option value="10">10. Why the locus forms a hyperbola</option>
+              </select>
+            </div>
+
+            <div class="accordion-list">
+              <!-- Topic 1: What is a hyperbola? -->
+              <div class="accordion-card active" id="acc-card-1">
+                <div class="accordion-header" data-topic="1">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">1</span>
+                    <span>What is a hyperbola?</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>A <strong>hyperbola</strong> is the locus of all points in a plane for which the absolute difference between the distances to two fixed points (foci) is constant.</p>
+                  
+                  <div class="formula-badge">|PF₁ - PF₂| = 2a</div>
+                  
+                  <p style="margin-top: 6px;">Where:</p>
+                  <ul style="margin-left: 18px; margin-top: 4px;">
+                    <li><strong>P = (x, y)</strong> is any point on the two open branches.</li>
+                    <li><strong>F₁ = (-c, 0)</strong> and <strong>F₂ = (c, 0)</strong> are the two foci.</li>
+                    <li><strong>2a</strong> is the fixed distance length of the transverse axis.</li>
+                  </ul>
+
+                  <div class="mini-diagram-box">
+                    <svg width="220" height="90" viewBox="0 0 220 90">
+                      <!-- Mini Hyperbola Branches -->
+                      <path d="M 20 10 Q 75 45 20 80" stroke="#635bff" stroke-width="2" fill="none"/>
+                      <path d="M 200 10 Q 145 45 200 80" stroke="#635bff" stroke-width="2" fill="none"/>
+                      
+                      <!-- Mini Foci -->
+                      <circle cx="45" cy="45" r="3.5" fill="#2563eb"/>
+                      <text x="35" y="60" font-size="9" fill="#2563eb" font-weight="bold">F₁(-c,0)</text>
+                      
+                      <circle cx="175" cy="45" r="3.5" fill="#ec4899"/>
+                      <text x="165" y="60" font-size="9" fill="#ec4899" font-weight="bold">F₂(c,0)</text>
+                      
+                      <!-- Mini Point P -->
+                      <circle cx="178" cy="22" r="4" fill="#10b981"/>
+                      <text x="184" y="20" font-size="9" fill="#10b981" font-weight="bold">P(x,y)</text>
+
+                      <!-- Distance Lines -->
+                      <line x1="178" y1="22" x2="45" y2="45" stroke="#2563eb" stroke-width="1.2" stroke-dasharray="3 3"/>
+                      <line x1="178" y1="22" x2="175" y2="45" stroke="#ec4899" stroke-width="1.2" stroke-dasharray="3 3"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 2: The two foci -->
+              <div class="accordion-card" id="acc-card-2">
+                <div class="accordion-header" data-topic="2">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">2</span>
+                    <span>The two foci</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>foci</strong> F₁ and F₂ lie symmetrically along the transverse axis at distance <em>c</em> from the center:</p>
+                  <div class="formula-badge">c = &radic;(a² + b²) &nbsp;&rArr;&nbsp; c &gt; a</div>
+                  <div style="background:#f8fafc; border:1px solid var(--border); padding:8px 12px; border-radius:6px; margin:6px 0;">
+                    Current Foci:<br>
+                    <strong style="color:var(--accent-blue);" id="learn-f1-str">F₁ = (-3.606, 0)</strong><br>
+                    <strong style="color:var(--accent-pink);" id="learn-f2-str">F₂ = (3.606, 0)</strong><br>
+                    Focal Distance F₁F₂ = <strong>2c = <span id="learn-2c-str">7.212</span></strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 3: Constant difference -->
+              <div class="accordion-card" id="acc-card-3">
+                <div class="accordion-header" data-topic="3">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">3</span>
+                    <span>Constant difference</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>As point <strong>P</strong> slides along either branch, distance lengths <strong>PF₁</strong> and <strong>PF₂</strong> vary continuously, but their absolute difference stays exactly equal to <strong>2a</strong>:</p>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:8px 0; font-weight:bold;">
+                    PF₁ = <span id="learn-pf1-val" style="color:var(--accent-blue);">8.244</span><br>
+                    PF₂ = <span id="learn-pf2-val" style="color:var(--accent-pink);">4.244</span><br>
+                    |PF₁ - PF₂| = <span id="learn-diff-val" style="color:var(--primary);">4.000</span> (Target 2a = <span id="learn-2a-val">4.000</span>)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 4: Vertices -->
+              <div class="accordion-card" id="acc-card-4">
+                <div class="accordion-header" data-topic="4">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">4</span>
+                    <span>Vertices</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>vertices</strong> V₁ and V₂ are the turning points of the two hyperbola branches on the focal axis:</p>
+                  <div class="formula-badge">V₁ = (-a, 0), &nbsp; V₂ = (a, 0)</div>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;">
+                    V₁ = <span id="learn-v1-val">(-2.00, 0)</span> &nbsp;|&nbsp; V₂ = <span id="learn-v2-val">(2.00, 0)</span><br>
+                    Distance between vertices = <strong>2a = <span id="learn-2a-vert">4.00</span></strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 5: Center -->
+              <div class="accordion-card" id="acc-card-5">
+                <div class="accordion-header" data-topic="5">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">5</span>
+                    <span>Center</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>center</strong> O(0,0) is the midpoint between both vertices V₁, V₂ and both foci F₁, F₂. It serves as the point of rotational symmetry for both branches.</p>
+                </div>
+              </div>
+
+              <!-- Topic 6: Asymptotes -->
+              <div class="accordion-card" id="acc-card-6">
+                <div class="accordion-header" data-topic="6">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">6</span>
+                    <span>Asymptotes</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>asymptotes</strong> are boundary lines that the hyperbola branches approach infinitely closely as |x| &rarr; &infin;, without ever intersecting them:</p>
+                  <div class="formula-badge">y = &plusmn; (b / a) x</div>
+                  <div style="background:#eeedfd; padding:8px 12px; border-radius:6px; margin:6px 0; color:var(--primary); font-weight:bold;" id="learn-asymp-calc">
+                    y = &plusmn; (3.00 / 2.00) x = &plusmn; 1.50x
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 7: Eccentricity -->
+              <div class="accordion-card" id="acc-card-7">
+                <div class="accordion-header" data-topic="7">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">7</span>
+                    <span>Eccentricity</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>eccentricity</strong> <em>e</em> quantifies the flare or opening angle of the hyperbola branches:</p>
+                  <div class="formula-badge">e = c / a  (e &gt; 1 always)</div>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;" id="learn-e-calc">
+                    e = 3.606 / 2.00 = 1.803 &gt; 1
+                  </div>
+                  <div style="font-size:12px; margin-top:6px; color:var(--text-muted);">
+                    <strong>Conic Section Comparison:</strong><br>
+                    &bull; Circle: e = 0<br>
+                    &bull; Ellipse: 0 &lt; e &lt; 1<br>
+                    &bull; Parabola: e = 1<br>
+                    &bull; <strong>Hyperbola: e &gt; 1</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 8: Directrices -->
+              <div class="accordion-card" id="acc-card-8">
+                <div class="accordion-header" data-topic="8">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">8</span>
+                    <span>Directrices</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>The <strong>directrices</strong> of a horizontal hyperbola are vertical lines positioned between the center and the vertices at distance <em>a/e = a²/c</em>:</p>
+                  <div class="formula-badge">x = &plusmn; a / e = &plusmn; a² / c</div>
+                  <div style="background:#f1f5f9; padding:8px 12px; border-radius:6px; margin:6px 0; font-weight:bold;" id="learn-dir-calc">
+                    x = &plusmn; 2.00² / 3.606 = &plusmn; 1.109
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 9: Deriving the equation -->
+              <div class="accordion-card" id="acc-card-9">
+                <div class="accordion-header" data-topic="9">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">9</span>
+                    <span>Deriving the equation</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Derivation from distance difference <strong>|PF₁ - PF₂| = 2a</strong>:</p>
+                  <ol style="margin-left: 18px; margin-top: 6px; display:flex; flex-direction:column; gap:6px;">
+                    <li><strong>Step 1:</strong> Distance formula:<br><span style="font-family:var(--font-math);">&radic;((x+c)²+y²) - &radic;((x-c)²+y²) = &plusmn;2a</span></li>
+                    <li><strong>Step 2:</strong> Isolate radical &amp; square:<br><span style="font-family:var(--font-math);">(x+c)² + y² = (2a + &radic;((x-c)²+y²))²</span></li>
+                    <li><strong>Step 3:</strong> Simplify to isolate remaining radical:<br><span style="font-family:var(--font-math);">cx - a² = a&radic;((x-c)²+y²)</span></li>
+                    <li><strong>Step 4:</strong> Square again &amp; substitute c² = a² + b²:<br><span style="font-family:var(--font-math);">(c²-a²)x² - a²y² = a²(c²-a²) &rArr; b²x² - a²y² = a²b²</span></li>
+                    <li><strong>Step 5:</strong> Divide by a²b²:</li>
+                  </ol>
+                  <div class="formula-badge" style="background:#eeedfd; margin-top:8px;">
+                    x²/a² - y²/b² = 1
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topic 10: Why the locus forms a hyperbola -->
+              <div class="accordion-card" id="acc-card-10">
+                <div class="accordion-header" data-topic="10">
+                  <div class="accordion-title-left">
+                    <span class="accordion-num">10</span>
+                    <span>Why locus forms hyperbola</span>
+                  </div>
+                  <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Consider vertex <strong>V₂ = (a, 0)</strong>:</p>
+                  <ul style="margin-left: 18px; margin-top: 4px;">
+                    <li>Distance to F₁: <strong>c + a</strong></li>
+                    <li>Distance to F₂: <strong>c - a</strong></li>
+                    <li>Difference: <strong>(c + a) - (c - a) = 2a</strong></li>
+                  </ul>
+                  <p style="margin-top:6px;">Because points nearer F₂ make PF₂ small and PF₁ large (and vice versa for points near F₁), two symmetrical unbounded branches form.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prediction-box">
+            <h5>Current Standard Equation</h5>
+            <div class="prediction-equation" id="prediction-eq">x² / 4.00 - y² / 9.00 = 1</div>
+          </div>
+
+          <button class="btn-primary" id="btn-toggle-proof">
+            Reveal Visual Proof Builder
+          </button>
+        </aside>
+      </div>
+
+      <!-- Bottom Grid Section: Proof, Challenge & Test Point -->
+      <div class="bottom-grid">
+        <!-- Visual Proof Builder Card -->
+        <section class="proof-card" id="proof-section" style="display: none;">
+          <h3>
+            Visual Proof Builder
+            <span style="font-size: 12px; font-weight: normal; color: var(--text-muted);">
+              Click any step to highlight on graph
+            </span>
+          </h3>
+
+          <div class="proof-steps-flow">
+            <div class="proof-step-box highlight" id="pstep-1" data-proof-step="1">
+              <div class="step-tag">Step 1: Foci</div>
+              <div class="step-math">F₁(-c,0), F₂(c,0)</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="pmath-step1-sub">
+                Two fixed foci
+              </div>
+            </div>
+
+            <span class="proof-arrow">&rarr;</span>
+
+            <div class="proof-step-box" id="pstep-2" data-proof-step="2">
+              <div class="step-tag">Step 2: Point P</div>
+              <div class="step-math">P(x, y)</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="pmath-step2-sub">
+                Any point on curve
+              </div>
+            </div>
+
+            <span class="proof-arrow">&rarr;</span>
+
+            <div class="proof-step-box" id="pstep-3" data-proof-step="3">
+              <div class="step-tag">Step 3: Distance Difference</div>
+              <div class="step-math">|PF₁ - PF₂| = 2a</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="pmath-step3-sub">
+                Measure difference
+              </div>
+            </div>
+
+            <span class="proof-arrow">&rarr;</span>
+
+            <div class="proof-step-box final" id="pstep-4" data-proof-step="4">
+              <div class="step-tag">Step 4: Hyperbola</div>
+              <div class="step-math">x²/a² - y²/b² = 1</div>
+              <div style="font-size: 12px; font-weight: bold; color: #047857; margin-top: 4px;" id="pmath-step4-sub">
+                Trace full locus &#10004;
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive Challenge & Test Point -->
+        <section class="interactive-card">
+          <div class="card-title">Challenge Yourself</div>
+          <p style="font-size: 13px; color: var(--text-muted);" id="challenge-prompt-text">
+            Given a hyperbola with <strong>a = 2.00</strong> and <strong>c = 4.00</strong>:
+          </p>
+
+          <div class="challenge-form">
+            <div class="input-group">
+              <label for="input-challenge-b">b =</label>
+              <input type="number" id="input-challenge-b" class="text-input" placeholder="e.g. 3.46" step="0.01">
+            </div>
+            <div class="input-group">
+              <label for="input-challenge-diff">|PF₁-PF₂| =</label>
+              <input type="number" id="input-challenge-diff" class="text-input" placeholder="e.g. 4.00" step="0.01">
+            </div>
+            <button class="btn-primary" id="btn-check-challenge" style="width: auto;">Check my locus</button>
+            <button class="btn-secondary" id="btn-new-challenge">New Challenge</button>
+            <div id="challenge-feedback" class="feedback-msg" style="display: none;"></div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border); margin: 4px 0;">
+
+          <!-- Test Arbitrary Point Section -->
+          <div class="card-title" style="font-size: 14px;">Test an Arbitrary Point</div>
+          <div class="challenge-form">
+            <div class="input-group">
+              <label for="input-test-x">x =</label>
+              <input type="number" id="input-test-x" class="text-input" value="4.36" step="0.1">
+            </div>
+            <div class="input-group">
+              <label for="input-test-y">y =</label>
+              <input type="number" id="input-test-y" class="text-input" value="2.32" step="0.1">
+            </div>
+            <button class="btn-secondary" id="btn-test-point">Test Point</button>
+            <div id="test-feedback" class="feedback-msg" style="display: none;"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Error Toast -->
+  <div class="error-toast" id="error-toast">
+    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span id="error-msg">Invalid parameters. Parameters 'a' and 'b' must be strictly positive (a > 0, b > 0).</span>
+  </div>
+
+  <script>
+    /**
+     * Hyperbola as Constant Difference of Distances Engine
+     * Pure JavaScript - No external dependencies
+     */
+
+    // --- 1. Centralized Mathematical Engine ---
+    const MathEngine = {
+      calculateC(a, b) {
+        if (a <= 0 || b <= 0) return 0;
+        return Math.sqrt(a * a + b * b);
+      },
+      calculateEccentricity(a, b) {
+        if (a <= 0) return 0;
+        return this.calculateC(a, b) / a;
+      },
+      calculateFocus1(a, b) {
+        const c = this.calculateC(a, b);
+        return { x: -c, y: 0 };
+      },
+      calculateFocus2(a, b) {
+        const c = this.calculateC(a, b);
+        return { x: c, y: 0 };
+      },
+      calculateVertex1(a) {
+        return { x: -a, y: 0 };
+      },
+      calculateVertex2(a) {
+        return { x: a, y: 0 };
+      },
+      calculatePF1(x, y, c) {
+        const dx = x + c;
+        return Math.sqrt(dx * dx + y * y);
+      },
+      calculatePF2(x, y, c) {
+        const dx = x - c;
+        return Math.sqrt(dx * dx + y * y);
+      },
+      calculateDistanceDifference(x, y, c) {
+        return Math.abs(this.calculatePF1(x, y, c) - this.calculatePF2(x, y, c));
+      },
+      isOnHyperbola(x, y, a, b, epsilon = 1e-3) {
+        if (a <= 0 || b <= 0) return false;
+        const val = (x * x) / (a * a) - (y * y) / (b * b);
+        return Math.abs(val - 1.0) < epsilon;
+      },
+      calculateAsymptoteSlope(a, b) {
+        return b / a;
+      },
+      calculateDirectrix(a, b) {
+        const c = this.calculateC(a, b);
+        return (a * a) / c;
+      },
+      hyperbolaPoint(t, a, b, branch = 'right') {
+        const coshT = Math.cosh(t);
+        const sinhT = Math.sinh(t);
+        const signX = branch === 'right' ? 1 : -1;
+        return {
+          x: signX * a * coshT,
+          y: b * sinhT
+        };
+      }
+    };
+
+    // --- 2. Application State ---
+    const state = {
+      a: 2.0,
+      b: 3.0,
+      paramT: 1.0,        // Parameter t for cosh(t), sinh(t)
+      branch: 'right',    // 'right' or 'left'
+      mode: 'select',     // 'select', 'pan', 'locus', 'asymptotes', 'construction'
+      showGrid: true,
+      showInequality: false,
+      ineqInside: true,
+      ineqOutside: false,
+      proofRevealed: false,
+      activeProofStep: null,
+      isConstructing: false,
+
+      // Challenge State
+      challengeA: 2.0,
+      challengeC: 4.0
+    };
+
+    // --- 3. View & Coordinate Transformation State ---
+    const view = {
+      width: 800,
+      height: 580,
+      originX: 400, // SVG canvas center X for math (0,0)
+      originY: 290, // SVG canvas Y for math (0,0)
+      scale: 45,    // Pixels per mathematical unit
+      isPanning: false,
+      dragStartScreen: { x: 0, y: 0 },
+      dragStartOrigin: { x: 0, y: 0 },
+
+      toScreen(mx, my) {
+        return {
+          sx: this.originX + mx * this.scale,
+          sy: this.originY - my * this.scale
+        };
+      },
+
+      toMath(sx, sy) {
+        return {
+          mx: (sx - this.originX) / this.scale,
+          my: (this.originY - sy) / this.scale
+        };
+      }
+    };
+
+    // --- 4. DOM Elements Cache ---
+    const elements = {
+      viewportContainer: document.getElementById('viewport-container'),
+      svg: document.getElementById('math-svg'),
+      viewportG: document.getElementById('viewport-g'),
+      gridGroup: document.getElementById('grid-group'),
+      axisX: document.getElementById('axis-x'),
+      axisY: document.getElementById('axis-y'),
+      axisXLabel: document.getElementById('axis-x-label'),
+      axisYLabel: document.getElementById('axis-y-label'),
+      asymptotePos: document.getElementById('asymptote-pos'),
+      asymptoteNeg: document.getElementById('asymptote-neg'),
+      textAsympPos: document.getElementById('text-asymp-pos'),
+      textAsympNeg: document.getElementById('text-asymp-neg'),
+      directrixD1: document.getElementById('directrix-d1'),
+      directrixD2: document.getElementById('directrix-d2'),
+      d1Bg: document.getElementById('d1-bg'),
+      d1Text: document.getElementById('d1-text'),
+      d2Bg: document.getElementById('d2-bg'),
+      d2Text: document.getElementById('d2-text'),
+      hyperbolaLeftPath: document.getElementById('hyperbola-left-path'),
+      hyperbolaRightPath: document.getElementById('hyperbola-right-path'),
+      hyperbolaLabelG: document.getElementById('hyperbola-label-g'),
+      textHyperbolaEq: document.getElementById('text-hyperbola-eq'),
+      constructionTrailG: document.getElementById('construction-trail-g'),
+      linePf1: document.getElementById('line-pf1'),
+      linePf2: document.getElementById('line-pf2'),
+      labelPf1G: document.getElementById('label-pf1-g'),
+      labelPf2G: document.getElementById('label-pf2-g'),
+      textPf1Label: document.getElementById('text-pf1-label'),
+      textPf2Label: document.getElementById('text-pf2-label'),
+      pointCenter: document.getElementById('point-center'),
+      pointVertex1: document.getElementById('point-vertex1'),
+      pointVertex2: document.getElementById('point-vertex2'),
+      labelVertex1: document.getElementById('label-vertex1'),
+      labelVertex2: document.getElementById('label-vertex2'),
+      pointFocus1: document.getElementById('point-focus1'),
+      pointFocus2: document.getElementById('point-focus2'),
+      labelFocus1G: document.getElementById('label-focus1-g'),
+      labelFocus2G: document.getElementById('label-focus2-g'),
+      textFocus1Label: document.getElementById('text-focus1-label'),
+      textFocus2Label: document.getElementById('text-focus2-label'),
+      pointLocus: document.getElementById('point-locus'),
+      pointLocusHalo: document.getElementById('point-locus-halo'),
+      labelLocusG: document.getElementById('label-locus-g'),
+      textLocusLabel: document.getElementById('text-locus-label'),
+      pathIneqInside: document.getElementById('path-ineq-inside'),
+      pathIneqOutside: document.getElementById('path-ineq-outside'),
+
+      // UI Controls
+      inputA: document.getElementById('input-a'),
+      inputB: document.getElementById('input-b'),
+      sliderA: document.getElementById('slider-a'),
+      sliderB: document.getElementById('slider-b'),
+      btnADec: document.getElementById('btn-a-dec'),
+      btnAInc: document.getElementById('btn-a-inc'),
+      btnBDec: document.getElementById('btn-b-dec'),
+      btnBInc: document.getElementById('btn-b-inc'),
+      readoutC: document.getElementById('readout-c'),
+      readout2a: document.getElementById('readout-2a'),
+      readoutE: document.getElementById('readout-e'),
+      readoutAsymp: document.getElementById('readout-asymp'),
+      readoutDirectrices: document.getElementById('readout-directrices'),
+      distPf1Val: document.getElementById('dist-pf1-val'),
+      distPf2Val: document.getElementById('dist-pf2-val'),
+      distDiffVal: document.getElementById('dist-diff-val'),
+      target2aVal: document.getElementById('target-2a-val'),
+      equalityBadge: document.getElementById('equality-badge'),
+      predictionEq: document.getElementById('prediction-eq'),
+
+      // Zoom
+      btnZoomIn: document.getElementById('btn-zoom-in'),
+      btnZoomOut: document.getElementById('btn-zoom-out'),
+      btnZoomReset: document.getElementById('btn-zoom-reset'),
+
+      // Bottom Status Bar
+      barParams: document.getElementById('bar-params'),
+      barEccentricity: document.getElementById('bar-eccentricity'),
+      barBadgeStatus: document.getElementById('bar-badge-status'),
+
+      // Learning Panel
+      learnDropdown: document.getElementById('learn-dropdown'),
+      learnPf1Val: document.getElementById('learn-pf1-val'),
+      learnPf2Val: document.getElementById('learn-pf2-val'),
+      learnDiffVal: document.getElementById('learn-diff-val'),
+      learn2aVal: document.getElementById('learn-2a-val'),
+      learnF1Str: document.getElementById('learn-f1-str'),
+      learnF2Str: document.getElementById('learn-f2-str'),
+      learn2cStr: document.getElementById('learn-2c-str'),
+      learnV1Val: document.getElementById('learn-v1-val'),
+      learnV2Val: document.getElementById('learn-v2-val'),
+      learn2aVert: document.getElementById('learn-2a-vert'),
+      learnAsympCalc: document.getElementById('learn-asymp-calc'),
+      learnECalc: document.getElementById('learn-e-calc'),
+      learnDirCalc: document.getElementById('learn-dir-calc'),
+
+      // Toolbar & Toggles
+      toggleGrid: document.getElementById('toggle-grid'),
+      toggleInequality: document.getElementById('toggle-inequality'),
+      inequalityCard: document.getElementById('inequality-card'),
+      chkIneqInside: document.getElementById('chk-ineq-inside'),
+      chkIneqOutside: document.getElementById('chk-ineq-outside'),
+      toolBtns: document.querySelectorAll('.tool-btn'),
+
+      // Proof & Challenge
+      btnToggleProof: document.getElementById('btn-toggle-proof'),
+      proofSection: document.getElementById('proof-section'),
+      challengePromptText: document.getElementById('challenge-prompt-text'),
+      inputChallengeB: document.getElementById('input-challenge-b'),
+      inputChallengeDiff: document.getElementById('input-challenge-diff'),
+      btnCheckChallenge: document.getElementById('btn-check-challenge'),
+      btnNewChallenge: document.getElementById('btn-new-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback'),
+      inputTestX: document.getElementById('input-test-x'),
+      inputTestY: document.getElementById('input-test-y'),
+      btnTestPoint: document.getElementById('btn-test-point'),
+      testFeedback: document.getElementById('test-feedback'),
+      btnReset: document.getElementById('btn-reset'),
+      errorToast: document.getElementById('error-toast'),
+      errorMsg: document.getElementById('error-msg')
+    };
+
+    // --- 5. Rendering Pipeline ---
+
+    function updateViewportDimensions() {
+      const rect = elements.viewportContainer.getBoundingClientRect();
+      view.width = rect.width || 800;
+      view.height = rect.height || 580;
+      render();
+    }
+
+    function renderGrid() {
+      elements.gridGroup.innerHTML = '';
+      if (!state.showGrid) return;
+
+      const minMath = view.toMath(0, view.height);
+      const maxMath = view.toMath(view.width, 0);
+
+      const startX = Math.floor(minMath.mx) - 1;
+      const endX = Math.ceil(maxMath.mx) + 1;
+      const startY = Math.floor(minMath.my) - 1;
+      const endY = Math.ceil(maxMath.my) + 1;
+
+      const frag = document.createDocumentFragment();
+
+      // Vertical Grid Lines
+      for (let x = startX; x <= endX; x++) {
+        const pt1 = view.toScreen(x, startY);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', pt1.sx);
+        line.setAttribute('y1', 0);
+        line.setAttribute('x2', pt1.sx);
+        line.setAttribute('y2', view.height);
+        line.setAttribute('class', 'grid-line');
+        frag.appendChild(line);
+
+        if (x !== 0) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const axisYPos = Math.min(Math.max(view.originY + 14, 20), view.height - 10);
+          text.setAttribute('x', pt1.sx);
+          text.setAttribute('y', axisYPos);
+          text.setAttribute('class', 'svg-text');
+          text.setAttribute('text-anchor', 'middle');
+          text.textContent = x;
+          frag.appendChild(text);
+        }
+      }
+
+      // Horizontal Grid Lines
+      for (let y = startY; y <= endY; y++) {
+        const pt1 = view.toScreen(startX, y);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', 0);
+        line.setAttribute('y1', pt1.sy);
+        line.setAttribute('x2', view.width);
+        line.setAttribute('y2', pt1.sy);
+        line.setAttribute('class', 'grid-line');
+        frag.appendChild(line);
+
+        if (y !== 0) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const axisXPos = Math.min(Math.max(view.originX - 8, 15), view.width - 20);
+          text.setAttribute('x', axisXPos);
+          text.setAttribute('y', pt1.sy + 4);
+          text.setAttribute('class', 'svg-text');
+          text.setAttribute('text-anchor', 'end');
+          text.textContent = y;
+          frag.appendChild(text);
+        }
+      }
+
+      elements.gridGroup.appendChild(frag);
+    }
+
+    function renderAxes() {
+      // X-Axis
+      elements.axisX.setAttribute('x1', 0);
+      elements.axisX.setAttribute('y1', view.originY);
+      elements.axisX.setAttribute('x2', view.width - 10);
+      elements.axisX.setAttribute('y2', view.originY);
+
+      elements.axisXLabel.setAttribute('x', view.width - 15);
+      elements.axisXLabel.setAttribute('y', view.originY - 8);
+
+      // Y-Axis
+      elements.axisY.setAttribute('x1', view.originX);
+      elements.axisY.setAttribute('y1', view.height);
+      elements.axisY.setAttribute('x2', view.originX);
+      elements.axisY.setAttribute('y2', 15);
+
+      elements.axisYLabel.setAttribute('x', view.originX + 10);
+      elements.axisYLabel.setAttribute('y', 20);
+
+      // Center O(0,0)
+      elements.pointCenter.setAttribute('cx', view.originX);
+      elements.pointCenter.setAttribute('cy', view.originY);
+
+      // Vertices V1(-a,0) and V2(a,0)
+      const v1Screen = view.toScreen(-state.a, 0);
+      const v2Screen = view.toScreen(state.a, 0);
+
+      elements.pointVertex1.setAttribute('cx', v1Screen.sx);
+      elements.pointVertex1.setAttribute('cy', v1Screen.sy);
+      elements.labelVertex1.setAttribute('x', v1Screen.sx - 20);
+      elements.labelVertex1.setAttribute('y', v1Screen.sy + 18);
+      elements.labelVertex1.textContent = `V₁(-${state.a.toFixed(2)},0)`;
+
+      elements.pointVertex2.setAttribute('cx', v2Screen.sx);
+      elements.pointVertex2.setAttribute('cy', v2Screen.sy);
+      elements.labelVertex2.setAttribute('x', v2Screen.sx - 15);
+      elements.labelVertex2.setAttribute('y', v2Screen.sy + 18);
+      elements.labelVertex2.textContent = `V₂(${state.a.toFixed(2)},0)`;
+    }
+
+    function renderHyperbola() {
+      const a = state.a;
+      const b = state.b;
+
+      // Draw Right Branch (x >= a) and Left Branch (x <= -a)
+      const tMax = 2.2;
+      const steps = 80;
+
+      let rightD = '';
+      for (let i = 0; i <= steps; i++) {
+        const t = -tMax + (i / steps) * (2 * tMax);
+        const pt = MathEngine.hyperbolaPoint(t, a, b, 'right');
+        const screenPt = view.toScreen(pt.x, pt.y);
+
+        if (i === 0) {
+          rightD += `M ${screenPt.sx.toFixed(1)} ${screenPt.sy.toFixed(1)}`;
+        } else {
+          rightD += ` L ${screenPt.sx.toFixed(1)} ${screenPt.sy.toFixed(1)}`;
+        }
+      }
+      elements.hyperbolaRightPath.setAttribute('d', rightD);
+
+      let leftD = '';
+      for (let i = 0; i <= steps; i++) {
+        const t = -tMax + (i / steps) * (2 * tMax);
+        const pt = MathEngine.hyperbolaPoint(t, a, b, 'left');
+        const screenPt = view.toScreen(pt.x, pt.y);
+
+        if (i === 0) {
+          leftD += `M ${screenPt.sx.toFixed(1)} ${screenPt.sy.toFixed(1)}`;
+        } else {
+          leftD += ` L ${screenPt.sx.toFixed(1)} ${screenPt.sy.toFixed(1)}`;
+        }
+      }
+      elements.hyperbolaLeftPath.setAttribute('d', leftD);
+
+      // Equation Label near top right branch
+      const samplePt = MathEngine.hyperbolaPoint(1.2, a, b, 'right');
+      const labelScreen = view.toScreen(samplePt.x, samplePt.y);
+      elements.textHyperbolaEq.textContent = `x²/${(a*a).toFixed(2)} - y²/${(b*b).toFixed(2)} = 1`;
+      elements.hyperbolaLabelG.setAttribute('transform', `translate(${labelScreen.sx + 10}, ${labelScreen.sy - 10})`);
+
+      // Inequality Shading
+      if (state.showInequality) {
+        if (state.ineqInside) {
+          // Inside branches (x^2/a^2 - y^2/b^2 > 1)
+          const inRightD = rightD + ` L ${view.width} 0 L ${view.width} ${view.height} Z`;
+          const inLeftD = leftD + ` L 0 0 L 0 ${view.height} Z`;
+          elements.pathIneqInside.setAttribute('d', inRightD + ' ' + inLeftD);
+          elements.pathIneqInside.style.display = 'block';
+        } else {
+          elements.pathIneqInside.style.display = 'none';
+        }
+
+        if (state.ineqOutside) {
+          // Between branches (x^2/a^2 - y^2/b^2 < 1)
+          const outD = rightD + ` L ${view.toScreen(-a, -15).sx} ${view.height} ` + leftD + ` Z`;
+          elements.pathIneqOutside.setAttribute('d', outD);
+          elements.pathIneqOutside.style.display = 'block';
+        } else {
+          elements.pathIneqOutside.style.display = 'none';
+        }
+      } else {
+        elements.pathIneqInside.style.display = 'none';
+        elements.pathIneqOutside.style.display = 'none';
+      }
+    }
+
+    function renderAsymptotesAndDirectrices() {
+      const a = state.a;
+      const b = state.b;
+      const c = MathEngine.calculateC(a, b);
+      const slope = MathEngine.calculateAsymptoteSlope(a, b);
+
+      // Asymptotes y = ± (b/a)x
+      const minMath = view.toMath(0, view.height);
+      const maxMath = view.toMath(view.width, 0);
+      const spanX = Math.max(Math.abs(minMath.mx), Math.abs(maxMath.mx)) + 5;
+
+      const posP1 = view.toScreen(-spanX, -slope * spanX);
+      const posP2 = view.toScreen(spanX, slope * spanX);
+      elements.asymptotePos.setAttribute('x1', posP1.sx);
+      elements.asymptotePos.setAttribute('y1', posP1.sy);
+      elements.asymptotePos.setAttribute('x2', posP2.sx);
+      elements.asymptotePos.setAttribute('y2', posP2.sy);
+
+      const negP1 = view.toScreen(-spanX, slope * spanX);
+      const negP2 = view.toScreen(spanX, -slope * spanX);
+      elements.asymptoteNeg.setAttribute('x1', negP1.sx);
+      elements.asymptoteNeg.setAttribute('y1', negP1.sy);
+      elements.asymptoteNeg.setAttribute('x2', negP2.sx);
+      elements.asymptoteNeg.setAttribute('y2', negP2.sy);
+
+      // Asymptote Labels
+      const sampleAsympP = view.toScreen(4.5, 4.5 * slope);
+      elements.textAsympPos.textContent = `y = ${(b/a).toFixed(2)}x`;
+      elements.textAsympPos.setAttribute('x', sampleAsympP.sx + 8);
+      elements.textAsympPos.setAttribute('y', sampleAsympP.sy - 8);
+
+      const sampleAsympNegP = view.toScreen(4.5, -4.5 * slope);
+      elements.textAsympNeg.textContent = `y = -${(b/a).toFixed(2)}x`;
+      elements.textAsympNeg.setAttribute('x', sampleAsympNegP.sx + 8);
+      elements.textAsympNeg.setAttribute('y', sampleAsympNegP.sy + 16);
+
+      const showAsymptotes = state.mode === 'asymptotes' || document.getElementById('acc-card-6').classList.contains('active');
+      if (showAsymptotes) {
+        elements.asymptotePos.setAttribute('stroke-width', '3.5');
+        elements.asymptoteNeg.setAttribute('stroke-width', '3.5');
+      } else {
+        elements.asymptotePos.setAttribute('stroke-width', '1.8');
+        elements.asymptoteNeg.setAttribute('stroke-width', '1.8');
+      }
+
+      // Directrices x = ± a² / c
+      const directrixDistX = MathEngine.calculateDirectrix(a, b);
+      const d1ScreenX = view.toScreen(-directrixDistX, 0).sx;
+      const d2ScreenX = view.toScreen(directrixDistX, 0).sx;
+
+      elements.directrixD1.setAttribute('x1', d1ScreenX);
+      elements.directrixD1.setAttribute('y1', 0);
+      elements.directrixD1.setAttribute('x2', d1ScreenX);
+      elements.directrixD1.setAttribute('y2', view.height);
+
+      elements.directrixD2.setAttribute('x1', d2ScreenX);
+      elements.directrixD2.setAttribute('y1', 0);
+      elements.directrixD2.setAttribute('x2', d2ScreenX);
+      elements.directrixD2.setAttribute('y2', view.height);
+
+      elements.d1Text.textContent = `d₁: x = -${directrixDistX.toFixed(3)}`;
+      elements.d1Bg.setAttribute('x', d1ScreenX - 48);
+      elements.d1Bg.setAttribute('y', 20);
+      elements.d1Text.setAttribute('x', d1ScreenX - 43);
+      elements.d1Text.setAttribute('y', 34);
+
+      elements.d2Text.textContent = `d₂: x = ${directrixDistX.toFixed(3)}`;
+      elements.d2Bg.setAttribute('x', d2ScreenX - 48);
+      elements.d2Bg.setAttribute('y', 20);
+      elements.d2Text.setAttribute('x', d2ScreenX - 43);
+      elements.d2Text.setAttribute('y', 34);
+
+      const showDir = document.getElementById('acc-card-8').classList.contains('active');
+      elements.directrixD1.style.display = showDir ? 'block' : 'none';
+      elements.directrixD2.style.display = showDir ? 'block' : 'none';
+      elements.d1Bg.style.display = showDir ? 'block' : 'none';
+      elements.d1Text.style.display = showDir ? 'block' : 'none';
+      elements.d2Bg.style.display = showDir ? 'block' : 'none';
+      elements.d2Text.style.display = showDir ? 'block' : 'none';
+
+      // Foci F1(-c,0) and F2(c,0)
+      const f1Screen = view.toScreen(-c, 0);
+      const f2Screen = view.toScreen(c, 0);
+
+      elements.pointFocus1.setAttribute('cx', f1Screen.sx);
+      elements.pointFocus1.setAttribute('cy', f1Screen.sy);
+
+      elements.pointFocus2.setAttribute('cx', f2Screen.sx);
+      elements.pointFocus2.setAttribute('cy', f2Screen.sy);
+
+      elements.textFocus1Label.textContent = `F₁(-${c.toFixed(3)}, 0)`;
+      elements.labelFocus1G.setAttribute('transform', `translate(${f1Screen.sx - 45}, ${f1Screen.sy + 14})`);
+
+      elements.textFocus2Label.textContent = `F₂(${c.toFixed(3)}, 0)`;
+      elements.labelFocus2G.setAttribute('transform', `translate(${f2Screen.sx - 45}, ${f2Screen.sy + 14})`);
+
+      // Focus Highlight
+      const focusActive = document.getElementById('acc-card-2').classList.contains('active') || state.activeProofStep === 1;
+      if (focusActive) {
+        elements.pointFocus1.setAttribute('r', '9');
+        elements.pointFocus1.setAttribute('stroke', '#818cf8');
+        elements.pointFocus1.setAttribute('stroke-width', '4');
+
+        elements.pointFocus2.setAttribute('r', '9');
+        elements.pointFocus2.setAttribute('stroke', '#f472b6');
+        elements.pointFocus2.setAttribute('stroke-width', '4');
+      } else {
+        elements.pointFocus1.setAttribute('r', '6');
+        elements.pointFocus1.setAttribute('stroke', '#ffffff');
+        elements.pointFocus1.setAttribute('stroke-width', '2.5');
+
+        elements.pointFocus2.setAttribute('r', '6');
+        elements.pointFocus2.setAttribute('stroke', '#ffffff');
+        elements.pointFocus2.setAttribute('stroke-width', '2.5');
+      }
+    }
+
+    function renderLocusConstruction() {
+      const a = state.a;
+      const b = state.b;
+      const c = MathEngine.calculateC(a, b);
+
+      // Current Point P on Hyperbola
+      const P = MathEngine.hyperbolaPoint(state.paramT, a, b, state.branch);
+      const Pscreen = view.toScreen(P.x, P.y);
+
+      elements.pointLocus.setAttribute('cx', Pscreen.sx);
+      elements.pointLocus.setAttribute('cy', Pscreen.sy);
+      elements.pointLocusHalo.setAttribute('cx', Pscreen.sx);
+      elements.pointLocusHalo.setAttribute('cy', Pscreen.sy);
+
+      elements.textLocusLabel.textContent = `P(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
+      const labelOffsetX = P.x >= 0 ? 12 : -135;
+      const labelOffsetY = P.y >= 0 ? -12 : 24;
+      elements.labelLocusG.setAttribute('transform', `translate(${Pscreen.sx + labelOffsetX}, ${Pscreen.sy + labelOffsetY})`);
+
+      // Foci Screen Coordinates
+      const f1Screen = view.toScreen(-c, 0);
+      const f2Screen = view.toScreen(c, 0);
+
+      // Line PF1 (P -> Focus 1)
+      elements.linePf1.setAttribute('x1', Pscreen.sx);
+      elements.linePf1.setAttribute('y1', Pscreen.sy);
+      elements.linePf1.setAttribute('x2', f1Screen.sx);
+      elements.linePf1.setAttribute('y2', f1Screen.sy);
+
+      // Line PF2 (P -> Focus 2)
+      elements.linePf2.setAttribute('x1', Pscreen.sx);
+      elements.linePf2.setAttribute('y1', Pscreen.sy);
+      elements.linePf2.setAttribute('x2', f2Screen.sx);
+      elements.linePf2.setAttribute('y2', f2Screen.sy);
+
+      // Distance Calculations
+      const pf1 = MathEngine.calculatePF1(P.x, P.y, c);
+      const pf2 = MathEngine.calculatePF2(P.x, P.y, c);
+      const diff = MathEngine.calculateDistanceDifference(P.x, P.y, c);
+      const target2a = 2 * a;
+
+      elements.distPf1Val.textContent = pf1.toFixed(3);
+      elements.distPf2Val.textContent = pf2.toFixed(3);
+      elements.distDiffVal.textContent = diff.toFixed(3);
+      elements.target2aVal.textContent = target2a.toFixed(3);
+
+      // Verify |PF1 - PF2| = 2a within tolerance
+      const isEqual = Math.abs(diff - target2a) < 1e-3;
+      if (isEqual) {
+        elements.equalityBadge.className = 'status-badge equal';
+        elements.equalityBadge.innerHTML = '✓ Constant difference';
+
+        elements.barBadgeStatus.className = 'status-badge equal';
+        elements.barBadgeStatus.innerHTML = '✓ Constant Difference';
+      } else {
+        elements.equalityBadge.className = 'status-badge unequal';
+        elements.equalityBadge.innerHTML = `✗ Difference ≠ 2a (${diff.toFixed(3)})`;
+
+        elements.barBadgeStatus.className = 'status-badge unequal';
+        elements.barBadgeStatus.innerHTML = '✗ Not on Hyperbola';
+      }
+
+      // Line Text Labels
+      const midPf1X = (Pscreen.sx + f1Screen.sx) / 2;
+      const midPf1Y = (Pscreen.sy + f1Screen.sy) / 2;
+      elements.textPf1Label.textContent = `PF₁ = ${pf1.toFixed(3)}`;
+      elements.labelPf1G.setAttribute('transform', `translate(${midPf1X - 35}, ${midPf1Y - 14})`);
+
+      const midPf2X = (Pscreen.sx + f2Screen.sx) / 2;
+      const midPf2Y = (Pscreen.sy + f2Screen.sy) / 2;
+      elements.textPf2Label.textContent = `PF₂ = ${pf2.toFixed(3)}`;
+      elements.labelPf2G.setAttribute('transform', `translate(${midPf2X - 35}, ${midPf2Y - 14})`);
+    }
+
+    function updateReadouts() {
+      const a = state.a;
+      const b = state.b;
+      const c = MathEngine.calculateC(a, b);
+      const e = MathEngine.calculateEccentricity(a, b);
+      const twoA = 2 * a;
+      const slope = MathEngine.calculateAsymptoteSlope(a, b);
+      const directrixDistX = MathEngine.calculateDirectrix(a, b);
+
+      elements.inputA.value = a.toFixed(2);
+      elements.inputB.value = b.toFixed(2);
+      elements.sliderA.value = a;
+      elements.sliderB.value = b;
+
+      elements.readoutC.textContent = `c = ${c.toFixed(3)}`;
+      elements.readout2a.textContent = twoA.toFixed(3);
+      elements.readoutE.textContent = `e = ${e.toFixed(3)}`;
+      elements.readoutAsymp.textContent = `y = ±${slope.toFixed(2)}x`;
+      elements.readoutDirectrices.textContent = `x = ±${directrixDistX.toFixed(3)}`;
+
+      elements.predictionEq.textContent = `x² / ${(a*a).toFixed(2)} - y² / ${(b*b).toFixed(2)} = 1`;
+
+      elements.barParams.textContent = `a = ${a.toFixed(3)}, b = ${b.toFixed(3)}, c = ${c.toFixed(3)}`;
+      elements.barEccentricity.innerHTML = `e = c/a = ${e.toFixed(3)} &gt; 1 &#10004;`;
+
+      // Update Learning Panel Content Dynamically
+      const P = MathEngine.hyperbolaPoint(state.paramT, a, b, state.branch);
+      const pf1 = MathEngine.calculatePF1(P.x, P.y, c);
+      const pf2 = MathEngine.calculatePF2(P.x, P.y, c);
+      const diff = MathEngine.calculateDistanceDifference(P.x, P.y, c);
+
+      if (elements.learnPf1Val) elements.learnPf1Val.textContent = pf1.toFixed(3);
+      if (elements.learnPf2Val) elements.learnPf2Val.textContent = pf2.toFixed(3);
+      if (elements.learnDiffVal) elements.learnDiffVal.textContent = diff.toFixed(3);
+      if (elements.learn2aVal) elements.learn2aVal.textContent = twoA.toFixed(3);
+      if (elements.learnF1Str) elements.learnF1Str.textContent = `F₁ = (-${c.toFixed(3)}, 0)`;
+      if (elements.learnF2Str) elements.learnF2Str.textContent = `F₂ = (${c.toFixed(3)}, 0)`;
+      if (elements.learn2cStr) elements.learn2cStr.textContent = (2*c).toFixed(3);
+      if (elements.learnV1Val) elements.learnV1Val.textContent = `(-${a.toFixed(2)}, 0)`;
+      if (elements.learnV2Val) elements.learnV2Val.textContent = `(${a.toFixed(2)}, 0)`;
+      if (elements.learn2aVert) elements.learn2aVert.textContent = twoA.toFixed(2);
+      if (elements.learnAsympCalc) elements.learnAsympCalc.textContent = `y = \u00B1 (${b.toFixed(2)} / ${a.toFixed(2)}) x = \u00B1 ${slope.toFixed(2)}x`;
+      if (elements.learnECalc) elements.learnECalc.textContent = `e = ${c.toFixed(3)} / ${a.toFixed(2)} = ${e.toFixed(3)} > 1`;
+      if (elements.learnDirCalc) elements.learnDirCalc.textContent = `x = \u00B1 ${a.toFixed(2)}\u00B2 / ${c.toFixed(3)} = \u00B1 ${directrixDistX.toFixed(3)}`;
+    }
+
+    function render() {
+      renderGrid();
+      renderAxes();
+      renderHyperbola();
+      renderAsymptotesAndDirectrices();
+      renderLocusConstruction();
+      updateReadouts();
+    }
+
+    // --- 6. Event Handlers & Interactions ---
+
+    function showError(msg) {
+      elements.errorMsg.textContent = msg;
+      elements.errorToast.classList.add('show');
+      setTimeout(() => {
+        elements.errorToast.classList.remove('show');
+      }, 3500);
+    }
+
+    function setAandB(newA, newB) {
+      const parsedA = parseFloat(newA);
+      const parsedB = parseFloat(newB);
+
+      if (isNaN(parsedA) || isNaN(parsedB) || parsedA <= 0 || parsedB <= 0) {
+        showError('Invalid parameter. Both semi-axes a and b must be strictly positive (a > 0, b > 0).');
+        elements.inputA.value = state.a.toFixed(2);
+        elements.inputB.value = state.b.toFixed(2);
+        return;
+      }
+
+      state.a = parsedA;
+      state.b = parsedB;
+      render();
+    }
+
+    // Parameter Listeners
+    elements.inputA.addEventListener('change', (e) => setAandB(e.target.value, state.b));
+    elements.inputB.addEventListener('change', (e) => setAandB(state.a, e.target.value));
+
+    elements.sliderA.addEventListener('input', (e) => setAandB(e.target.value, state.b));
+    elements.sliderB.addEventListener('input', (e) => setAandB(state.a, e.target.value));
+
+    elements.btnADec.addEventListener('click', () => {
+      if (state.a > 0.3) setAandB(state.a - 0.25, state.b);
+    });
+
+    elements.btnAInc.addEventListener('click', () => {
+      setAandB(state.a + 0.25, state.b);
+    });
+
+    elements.btnBDec.addEventListener('click', () => {
+      if (state.b > 0.3) setAandB(state.a, state.b - 0.25);
+    });
+
+    elements.btnBInc.addEventListener('click', () => {
+      setAandB(state.a, state.b + 0.25);
+    });
+
+    // Zoom Controls
+    elements.btnZoomIn.addEventListener('click', () => {
+      view.scale = Math.min(160, view.scale * 1.15);
+      render();
+    });
+
+    elements.btnZoomOut.addEventListener('click', () => {
+      view.scale = Math.max(15, view.scale / 1.15);
+      render();
+    });
+
+    elements.btnZoomReset.addEventListener('click', () => {
+      view.originX = view.width / 2;
+      view.originY = view.height / 2;
+      view.scale = 45;
+      render();
+    });
+
+    // Toolbar Modes
+    elements.toolBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        elements.toolBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.mode = btn.dataset.mode;
+
+        if (state.mode === 'pan') {
+          elements.viewportContainer.className = 'graph-viewport-container mode-pan';
+        } else {
+          elements.viewportContainer.className = 'graph-viewport-container';
+        }
+
+        if (state.mode === 'construction') {
+          startConstructionAnimation();
+        }
+
+        render();
+      });
+    });
+
+    // Construction Animation Handler
+    function startConstructionAnimation() {
+      if (state.isConstructing) return;
+      state.isConstructing = true;
+      elements.constructionTrailG.innerHTML = '';
+
+      let currentT = -1.8;
+      const targetT = 1.8;
+      const stepT = 0.1;
+      let currentBranch = 'right';
+
+      const animInterval = setInterval(() => {
+        state.paramT = currentT;
+        state.branch = currentBranch;
+
+        // Place trail dot
+        const P = MathEngine.hyperbolaPoint(state.paramT, state.a, state.b, state.branch);
+        const ptScreen = view.toScreen(P.x, P.y);
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', ptScreen.sx);
+        circle.setAttribute('cy', ptScreen.sy);
+        circle.setAttribute('r', '4');
+        circle.setAttribute('class', 'construction-trail-circle');
+        elements.constructionTrailG.appendChild(circle);
+
+        render();
+
+        currentT += stepT;
+        if (currentT > targetT) {
+          if (currentBranch === 'right') {
+            currentBranch = 'left';
+            currentT = -1.8;
+          } else {
+            clearInterval(animInterval);
+            state.isConstructing = false;
+          }
+        }
+      }, 60);
+    }
+
+    // Toggles
+    elements.toggleGrid.addEventListener('change', (e) => {
+      state.showGrid = e.target.checked;
+      render();
+    });
+
+    elements.toggleInequality.addEventListener('change', (e) => {
+      state.showInequality = e.target.checked;
+      elements.inequalityCard.style.display = state.showInequality ? 'block' : 'none';
+      render();
+    });
+
+    elements.chkIneqInside.addEventListener('change', (e) => {
+      state.ineqInside = e.target.checked;
+      render();
+    });
+
+    elements.chkIneqOutside.addEventListener('change', (e) => {
+      state.ineqOutside = e.target.checked;
+      render();
+    });
+
+    // Independent Expandable Accordion Cards
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const card = header.closest('.accordion-card');
+        if (card) {
+          card.classList.toggle('active');
+          render();
+        }
+      });
+    });
+
+    // Dropdown Jump / Expand Selector
+    elements.learnDropdown.addEventListener('change', (e) => {
+      const topicId = e.target.value;
+      const targetCard = document.getElementById(`acc-card-${topicId}`);
+      if (targetCard) {
+        targetCard.classList.add('active');
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        render();
+      }
+    });
+
+    // Proof Builder Toggle & Step Click
+    elements.btnToggleProof.addEventListener('click', () => {
+      state.proofRevealed = !state.proofRevealed;
+      elements.proofSection.style.display = state.proofRevealed ? 'block' : 'none';
+      elements.btnToggleProof.textContent = state.proofRevealed ? 'Hide Visual Proof Builder' : 'Reveal Visual Proof Builder';
+    });
+
+    document.querySelectorAll('.proof-step-box').forEach(box => {
+      box.addEventListener('click', () => {
+        document.querySelectorAll('.proof-step-box').forEach(b => b.classList.remove('highlight'));
+        box.classList.add('highlight');
+        state.activeProofStep = parseInt(box.dataset.proofStep);
+        render();
+      });
+    });
+
+    // Challenge Logic
+    function generateNewChallenge() {
+      const possibleA = [2.0, 3.0, 4.0];
+      const possibleC = [4.0, 5.0, 6.0];
+
+      const aVal = possibleA[Math.floor(Math.random() * possibleA.length)];
+      const cVal = possibleC[Math.floor(Math.random() * possibleC.length)];
+
+      state.challengeA = aVal;
+      state.challengeC = cVal;
+
+      elements.challengePromptText.innerHTML = `Given a hyperbola with <strong>a = ${aVal.toFixed(2)}</strong> and <strong>c = ${cVal.toFixed(2)}</strong>:`;
+      elements.inputChallengeB.value = '';
+      elements.inputChallengeDiff.value = '';
+      elements.challengeFeedback.style.display = 'none';
+    }
+
+    elements.btnNewChallenge.addEventListener('click', generateNewChallenge);
+
+    elements.btnCheckChallenge.addEventListener('click', () => {
+      const userB = parseFloat(elements.inputChallengeB.value);
+      const userDiff = parseFloat(elements.inputChallengeDiff.value);
+
+      if (isNaN(userB) || isNaN(userDiff)) {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = '&#10008; Please enter valid numbers for b and |PF₁ - PF₂|.';
+        elements.challengeFeedback.style.display = 'inline-flex';
+        return;
+      }
+
+      const expectedB = Math.sqrt(state.challengeC * state.challengeC - state.challengeA * state.challengeA);
+      const expectedDiff = 2 * state.challengeA;
+
+      const diffB = Math.abs(userB - expectedB);
+      const diffD = Math.abs(userDiff - expectedDiff);
+
+      if (diffB < 0.08 && diffD < 0.08) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = `&#10004; Excellent! b = &radic;(${state.challengeC}² - ${state.challengeA}²) = ${expectedB.toFixed(2)}, |PF₁-PF₂| = ${expectedDiff.toFixed(2)}. Curve matches hyperbola!`;
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = `&#10008; Try again. Expected: b = ${expectedB.toFixed(2)}, |PF₁-PF₂| = ${expectedDiff.toFixed(2)}.`;
+      }
+      elements.challengeFeedback.style.display = 'inline-flex';
+    });
+
+    // Test Custom Point
+    elements.btnTestPoint.addEventListener('click', () => {
+      const tx = parseFloat(elements.inputTestX.value);
+      const ty = parseFloat(elements.inputTestY.value);
+
+      if (isNaN(tx) || isNaN(ty)) {
+        showError('Please enter valid numeric coordinates for x and y.');
+        return;
+      }
+
+      const c = MathEngine.calculateC(state.a, state.b);
+      const pf1 = MathEngine.calculatePF1(tx, ty, c);
+      const pf2 = MathEngine.calculatePF2(tx, ty, c);
+      const diff = Math.abs(pf1 - pf2);
+      const target2a = 2 * state.a;
+
+      const onEq = MathEngine.isOnHyperbola(tx, ty, state.a, state.b);
+      const onDist = Math.abs(diff - target2a) < 1e-3;
+
+      if (onEq && onDist) {
+        elements.testFeedback.className = 'feedback-msg correct';
+        elements.testFeedback.innerHTML = `&#10004; Point P(${tx}, ${ty}) lies ON the hyperbola! (|PF₁ - PF₂| = ${diff.toFixed(3)} = 2a)`;
+      } else {
+        elements.testFeedback.className = 'feedback-msg incorrect';
+        elements.testFeedback.innerHTML = `&#10008; Point P(${tx}, ${ty}) is NOT on the hyperbola. (|PF₁ - PF₂| = ${diff.toFixed(3)} ≠ ${target2a.toFixed(3)})`;
+      }
+      elements.testFeedback.style.display = 'inline-flex';
+
+      // Update point P parameters for user convenience
+      state.branch = tx >= 0 ? 'right' : 'left';
+      state.paramT = Math.asinh(ty / state.b);
+      render();
+    });
+
+    // Reset Button
+    elements.btnReset.addEventListener('click', () => {
+      state.a = 2.0;
+      state.b = 3.0;
+      state.paramT = 1.0;
+      state.branch = 'right';
+      state.mode = 'select';
+      state.showGrid = true;
+      state.showInequality = false;
+      state.ineqInside = true;
+      state.ineqOutside = false;
+      state.proofRevealed = false;
+      state.activeProofStep = null;
+
+      view.originX = 400;
+      view.originY = 290;
+      view.scale = 45;
+
+      elements.constructionTrailG.innerHTML = '';
+      elements.toggleGrid.checked = true;
+      elements.toggleInequality.checked = false;
+      elements.inequalityCard.style.display = 'none';
+      elements.proofSection.style.display = 'none';
+      elements.btnToggleProof.textContent = 'Reveal Visual Proof Builder';
+      elements.challengeFeedback.style.display = 'none';
+      elements.testFeedback.style.display = 'none';
+
+      elements.toolBtns.forEach(b => b.classList.remove('active'));
+      document.getElementById('tool-select').classList.add('active');
+      elements.viewportContainer.className = 'graph-viewport-container';
+
+      render();
+    });
+
+    // --- 7. Mouse & Touch Dragging Engine ---
+    let isDraggingP = false;
+
+    function getSVGCoordinates(e) {
+      const rect = elements.svg.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        sx: clientX - rect.left,
+        sy: clientY - rect.top
+      };
+    }
+
+    elements.viewportContainer.addEventListener('mousedown', (e) => {
+      const coords = getSVGCoordinates(e);
+      const mathPt = view.toMath(coords.sx, coords.sy);
+      const Ppt = MathEngine.hyperbolaPoint(state.paramT, state.a, state.b, state.branch);
+      const Pscreen = view.toScreen(Ppt.x, Ppt.y);
+
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      // Dragging Point P handle
+      if (distToP < 24 && state.mode !== 'pan') {
+        isDraggingP = true;
+        updatePointFromMouse(mathPt);
+        return;
+      }
+
+      // Free 2D Panning
+      if (state.mode === 'pan' || state.mode === 'locus' || distToP >= 24) {
+        if (state.mode !== 'locus' || distToP >= 24) {
+          view.isPanning = true;
+          view.dragStartScreen = { x: coords.sx, y: coords.sy };
+          view.dragStartOrigin = { x: view.originX, y: view.originY };
+        }
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingP) {
+        const coords = getSVGCoordinates(e);
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updatePointFromMouse(mathPt);
+      } else if (view.isPanning) {
+        const coords = getSVGCoordinates(e);
+        const dx = coords.sx - view.dragStartScreen.x;
+        const dy = coords.sy - view.dragStartScreen.y;
+        view.originX = view.dragStartOrigin.x + dx;
+        view.originY = view.dragStartOrigin.y + dy;
+        render();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingP = false;
+      view.isPanning = false;
+    });
+
+    // Touch Support
+    elements.viewportContainer.addEventListener('touchstart', (e) => {
+      const coords = getSVGCoordinates(e);
+      const Ppt = MathEngine.hyperbolaPoint(state.paramT, state.a, state.b, state.branch);
+      const Pscreen = view.toScreen(Ppt.x, Ppt.y);
+      const distToP = Math.hypot(coords.sx - Pscreen.sx, coords.sy - Pscreen.sy);
+
+      if (distToP < 30 && state.mode !== 'pan') {
+        isDraggingP = true;
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updatePointFromMouse(mathPt);
+        e.preventDefault();
+      } else {
+        view.isPanning = true;
+        view.dragStartScreen = { x: coords.sx, y: coords.sy };
+        view.dragStartOrigin = { x: view.originX, y: view.originY };
+      }
+    }, { passive: false });
+
+    elements.viewportContainer.addEventListener('touchmove', (e) => {
+      const coords = getSVGCoordinates(e);
+      if (isDraggingP) {
+        const mathPt = view.toMath(coords.sx, coords.sy);
+        updatePointFromMouse(mathPt);
+        e.preventDefault();
+      } else if (view.isPanning) {
+        const dx = coords.sx - view.dragStartScreen.x;
+        const dy = coords.sy - view.dragStartScreen.y;
+        view.originX = view.dragStartOrigin.x + dx;
+        view.originY = view.dragStartOrigin.y + dy;
+        render();
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    elements.viewportContainer.addEventListener('touchend', () => {
+      isDraggingP = false;
+      view.isPanning = false;
+    });
+
+    function updatePointFromMouse(mathPt) {
+      // Determine branch from x coordinate sign
+      state.branch = mathPt.mx >= 0 ? 'right' : 'left';
+      // Solve y = b * sinh(t) => t = asinh(y / b)
+      state.paramT = Math.asinh(mathPt.my / state.b);
+      render();
+    }
+
+    // Wheel Zooming
+    elements.viewportContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      const mouseCoords = getSVGCoordinates(e);
+      const mathBefore = view.toMath(mouseCoords.sx, mouseCoords.sy);
+
+      const newScale = Math.min(Math.max(15, view.scale * zoomFactor), 160);
+      view.scale = newScale;
+
+      view.originX = mouseCoords.sx - mathBefore.mx * view.scale;
+      view.originY = mouseCoords.sy + mathBefore.my * view.scale;
+
+      render();
+    }, { passive: false });
+
+    // Resize Event
+    window.addEventListener('resize', updateViewportDimensions);
+
+    // Initial Execution
+    updateViewportDimensions();
+    render();
+  </script>
+</body>
+</html>

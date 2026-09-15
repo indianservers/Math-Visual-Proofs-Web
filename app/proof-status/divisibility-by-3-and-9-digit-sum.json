@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "divisibility-by-3-and-9-digit-sum",
+  "categorySlug": "number-theory",
+  "slug": "divisibility-by-3-and-9-digit-sum",
+  "route": "/visual-proofs/number-theory/divisibility-by-3-and-9-digit-sum",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/83/index.html)."
+}

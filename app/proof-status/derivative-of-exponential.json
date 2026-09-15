@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "derivative-of-exponential",
+  "categorySlug": "calculus",
+  "slug": "derivative-of-exponential",
+  "route": "/visual-proofs/calculus/derivative-of-exponential",
+  "status": "interactive",
+  "owner": "Asad",
+  "notes": "Integrated team-developed self-contained HTML proof (Asad/70/graph_lab_complete.html)."
+}

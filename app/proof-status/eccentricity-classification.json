@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "eccentricity-classification",
+  "categorySlug": "conic-sections",
+  "slug": "eccentricity-classification",
+  "route": "/visual-proofs/conic-sections/eccentricity-classification",
+  "status": "interactive",
+  "owner": "Pavan",
+  "notes": "Integrated team-developed self-contained HTML proof (Pavan/projects/141-eccentricity-classification)."
+}

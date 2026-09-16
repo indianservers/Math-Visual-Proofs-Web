@@ -8,6 +8,8 @@ import {
   catalogProofRoute,
   implementationStatusForProof,
   interactiveRouteForProof,
+  proofFeelForProof,
+  readinessForProof,
 } from "../lib/visualProofCatalog";
 
 export const metadata: Metadata = {
@@ -164,19 +166,28 @@ export default function ProofsIndex() {
             description: category.description,
             proofCount: category.actualProofCount,
           }))}
-          proofs={ALL_VISUAL_PROOFS.map((proof) => ({
-            catalogNumber: proof.catalogNumber,
-            title: proof.title,
-            slug: proof.slug,
-            categorySlug: proof.categorySlug,
-            shortDescription: proof.shortDescription,
-            difficulty: proof.difficulty,
-            estimatedTime: proof.estimatedTime,
-            tags: proof.tags,
-            href: catalogProofRoute(proof),
-            interactiveHref: interactiveRouteForProof(proof),
-            implementationStatus: implementationStatusForProof(proof),
-          }))}
+          proofs={ALL_VISUAL_PROOFS.map((proof) => {
+            const feel = proofFeelForProof(proof);
+            return {
+              catalogNumber: proof.catalogNumber,
+              title: proof.title,
+              slug: proof.slug,
+              categorySlug: proof.categorySlug,
+              shortDescription: proof.shortDescription,
+              difficulty: proof.difficulty,
+              estimatedTime: proof.estimatedTime,
+              tags: proof.tags,
+              href: catalogProofRoute(proof),
+              interactiveHref: interactiveRouteForProof(proof),
+              implementationStatus: implementationStatusForProof(proof),
+              readiness: readinessForProof(proof),
+              methodLabel: feel.methodLabel,
+              methodGlyph: feel.methodGlyph,
+              doThis: feel.doThis,
+              provedWhen: feel.provedWhen,
+              uxEnhancement: feel.uxEnhancement,
+            };
+          })}
         />
 
         <section className="library-how" id="how-it-works">

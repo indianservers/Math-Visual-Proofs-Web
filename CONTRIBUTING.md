@@ -38,12 +38,14 @@ If a proof needs an engine capability, open a small engine pull request first. M
 
 ## Status lifecycle
 
-- `planned`: catalog entry only; no active implementation.
-- `in-development`: an isolated workspace exists, but should not be advertised as ready.
-- `interactive`: controls and mathematical interactions work.
-- `verified`: interaction, accessibility, and reference-image visual checks have passed.
+- `planned`: catalog entry only; no active implementation. User-facing label: **Upcoming**.
+- `in-development`: an isolated workspace exists, but should not be advertised as ready. User-facing label: **Upcoming**.
+- `interactive`: controls and mathematical interactions work. User-facing label: **Interactive**.
+- `verified`: interaction, accessibility, and reference-image visual checks have passed. User-facing label: **Visually verified**.
 
 Only change the status in that proof's own manifest. `npm run proof:validate` checks manifest identity, duplicate routes, and isolated page existence.
+
+Every catalog proof also has a unique proof-feel cue (method, interaction, and “oo yes” moment) derived in `app/lib/proofFeel.ts` so learners see *how* it is proved, not only whether it is ready.
 
 ## Merge checklist
 

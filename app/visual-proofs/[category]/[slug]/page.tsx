@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { readinessLabel } from "../../../lib/proofFeel";
 import { getProofImplementation } from "../../../lib/proofImplementation";
 import {
   ALL_VISUAL_PROOFS,
@@ -8,6 +9,8 @@ import {
   getCatalogCategory,
   getCatalogProof,
   interactiveRouteForProof,
+  proofFeelForProof,
+  readinessForProof,
 } from "../../../lib/visualProofCatalog";
 
 type PageProps = { params: Promise<{ category: string; slug: string }> };
@@ -43,6 +46,8 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
   if (!proof) notFound();
   const categoryInfo = getCatalogCategory(category);
   const interactiveRoute = interactiveRouteForProof(proof);
+  const readiness = readinessForProof(proof);
+  const feel = proofFeelForProof(proof);
   const related = ALL_VISUAL_PROOFS.filter(
     (item) => item.categorySlug === category && item.id !== proof.id,
   ).slice(0, 3);
@@ -71,6 +76,11 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
         <section className="catalog-detail-hero">
           <div className="catalog-detail-copy">
             <div className="catalog-detail-chips">
+              <span
+                className={`readiness-pill readiness-pill-${readiness}`}
+              >
+                {readinessLabel(readiness)}
+              </span>
               <span>{proof.difficulty}</span>
               <span>{proof.estimatedTime}</span>
               <span>{proof.level}</span>
@@ -87,8 +97,8 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
                   ▶ Open interactive proof
                 </Link>
               ) : (
-                <span className="catalog-page-status">
-                  Dedicated proof page #{proof.catalogNumber}
+                <span className="catalog-page-status catalog-page-upcoming">
+                  Upcoming — interactive workspace planned
                 </span>
               )}
               <Link href="/proofs" className="browse-more">
@@ -97,28 +107,49 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
             </div>
           </div>
           <div
-            className={`catalog-concept-card concept-${proof.proofLearningModel}`}
-            aria-label={`Visual concept for ${proof.title}`}
+            className={`catalog-concept-card concept-${feel.tone} concept-${proof.proofLearningModel}`}
+            aria-label={`How ${proof.title} is proved`}
           >
             <div className="concept-grid" aria-hidden="true">
               <i />
               <i />
               <i />
               <i />
-              <span>
-                {proof.categorySlug === "geometry"
-                  ? "△"
-                  : proof.categorySlug === "calculus"
-                    ? "∫"
-                    : proof.categorySlug === "statistics"
-                      ? "▥"
-                      : proof.categorySlug === "vectors"
-                        ? "→"
-                        : "∑"}
-              </span>
+              <span>{feel.methodGlyph}</span>
             </div>
-            <b>Visual model</b>
-            <p>{proof.proofLearningModel.replaceAll("-", " ")}</p>
+            <b>Proved like this</b>
+            <p>{feel.methodLabel}</p>
+          </div>
+        </section>
+
+        <section
+          className={`proof-feel-panel tone-${feel.tone}`}
+          aria-labelledby="proof-feel-title"
+        >
+          <div className="proof-feel-panel-head">
+            <span aria-hidden="true">{feel.methodGlyph}</span>
+            <div>
+              <p className="eyebrow">HOW THIS IS PROVED</p>
+              <h2 id="proof-feel-title">{feel.methodLabel}</h2>
+            </div>
+          </div>
+          <div className="proof-feel-panel-grid">
+            <article>
+              <h3>What you do</h3>
+              <p>{feel.doThis}</p>
+            </article>
+            <article>
+              <h3>The “oo yes” moment</h3>
+              <p>{feel.provedWhen}</p>
+            </article>
+            <article>
+              <h3>
+                {readiness === "upcoming"
+                  ? "Upcoming UX enhancement"
+                  : "Signature UX"}
+              </h3>
+              <p>{feel.uxEnhancement}</p>
+            </article>
           </div>
         </section>
 
@@ -161,13 +192,20 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              {related.map((item) => (
-                <Link key={item.id} href={catalogProofRoute(item)}>
-                  <small>#{String(item.catalogNumber).padStart(3, "0")}</small>
-                  <b>{item.title}</b>
-                  <span>View proof →</span>
-                </Link>
-              ))}
+              {related.map((item) => {
+                const relatedFeel = proofFeelForProof(item);
+                const relatedReady = readinessForProof(item);
+                return (
+                  <Link key={item.id} href={catalogProofRoute(item)}>
+                    <small>#{String(item.catalogNumber).padStart(3, "0")}</small>
+                    <b>{item.title}</b>
+                    <span>
+                      {relatedFeel.methodGlyph} {relatedFeel.methodLabel} ·{" "}
+                      {readinessLabel(relatedReady)}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </section>
         )}

@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import {
+  readinessLabel,
+  type ProofReadiness,
+} from "../lib/proofFeel";
 
 export type CatalogBrowserCategory = {
   title: string;
@@ -22,6 +26,12 @@ export type CatalogBrowserProof = {
   href: string;
   interactiveHref: string | null;
   implementationStatus: "planned" | "in-development" | "interactive" | "verified";
+  readiness: ProofReadiness;
+  methodLabel: string;
+  methodGlyph: string;
+  doThis: string;
+  provedWhen: string;
+  uxEnhancement: string;
 };
 
 const CATEGORY_GLYPHS = [
@@ -46,6 +56,8 @@ const CATEGORY_GLYPHS = [
   "⚙",
 ];
 
+type ReadinessFilter = "all" | "ready" | "upcoming";
+
 export default function ProofCatalogBrowser({
   categories,
   proofs,
@@ -55,20 +67,35 @@ export default function ProofCatalogBrowser({
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
+  const [readiness, setReadiness] = useState<ReadinessFilter>("all");
   const normalizedQuery = query.trim().toLowerCase();
+
+  const readinessCounts = useMemo(() => {
+    const counts = { upcoming: 0, ready: 0 };
+    for (const proof of proofs) {
+      if (proof.readiness === "upcoming") counts.upcoming += 1;
+      else counts.ready += 1;
+    }
+    return counts;
+  }, [proofs]);
+
   const filtered = useMemo(
     () =>
       proofs.filter((proof) => {
         const categoryMatches =
           category === "all" || proof.categorySlug === category;
+        const readinessMatches =
+          readiness === "all" ||
+          (readiness === "upcoming" && proof.readiness === "upcoming") ||
+          (readiness === "ready" && proof.readiness !== "upcoming");
         const queryMatches =
           !normalizedQuery ||
-          `${proof.title} ${proof.shortDescription} ${proof.tags.join(" ")}`
+          `${proof.title} ${proof.shortDescription} ${proof.tags.join(" ")} ${proof.doThis} ${proof.provedWhen}`
             .toLowerCase()
             .includes(normalizedQuery);
-        return categoryMatches && queryMatches;
+        return categoryMatches && readinessMatches && queryMatches;
       }),
-    [category, normalizedQuery, proofs],
+    [category, normalizedQuery, proofs, readiness],
   );
 
   return (
@@ -77,7 +104,10 @@ export default function ProofCatalogBrowser({
         <div>
           <span className="eyebrow">COMPLETE CATALOG</span>
           <h2 id="catalog-title">Browse 223 visual proofs</h2>
-          <p>Explore every theorem by topic, level, or mathematical idea.</p>
+          <p>
+            Ready proofs you can open now — Upcoming proofs show how they will
+            be proved.
+          </p>
         </div>
         <label className="proof-search">
           <span>⌕</span>
@@ -93,6 +123,36 @@ export default function ProofCatalogBrowser({
             </button>
           )}
         </label>
+      </div>
+
+      <div className="readiness-filter" role="tablist" aria-label="Proof readiness">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={readiness === "all"}
+          className={readiness === "all" ? "active" : ""}
+          onClick={() => setReadiness("all")}
+        >
+          All <small>{proofs.length}</small>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={readiness === "ready"}
+          className={readiness === "ready" ? "active" : ""}
+          onClick={() => setReadiness("ready")}
+        >
+          Ready <small>{readinessCounts.ready}</small>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={readiness === "upcoming"}
+          className={readiness === "upcoming" ? "active" : ""}
+          onClick={() => setReadiness("upcoming")}
+        >
+          Upcoming <small>{readinessCounts.upcoming}</small>
+        </button>
       </div>
 
       <div className="category-browser" aria-label="Proof categories">
@@ -127,6 +187,11 @@ export default function ProofCatalogBrowser({
           {category === "all"
             ? "All categories"
             : categories.find((item) => item.slug === category)?.title}
+          {readiness === "upcoming"
+            ? " · Upcoming"
+            : readiness === "ready"
+              ? " · Ready"
+              : ""}
         </b>
         <span>
           {filtered.length} result{filtered.length === 1 ? "" : "s"}
@@ -136,28 +201,55 @@ export default function ProofCatalogBrowser({
         <div className="catalog-proof-grid">
           {filtered.map((proof) => (
             <article
-              className="catalog-proof-card"
+              className={`catalog-proof-card readiness-${proof.readiness}`}
               key={`${proof.categorySlug}-${proof.slug}`}
             >
               <Link href={proof.href} className="catalog-proof-main">
                 <div className="catalog-proof-meta">
                   <span>#{String(proof.catalogNumber).padStart(3, "0")}</span>
+                  <span
+                    className={`readiness-pill readiness-pill-${proof.readiness}`}
+                  >
+                    {readinessLabel(proof.readiness)}
+                  </span>
                   <i>{proof.difficulty}</i>
                 </div>
                 <h3>{proof.title}</h3>
                 <p>{proof.shortDescription}</p>
+                <div className="proof-feel-cue" aria-label="How this is proved">
+                  <span className="proof-feel-glyph" aria-hidden="true">
+                    {proof.methodGlyph}
+                  </span>
+                  <div>
+                    <b>{proof.methodLabel}</b>
+                    <em>{proof.doThis}</em>
+                  </div>
+                </div>
+                <p className="proof-feel-aha">{proof.provedWhen}</p>
                 <div className="catalog-proof-foot">
                   <span>{proof.estimatedTime}</span>
-                  <b>View proof →</b>
+                  <b>
+                    {proof.readiness === "upcoming"
+                      ? "Preview proof →"
+                      : "View proof →"}
+                  </b>
                 </div>
               </Link>
-              {proof.interactiveHref && (
+              {proof.interactiveHref ? (
                 <Link
                   href={proof.interactiveHref}
                   className="interactive-ready"
                 >
-                  ● {proof.implementationStatus === "verified" ? "Visually verified" : "Interactive workspace ready"}
+                  ●{" "}
+                  {proof.readiness === "verified"
+                    ? "Visually verified"
+                    : "Interactive workspace ready"}
                 </Link>
+              ) : (
+                <div className="upcoming-ux" title={proof.uxEnhancement}>
+                  <span>Upcoming UX</span>
+                  <p>{proof.uxEnhancement}</p>
+                </div>
               )}
             </article>
           ))}
@@ -170,6 +262,7 @@ export default function ProofCatalogBrowser({
             onClick={() => {
               setQuery("");
               setCategory("all");
+              setReadiness("all");
             }}
           >
             Show all proofs

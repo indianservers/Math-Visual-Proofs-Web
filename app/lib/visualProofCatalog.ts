@@ -1,4 +1,5 @@
 import catalogData from "../data/visual-proofs-detailed.json";
+import { getProofFeel, readinessForStatus } from "./proofFeel";
 import { getProofImplementation } from "./proofImplementation";
 
 export type VisualProofCategory = {
@@ -69,6 +70,14 @@ export function interactiveRouteForProof(proof: CatalogVisualProof) {
 
 export function implementationStatusForProof(proof: CatalogVisualProof) {
   return getProofImplementation(proof.id)?.status ?? "planned";
+}
+
+export function readinessForProof(proof: CatalogVisualProof) {
+  return readinessForStatus(getProofImplementation(proof.id)?.status);
+}
+
+export function proofFeelForProof(proof: CatalogVisualProof) {
+  return getProofFeel(proof);
 }
 
 export function getCatalogProof(categorySlug: string, proofSlug: string) {

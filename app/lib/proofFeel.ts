@@ -217,6 +217,12 @@ function verbFrom(proof: CatalogVisualProof) {
   return `${lead}ing`;
 }
 
+function asClause(text: string) {
+  const stripped = stripTrailingPeriod(text).trim();
+  if (!stripped) return stripped;
+  return stripped.charAt(0).toLowerCase() + stripped.slice(1);
+}
+
 function sentenceCase(text: string) {
   if (!text) return text;
   return text.charAt(0).toUpperCase() + text.slice(1);

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "distributive-law-area-model",
+  "categorySlug": "algebraic-identities",
+  "slug": "distributive-law-area-model",
+  "route": "/visual-proofs/algebraic-identities/distributive-law-area-model",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive tile proof using shared canvas engine, ProofShape, ProofUI, CanvasNavigator, MathFormula, and lucide icons."
+}

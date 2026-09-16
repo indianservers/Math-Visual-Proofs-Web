@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "product-of-binomials",
+  "categorySlug": "algebraic-identities",
+  "slug": "product-of-binomials",
+  "route": "/visual-proofs/algebraic-identities/product-of-binomials",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive tile proof using shared canvas engine, ProofShape, ProofUI, CanvasNavigator, MathFormula, and lucide icons."
+}

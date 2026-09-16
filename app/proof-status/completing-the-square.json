@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "completing-the-square",
+  "categorySlug": "algebraic-identities",
+  "slug": "completing-the-square",
+  "route": "/visual-proofs/algebraic-identities/completing-the-square",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive tile proof using shared canvas engine, ProofShape, ProofUI, CanvasNavigator, MathFormula, and lucide icons."
+}

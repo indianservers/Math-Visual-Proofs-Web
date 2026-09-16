@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "quadratic-factorization-area-model",
+  "categorySlug": "algebraic-identities",
+  "slug": "quadratic-factorization-area-model",
+  "route": "/visual-proofs/algebraic-identities/quadratic-factorization-area-model",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive tile proof using shared canvas engine, ProofShape, ProofUI, CanvasNavigator, MathFormula, and lucide icons."
+}

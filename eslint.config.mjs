@@ -15,6 +15,11 @@ const eslintConfig = defineConfig([
     "build/**",
     "work/**",
     "next-env.d.ts",
+    // Intern-imported proof UIs and vendor assets still carry lint debt from main.
+    "app/imported/**",
+    "public/imported-proofs/**",
+    "public/vendor/**",
+    "app/visual-proofs/**/source/**",
   ]),
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

@@ -29,7 +29,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "◫",
     doThis: "Slide pieces until leftover regions match",
     provedWhenTemplate: (proof) =>
-      `When the leftover areas lock together, ${stripTrailingPeriod(proof.shortDescription)} — and the equality is something you can see.`,
+      `When the leftover areas lock together, ${asClause(proof.shortDescription)} — and the equality is something you can see.`,
     uxEnhancement: (proof) =>
       `Magnetic snap while you ${verbFrom(proof)} — leftover regions flash when they become equal for ${proof.title}.`,
     tone: "rearrange",
@@ -39,7 +39,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "∠",
     doThis: "Lift or copy angles onto a straight line or matching arc",
     provedWhenTemplate: (proof) =>
-      `The moment the angles fill the target without gaps, ${stripTrailingPeriod(proof.shortDescription).toLowerCase()}.`,
+      `The moment the angles fill the target without gaps, ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Detachable angle wedges with a live degree readout that seals at the target for ${shortTitle(proof)}.`,
     tone: "angle",
@@ -49,7 +49,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "⌖",
     doThis: "Roll, unwrap, or grow the figure while measures update",
     provedWhenTemplate: (proof) =>
-      `Watch the measured lengths/areas converge: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Watch the measured lengths/areas converge: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Paired measure callouts that morph into the formula as you ${verbFrom(proof)} in ${shortTitle(proof)}.`,
     tone: "measure",
@@ -59,7 +59,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "▦",
     doThis: "Lay tiles until the pattern completes a known shape",
     provedWhenTemplate: (proof) =>
-      `Counting the finished tiling makes the identity unavoidable: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Counting the finished tiling makes the identity unavoidable: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Ghost outline for ${primaryTag(proof)}; tiles click into place while a running count becomes the closed form of ${shortTitle(proof)}.`,
     tone: "tile",
@@ -69,7 +69,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "∿",
     doThis: "Tighten a parameter and watch the graph settle",
     provedWhenTemplate: (proof) =>
-      `As the parameter approaches the limit, ${stripTrailingPeriod(proof.shortDescription).toLowerCase()}.`,
+      `As the parameter approaches the limit, ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Scrubbable limit slider with a settling trail that fades into the limiting curve for ${shortTitle(proof)}.`,
     tone: "limit",
@@ -79,7 +79,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "▦",
     doThis: "Drag points on the grid and read the invariant",
     provedWhenTemplate: (proof) =>
-      `Coordinates make the claim concrete: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Coordinates make the claim concrete: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Live coordinate badges plus a highlighted invariant that stays constant while you explore ${shortTitle(proof)}.`,
     tone: "grid",
@@ -89,7 +89,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "↻",
     doThis: "Apply the transform and compare before/after figures",
     provedWhenTemplate: (proof) =>
-      `After the motion finishes, ${stripTrailingPeriod(proof.shortDescription).toLowerCase()}.`,
+      `After the motion finishes, ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Ghost “before” silhouette while the image morphs; invariants pulse as you complete ${shortTitle(proof)}.`,
     tone: "transform",
@@ -99,7 +99,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "#",
     doThis: "Group, pair, or rearrange counters into a clear structure",
     provedWhenTemplate: (proof) =>
-      `The structure of the counters is the proof: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `The structure of the counters is the proof: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Color-coded ${primaryTag(proof)} counters that pack into structure with remainder lanes for ${shortTitle(proof)}.`,
     tone: "number",
@@ -109,7 +109,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "⇔",
     doThis: "Align two constructions and spot what must match",
     provedWhenTemplate: (proof) =>
-      `When both sides match, ${stripTrailingPeriod(proof.shortDescription).toLowerCase()}.`,
+      `When both sides match, ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Split canvas with a balance meter that tips to equality only when ${shortTitle(proof)} lines up.`,
     tone: "compare",
@@ -119,7 +119,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "◎",
     doThis: "Run trials and watch the long-run pattern emerge",
     provedWhenTemplate: (proof) =>
-      `After enough trials, ${stripTrailingPeriod(proof.shortDescription).toLowerCase()}.`,
+      `After enough trials, ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Trial stamps feed a growing histogram that overlays the target curve for ${shortTitle(proof)}.`,
     tone: "simulate",
@@ -129,7 +129,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "▥",
     doThis: "Reshape the same data and keep the summary honest",
     provedWhenTemplate: (proof) =>
-      `Different pictures, same truth: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Different pictures, same truth: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Linked highlighting across chart forms so selecting one part lights matching values in ${shortTitle(proof)}.`,
     tone: "data",
@@ -139,7 +139,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "→",
     doThis: "Trace flow lines or combine vectors tip-to-tail",
     provedWhenTemplate: (proof) =>
-      `Following the field makes the claim visible: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Following the field makes the claim visible: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Particle tracers with optional path readouts tailored to ${shortTitle(proof)}.`,
     tone: "vector",
@@ -149,7 +149,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "ℂ",
     doThis: "Rotate and scale arrows in the Argand plane",
     provedWhenTemplate: (proof) =>
-      `Geometry of arrows replaces algebra: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Geometry of arrows replaces algebra: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Draggable Argand arrows with polar guides so ${shortTitle(proof)} becomes rotate-and-stretch.`,
     tone: "complex",
@@ -159,7 +159,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "⤴",
     doThis: "Stack or scale layers and read the exponent change",
     provedWhenTemplate: (proof) =>
-      `Scaling the figure rewrites the exponent: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `Scaling the figure rewrites the exponent: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Layer stack that merges/splits with a log-scale ruler for ${shortTitle(proof)}.`,
     tone: "growth",
@@ -169,7 +169,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "⚙",
     doThis: "Tune the system and watch the governing relation hold",
     provedWhenTemplate: (proof) =>
-      `The system cannot violate the relation: ${stripTrailingPeriod(proof.shortDescription)}.`,
+      `The system cannot violate the relation: ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Linked real-world knobs with a formula HUD that stays satisfied throughout ${shortTitle(proof)}.`,
     tone: "applied",
@@ -179,7 +179,7 @@ const MODEL_FEEL: Record<string, ModelFeel> = {
     methodGlyph: "✣",
     doThis: "Build the next terms until the pattern forces the formula",
     provedWhenTemplate: (proof) =>
-      `Once the pattern locks, ${stripTrailingPeriod(proof.shortDescription).toLowerCase()}.`,
+      `Once the pattern locks, ${asClause(proof.shortDescription)}.`,
     uxEnhancement: (proof) =>
       `Predict-the-next-term gate before revealing the closed form in ${shortTitle(proof)}.`,
     tone: "pattern",
@@ -191,7 +191,7 @@ const FALLBACK_MODEL: ModelFeel = {
   methodGlyph: "✦",
   doThis: "Manipulate the figure until the claim is forced",
   provedWhenTemplate: (proof) =>
-    `You prove it by seeing it: ${stripTrailingPeriod(proof.shortDescription)}.`,
+    `You prove it by seeing it: ${asClause(proof.shortDescription)}.`,
   uxEnhancement: (proof) =>
     `Step-locked interactions with a final “proved” seal when ${shortTitle(proof)} matches the statement.`,
   tone: "general",

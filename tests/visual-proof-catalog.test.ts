@@ -56,7 +56,11 @@ describe("visual proof catalog", () => {
     const ahas = ALL_VISUAL_PROOFS.map(
       (proof) => getProofFeel(proof).provedWhen,
     );
+    const enhancements = ALL_VISUAL_PROOFS.map(
+      (proof) => getProofFeel(proof).uxEnhancement,
+    );
     expect(new Set(ahas).size).toBe(ALL_VISUAL_PROOFS.length);
+    expect(new Set(enhancements).size).toBe(ALL_VISUAL_PROOFS.length);
     for (const proof of ALL_VISUAL_PROOFS) {
       const feel = getProofFeel(proof);
       expect(feel.methodLabel.length).toBeGreaterThan(0);

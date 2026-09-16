@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "non-unique-solid-projections",
+  "categorySlug": "geometry",
+  "slug": "non-unique-solid-projections",
+  "route": "/visual-proofs/geometry/non-unique-solid-projections",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive proof using shared canvas engine, ProofShape, ProofUI, MathFormula, and lucide icons."
+}

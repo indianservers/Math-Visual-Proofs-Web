@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "three-term-square",
+  "categorySlug": "algebraic-identities",
+  "slug": "three-term-square",
+  "route": "/visual-proofs/algebraic-identities/three-term-square",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive tile proof using shared canvas engine, ProofShape, ProofUI, CanvasNavigator, MathFormula, and lucide icons."
+}

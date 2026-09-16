@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "even-number-sum",
+  "categorySlug": "sequences-and-series",
+  "slug": "sum-first-n-even-numbers",
+  "route": "/visual-proofs/sequences-and-series/sum-first-n-even-numbers",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/even-number-sum"
+}

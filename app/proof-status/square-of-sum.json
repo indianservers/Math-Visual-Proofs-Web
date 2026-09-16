@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "square-of-sum",
+  "categorySlug": "algebraic-identities",
+  "slug": "square-of-sum",
+  "route": "/visual-proofs/algebraic-identities/square-of-sum",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-09.html"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "pyramid-volume-one-third",
+  "categorySlug": "mensuration",
+  "slug": "pyramid-volume-one-third",
+  "route": "/visual-proofs/mensuration/pyramid-volume-one-third",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/pyramid-volume-one-third"
+}

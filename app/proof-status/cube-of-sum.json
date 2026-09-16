@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "cube-of-sum",
+  "categorySlug": "algebraic-identities",
+  "slug": "cube-of-sum",
+  "route": "/visual-proofs/algebraic-identities/cube-of-sum",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-28.html"
+}

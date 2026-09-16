@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "proofId": "pythagorean-area-rearrangement",
+  "categorySlug": "geometry",
+  "slug": "pythagorean-theorem-area-rearrangement",
+  "route": "/proofs/pythagorean-theorem",
+  "status": "verified",
+  "notes": "Guided, draggable rearrangement proof with shared canvas engine."
+}

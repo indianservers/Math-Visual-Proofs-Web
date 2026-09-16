@@ -1,0 +1,2444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LCM by Grid Alignment - Maths Universe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #f3f4fa;
+      --sidebar-bg: #ffffff;
+      --card-bg: #ffffff;
+      --text-main: #1e1b4b;
+      --text-muted: #64748b;
+      --text-purple: #6d28d9;
+      --purple-primary: #7c3aed;
+      --purple-light: #ede9fe;
+      --purple-border: #ddd6fe;
+      --purple-counter: #8b5cf6;
+      --purple-glow: rgba(139, 92, 246, 0.3);
+      --blue-primary: #3b82f6;
+      --blue-light: #dbeafe;
+      --blue-border: #bfdbfe;
+      --blue-counter: #3b82f6;
+      --blue-glow: rgba(59, 130, 246, 0.3);
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 2px 8px rgba(99, 102, 241, 0.04);
+      --shadow-md: 0 6px 20px rgba(99, 102, 241, 0.06);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* Layout Structure */
+    .app-layout {
+      display: flex;
+      width: 100vw;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 80px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      gap: 32px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #efe7ff 0%, #e0e7ff 100%);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--purple-primary);
+    }
+
+    .brand-text {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #4338ca;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      width: 64px;
+      padding: 8px 0;
+      border-radius: 12px;
+    }
+
+    .nav-item:hover {
+      color: var(--purple-primary);
+      background: #f8fafc;
+    }
+
+    .nav-item.active {
+      color: var(--purple-primary);
+      background: var(--purple-light);
+    }
+
+    .nav-item.active .nav-icon {
+      color: var(--purple-primary);
+    }
+
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+
+    /* Main Area Styling */
+    .main-container {
+      flex: 1;
+      padding: 24px 32px 40px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* Header Bar */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breadcrumb span {
+      color: var(--purple-primary);
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pill-badge.purple {
+      background: #f5f3ff;
+      border-color: #ddd6fe;
+      color: #6d28d9;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Mission Banner */
+    .mission-banner {
+      background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      border: 1px solid #ddd6fe;
+      border-radius: var(--radius-md);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #5b21b6;
+    }
+
+    .mission-icon {
+      width: 28px;
+      height: 28px;
+      background: #7c3aed;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Grid Layouts */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+    }
+
+    @media (max-width: 1200px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* Build Patterns & Main Interactive Grid Area */
+    .main-interactive-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .panel-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-circle {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: help;
+    }
+
+    .panel-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .grid-legend {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .dot-purple {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--purple-counter);
+    }
+
+    .dot-blue {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue-counter);
+    }
+
+    .btn-clear {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-clear:hover {
+      background: #f8fafc;
+      color: #0f172a;
+      border-color: #cbd5e1;
+    }
+
+    /* Pattern Drag Building Row */
+    .pattern-builders {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #f8fafc;
+      border: 1px solid #f1f5f9;
+      padding: 16px 20px;
+      border-radius: var(--radius-md);
+    }
+
+    .builder-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .builder-label {
+      font-size: 15px;
+      font-weight: 800;
+      min-width: 60px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .builder-label.purple { color: #6d28d9; }
+    .builder-label.blue { color: #1d4ed8; }
+
+    .num-input-inline {
+      width: 44px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+      outline: none;
+    }
+
+    .counter-palette {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .counter-token {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      touch-action: none;
+      position: relative;
+    }
+
+    .counter-token:hover {
+      cursor: grab;
+    }
+
+    .counter-token:active, .counter-token.dragging {
+      cursor: grabbing;
+      transform: scale(1.15);
+      z-index: 1000;
+    }
+
+    .counter-token.purple {
+      background: radial-gradient(circle at 30% 30%, #a78bfa, #7c3aed);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 10px var(--purple-glow);
+    }
+
+    .counter-token.blue {
+      background: radial-gradient(circle at 30% 30%, #60a5fa, #2563eb);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 10px var(--blue-glow);
+    }
+
+    .counter-placeholder {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px dashed #cbd5e1;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Central Multiples Workspace Container */
+    .grid-visualizer-container {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 20px 16px;
+      position: relative;
+      overflow-x: auto;
+      min-height: 280px;
+    }
+
+    .grid-header-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 20px;
+    }
+
+    .number-ruler {
+      display: flex;
+      margin-left: 60px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .ruler-cell {
+      flex: 1;
+      min-width: 36px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .grid-track-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+    }
+
+    .grid-track-row {
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 52px;
+    }
+
+    .track-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+
+    .track-badge.purple {
+      background: #f5f3ff;
+      border: 1.5px solid #c4b5fd;
+      color: #6d28d9;
+    }
+
+    .track-badge.blue {
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      color: #1d4ed8;
+    }
+
+    .track-line-container {
+      flex: 1;
+      display: flex;
+      position: relative;
+      height: 100%;
+      align-items: center;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 35px,
+        #f1f5f9 35px,
+        #f1f5f9 36px
+      );
+    }
+
+    .track-bg-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #e2e8f0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .grid-cell {
+      flex: 1;
+      min-width: 36px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .grid-cell.highlight-target {
+      background: rgba(124, 58, 237, 0.05);
+    }
+
+    .grid-cell-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #cbd5e1;
+    }
+
+    .grid-counter {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      z-index: 5;
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .grid-counter.purple {
+      background: radial-gradient(circle at 30% 30%, #a78bfa, #7c3aed);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 10px var(--purple-glow);
+    }
+
+    .grid-counter.blue {
+      background: radial-gradient(circle at 30% 30%, #60a5fa, #2563eb);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 10px var(--blue-glow);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Highlight Capsule for First Alignment */
+    .alignment-capsule {
+      position: absolute;
+      top: -24px;
+      bottom: -10px;
+      border: 2px solid #7c3aed;
+      background: rgba(124, 58, 237, 0.04);
+      border-radius: 24px;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(124, 58, 237, 0.15);
+    }
+
+    .alignment-tag {
+      background: #ede9fe;
+      border: 1px solid #c4b5fd;
+      color: #6d28d9;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      position: absolute;
+      top: -14px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(124, 58, 237, 0.1);
+    }
+
+    .alignment-line {
+      width: 2px;
+      background: #8b5cf6;
+      height: 100%;
+      margin: 12px 0;
+      opacity: 0.6;
+    }
+
+    /* --- Views CSS Styling --- */
+    .tool-view-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 10px 0;
+    }
+
+    /* Groups View */
+    .groups-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .groups-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .group-block-set {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .group-box {
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .group-box.purple {
+      background: #f5f3ff;
+      border: 1.5px solid #c4b5fd;
+      color: #6d28d9;
+    }
+
+    .group-box.blue {
+      background: #eff6ff;
+      border: 1.5px solid #93c5fd;
+      color: #1d4ed8;
+    }
+
+    .group-box.aligned {
+      box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);
+      border-width: 2.5px;
+    }
+
+    /* Clocks View */
+    .clock-view-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .clock-dial {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 6px solid #e2e8f0;
+      position: relative;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .clock-hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      border-radius: 4px;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .clock-hand.purple {
+      width: 4px;
+      height: 75px;
+      background: #7c3aed;
+    }
+
+    .clock-hand.blue {
+      width: 4px;
+      height: 60px;
+      background: #2563eb;
+    }
+
+    .clock-center-cap {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #1e293b;
+      z-index: 10;
+    }
+
+    .clock-num-label {
+      position: absolute;
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+    }
+
+    /* Lanes View */
+    .lanes-view-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .lane-track {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .lane-runner-icon {
+      font-size: 24px;
+    }
+
+    .lane-steps-container {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .lane-flag {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .lane-flag.purple { background: #ede9fe; color: #6d28d9; border: 1px solid #c4b5fd; }
+    .lane-flag.blue { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+    .lane-flag.aligned { background: #7c3aed; color: #ffffff; box-shadow: 0 0 10px rgba(124, 58, 237, 0.4); }
+
+    /* Factor Tree View */
+    .tree-view-wrapper {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .tree-branch-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      min-width: 200px;
+    }
+
+    .tree-node-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tree-node-circle.purple { background: #ede9fe; border: 2px solid #c4b5fd; color: #6d28d9; }
+    .tree-node-circle.blue { background: #dbeafe; border: 2px solid #93c5fd; color: #1d4ed8; }
+    .tree-node-circle.prime { background: #fef08a; border: 2px solid #facc15; color: #854d0e; }
+
+    .tree-split-lines {
+      display: flex;
+      gap: 24px;
+      position: relative;
+    }
+
+    .tree-factors-list {
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    /* Equation / Result Banner */
+    .equation-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 14px 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .eq-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .eq-result {
+      font-size: 18px;
+      font-weight: 800;
+      color: #6d28d9;
+      background: #ede9fe;
+      padding: 6px 18px;
+      border-radius: 20px;
+    }
+
+    /* Tools & Prediction Row */
+    .tools-prediction-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .tools-prediction-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tools-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tools-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tools-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      flex: 1;
+      min-width: 56px;
+      height: 56px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tool-btn:hover {
+      border-color: #cbd5e1;
+      color: #334155;
+    }
+
+    .tool-btn.active {
+      border-color: #8b5cf6;
+      background: #f5f3ff;
+      color: #6d28d9;
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+    }
+
+    .tool-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .prediction-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .prediction-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .predict-input {
+      flex: 1;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      padding: 0 12px;
+      font-size: 15px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 0 20px;
+      height: 40px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+    }
+
+    .prediction-feedback {
+      font-size: 13px;
+      font-weight: 600;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    /* Right Explanation Sidebar Panel */
+    .right-explanation-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step-badge-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .badge-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #7c3aed;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-num.blue {
+      background: #2563eb;
+    }
+
+    .arc-diagram-container {
+      position: relative;
+      padding: 20px 10px 10px 10px;
+    }
+
+    .arc-numbers {
+      display: flex;
+      justify-content: space-around;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      position: relative;
+      z-index: 2;
+    }
+
+    .arc-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Venn Diagram Card */
+    .venn-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0;
+      position: relative;
+      height: 90px;
+    }
+
+    .venn-circle {
+      width: 100px;
+      height: 80px;
+      border-radius: 50%;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .venn-circle.left {
+      left: 60px;
+      background: rgba(237, 233, 254, 0.7);
+      border: 1.5px solid #c4b5fd;
+      color: #6d28d9;
+      justify-content: flex-start;
+    }
+
+    .venn-circle.right {
+      right: 60px;
+      background: rgba(219, 234, 254, 0.7);
+      border: 1.5px solid #93c5fd;
+      color: #1d4ed8;
+      justify-content: flex-end;
+    }
+
+    .venn-overlap {
+      width: 44px;
+      height: 70px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      border: 1.5px solid #818cf8;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: #4338ca;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Connections Dropdown Section */
+    .connections-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .conn-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .conn-badge {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* Reveal Button & Big Conclusion */
+    .btn-reveal {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-reveal:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .conclusion-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 0;
+      transition: all 0.3s ease;
+    }
+
+    .big-formula {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .proven-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: #16a34a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Bottom Section */
+    .bottom-workspace {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .bottom-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* One Line Visual Proof */
+    .proof-flowchart {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      background: #f5f3ff;
+      border: 1px solid #ddd6fe;
+      color: #6d28d9;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      flex: 1;
+      min-width: 90px;
+    }
+
+    .flow-step.dashed {
+      border: 1.5px dashed #93c5fd;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .flow-step.highlight {
+      background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+      border-color: #c4b5fd;
+      color: #5b21b6;
+    }
+
+    .flow-arrow {
+      color: #94a3b8;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .proof-subtext {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Challenge Section */
+    .challenge-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .challenge-timeline {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-md);
+      padding: 14px;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .timeline-ruler {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 8px;
+      padding-left: 28px;
+    }
+
+    .timeline-track {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 24px;
+    }
+
+    .mini-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-badge.purple { background: #ede9fe; color: #6d28d9; }
+    .mini-badge.blue { background: #dbeafe; color: #1d4ed8; }
+
+    .mini-dots-row {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .mini-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+    }
+
+    .mini-dot.purple { background: #8b5cf6; }
+    .mini-dot.blue { background: #3b82f6; }
+
+    /* Drag Ghost Element */
+    #drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+
+    /* Dynamic SVG Drag Arc */
+    #drag-svg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9998;
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+  <!-- Drag SVG Arc Container -->
+  <svg id="drag-svg-layer">
+    <path id="drag-arc-path" d="" fill="none" stroke="#8b5cf6" stroke-width="2.5" stroke-dasharray="6,6"/>
+  </svg>
+
+  <!-- Drag Floating Ghost -->
+  <div id="drag-ghost" class="counter-token purple"></div>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand-logo">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/>
+          </svg>
+        </div>
+        <div class="brand-text">MATHS<br>UNIVERSE</div>
+      </div>
+
+      <nav class="nav-list">
+        <div class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          Explore
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18h6m-3 3v-3m-4-7a5 5 0 1110 0c0 1.94-.88 3.03-1.8 4-.67.7-1.2 1.34-1.2 2h-4c0-.66-.53-1.3-1.2-2C9.88 14.03 9 12.94 9 11z"/>
+          </svg>
+          Proofs
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Practice
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2v16z"/>
+          </svg>
+          Saved
+        </div>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+            <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+          Settings
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Content -->
+    <main class="main-container">
+      <!-- Top Header Bar -->
+      <header class="top-header">
+        <div class="header-left">
+          <div class="breadcrumb">Visual Proofs / <span>Number Theory</span></div>
+          <h1 class="page-title">LCM by Grid Alignment</h1>
+          <p class="page-subtitle">Two repeated step patterns meet first at the least common multiple.</p>
+        </div>
+
+        <div class="header-right">
+          <div class="pill-badge purple">
+            Intermediate
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="pill-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            12 min
+          </div>
+          <div class="user-avatar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/></svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- Mission Banner -->
+      <div class="mission-banner">
+        <div class="mission-icon">🎯</div>
+        <div><strong>Mission:</strong> Use patterns, cycles and groups to find when two numbers line up together for the first time.</div>
+      </div>
+
+      <!-- Core 2-Column Dashboard Grid -->
+      <div class="workspace-grid">
+        <!-- Left Panel: Interactive Grid + Tools + Prediction -->
+        <div class="main-interactive-panel">
+          <div class="card">
+            <!-- Panel Header -->
+            <div class="panel-header">
+              <div class="panel-title-area">
+                <div class="panel-title">
+                  Build the patterns
+                  <span class="info-circle" title="Drag counters onto grid multiples or adjust A & B numbers">?</span>
+                </div>
+                <div class="panel-subtitle">Drag counters to extend each pattern.</div>
+              </div>
+
+              <div class="grid-legend">
+                <div class="legend-item"><span class="dot-purple"></span> Multiples of <span id="legA">4</span></div>
+                <div class="legend-item"><span class="dot-blue"></span> Multiples of <span id="legB">6</span></div>
+                <button class="btn-clear" id="btnClear">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 11-.57-8.38l5.67-5.67"/></svg>
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Pattern Draggable Builders -->
+            <div class="pattern-builders">
+              <!-- Row A -->
+              <div class="builder-row">
+                <div class="builder-label purple">
+                  A = <input type="number" id="inputA" class="num-input-inline" value="4" min="1" max="15">
+                </div>
+                <div class="counter-palette" id="paletteA">
+                  <!-- JS injected purple draggable counters -->
+                </div>
+              </div>
+
+              <!-- Row B -->
+              <div class="builder-row">
+                <div class="builder-label blue">
+                  B = <input type="number" id="inputB" class="num-input-inline" value="6" min="1" max="15">
+                </div>
+                <div class="counter-palette" id="paletteB">
+                  <!-- JS injected blue draggable counters -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Central Multiples Workspace Container (Supports 5 Tool Views) -->
+            <div class="grid-visualizer-container" id="gridVisualizer">
+              <div class="grid-header-title" id="gridDisplayTitle">Grid Alignment (Multiples)</div>
+
+              <!-- View 1: Grid View -->
+              <div id="viewGridContainer">
+                <div class="number-ruler" id="numberRuler">
+                  <!-- 1 to 24 numbers -->
+                </div>
+
+                <div class="grid-track-wrapper">
+                  <!-- Highlight Column Capsule -->
+                  <div class="alignment-capsule" id="alignmentCapsule">
+                    <div class="alignment-tag">First alignment!</div>
+                    <div class="alignment-line"></div>
+                  </div>
+
+                  <!-- Track A -->
+                  <div class="grid-track-row" id="trackA">
+                    <div class="track-badge purple" id="badgeA">4</div>
+                    <div class="track-line-container" id="trackLineA">
+                      <div class="track-bg-line"></div>
+                      <!-- Cells 1..24 -->
+                    </div>
+                  </div>
+
+                  <!-- Track B -->
+                  <div class="grid-track-row" id="trackB">
+                    <div class="track-badge blue" id="badgeB">6</div>
+                    <div class="track-line-container" id="trackLineB">
+                      <div class="track-bg-line"></div>
+                      <!-- Cells 1..24 -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dynamic Tool Views (Groups, Clocks, Lanes, Trees) -->
+              <div id="dynamicToolView" style="display: none;"></div>
+            </div>
+
+            <!-- Dynamic Result Equation Banner -->
+            <div class="equation-banner">
+              <div class="eq-text" id="eqDescription">12 is the first number in both patterns.</div>
+              <div class="eq-result" id="eqResultFormula">LCM(4, 6) = 12</div>
+            </div>
+
+            <!-- Tools & Prediction Row -->
+            <div class="tools-prediction-grid">
+              <!-- Tools Switcher -->
+              <div class="tools-card">
+                <div class="tools-title">Tools</div>
+                <div class="tools-list">
+                  <div class="tool-btn active" data-tool="grid">
+                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+                    Grid
+                  </div>
+                  <div class="tool-btn" data-tool="groups">
+                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="12" r="3"/><circle cx="17" cy="12" r="3"/><circle cx="12" cy="7" r="3"/></svg>
+                    Groups
+                  </div>
+                  <div class="tool-btn" data-tool="clocks">
+                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    Clocks
+                  </div>
+                  <div class="tool-btn" data-tool="lanes">
+                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    Lanes
+                  </div>
+                  <div class="tool-btn" data-tool="trees">
+                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v6M6 15l6-6 6 6M6 21v-6M18 21v-6"/></svg>
+                    Trees
+                  </div>
+                </div>
+              </div>
+
+              <!-- Prediction Card -->
+              <div class="prediction-card">
+                <div class="tools-title">
+                  Prediction <span class="info-circle" title="Guess when both step patterns will land together first">?</span>
+                </div>
+                <div class="panel-subtitle">When will they first align?</div>
+                <div class="prediction-input-row">
+                  <input type="number" id="predictInput" class="predict-input" value="12">
+                  <button class="btn-primary" id="btnCheckPrediction">Check</button>
+                </div>
+                <div class="prediction-feedback" id="predictionFeedback">
+                  ✔ Correct! First alignment at <span id="feedbackLcmVal">12</span>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side Panel: Why It Works & Connections -->
+        <div class="right-explanation-panel">
+          <div class="card">
+            <div class="why-title">
+              <span style="color:#7c3aed">✨</span> Why it works
+            </div>
+
+            <!-- Card 1: Step Pattern A -->
+            <div class="step-card">
+              <div class="step-badge-title">
+                <span class="badge-num">1</span>
+                Step pattern A (<span id="patternANum">4</span>)
+              </div>
+              <div class="arc-diagram-container">
+                <svg class="arc-svg" id="arcSvgA">
+                  <!-- Dynamic SVG Arcs +4 -->
+                </svg>
+                <div class="arc-numbers" id="arcNumsA">
+                  <span>4</span><span>8</span><span>12</span><span>16</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Step Pattern B -->
+            <div class="step-card">
+              <div class="step-badge-title">
+                <span class="badge-num blue">2</span>
+                Step pattern B (<span id="patternBNum">6</span>)
+              </div>
+              <div class="arc-diagram-container">
+                <svg class="arc-svg" id="arcSvgB">
+                  <!-- Dynamic SVG Arcs +6 -->
+                </svg>
+                <div class="arc-numbers" id="arcNumsB">
+                  <span>6</span><span>12</span><span>18</span><span>24</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Overlap Venn Diagram -->
+            <div class="step-card">
+              <div class="step-badge-title">
+                <span class="badge-num">3</span>
+                They meet at the first common multiple.
+              </div>
+              <div class="venn-container">
+                <div class="venn-circle left" id="vennLeft">4, 8</div>
+                <div class="venn-overlap" id="vennCenter">12</div>
+                <div class="venn-circle right" id="vennRight">6, 18</div>
+              </div>
+            </div>
+
+            <!-- Connections -->
+            <div class="connections-box">
+              <div class="conn-title">
+                <span style="color:#7c3aed">✨</span> Connections
+              </div>
+              <div class="conn-badge">LCM & GCD</div>
+              <div class="conn-badge" id="gcdBadge">GCD(4, 6) = 2</div>
+            </div>
+
+            <!-- Conclusion Section -->
+            <button class="btn-reveal" id="btnReveal">Reveal Conclusion</button>
+
+            <div class="conclusion-display" id="conclusionDisplay">
+              <div class="big-formula" id="bigFormula">LCM(4, 6) = 12</div>
+              <div class="proven-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                You proved it!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Workspace: One-Line Visual Proof & Your Challenge -->
+      <div class="bottom-workspace">
+        <!-- Visual Proof Card -->
+        <div class="card">
+          <div class="panel-title">
+            One-line visual proof <span class="info-circle" title="Summary flow of grid alignment">?</span>
+          </div>
+
+          <div class="proof-flowchart">
+            <div class="flow-step" id="proofStepA">Step every 4</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" id="proofStepB">Step every 6</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step dashed">Both steps on same grid</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step highlight">First common landing = LCM</div>
+          </div>
+
+          <div class="proof-subtext">They land together for the first time at the least common multiple. 🎉</div>
+        </div>
+
+        <!-- Challenge Card -->
+        <div class="card">
+          <div class="panel-title">Your challenge</div>
+          <div class="panel-subtitle">Find the LCM.</div>
+
+          <div class="challenge-form">
+            <div class="builder-label purple" style="font-size:14px;">
+              A = <input type="number" id="chalA" class="num-input-inline" value="5" min="1" max="15">
+            </div>
+            <div class="builder-label blue" style="font-size:14px;">
+              B = <input type="number" id="chalB" class="num-input-inline" value="8" min="1" max="15">
+            </div>
+            <button class="btn-primary" id="btnSolveChallenge">Solve</button>
+          </div>
+
+          <!-- Mini Timeline Preview -->
+          <div class="challenge-timeline" id="challengeTimeline">
+            <div class="timeline-ruler" id="chalRuler">
+              <!-- Dynamic mini ruler -->
+            </div>
+
+            <div class="timeline-track">
+              <div class="mini-badge purple" id="chalBadgeA">5</div>
+              <div class="mini-dots-row" id="chalTrackA"></div>
+            </div>
+
+            <div class="timeline-track" style="margin-top:6px;">
+              <div class="mini-badge blue" id="chalBadgeB">8</div>
+              <div class="mini-dots-row" id="chalTrackB"></div>
+            </div>
+          </div>
+
+          <div class="proof-subtext" style="margin-top:4px;">Hint: Look for the first alignment on the grid.</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // --- Application Shared Mathematical State ---
+    const state = {
+      A: 4,
+      B: 6,
+      maxGrid: 24,
+      placedA: [4, 8, 12, 16, 20, 24],
+      placedB: [6, 12, 18, 24],
+      activeTool: 'grid',
+      predictedLCM: 12,
+      revealed: true,
+      challengeA: 5,
+      challengeB: 8
+    };
+
+    // Helper Math Functions
+    function gcd(a, b) {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+    function lcm(a, b) {
+      if (a === 0 || b === 0) return 0;
+      return Math.abs(a * b) / gcd(a, b);
+    }
+    function getPrimeFactors(n) {
+      const factors = [];
+      let d = 2;
+      let temp = n;
+      while (temp >= 2) {
+        if (temp % d === 0) {
+          factors.push(d);
+          temp = temp / d;
+        } else {
+          d++;
+        }
+      }
+      return factors;
+    }
+
+    // DOM References
+    const inputA = document.getElementById('inputA');
+    const inputB = document.getElementById('inputB');
+    const legA = document.getElementById('legA');
+    const legB = document.getElementById('legB');
+    const badgeA = document.getElementById('badgeA');
+    const badgeB = document.getElementById('badgeB');
+    const paletteA = document.getElementById('paletteA');
+    const paletteB = document.getElementById('paletteB');
+    const numberRuler = document.getElementById('numberRuler');
+    const trackLineA = document.getElementById('trackLineA');
+    const trackLineB = document.getElementById('trackLineB');
+    const alignmentCapsule = document.getElementById('alignmentCapsule');
+    const eqDescription = document.getElementById('eqDescription');
+    const eqResultFormula = document.getElementById('eqResultFormula');
+    const btnClear = document.getElementById('btnClear');
+    const predictInput = document.getElementById('predictInput');
+    const btnCheckPrediction = document.getElementById('btnCheckPrediction');
+    const predictionFeedback = document.getElementById('predictionFeedback');
+    const feedbackLcmVal = document.getElementById('feedbackLcmVal');
+    const patternANum = document.getElementById('patternANum');
+    const patternBNum = document.getElementById('patternBNum');
+    const arcNumsA = document.getElementById('arcNumsA');
+    const arcNumsB = document.getElementById('arcNumsB');
+    const arcSvgA = document.getElementById('arcSvgA');
+    const arcSvgB = document.getElementById('arcSvgB');
+    const vennLeft = document.getElementById('vennLeft');
+    const vennCenter = document.getElementById('vennCenter');
+    const vennRight = document.getElementById('vennRight');
+    const gcdBadge = document.getElementById('gcdBadge');
+    const btnReveal = document.getElementById('btnReveal');
+    const conclusionDisplay = document.getElementById('conclusionDisplay');
+    const bigFormula = document.getElementById('bigFormula');
+    const proofStepA = document.getElementById('proofStepA');
+    const proofStepB = document.getElementById('proofStepB');
+    const chalA = document.getElementById('chalA');
+    const chalB = document.getElementById('chalB');
+    const btnSolveChallenge = document.getElementById('btnSolveChallenge');
+    const chalBadgeA = document.getElementById('chalBadgeA');
+    const chalBadgeB = document.getElementById('chalBadgeB');
+    const chalRuler = document.getElementById('chalRuler');
+    const chalTrackA = document.getElementById('chalTrackA');
+    const chalTrackB = document.getElementById('chalTrackB');
+
+    // Tool View Containers
+    const viewGridContainer = document.getElementById('viewGridContainer');
+    const dynamicToolView = document.getElementById('dynamicToolView');
+    const gridDisplayTitle = document.getElementById('gridDisplayTitle');
+
+    // Drag Elements
+    const dragGhost = document.getElementById('drag-ghost');
+    const dragArcPath = document.getElementById('drag-arc-path');
+    let activeDrag = null;
+
+    // --- Initialization & Master Render ---
+    function init() {
+      setupEventListeners();
+      renderAll();
+      renderChallenge();
+    }
+
+    function calculateMaxGrid() {
+      const currentLCM = lcm(state.A, state.B);
+      state.maxGrid = Math.max(24, currentLCM + (currentLCM % 2 === 0 ? 4 : 3));
+    }
+
+    function renderAll() {
+      calculateMaxGrid();
+      const currentLCM = lcm(state.A, state.B);
+
+      // Update Labels & Inputs
+      inputA.value = state.A;
+      inputB.value = state.B;
+      legA.textContent = state.A;
+      legB.textContent = state.B;
+      badgeA.textContent = state.A;
+      badgeB.textContent = state.B;
+      patternANum.textContent = state.A;
+      patternBNum.textContent = state.B;
+      proofStepA.textContent = `Step every ${state.A}`;
+      proofStepB.textContent = `Step every ${state.B}`;
+
+      // Render Palettes
+      renderPalettes();
+
+      // Render Grid Ruler & Tracks
+      renderRulerAndTracks();
+
+      // Position Alignment Capsule
+      positionCapsule(currentLCM);
+
+      // Render Active Tool View (Grid, Groups, Clocks, Lanes, Trees)
+      renderActiveToolView(currentLCM);
+
+      // Update Equations & Results
+      eqDescription.textContent = `${currentLCM} is the first number in both patterns.`;
+      eqResultFormula.textContent = `LCM(${state.A}, ${state.B}) = ${currentLCM}`;
+      bigFormula.textContent = `LCM(${state.A}, ${state.B}) = ${currentLCM}`;
+      feedbackLcmVal.textContent = currentLCM;
+      gcdBadge.textContent = `GCD(${state.A}, ${state.B}) = ${gcd(state.A, state.B)}`;
+
+      // Render Right Panel Arc Diagrams & Venn
+      renderArcsAndVenn(currentLCM);
+
+      // Control Conclusion Visibility
+      conclusionDisplay.style.display = state.revealed ? 'flex' : 'none';
+    }
+
+    function renderPalettes() {
+      paletteA.innerHTML = '';
+      paletteB.innerHTML = '';
+
+      // Palette A (5 counters + 3 placeholders)
+      for (let i = 0; i < 5; i++) {
+        const token = document.createElement('div');
+        token.className = 'counter-token purple';
+        token.dataset.type = 'A';
+        token.title = `Drag to extend pattern of ${state.A}`;
+        attachDragEvents(token, 'A');
+        paletteA.appendChild(token);
+      }
+      for (let i = 0; i < 3; i++) {
+        const ph = document.createElement('div');
+        ph.className = 'counter-placeholder';
+        paletteA.appendChild(ph);
+      }
+
+      // Palette B (6 counters + 3 placeholders)
+      for (let i = 0; i < 6; i++) {
+        const token = document.createElement('div');
+        token.className = 'counter-token blue';
+        token.dataset.type = 'B';
+        token.title = `Drag to extend pattern of ${state.B}`;
+        attachDragEvents(token, 'B');
+        paletteB.appendChild(token);
+      }
+      for (let i = 0; i < 3; i++) {
+        const ph = document.createElement('div');
+        ph.className = 'counter-placeholder';
+        paletteB.appendChild(ph);
+      }
+    }
+
+    function renderRulerAndTracks() {
+      numberRuler.innerHTML = '';
+      trackLineA.innerHTML = '<div class="track-bg-line"></div>';
+      trackLineB.innerHTML = '<div class="track-bg-line"></div>';
+
+      const currentLCM = lcm(state.A, state.B);
+
+      for (let i = 1; i <= state.maxGrid; i++) {
+        // Ruler Cell
+        const rulerCell = document.createElement('div');
+        rulerCell.className = 'ruler-cell';
+        rulerCell.textContent = i;
+        if (i === currentLCM) rulerCell.style.color = '#7c3aed';
+        numberRuler.appendChild(rulerCell);
+
+        // Track Cell A
+        const cellA = document.createElement('div');
+        cellA.className = 'grid-cell';
+        cellA.dataset.num = i;
+        cellA.dataset.track = 'A';
+        if (i === currentLCM) cellA.classList.add('highlight-target');
+
+        const dotA = document.createElement('div');
+        dotA.className = 'grid-cell-dot';
+        cellA.appendChild(dotA);
+
+        if (state.placedA.includes(i)) {
+          const counter = document.createElement('div');
+          counter.className = 'grid-counter purple';
+          counter.dataset.num = i;
+          cellA.appendChild(counter);
+        }
+
+        cellA.addEventListener('click', () => toggleCounter('A', i));
+        trackLineA.appendChild(cellA);
+
+        // Track Cell B
+        const cellB = document.createElement('div');
+        cellB.className = 'grid-cell';
+        cellB.dataset.num = i;
+        cellB.dataset.track = 'B';
+        if (i === currentLCM) cellB.classList.add('highlight-target');
+
+        const dotB = document.createElement('div');
+        dotB.className = 'grid-cell-dot';
+        cellB.appendChild(dotB);
+
+        if (state.placedB.includes(i)) {
+          const counter = document.createElement('div');
+          counter.className = 'grid-counter blue';
+          counter.dataset.num = i;
+          cellB.appendChild(counter);
+        }
+
+        cellB.addEventListener('click', () => toggleCounter('B', i));
+        trackLineB.appendChild(cellB);
+      }
+    }
+
+    function positionCapsule(lcmVal) {
+      if (lcmVal > state.maxGrid) {
+        alignmentCapsule.style.display = 'none';
+        return;
+      }
+      alignmentCapsule.style.display = 'flex';
+
+      const firstCell = trackLineA.querySelector(`.grid-cell[data-num="1"]`);
+      const targetCell = trackLineA.querySelector(`.grid-cell[data-num="${lcmVal}"]`);
+
+      if (firstCell && targetCell) {
+        const cellWidth = firstCell.offsetWidth;
+        const targetLeft = targetCell.offsetLeft;
+        alignmentCapsule.style.width = `${cellWidth + 12}px`;
+        alignmentCapsule.style.left = `${targetLeft - 6}px`;
+      }
+    }
+
+    function toggleCounter(type, num) {
+      const arr = type === 'A' ? state.placedA : state.placedB;
+      const index = arr.indexOf(num);
+      if (index > -1) {
+        arr.splice(index, 1);
+      } else {
+        arr.push(num);
+      }
+      renderAll();
+    }
+
+    // --- Dynamic Tool Representations (Grid, Groups, Clocks, Lanes, Trees) ---
+    function renderActiveToolView(currentLCM) {
+      if (state.activeTool === 'grid') {
+        viewGridContainer.style.display = 'block';
+        dynamicToolView.style.display = 'none';
+        gridDisplayTitle.textContent = 'Grid Alignment (Multiples)';
+        return;
+      }
+
+      viewGridContainer.style.display = 'none';
+      dynamicToolView.style.display = 'block';
+
+      if (state.activeTool === 'groups') {
+        gridDisplayTitle.textContent = 'Equal Groups Alignment';
+        renderGroupsView(currentLCM);
+      } else if (state.activeTool === 'clocks') {
+        gridDisplayTitle.textContent = 'Circular Modular Clock Cycles';
+        renderClocksView(currentLCM);
+      } else if (state.activeTool === 'lanes') {
+        gridDisplayTitle.textContent = 'Track Runner Lanes';
+        renderLanesView(currentLCM);
+      } else if (state.activeTool === 'trees') {
+        gridDisplayTitle.textContent = 'Prime Factorization Trees';
+        renderTreesView(currentLCM);
+      }
+    }
+
+    // View 2: Groups View
+    function renderGroupsView(currentLCM) {
+      const countA = currentLCM / state.A;
+      const countB = currentLCM / state.B;
+
+      let htmlA = '';
+      for (let i = 1; i <= countA; i++) {
+        const val = i * state.A;
+        const isAligned = val === currentLCM;
+        htmlA += `<div class="group-box purple ${isAligned ? 'aligned' : ''}">
+          <span>Group ${i}</span>
+          <strong>${val}</strong>
+        </div>`;
+      }
+
+      let htmlB = '';
+      for (let i = 1; i <= countB; i++) {
+        const val = i * state.B;
+        const isAligned = val === currentLCM;
+        htmlB += `<div class="group-box blue ${isAligned ? 'aligned' : ''}">
+          <span>Group ${i}</span>
+          <strong>${val}</strong>
+        </div>`;
+      }
+
+      dynamicToolView.innerHTML = `
+        <div class="tool-view-panel">
+          <div class="groups-container">
+            <div class="groups-row">
+              <span class="builder-label purple">A (${state.A}):</span>
+              <div class="group-block-set">${htmlA}</div>
+            </div>
+            <div class="groups-row">
+              <span class="builder-label blue">B (${state.B}):</span>
+              <div class="group-block-set">${htmlB}</div>
+            </div>
+          </div>
+          <div class="proof-subtext" style="margin-top:10px;">
+            Pattern A uses ${countA} groups of ${state.A} and Pattern B uses ${countB} groups of ${state.B} to meet at ${currentLCM}!
+          </div>
+        </div>
+      `;
+    }
+
+    // View 3: Clocks View
+    function renderClocksView(currentLCM) {
+      const totalTicks = Math.min(24, Math.max(12, currentLCM));
+      const angleStep = 360 / totalTicks;
+
+      // Clock hand angles for A and B
+      const angleA = (state.A * angleStep) % 360;
+      const angleB = (state.B * angleStep) % 360;
+
+      let tickLabels = '';
+      for (let i = 1; i <= totalTicks; i++) {
+        const angle = (i * angleStep - 90) * (Math.PI / 180);
+        const r = 82;
+        const x = 100 + r * Math.cos(angle);
+        const y = 100 + r * Math.sin(angle);
+        const isLcm = i === currentLCM;
+        tickLabels += `<div class="clock-num-label" style="left:${x - 8}px; top:${y - 8}px; ${isLcm ? 'color:#7c3aed; font-size:13px; font-weight:800;' : ''}">${i}</div>`;
+      }
+
+      dynamicToolView.innerHTML = `
+        <div class="tool-view-panel">
+          <div class="clock-view-wrapper">
+            <div class="clock-dial">
+              ${tickLabels}
+              <div class="clock-hand purple" style="transform: rotate(${angleA}deg)" title="Hand A (${state.A})"></div>
+              <div class="clock-hand blue" style="transform: rotate(${angleB}deg)" title="Hand B (${state.B})"></div>
+              <div class="clock-center-cap"></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div class="legend-item"><span class="dot-purple"></span> Hand A steps every ${state.A} units (${angleA.toFixed(0)}°)</div>
+              <div class="legend-item"><span class="dot-blue"></span> Hand B steps every ${state.B} units (${angleB.toFixed(0)}°)</div>
+              <div class="eq-result" style="margin-top:8px; font-size:14px;">First 12:00 meeting at ${currentLCM}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // View 4: Lanes View
+    function renderLanesView(currentLCM) {
+      const stepsA = [];
+      for (let i = state.A; i <= currentLCM; i += state.A) stepsA.push(i);
+
+      const stepsB = [];
+      for (let i = state.B; i <= currentLCM; i += state.B) stepsB.push(i);
+
+      let flagsA = stepsA.map(n => `<div class="lane-flag purple ${n === currentLCM ? 'aligned' : ''}">${n}</div>`).join('');
+      let flagsB = stepsB.map(n => `<div class="lane-flag blue ${n === currentLCM ? 'aligned' : ''}">${n}</div>`).join('');
+
+      dynamicToolView.innerHTML = `
+        <div class="tool-view-panel">
+          <div class="lanes-view-container">
+            <div class="lane-track">
+              <div class="lane-runner-icon">🏃‍♀️</div>
+              <span class="builder-label purple" style="min-width:70px;">Lane A (${state.A}):</span>
+              <div class="lane-steps-container">${flagsA}</div>
+            </div>
+            <div class="lane-track">
+              <div class="lane-runner-icon">🏃‍♂️</div>
+              <span class="builder-label blue" style="min-width:70px;">Lane B (${state.B}):</span>
+              <div class="lane-steps-container">${flagsB}</div>
+            </div>
+          </div>
+          <div class="proof-subtext" style="margin-top:10px;">
+            🏁 Both runners cross the finish line together at ${currentLCM}!
+          </div>
+        </div>
+      `;
+    }
+
+    // View 5: Trees View
+    function renderTreesView(currentLCM) {
+      const factorsA = getPrimeFactors(state.A);
+      const factorsB = getPrimeFactors(state.B);
+
+      const strA = factorsA.length > 0 ? factorsA.join(' × ') : state.A;
+      const strB = factorsB.length > 0 ? factorsB.join(' × ') : state.B;
+
+      dynamicToolView.innerHTML = `
+        <div class="tool-view-panel">
+          <div class="tree-view-wrapper">
+            <div class="tree-branch-card">
+              <div class="tree-node-circle purple">${state.A}</div>
+              <div class="tree-factors-list">Prime factors: ${strA}</div>
+            </div>
+
+            <div style="font-size:24px; font-weight:800; color:#7c3aed; align-self:center;">×</div>
+
+            <div class="tree-branch-card">
+              <div class="tree-node-circle blue">${state.B}</div>
+              <div class="tree-factors-list">Prime factors: ${strB}</div>
+            </div>
+          </div>
+
+          <div class="equation-banner" style="margin-top:12px;">
+            <div class="eq-text">LCM Prime Factorization Rule:</div>
+            <div class="eq-result">LCM(${state.A}, ${state.B}) = ${currentLCM}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- Right Explanation Panel (Arcs & Venn) ---
+    function renderArcsAndVenn(currentLCM) {
+      // Step Pattern A Arcs
+      const multsA = [];
+      for (let i = state.A; i <= currentLCM + state.A; i += state.A) multsA.push(i);
+      arcNumsA.innerHTML = multsA.slice(0, 4).map(n => `<span>${n}</span>`).join('');
+      renderSvgArcs('arcSvgA', multsA.slice(0, 4), state.A, '#7c3aed');
+
+      // Step Pattern B Arcs
+      const multsB = [];
+      for (let i = state.B; i <= currentLCM + state.B; i += state.B) multsB.push(i);
+      arcNumsB.innerHTML = multsB.slice(0, 4).map(n => `<span>${n}</span>`).join('');
+      renderSvgArcs('arcSvgB', multsB.slice(0, 4), state.B, '#2563eb');
+
+      // Venn Diagram Sets
+      const setA = multsA.filter(n => n < currentLCM);
+      const setB = multsB.filter(n => n < currentLCM);
+
+      vennLeft.textContent = setA.length > 0 ? setA.join(', ') : `${state.A}`;
+      vennCenter.textContent = currentLCM;
+      vennRight.textContent = setB.length > 0 ? setB.join(', ') : `${state.B}`;
+    }
+
+    function renderSvgArcs(svgId, numbers, stepVal, color) {
+      const svg = document.getElementById(svgId);
+      svg.innerHTML = '';
+      if (numbers.length < 2) return;
+
+      const w = svg.clientWidth || 300;
+      const stepWidth = w / numbers.length;
+
+      for (let i = 0; i < numbers.length - 1; i++) {
+        const x1 = stepWidth * i + stepWidth / 2;
+        const x2 = stepWidth * (i + 1) + stepWidth / 2;
+        const midX = (x1 + x2) / 2;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} 30 Q ${midX} 5 ${x2} 30`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '2');
+        svg.appendChild(path);
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', midX);
+        text.setAttribute('y', 14);
+        text.setAttribute('fill', color);
+        text.setAttribute('font-size', '11');
+        text.setAttribute('font-weight', 'bold');
+        text.setAttribute('text-anchor', 'middle');
+        text.textContent = `+${stepVal}`;
+        svg.appendChild(text);
+      }
+    }
+
+    // --- Pointer Drag & Drop Engine ---
+    function attachDragEvents(element, type) {
+      element.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        element.setPointerCapture(e.pointerId);
+
+        const rect = element.getBoundingClientRect();
+        activeDrag = {
+          type: type,
+          startX: rect.left + rect.width / 2,
+          startY: rect.top + rect.height / 2,
+          element: element
+        };
+
+        // Show Drag Ghost
+        dragGhost.className = `counter-token ${type === 'A' ? 'purple' : 'blue'}`;
+        dragGhost.style.display = 'flex';
+        dragGhost.style.left = `${e.clientX}px`;
+        dragGhost.style.top = `${e.clientY}px`;
+
+        updateDragArc(e.clientX, e.clientY);
+      });
+
+      element.addEventListener('pointermove', (e) => {
+        if (!activeDrag) return;
+        dragGhost.style.left = `${e.clientX}px`;
+        dragGhost.style.top = `${e.clientY}px`;
+        updateDragArc(e.clientX, e.clientY);
+      });
+
+      element.addEventListener('pointerup', (e) => {
+        if (!activeDrag) return;
+        element.releasePointerCapture(e.pointerId);
+
+        // Drop Target Detection
+        const dropCell = document.elementFromPoint(e.clientX, e.clientY)?.closest('.grid-cell');
+        if (dropCell) {
+          const trackType = dropCell.dataset.track;
+          const num = parseInt(dropCell.dataset.num, 10);
+          const expectedStep = trackType === 'A' ? state.A : state.B;
+
+          if (trackType === activeDrag.type && num % expectedStep === 0) {
+            const arr = trackType === 'A' ? state.placedA : state.placedB;
+            if (!arr.includes(num)) {
+              arr.push(num);
+              renderAll();
+            }
+          }
+        }
+
+        // Reset Drag Elements
+        dragGhost.style.display = 'none';
+        dragArcPath.setAttribute('d', '');
+        activeDrag = null;
+      });
+    }
+
+    function updateDragArc(currentX, currentY) {
+      if (!activeDrag) return;
+      const sx = activeDrag.startX;
+      const sy = activeDrag.startY;
+      const controlX = (sx + currentX) / 2;
+      const controlY = Math.min(sy, currentY) - 60;
+
+      dragArcPath.setAttribute('d', `M ${sx} ${sy} Q ${controlX} ${controlY} ${currentX} ${currentY}`);
+    }
+
+    // --- Challenge Module Solver ---
+    function renderChallenge() {
+      const cA = parseInt(chalA.value, 10) || 5;
+      const cB = parseInt(chalB.value, 10) || 8;
+      const cLCM = lcm(cA, cB);
+      const maxChal = Math.max(40, cLCM);
+
+      chalBadgeA.textContent = cA;
+      chalBadgeB.textContent = cB;
+
+      // Ruler
+      chalRuler.innerHTML = '';
+      const steps = [1, 5, 10, 15, 20, 25, 30, 35, 40, cLCM].sort((a,b) => a-b);
+      const uniqueSteps = [...new Set(steps)];
+      uniqueSteps.forEach(val => {
+        if (val <= maxChal) {
+          const span = document.createElement('span');
+          span.textContent = val;
+          if (val === cLCM) span.style.color = '#7c3aed';
+          chalRuler.appendChild(span);
+        }
+      });
+
+      // Track A & B Dots
+      chalTrackA.innerHTML = '';
+      chalTrackB.innerHTML = '';
+
+      for (let i = 1; i <= 40; i++) {
+        const dotA = document.createElement('div');
+        dotA.className = 'mini-dot';
+        if (i % cA === 0) dotA.classList.add('purple');
+        chalTrackA.appendChild(dotA);
+
+        const dotB = document.createElement('div');
+        dotB.className = 'mini-dot';
+        if (i % cB === 0) dotB.classList.add('blue');
+        chalTrackB.appendChild(dotB);
+      }
+    }
+
+    // --- Event Listeners Setup ---
+    function setupEventListeners() {
+      // Number Inputs A and B
+      inputA.addEventListener('change', (e) => {
+        state.A = Math.max(1, parseInt(e.target.value, 10) || 1);
+        state.placedA = Array.from({length: 6}, (_, i) => (i + 1) * state.A);
+        renderAll();
+      });
+
+      inputB.addEventListener('change', (e) => {
+        state.B = Math.max(1, parseInt(e.target.value, 10) || 1);
+        state.placedB = Array.from({length: 6}, (_, i) => (i + 1) * state.B);
+        renderAll();
+      });
+
+      // Clear Button
+      btnClear.addEventListener('click', () => {
+        state.placedA = [state.A];
+        state.placedB = [state.B];
+        renderAll();
+      });
+
+      // Tools Switcher Buttons
+      document.querySelectorAll('.tool-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.activeTool = btn.dataset.tool;
+          renderAll();
+        });
+      });
+
+      // Prediction Check
+      btnCheckPrediction.addEventListener('click', () => {
+        const val = parseInt(predictInput.value, 10);
+        const currentLCM = lcm(state.A, state.B);
+
+        if (val === currentLCM) {
+          predictionFeedback.style.color = '#16a34a';
+          predictionFeedback.innerHTML = `✔ Correct! First alignment at ${currentLCM}.`;
+        } else {
+          predictionFeedback.style.color = '#dc2626';
+          predictionFeedback.innerHTML = `❌ Try again! Multiples of ${state.A} and ${state.B} line up first at ${currentLCM}.`;
+        }
+      });
+
+      // Reveal Conclusion Button
+      btnReveal.addEventListener('click', () => {
+        state.revealed = !state.revealed;
+        conclusionDisplay.style.display = state.revealed ? 'flex' : 'none';
+        btnReveal.textContent = state.revealed ? 'Hide Conclusion' : 'Reveal Conclusion';
+      });
+
+      // Challenge Solver Button
+      btnSolveChallenge.addEventListener('click', () => {
+        state.A = parseInt(chalA.value, 10) || 5;
+        state.B = parseInt(chalB.value, 10) || 8;
+        state.placedA = Array.from({length: 6}, (_, i) => (i + 1) * state.A);
+        state.placedB = Array.from({length: 6}, (_, i) => (i + 1) * state.B);
+        renderAll();
+        renderChallenge();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Initialize Page on Load
+    window.addEventListener('DOMContentLoaded', init);
+    window.addEventListener('resize', () => {
+      positionCapsule(lcm(state.A, state.B));
+      renderArcsAndVenn(lcm(state.A, state.B));
+    });
+  </script>
+</body>
+</html>

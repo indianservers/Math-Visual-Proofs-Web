@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "lcm-grid-alignment",
+  "categorySlug": "number-theory",
+  "slug": "lcm-grid-alignment",
+  "route": "/visual-proofs/number-theory/lcm-grid-alignment",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/80/index.html"
+}

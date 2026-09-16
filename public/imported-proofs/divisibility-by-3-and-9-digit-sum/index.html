@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Divisibility by 3 and 9 using Digit Sum — Visual Proofs</title>
+  <!-- Google Fonts: Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-page: #f4f5fa;
+      --bg-card: #ffffff;
+      --border-color: #e5e7eb;
+      --border-hover: #cbd5e1;
+      
+      --text-dark: #1e1b4b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      --primary-purple: #7c3aed;
+      --primary-purple-hover: #6d28d9;
+      --primary-light: #f3e8ff;
+      --primary-border: #ddd6fe;
+      
+      --col-1000-bg: #faf5ff;
+      --col-1000-border: #e9d5ff;
+      --col-1000-accent: #8b5cf6;
+      --col-1000-text: #6b21a8;
+
+      --col-100-bg: #eff6ff;
+      --col-100-border: #bfdbfe;
+      --col-100-accent: #3b82f6;
+      --col-100-text: #1e40af;
+
+      --col-10-bg: #ecfdf5;
+      --col-10-border: #a7f3d0;
+      --col-10-accent: #10b981;
+      --col-10-text: #065f46;
+
+      --col-1-bg: #fff1f2;
+      --col-1-border: #fecdd3;
+      --col-1-accent: #f43f5e;
+      --col-1-text: #9f1239;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 16px rgba(124, 58, 237, 0.06);
+      --shadow-lg: 0 10px 25px rgba(124, 58, 237, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-dark);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* LEFT SIDEBAR */
+    aside.sidebar {
+      width: 90px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary-purple);
+      text-decoration: none;
+    }
+
+    .brand-logo svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .brand-logo span {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 68px;
+      padding: 10px 0;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: var(--primary-light);
+      color: var(--primary-purple);
+    }
+
+    .nav-item.active {
+      background: var(--primary-purple);
+      color: white;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-bottom {
+      margin-top: auto;
+    }
+
+    /* MAIN CONTAINER */
+    main.main-content {
+      flex: 1;
+      padding: 24px 32px;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* TOP HEADER */
+    header.top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-purple);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .header-title h1 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .header-title p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill-btn {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+    }
+
+    .icon-circle-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* MISSION BAR */
+    .mission-bar {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 14px 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .mission-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .star-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #fef3c7;
+      color: #d97706;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mission-tags {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tag-btn {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag-btn.active, .tag-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary-purple);
+      border-color: var(--primary-border);
+    }
+
+    /* MAIN CONTENT LAYOUT GRID */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr 340px;
+      gap: 20px;
+    }
+
+    /* NUMBER BUILDER CARD */
+    .number-builder-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .digit-boxes {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .digit-box {
+      flex: 1;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 6px 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .digit-input {
+      width: 38px;
+      height: 40px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: 'Fira Code', monospace;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-dark);
+      background: white;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .digit-input:focus {
+      border-color: var(--primary-purple);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .builder-math-display {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .n-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .digit-sum-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .counters-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .counter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .counter-label-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-1000s { background: var(--col-1000-accent); }
+    .dot-100s { background: var(--col-100-accent); }
+    .dot-10s { background: var(--col-10-accent); }
+    .dot-1s { background: var(--col-1-accent); }
+
+    /* TOOL BUTTONS GRID */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .tool-btn {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--primary-purple);
+      background: var(--primary-light);
+      color: var(--primary-purple);
+    }
+
+    .tool-btn.active {
+      background: var(--primary-purple);
+      color: white;
+      border-color: var(--primary-purple);
+      box-shadow: 0 4px 10px rgba(124, 58, 237, 0.25);
+    }
+
+    .tool-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* CENTER WORKSPACE CARD */
+    .workspace-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      min-height: 480px;
+    }
+
+    .workspace-header {
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary-purple);
+    }
+
+    /* DYNAMIC STAGE VIEWS CONTAINER */
+    .workspace-stage-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* VIEW 1: PLACE VALUE COLUMNS */
+    .columns-workspace {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) 140px;
+      gap: 12px;
+      min-height: 340px;
+    }
+
+    .pv-col {
+      border-radius: var(--radius-md);
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid transparent;
+      position: relative;
+    }
+
+    .pv-col.col-1000 { background: var(--col-1000-bg); border-color: var(--col-1000-border); }
+    .pv-col.col-100 { background: var(--col-100-bg); border-color: var(--col-100-border); }
+    .pv-col.col-10 { background: var(--col-10-bg); border-color: var(--col-10-border); }
+    .pv-col.col-1 { background: var(--col-1-bg); border-color: var(--col-1-border); }
+
+    .pv-col-header {
+      text-align: center;
+    }
+
+    .pv-col-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .col-1000 .pv-col-title { color: var(--col-1000-text); }
+    .col-100 .pv-col-title { color: var(--col-100-text); }
+    .col-10 .pv-col-title { color: var(--col-10-text); }
+    .col-1 .pv-col-title { color: var(--col-1-text); }
+
+    .pv-col-sub {
+      font-size: 0.75rem;
+      font-family: 'Fira Code', monospace;
+      color: var(--text-muted);
+    }
+
+    .group-box {
+      border: 2px dashed;
+      border-radius: var(--radius-md);
+      padding: 8px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      min-height: 50px;
+    }
+
+    .col-1000 .group-box { border-color: var(--col-1000-accent); background: rgba(233, 213, 255, 0.3); }
+    .col-100 .group-box { border-color: var(--col-100-accent); background: rgba(191, 219, 254, 0.3); }
+    .col-10 .group-box { border-color: var(--col-10-accent); background: rgba(167, 243, 208, 0.3); }
+    .col-1 .group-box { border-color: var(--col-1-accent); background: rgba(254, 205, 211, 0.3); }
+
+    /* COUNTER DOTS */
+    .counter-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: 'Fira Code', monospace;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      transition: transform 0.15s;
+    }
+
+    .counter-dot:active, .counter-dot.dragging {
+      cursor: grabbing;
+      transform: scale(1.15);
+      z-index: 10000;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+    }
+
+    .dot-purple { background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%); }
+    .dot-blue { background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%); }
+    .dot-green { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
+    .dot-red { background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%); }
+
+    /* REMAINDER PANEL RIGHT SIDE OF WORKSPACE */
+    .remainder-side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .rem-panel-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--primary-purple);
+      text-align: center;
+    }
+
+    .rem-panel-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .rem-slot {
+      width: 44px;
+      height: 44px;
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+    }
+
+    .rem-slot.purple { border-color: var(--col-1000-accent); }
+    .rem-slot.blue { border-color: var(--col-100-accent); }
+    .rem-slot.green { border-color: var(--col-10-accent); }
+    .rem-slot.red-target { border-color: var(--col-1-accent); background: #fff1f2; box-shadow: 0 0 12px rgba(244, 63, 94, 0.2); }
+    .rem-slot.hovered-drop { background: #e0e7ff; border-color: var(--primary-purple); transform: scale(1.08); }
+
+    /* WORKSPACE BOTTOM REMINDER BAR */
+    .workspace-bottom-bar {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      flex-wrap: wrap;
+    }
+
+    .rem-pill {
+      padding: 4px 10px;
+      border-radius: 14px;
+      color: white;
+      font-weight: 700;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+    }
+
+    .rem-pill.purple { background: var(--col-1000-accent); }
+    .rem-pill.blue { background: var(--col-100-accent); }
+    .rem-pill.green { background: var(--col-10-accent); }
+    .rem-pill.red { background: var(--col-1-accent); }
+
+    .total-math-pill {
+      background: var(--primary-light);
+      color: var(--primary-purple);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-left: auto;
+    }
+
+    /* LIGHTBULB TIP BANNER */
+    .tip-banner {
+      background: #fffbebf5;
+      border: 1px solid #fef08a;
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      font-size: 0.78rem;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* VIEW 2: MAKE ARRAY VIEW */
+    .array-view-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      min-height: 320px;
+    }
+
+    .array-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .array-card-title {
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .array-dots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 8px;
+      background: white;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      min-height: 48px;
+    }
+
+    /* VIEW 3: CLOCK VIEW */
+    .clock-view-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 10px;
+    }
+
+    .clock-svg-wrap {
+      width: 240px;
+      height: 240px;
+    }
+
+    /* VIEW 4: REMAINDER LANES VIEW */
+    .lanes-view-stage {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .lane-bucket {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      min-height: 220px;
+    }
+
+    .lane-bucket.highlight {
+      background: var(--primary-light);
+      border-color: var(--primary-purple);
+    }
+
+    .lane-header {
+      font-weight: 800;
+      font-size: 0.85rem;
+      border-bottom: 2px solid var(--border-color);
+      width: 100%;
+      text-align: center;
+      padding-bottom: 4px;
+    }
+
+    .lane-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .lane-item-badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      padding: 4px;
+      border-radius: 4px;
+      background: white;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    /* RIGHT COLUMN: WHY IT WORKS CARD */
+    .sidebar-right {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .why-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .why-step {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary-purple);
+      color: white;
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-formula {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      text-align: center;
+      background: white;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .digit-arrows-row {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .d-badge {
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .clocks-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    /* PREDICT REMAINDERS CARD */
+    .predict-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .predict-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .predict-input-row label {
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .predict-input-row input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      min-width: 0;
+    }
+
+    .primary-btn {
+      background: var(--primary-purple);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .primary-btn:hover {
+      background: var(--primary-purple-hover);
+    }
+
+    .mod-results-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mod-res-box {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: var(--radius-md);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .mod-res-box .title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #065f46;
+    }
+
+    .mod-res-box .val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      font-family: 'Fira Code', monospace;
+      color: #047857;
+    }
+
+    .proof-drawer {
+      background: #f8fafc;
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      color: var(--primary-purple);
+      display: none;
+    }
+
+    .proof-drawer.visible {
+      display: block;
+    }
+
+    .feedback-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #047857;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    /* BOTTOM ROW: PROOF & CHALLENGE */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 20px;
+    }
+
+    .proof-card-bottom, .challenge-card-bottom {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .proof-chain-line {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .challenge-inputs-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .challenge-inputs-row input {
+      width: 38px;
+      height: 40px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .challenge-math-output {
+      font-size: 0.82rem;
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+    }
+
+    /* RESPONSIVE LAYOUT */
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <a href="#" class="brand-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path></svg>
+      <span>MATHS<br>UNIVERSE</span>
+    </a>
+
+    <nav class="nav-list">
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+        <span>Explore</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path></svg>
+        <span>Proofs</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        <span>Practice</span>
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path></svg>
+        <span>Saved</span>
+      </div>
+    </nav>
+
+    <div class="nav-item nav-bottom">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+      <span>Settings</span>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="main-content">
+    
+    <!-- TOP HEADER -->
+    <header class="top-header">
+      <div class="header-title">
+        <div class="breadcrumb">
+          <span>Visual Proofs</span> / <span>Number Theory</span> →
+        </div>
+        <h1>Divisibility by 3 and 9 using Digit Sum</h1>
+        <p>A number and its digit sum have the same remainder modulo 3 and modulo 9.</p>
+      </div>
+
+      <div class="header-controls">
+        <button class="pill-btn">
+          Intermediate
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+
+        <button class="pill-btn">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          12 min
+        </button>
+
+        <button class="icon-circle-btn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- MISSION BAR -->
+    <div class="mission-bar">
+      <div class="mission-info">
+        <div class="star-icon">★</div>
+        <span><strong>Mission:</strong> Understand why digit sums preserve remainders modulo 3 and 9.</span>
+      </div>
+
+      <div class="mission-tags">
+        <button class="tag-btn active" id="btn-mode-pv" onclick="setMissionMode('pv')">Place value</button>
+        <button class="tag-btn" id="btn-mode-rem" onclick="setMissionMode('rem')">+ Remainders</button>
+        <button class="tag-btn" id="btn-mode-gen" onclick="setMissionMode('gen')">∞ Generalize</button>
+      </div>
+    </div>
+
+    <!-- CONTENT GRID (3 COLUMNS) -->
+    <div class="content-grid">
+      
+      <!-- LEFT: NUMBER BUILDER CARD & TOOLS -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        
+        <div class="number-builder-card">
+          <div class="card-title">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path></svg>
+            Number Builder
+          </div>
+
+          <div class="digit-boxes">
+            <div class="digit-box">
+              <input type="text" class="digit-input" id="d-3" value="4" maxlength="1" inputmode="numeric">
+            </div>
+            <div class="digit-box">
+              <input type="text" class="digit-input" id="d-2" value="5" maxlength="1" inputmode="numeric">
+            </div>
+            <div class="digit-box">
+              <input type="text" class="digit-input" id="d-1" value="7" maxlength="1" inputmode="numeric">
+            </div>
+            <div class="digit-box">
+              <input type="text" class="digit-input" id="d-0" value="2" maxlength="1" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="builder-math-display">
+            <div class="n-value">= <span id="val-n">4572</span></div>
+            <div class="digit-sum-text" id="val-sum-text">Digit sum = 4 + 5 + 7 + 2 = 18</div>
+          </div>
+
+          <div class="counters-breakdown">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 2px;">Counters</div>
+            <div class="counter-row">
+              <div class="counter-label-group">
+                <div class="dot-indicator dot-1000s"></div>
+                <span>1000s</span>
+              </div>
+              <span id="cnt-1000">4</span>
+            </div>
+            <div class="counter-row">
+              <div class="counter-label-group">
+                <div class="dot-indicator dot-100s"></div>
+                <span>100s</span>
+              </div>
+              <span id="cnt-100">5</span>
+            </div>
+            <div class="counter-row">
+              <div class="counter-label-group">
+                <div class="dot-indicator dot-10s"></div>
+                <span>10s</span>
+              </div>
+              <span id="cnt-10">7</span>
+            </div>
+            <div class="counter-row">
+              <div class="counter-label-group">
+                <div class="dot-indicator dot-1s"></div>
+                <span>1s</span>
+              </div>
+              <span id="cnt-1">2</span>
+            </div>
+          </div>
+
+          <div class="tools-grid">
+            <button class="tool-btn active" id="tool-group" onclick="selectTool('group')">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+              Group by 3
+            </button>
+
+            <button class="tool-btn" id="tool-array" onclick="selectTool('array')">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              Make Array
+            </button>
+
+            <button class="tool-btn" id="tool-clock3" onclick="selectTool('clock3')">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              Clock (mod 3)
+            </button>
+
+            <button class="tool-btn" id="tool-clock9" onclick="selectTool('clock9')">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 15 15"></polyline></svg>
+              Clock (mod 9)
+            </button>
+
+            <button class="tool-btn" id="tool-lanes" onclick="selectTool('lanes')">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg>
+              Remainder Lanes
+            </button>
+
+            <button class="tool-btn" id="tool-clear" onclick="clearBoard()">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              Clear Board
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CENTER: PLACE-VALUE WORKSPACE -->
+      <div class="workspace-card">
+        <div class="workspace-header" id="workspace-title-text">
+          Place value decomposition → group into 3s (mod 3)
+        </div>
+
+        <!-- DYNAMIC STAGE VIEW CONTAINER -->
+        <div class="workspace-stage-view" id="workspace-stage-container">
+          <!-- Populated by JS based on state.activeTool -->
+        </div>
+
+        <!-- WORKSPACE BOTTOM REMINDER BAR -->
+        <div class="workspace-bottom-bar" id="workspace-bottom-bar">
+          <span>Remainder from number =</span>
+          <span class="rem-pill purple" id="pill-p">1</span>
+          <span>-</span>
+          <span class="rem-pill blue" id="pill-b">2</span>
+          <span>-</span>
+          <span class="rem-pill green" id="pill-g">1</span>
+          <span>→</span>
+          <div class="total-math-pill" id="bar-total-text">
+            Total = 1 + 2 + 1 + 2 = 6 ≡ 0 (mod 3)
+          </div>
+        </div>
+
+        <!-- LIGHTBULB TIP BANNER -->
+        <div class="tip-banner">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 001 1h6a1 1 0 001-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 00-7-7zM9 21a1 1 0 001 1h4a1 1 0 001-1v-1H9v1z"></path></svg>
+          <span id="tip-banner-text">We group each place-value column into 3s. The leftovers are the same as the leftovers from the digits.</span>
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDEBAR: WHY IT WORKS & PREDICT -->
+      <div class="sidebar-right">
+        
+        <!-- WHY IT WORKS CARD -->
+        <div class="why-card">
+          <div class="card-title" style="color: var(--primary-purple);">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"></path></svg>
+            Why it works
+          </div>
+
+          <div class="why-step">
+            <div class="step-header">
+              <span class="step-num">1</span>
+              <span>Any number can be written as</span>
+            </div>
+            <div class="step-formula">N = Σ dᵢ × 10ⁱ</div>
+            <div class="digit-arrows-row">
+              <span class="d-badge" style="background: var(--col-1000-accent);" id="why-d3">4</span>
+              <span class="d-badge" style="background: var(--col-100-accent);" id="why-d2">5</span>
+              <span class="d-badge" style="background: var(--col-10-accent);" id="why-d1">7</span>
+              <span class="d-badge" style="background: var(--col-1-accent);" id="why-d0">2</span>
+            </div>
+            <div style="text-align: center; font-size: 0.68rem; font-family: 'Fira Code', monospace; color: var(--text-muted);">
+              10³ &nbsp; 10² &nbsp; 10¹ &nbsp; 10⁰
+            </div>
+          </div>
+
+          <div class="why-step">
+            <div class="step-header">
+              <span class="step-num">2</span>
+              <span>Since 10 ≡ 1 (mod 3) and 10 ≡ 1 (mod 9).</span>
+            </div>
+            <div class="step-formula">
+              10ⁱ ≡ 1 (mod 3) &nbsp; and &nbsp; 10ⁱ ≡ 1 (mod 9)
+            </div>
+            
+            <div class="clocks-row">
+              <!-- Mod 3 Clock SVG -->
+              <svg width="64" height="64" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="24" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+                <circle cx="32" cy="12" r="5" fill="#8b5cf6"/><text x="32" y="15" font-size="8" fill="white" text-anchor="middle" font-weight="700">0</text>
+                <circle cx="48" cy="42" r="5" fill="#f43f5e"/><text x="48" y="45" font-size="8" fill="white" text-anchor="middle" font-weight="700">1</text>
+                <circle cx="16" cy="42" r="5" fill="#10b981"/><text x="16" y="45" font-size="8" fill="white" text-anchor="middle" font-weight="700">2</text>
+              </svg>
+
+              <!-- Mod 9 Clock SVG -->
+              <svg width="64" height="64" viewBox="0 0 64 64">
+                <circle cx="32" cy="32" r="24" fill="none" stroke="#cbd5e1" stroke-width="2"/>
+                <circle cx="32" cy="12" r="4" fill="#8b5cf6"/>
+                <circle cx="44" cy="16" r="4" fill="#60a5fa"/>
+                <circle cx="51" cy="27" r="4" fill="#34d399"/>
+                <circle cx="49" cy="40" r="4" fill="#fb7185"/>
+                <circle cx="39" cy="49" r="4" fill="#8b5cf6"/>
+                <circle cx="25" cy="49" r="4" fill="#60a5fa"/>
+                <circle cx="15" cy="40" r="4" fill="#34d399"/>
+                <circle cx="13" cy="27" r="4" fill="#fb7185"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="why-step">
+            <div class="step-header">
+              <span class="step-num">3</span>
+              <span>So N ≡ sum of digits (mod 3 and 9).</span>
+            </div>
+            <div class="step-formula" style="background: var(--primary-light); border-color: var(--primary-border); color: var(--primary-purple); font-weight: 700;">
+              N ≡ Sum of digits(N) (mod 3 and 9)
+            </div>
+          </div>
+        </div>
+
+        <!-- PREDICT REMAINDERS CARD -->
+        <div class="predict-card">
+          <div class="card-title">Predict remainders</div>
+
+          <div class="predict-input-row">
+            <label>Enter a number</label>
+            <input type="number" id="predict-num-input" value="4572">
+            <button class="primary-btn" onclick="runPredict()">Predict</button>
+          </div>
+
+          <div class="mod-results-row">
+            <div class="mod-res-box">
+              <div class="title">Mod 3</div>
+              <div class="val" id="res-mod-3">0</div>
+            </div>
+            <div class="mod-res-box">
+              <div class="title">Mod 9</div>
+              <div class="val" id="res-mod-9">0</div>
+            </div>
+          </div>
+
+          <button class="pill-btn" style="width: 100%; justify-content: center; background: var(--primary-purple); color: white;" onclick="toggleProofView()">
+            Reveal proof
+          </button>
+
+          <div class="proof-drawer" id="proof-drawer-box">
+            N = Σ dᵢ × 10ⁱ ≡ Σ dᵢ × (1)ⁱ ≡ Digit Sum (mod 3 & 9).
+          </div>
+
+          <div class="feedback-badge" id="predict-feedback">
+            ✓ Correct! Remainders match.
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ROW: PROOF & CHALLENGE -->
+    <div class="bottom-grid">
+      
+      <!-- ONE-LINE PROOF -->
+      <div class="proof-card-bottom">
+        <div class="card-title">One-line proof (visual)</div>
+        <div class="proof-chain-line" id="proof-chain-line">
+          <span>N = <strong id="pf-n-val">4572</strong></span>
+          <span>=</span>
+          <span style="color: var(--primary-purple);" id="pf-exp-val">4000 + 500 + 70 + 2</span>
+          <span>=</span>
+          <span style="color: var(--primary-purple);" id="pf-rem-val">1 + 2 + 1 + 2 (mod 3)</span>
+          <span>→</span>
+          <strong style="color: var(--col-10-accent);" id="pf-final-val">6 ≡ 0 (mod 3)</strong>
+          <span style="color: var(--text-muted);" id="pf-sim-val">Similarly, ≡ 0 (mod 9)</span>
+        </div>
+      </div>
+
+      <!-- CHALLENGE CARD -->
+      <div class="challenge-card-bottom">
+        <div class="card-title" style="justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span>🚩 Challenge</span>
+            <span style="font-size: 0.72rem; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 12px;">Your turn!</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.82rem; color: var(--text-muted);">
+          Find a 4-digit number divisible by 9.
+        </div>
+
+        <div class="challenge-inputs-row">
+          <input type="text" id="cq-3" value="3" maxlength="1" inputmode="numeric">
+          <input type="text" id="cq-2" value="5" maxlength="1" inputmode="numeric">
+          <input type="text" id="cq-1" value="1" maxlength="1" inputmode="numeric">
+          <input type="text" id="cq-0" value="2" maxlength="1" inputmode="numeric">
+          <button class="primary-btn" onclick="checkChallenge()">Check</button>
+        </div>
+
+        <div class="challenge-math-output" id="challenge-feedback-text">
+          Digit sum = 3 + 5 + 1 + 2 = 11 → <span style="color: #ef4444;">Not divisible by 9</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT STATE & REAL INTERACTION ENGINE -->
+  <script>
+    // SHARED MATHEMATICAL STATE (SINGLE SOURCE OF TRUTH)
+    const state = {
+      digits: [4, 5, 7, 2], // 1000s, 100s, 10s, 1s
+      mod: 3, // 3 or 9
+      activeTool: 'group', // 'group', 'array', 'clock3', 'clock9', 'lanes'
+      activeMission: 'pv', // 'pv', 'rem', 'gen'
+      droppedSlots: {
+        purple: false,
+        blue: false,
+        green: false,
+        red: false
+      },
+      predictProofVisible: false,
+      challengeDigits: [3, 5, 1, 2]
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupNumberBuilderInputs();
+      setupChallengeInputs();
+      renderAll();
+    });
+
+    // 1. ROBUST NUMBER BUILDER DIGIT INPUT HANDLING
+    function setupNumberBuilderInputs() {
+      const inputs = [
+        document.getElementById('d-3'),
+        document.getElementById('d-2'),
+        document.getElementById('d-1'),
+        document.getElementById('d-0')
+      ];
+
+      inputs.forEach((input, index) => {
+        // Select all text on focus
+        input.addEventListener('focus', () => {
+          input.select();
+        });
+
+        // Keydown for Backspace and Arrow Keys navigation
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace') {
+            if (input.value.length === 0 && index > 0) {
+              inputs[index - 1].focus();
+            } else {
+              setTimeout(() => {
+                let val = parseInt(input.value);
+                if (isNaN(val)) val = 0;
+                state.digits[index] = val;
+                renderAll();
+              }, 0);
+            }
+          } else if (e.key === 'ArrowLeft' && index > 0) {
+            inputs[index - 1].focus();
+          } else if (e.key === 'ArrowRight' && index < 3) {
+            inputs[index + 1].focus();
+          }
+        });
+
+        // Input event for typing digits 0-9
+        input.addEventListener('input', (e) => {
+          const valStr = input.value.replace(/[^0-9]/g, '');
+          if (valStr.length > 0) {
+            const digit = parseInt(valStr.charAt(valStr.length - 1)) || 0;
+            input.value = digit;
+            state.digits[index] = digit;
+
+            // Auto-advance focus to next input
+            if (index < 3) {
+              inputs[index + 1].focus();
+              inputs[index + 1].select();
+            }
+          } else {
+            input.value = 0;
+            state.digits[index] = 0;
+          }
+          renderAll();
+        });
+
+        // Paste event handling for 4-digit numbers (e.g. 4572, 9876)
+        input.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+          const digitsOnly = pasteData.replace(/[^0-9]/g, '');
+          if (digitsOnly.length > 0) {
+            const dArray = digitsOnly.slice(0, 4).split('').map(Number);
+            dArray.forEach((d, i) => {
+              if (i < 4) {
+                state.digits[i] = d;
+                inputs[i].value = d;
+              }
+            });
+            inputs[Math.min(digitsOnly.length - 1, 3)].focus();
+            renderAll();
+          }
+        });
+      });
+    }
+
+    function setupChallengeInputs() {
+      const inputs = [
+        document.getElementById('cq-3'),
+        document.getElementById('cq-2'),
+        document.getElementById('cq-1'),
+        document.getElementById('cq-0')
+      ];
+
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          const valStr = input.value.replace(/[^0-9]/g, '');
+          let val = parseInt(valStr) || 0;
+          val = Math.max(0, Math.min(9, val));
+          input.value = val;
+          state.challengeDigits[index] = val;
+          if (valStr.length > 0 && index < 3) {
+            inputs[index + 1].focus();
+            inputs[index + 1].select();
+          }
+          checkChallenge();
+        });
+      });
+    }
+
+    function getN() {
+      return state.digits[0] * 1000 + state.digits[1] * 100 + state.digits[2] * 10 + state.digits[3];
+    }
+
+    function getDigitSum() {
+      return state.digits.reduce((a, b) => a + b, 0);
+    }
+
+    function setMissionMode(mode) {
+      state.activeMission = mode;
+      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-mode-${mode}`).classList.add('active');
+
+      if (mode === 'pv') selectTool('group');
+      if (mode === 'rem') selectTool('lanes');
+      if (mode === 'gen') selectTool('clock9');
+    }
+
+    function selectTool(tool) {
+      state.activeTool = tool;
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`tool-${tool}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tool === 'clock3' || tool === 'group') state.mod = 3;
+      if (tool === 'clock9') state.mod = 9;
+
+      renderAll();
+    }
+
+    function clearBoard() {
+      state.droppedSlots = { purple: false, blue: false, green: false, red: false };
+      state.activeTool = 'group';
+      selectTool('group');
+    }
+
+    // MAIN CENTRAL RENDERER (EVERY COMPONENT READS FROM STATE)
+    function renderAll() {
+      const n = getN();
+      const sum = getDigitSum();
+      const m = state.mod;
+
+      // Update Number Builder Input values
+      document.getElementById('d-3').value = state.digits[0];
+      document.getElementById('d-2').value = state.digits[1];
+      document.getElementById('d-1').value = state.digits[2];
+      document.getElementById('d-0').value = state.digits[3];
+
+      document.getElementById('val-n').innerText = n.toLocaleString();
+      document.getElementById('val-sum-text').innerText = `Digit sum = ${state.digits.join(' + ')} = ${sum}`;
+
+      document.getElementById('cnt-1000').innerText = state.digits[0];
+      document.getElementById('cnt-100').innerText = state.digits[1];
+      document.getElementById('cnt-10').innerText = state.digits[2];
+      document.getElementById('cnt-1').innerText = state.digits[3];
+
+      // Update Why It Works
+      document.getElementById('why-d3').innerText = state.digits[0];
+      document.getElementById('why-d2').innerText = state.digits[1];
+      document.getElementById('why-d1').innerText = state.digits[2];
+      document.getElementById('why-d0').innerText = state.digits[3];
+
+      // Update Predict Number Input
+      document.getElementById('predict-num-input').value = n;
+
+      // Update One Line Proof
+      const pRem = state.digits[0] % m;
+      const bRem = state.digits[1] % m;
+      const gRem = state.digits[2] % m;
+      const rRem = state.digits[3] % m;
+      const totRem = (pRem + bRem + gRem + rRem);
+
+      document.getElementById('pf-n-val').innerText = n;
+      document.getElementById('pf-exp-val').innerText = `${state.digits[0]*1000} + ${state.digits[1]*100} + ${state.digits[2]*10} + ${state.digits[3]}`;
+      document.getElementById('pf-rem-val').innerText = `${pRem} + ${bRem} + ${gRem} + ${rRem} (mod ${m})`;
+      document.getElementById('pf-final-val').innerText = `${totRem} ≡ ${totRem % m} (mod ${m})`;
+      document.getElementById('pf-sim-val').innerText = `Similarly, ≡ ${n % 9} (mod 9)`;
+
+      // Render Stage Views
+      renderStageView();
+      runPredict();
+      checkChallenge();
+    }
+
+    // RENDER WORKSPACE STAGE VIEWS
+    function renderStageView() {
+      const container = document.getElementById('workspace-stage-container');
+      const title = document.getElementById('workspace-title-text');
+      const m = state.mod;
+
+      if (state.activeTool === 'group') {
+        title.innerText = `Place value decomposition → group into ${m}s (mod ${m})`;
+        renderPlaceValueView(container);
+      } else if (state.activeTool === 'array') {
+        title.innerText = `Rectangular Array Representation (${m}s Grid)`;
+        renderArrayView(container);
+      } else if (state.activeTool === 'clock3' || state.activeTool === 'clock9') {
+        title.innerText = `Modular Clock Visualization (mod ${m})`;
+        renderClockView(container);
+      } else if (state.activeTool === 'lanes') {
+        title.innerText = `Remainder Lanes Sorting (mod ${m})`;
+        renderLanesView(container);
+      }
+    }
+
+    // 4. DYNAMIC PLACE VALUE & COUNTERS DECOMPOSITION VIEW
+    function renderPlaceValueView(container) {
+      const m = state.mod;
+      const d3 = state.digits[0];
+      const d2 = state.digits[1];
+      const d1 = state.digits[2];
+      const d0 = state.digits[3];
+
+      const pRem = d3 % m;
+      const bRem = d2 % m;
+      const gRem = d1 % m;
+      const rRem = d0 % m;
+      const tot = pRem + bRem + gRem + rRem;
+
+      container.innerHTML = `
+        <div class="columns-workspace">
+          <!-- 1000s -->
+          <div class="pv-col col-1000">
+            <div class="pv-col-header">
+              <div class="pv-col-title">1000s</div>
+              <div class="pv-col-sub">${d3} × 1000</div>
+            </div>
+            <div class="group-box">
+              ${createDotsHTML('purple', Math.max(0, d3 - pRem), 1000)}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; justify-content:center;">
+              ${createDotsHTML('purple', pRem, 1000)}
+            </div>
+          </div>
+
+          <!-- 100s -->
+          <div class="pv-col col-100">
+            <div class="pv-col-header">
+              <div class="pv-col-title">100s</div>
+              <div class="pv-col-sub">${d2} × 100</div>
+            </div>
+            <div class="group-box">
+              ${createDotsHTML('blue', Math.max(0, d2 - bRem), 100)}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; justify-content:center;">
+              ${createDotsHTML('blue', bRem, 100)}
+            </div>
+          </div>
+
+          <!-- 10s -->
+          <div class="pv-col col-10">
+            <div class="pv-col-header">
+              <div class="pv-col-title">10s</div>
+              <div class="pv-col-sub">${d1} × 10</div>
+            </div>
+            <div class="group-box">
+              ${createDotsHTML('green', Math.max(0, d1 - gRem), 10)}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; justify-content:center;">
+              ${createDotsHTML('green', gRem, 10)}
+            </div>
+          </div>
+
+          <!-- 1s -->
+          <div class="pv-col col-1">
+            <div class="pv-col-header">
+              <div class="pv-col-title">1s</div>
+              <div class="pv-col-sub">${d0} × 1</div>
+            </div>
+            <div class="group-box">
+              ${createDotsHTML('red', Math.max(0, d0 - rRem), 1)}
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; justify-content:center;">
+              ${createDotsHTML('red', rRem, 1)}
+            </div>
+          </div>
+
+          <!-- REMAINDER (MOD M) SIDE PANEL -->
+          <div class="remainder-side-panel">
+            <div class="rem-panel-title">Remainder (mod ${m})</div>
+            <div class="rem-panel-sub">Keep what's left after groups of ${m}</div>
+
+            <div class="rem-slot purple drop-zone-target" data-color="purple">
+              ${state.droppedSlots.purple ? `<div class="counter-dot dot-purple" style="width: 30px; height: 30px; font-size: 0.65rem;">${pRem}</div>` : ''}
+            </div>
+
+            <div class="rem-slot blue drop-zone-target" data-color="blue">
+              ${state.droppedSlots.blue ? `<div class="counter-dot dot-blue" style="width: 30px; height: 30px; font-size: 0.65rem;">${bRem}</div>` : ''}
+            </div>
+
+            <div class="rem-slot green drop-zone-target" data-color="green">
+              ${state.droppedSlots.green ? `<div class="counter-dot dot-green" style="width: 30px; height: 30px; font-size: 0.65rem;">${gRem}</div>` : ''}
+            </div>
+
+            <div class="rem-slot red-target drop-zone-target" data-color="red">
+              ${state.droppedSlots.red ? `<div class="counter-dot dot-red" style="width: 30px; height: 30px; font-size: 0.65rem;">${rRem}</div>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- DIRECTIONAL ARROW PATH -->
+        <svg style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none;">
+          <path d="M 330 310 Q 380 340 460 330" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrowhead)"/>
+          <defs>
+            <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill="#f43f5e"/>
+            </marker>
+          </defs>
+        </svg>
+      `;
+
+      // Update Bottom Bar
+      document.getElementById('pill-p').innerText = pRem;
+      document.getElementById('pill-b').innerText = bRem;
+      document.getElementById('pill-g').innerText = gRem;
+      document.getElementById('bar-total-text').innerText = `Total = ${pRem} + ${bRem} + ${gRem} + ${rRem} = ${tot} ≡ ${tot % m} (mod ${m})`;
+
+      // Attach Drag listeners
+      attachPointerDragEngine();
+    }
+
+    function createDotsHTML(color, count, label) {
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        html += `<div class="counter-dot dot-${color} drag-target-item" data-type="${color}">${label}</div>`;
+      }
+      return html;
+    }
+
+    // POINTER EVENTS DRAG ENGINE
+    function attachPointerDragEngine() {
+      const draggables = document.querySelectorAll('.drag-target-item');
+      const dropTargets = document.querySelectorAll('.drop-zone-target');
+
+      draggables.forEach(el => {
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let initialLeft = 0, initialTop = 0;
+
+        el.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          isDragging = true;
+          el.setPointerCapture(e.pointerId);
+          el.classList.add('dragging');
+
+          const rect = el.getBoundingClientRect();
+          startX = e.clientX;
+          startY = e.clientY;
+          initialLeft = rect.left;
+          initialTop = rect.top;
+
+          el.style.position = 'fixed';
+          el.style.left = `${initialLeft}px`;
+          el.style.top = `${initialTop}px`;
+          el.style.zIndex = '10000';
+        });
+
+        el.addEventListener('pointermove', (e) => {
+          if (!isDragging) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+
+          el.style.left = `${initialLeft + dx}px`;
+          el.style.top = `${initialTop + dy}px`;
+
+          const cx = e.clientX, cy = e.clientY;
+          dropTargets.forEach(t => {
+            const tr = t.getBoundingClientRect();
+            if (cx >= tr.left && cx <= tr.right && cy >= tr.top && cy <= tr.bottom) {
+              t.classList.add('hovered-drop');
+            } else {
+              t.classList.remove('hovered-drop');
+            }
+          });
+        });
+
+        const endDrag = (e) => {
+          if (!isDragging) return;
+          isDragging = false;
+          el.classList.remove('dragging');
+
+          const cx = e.clientX, cy = e.clientY;
+
+          dropTargets.forEach(t => {
+            t.classList.remove('hovered-drop');
+            const tr = t.getBoundingClientRect();
+            if (cx >= tr.left && cx <= tr.right && cy >= tr.top && cy <= tr.bottom) {
+              const color = t.getAttribute('data-color') || 'red';
+              state.droppedSlots[color] = true;
+              t.innerHTML = `<div class="counter-dot dot-${color}" style="width: 30px; height: 30px; font-size: 0.65rem;">1</div>`;
+            }
+          });
+
+          el.style.position = '';
+          el.style.left = '';
+          el.style.top = '';
+          el.style.zIndex = '';
+        };
+
+        el.addEventListener('pointerup', endDrag);
+        el.addEventListener('pointercancel', endDrag);
+      });
+    }
+
+    // MAKE ARRAY VIEW
+    function renderArrayView(container) {
+      const m = state.mod;
+      container.innerHTML = `
+        <div class="array-view-grid">
+          <div class="array-card">
+            <div class="array-card-title" style="color: var(--col-1000-text);">1000s Array (${state.digits[0]})</div>
+            <div class="array-dots-grid">
+              ${createDotsHTML('purple', state.digits[0], 1000)}
+            </div>
+            <span style="font-size:0.75rem; font-weight:600;">Leftover: ${state.digits[0] % m}</span>
+          </div>
+
+          <div class="array-card">
+            <div class="array-card-title" style="color: var(--col-100-text);">100s Array (${state.digits[1]})</div>
+            <div class="array-dots-grid">
+              ${createDotsHTML('blue', state.digits[1], 100)}
+            </div>
+            <span style="font-size:0.75rem; font-weight:600;">Leftover: ${state.digits[1] % m}</span>
+          </div>
+
+          <div class="array-card">
+            <div class="array-card-title" style="color: var(--col-10-text);">10s Array (${state.digits[2]})</div>
+            <div class="array-dots-grid">
+              ${createDotsHTML('green', state.digits[2], 10)}
+            </div>
+            <span style="font-size:0.75rem; font-weight:600;">Leftover: ${state.digits[2] % m}</span>
+          </div>
+
+          <div class="array-card">
+            <div class="array-card-title" style="color: var(--col-1-text);">1s Array (${state.digits[3]})</div>
+            <div class="array-dots-grid">
+              ${createDotsHTML('red', state.digits[3], 1)}
+            </div>
+            <span style="font-size:0.75rem; font-weight:600;">Leftover: ${state.digits[3] % m}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // CLOCK VIEW (MOD 3 & MOD 9)
+    function renderClockView(container) {
+      const m = state.mod;
+      const n = getN();
+      const sum = getDigitSum();
+      const rem = n % m;
+
+      const cx = 120, cy = 120, r = 85;
+      let nodesHTML = '';
+
+      for (let i = 0; i < m; i++) {
+        const angle = (i / m) * 2 * Math.PI - Math.PI / 2;
+        const nx = cx + r * Math.cos(angle);
+        const ny = cy + r * Math.sin(angle);
+        const isTarget = (rem === i);
+
+        nodesHTML += `
+          <circle cx="${nx}" cy="${ny}" r="${isTarget ? 16 : 11}" fill="${isTarget ? '#7c3aed' : 'white'}" stroke="#7c3aed" stroke-width="3"/>
+          <text x="${nx}" y="${ny + 4}" font-size="11" font-weight="700" text-anchor="middle" fill="${isTarget ? 'white' : '#1e293b'}">${i}</text>
+        `;
+      }
+
+      const needleAngle = (rem / m) * 2 * Math.PI - Math.PI / 2;
+      const px = cx + (r - 20) * Math.cos(needleAngle);
+      const py = cy + (r - 20) * Math.sin(needleAngle);
+
+      container.innerHTML = `
+        <div class="clock-view-stage">
+          <div class="clock-svg-wrap">
+            <svg width="240" height="240" viewBox="0 0 240 240">
+              <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#cbd5e1" stroke-width="4"/>
+              ${nodesHTML}
+              <line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" stroke="#4f46e5" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="${cx}" cy="${cy}" r="6" fill="#4f46e5"/>
+            </svg>
+          </div>
+          <div style="font-family: 'Fira Code', monospace; font-size: 0.95rem; font-weight: 700; color: var(--primary-purple);">
+            ${n} ≡ Digit Sum (${sum}) ≡ ${rem} (mod ${m})
+          </div>
+        </div>
+      `;
+    }
+
+    // REMAINDER LANES VIEW
+    function renderLanesView(container) {
+      const m = state.mod;
+      const n = getN();
+      const activeLane = n % m;
+      let lanesHTML = '';
+
+      for (let i = 0; i < m; i++) {
+        lanesHTML += `
+          <div class="lane-bucket ${activeLane === i ? 'highlight' : ''}">
+            <div class="lane-header">Lane ${i} (mod ${m})</div>
+            <div class="lane-items-list">
+              ${i === 0 ? `<div class="lane-item-badge">${state.digits[0]}×999</div><div class="lane-item-badge">${state.digits[1]}×99</div><div class="lane-item-badge">${state.digits[2]}×9</div>` : ''}
+              ${activeLane === i ? `<div class="lane-item-badge" style="background:var(--primary-light); color:var(--primary-purple); font-weight:700;">Remainder = ${i}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="lanes-view-stage">
+          ${lanesHTML}
+        </div>
+      `;
+    }
+
+    // PREDICT TOOL
+    function runPredict() {
+      const num = parseInt(document.getElementById('predict-num-input').value) || getN();
+      const mod3 = num % 3;
+      const mod9 = num % 9;
+
+      document.getElementById('res-mod-3').innerText = mod3;
+      document.getElementById('res-mod-9').innerText = mod9;
+
+      document.getElementById('predict-feedback').innerText = `✓ Correct! Remainders match.`;
+    }
+
+    function toggleProofView() {
+      const drawer = document.getElementById('proof-drawer-box');
+      state.predictProofVisible = !state.predictProofVisible;
+      drawer.classList.toggle('visible', state.predictProofVisible);
+    }
+
+    // CHALLENGE TOOL
+    function checkChallenge() {
+      const digits = state.challengeDigits;
+      const sum = digits.reduce((a, b) => a + b, 0);
+      const isDiv9 = (sum % 9 === 0);
+
+      const out = document.getElementById('challenge-feedback-text');
+      out.innerHTML = `Digit sum = ${digits.join(' + ')} = ${sum} → ${isDiv9 ? '<span style="color: #10b981;">✓ Divisible by 9!</span>' : '<span style="color: #ef4444;">✗ Not divisible by 9</span>'}`;
+    }
+  </script>
+</body>
+</html>

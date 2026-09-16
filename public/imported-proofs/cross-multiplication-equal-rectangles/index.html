@@ -1,0 +1,2243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross Multiplication as Equal Rectangles — Interactive Visual Proof</title>
+  <meta name="description" content="Interactive visual proof demonstrating that a/b = c/d implies ad = bc using geometric equal area rectangles.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       CSS DESIGN SYSTEM & TOKENS
+       ========================================================================== */
+    :root {
+      /* Colors */
+      --bg-dark: #090d16;
+      --bg-surface: #0f172a;
+      --bg-card: rgba(30, 41, 59, 0.7);
+      --bg-card-hover: rgba(51, 65, 85, 0.8);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(255, 255, 255, 0.18);
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: rgba(99, 102, 241, 0.15);
+      
+      --accent-blue: #38bdf8;
+      --accent-blue-dark: #0284c7;
+      --accent-blue-light: rgba(56, 189, 248, 0.15);
+
+      --accent-green: #10b981;
+      --accent-green-dark: #059669;
+      --accent-green-light: rgba(16, 185, 129, 0.15);
+
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      /* Layout & Shadows */
+      --sidebar-width: 260px;
+      --header-height: 70px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-glow-blue: 0 0 25px rgba(56, 189, 248, 0.25);
+      --shadow-glow-green: 0 0 25px rgba(16, 185, 129, 0.25);
+      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+
+      /* Fonts */
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-heading: 'Outfit', var(--font-sans);
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* App Container Layout */
+    .app-layout {
+      display: flex;
+      width: 100vw;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR
+       ========================================================================== */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: rgba(15, 23, 42, 0.95);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+      backdrop-filter: blur(16px);
+      z-index: 10;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: var(--text-main);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active {
+      border-left: 3px solid var(--primary);
+      color: #a5b4fc;
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2;
+    }
+
+    .sidebar-progress {
+      margin-top: auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+    }
+
+    .progress-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 60%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--primary));
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /* ==========================================================================
+       MAIN WORKSPACE CONTENT AREA
+       ========================================================================== */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* Header */
+    .header {
+      height: var(--header-height);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .header-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .header-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-difficulty {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .badge-time {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+      border-color: var(--border-highlight);
+    }
+
+    /* Scrollable Container */
+    .content-container {
+      padding: 1.5rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Mission Banner */
+    .mission-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent-blue), var(--primary));
+    }
+
+    .mission-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .mission-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .mission-text {
+      font-size: 1rem;
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.65rem 1.4rem;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Main Workspace Grid Layout */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1200px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Central Workspace */
+    .central-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Ratio Input Section */
+    .ratios-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .ratio-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    .ratio-card.ratio-1 {
+      border-top: 3px solid var(--accent-blue);
+    }
+
+    .ratio-card.ratio-2 {
+      border-top: 3px solid var(--accent-green);
+    }
+
+    .ratio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ratio-title {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ratio-pill {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .ratio-1 .ratio-pill {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+    }
+
+    .ratio-2 .ratio-pill {
+      background: var(--accent-green-light);
+      color: var(--accent-green);
+    }
+
+    .ratio-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.5rem 0;
+    }
+
+    .fraction-input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .input-box:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .num-input {
+      width: 54px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-align: center;
+      font-family: var(--font-mono);
+      -moz-appearance: textfield;
+    }
+
+    .num-input::-webkit-inner-spin-button,
+    .num-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .step-btn {
+      width: 24px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: background 0.2s ease;
+    }
+
+    .step-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--text-main);
+    }
+
+    .fraction-line {
+      width: 90px;
+      height: 3px;
+      background: var(--text-muted);
+      border-radius: 2px;
+      margin: 0.2rem 0;
+    }
+
+    .simplified-preview {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.5);
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-sm);
+      justify-content: center;
+    }
+
+    .simplified-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Error Toast / Alert */
+    .validation-alert {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid var(--accent-rose);
+      color: #fda4af;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+
+    /* Rectangle Visualizer Workspace */
+    .visualizer-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .viz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .viz-title {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .svg-container {
+      width: 100%;
+      height: 380px;
+      background: rgba(9, 13, 22, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    svg.main-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* SVG Elements Styling */
+    .grid-line {
+      stroke: rgba(255, 255, 255, 0.05);
+      stroke-width: 1;
+    }
+
+    .rect-a {
+      fill: rgba(56, 189, 248, 0.18);
+      stroke: var(--accent-blue);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .rect-b {
+      fill: rgba(16, 185, 129, 0.18);
+      stroke: var(--accent-green);
+      stroke-width: 2.5;
+      transition: all 0.3s ease;
+    }
+
+    .diagonal-line-a {
+      stroke: #7dd3fc;
+      stroke-width: 2;
+      stroke-dasharray: 4,4;
+    }
+
+    .diagonal-line-b {
+      stroke: #6ee7b7;
+      stroke-width: 2;
+      stroke-dasharray: 4,4;
+    }
+
+    .aux-line {
+      stroke: rgba(245, 158, 11, 0.6);
+      stroke-width: 1.5;
+      stroke-dasharray: 3,3;
+    }
+
+    .angle-arc {
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .angle-arc-a {
+      stroke: #38bdf8;
+    }
+
+    .angle-arc-b {
+      stroke: #10b981;
+    }
+
+    .svg-text {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      fill: var(--text-main);
+      text-anchor: middle;
+      dominant-baseline: middle;
+      user-select: none;
+    }
+
+    .svg-text-muted {
+      fill: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .svg-badge {
+      rx: 6px;
+      ry: 6px;
+    }
+
+    /* Draggable Snap Rail Interface */
+    .snap-rail-container {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .rail-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .snap-track-wrapper {
+      position: relative;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .snap-track-bg {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .snap-track-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+      border-radius: 5px;
+      width: 50%;
+    }
+
+    .snap-tick {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 4px;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .snap-thumb {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 28px;
+      height: 28px;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5), 0 0 12px rgba(99, 102, 241, 0.5);
+      cursor: grab;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .snap-thumb:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .snap-thumb:active, .snap-thumb.dragging {
+      cursor: grabbing;
+      transform: translate(-50%, -50%) scale(1.15);
+      box-shadow: 0 0 18px var(--primary);
+    }
+
+    .thumb-dots {
+      display: flex;
+      gap: 2px;
+    }
+
+    .thumb-dot {
+      width: 2px;
+      height: 8px;
+      background: #475569;
+      border-radius: 1px;
+    }
+
+    /* Equations & Equality Card */
+    .equations-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.3s ease;
+    }
+
+    .equations-card.is-equal {
+      border-color: rgba(16, 185, 129, 0.5);
+      box-shadow: var(--shadow-glow-green);
+    }
+
+    .equations-card.is-unequal {
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .eq-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .eq-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .eq-value {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .val-ad {
+      color: var(--accent-blue);
+    }
+
+    .val-bc {
+      color: var(--accent-green);
+    }
+
+    .equality-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .status-equal {
+      background: var(--accent-green-light);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .status-unequal {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    /* ==========================================================================
+       RIGHT SIDE PANEL CARDS
+       ========================================================================== */
+    .side-panels {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .side-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .side-card-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+    }
+
+    .step-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      text-transform: uppercase;
+    }
+
+    .step-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .step-math {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 0.2rem;
+    }
+
+    /* Prediction Section */
+    .prediction-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .pred-option-btn {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pred-option-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+    }
+
+    .pred-option-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: #a5b4fc;
+    }
+
+    .feedback-box {
+      font-size: 0.85rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+
+    .feedback-success {
+      background: var(--accent-green-light);
+      border: 1px solid var(--accent-green);
+      color: #6ee7b7;
+    }
+
+    .feedback-error {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid var(--accent-rose);
+      color: #fda4af;
+    }
+
+    /* Challenge Section */
+    .challenge-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .challenge-prompt {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      background: rgba(15, 23, 42, 0.6);
+      padding: 0.75rem;
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--accent-amber);
+    }
+
+    .challenge-input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .challenge-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 0.75rem;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+    }
+
+    .challenge-input:focus {
+      outline: none;
+      border-color: var(--accent-amber);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--border-highlight);
+    }
+
+    /* ==========================================================================
+       VISUAL ONE-LINE PROOF & BOTTOM TOOLBAR
+       ========================================================================== */
+    .proof-chain-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .proof-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .proof-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text-main);
+    }
+
+    .proof-steps-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.5rem 0;
+    }
+
+    .proof-step-box {
+      flex: 1;
+      min-width: 160px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .proof-step-box.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+
+    .proof-arrow {
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .step-tag {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .step-formula {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    /* Bottom Toolbar Controls */
+    .bottom-toolbar {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(16px);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .toggles-group {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .btn-reset {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fda4af;
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-reset:hover {
+      background: rgba(244, 63, 94, 0.25);
+      color: white;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-highlight);
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 520px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        height: 100vh;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .ratios-container {
+        grid-template-columns: 1fr;
+      }
+      .content-container {
+        padding: 1rem;
+      }
+      .proof-steps-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+<div class="app-layout">
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-icon">✕</div>
+      <div class="brand-title">MathVisuals</div>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item active">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Equal Rectangles
+      </li>
+      <li class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Cross Multiplication
+      </li>
+      <li class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Slope & Diagonals
+      </li>
+      <li class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Practice Challenges
+      </li>
+    </ul>
+
+    <div class="sidebar-progress">
+      <div class="progress-title">
+        <span>Lesson Progress</span>
+        <span id="progressPercent">60%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="main-wrapper">
+    <!-- HEADER BAR -->
+    <header class="header">
+      <div class="header-left">
+        <div class="breadcrumb">
+          <span>Algebra</span> &rsaquo; <span>Geometric Proofs</span> &rsaquo; <span>Cross Multiplication</span>
+        </div>
+        <div class="header-title-group">
+          <h1 class="header-title">Cross Multiplication as Equal Rectangles</h1>
+          <span class="badge badge-difficulty">Intermediate</span>
+          <span class="badge badge-time">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            15 min
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="soundToggleBtn" title="Toggle Sound Effects">
+          <svg id="soundIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+        <button class="icon-btn" id="helpBtn" title="Help & Instructions">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT SCROLL AREA -->
+    <div class="content-container">
+      
+      <!-- MISSION CARD -->
+      <section class="mission-card">
+        <div class="mission-info">
+          <span class="mission-tag">Target Learning Goal</span>
+          <div class="mission-text">
+            Prove geometrically that if <strong style="color: var(--accent-blue)">a / b = c / d</strong>, then the area of rectangle <strong style="color: var(--accent-blue)">a &times; d</strong> equals rectangle <strong style="color: var(--accent-green)">b &times; c</strong> (<strong style="color: var(--primary)">ad = bc</strong>).
+          </div>
+        </div>
+        <button class="btn-primary" id="mainCheckBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Check Proof State
+        </button>
+      </section>
+
+      <!-- MAIN WORKSPACE GRID -->
+      <div class="workspace-grid">
+        
+        <!-- LEFT COLUMN: CENTRAL PROOF WORKSPACE -->
+        <div class="central-workspace">
+          
+          <!-- RATIOS INPUT CARDS -->
+          <div class="ratios-container">
+            <!-- Ratio 1: a / b -->
+            <div class="ratio-card ratio-1">
+              <div class="ratio-header">
+                <span class="ratio-title">First Ratio (a / b)</span>
+                <span class="ratio-pill">Ratio 1</span>
+              </div>
+              <div class="ratio-controls">
+                <div class="fraction-input-group">
+                  <span style="font-size: 0.75rem; color: var(--accent-blue); font-weight: 700;">Numerator (a)</span>
+                  <div class="input-box">
+                    <button class="step-btn" onclick="updateInputValue('a', -1)">-</button>
+                    <input type="number" id="inputA" class="num-input" value="3" min="-50" max="50">
+                    <button class="step-btn" onclick="updateInputValue('a', 1)">+</button>
+                  </div>
+                  
+                  <div class="fraction-line"></div>
+
+                  <div class="input-box">
+                    <button class="step-btn" onclick="updateInputValue('b', -1)">-</button>
+                    <input type="number" id="inputB" class="num-input" value="4" min="-50" max="50">
+                    <button class="step-btn" onclick="updateInputValue('b', 1)">+</button>
+                  </div>
+                  <span style="font-size: 0.75rem; color: var(--accent-blue); font-weight: 700;">Denominator (b)</span>
+                </div>
+              </div>
+              <div class="simplified-preview">
+                <span>Simplified Form:</span>
+                <span class="simplified-val" id="simplifiedRatio1">3 / 4</span>
+              </div>
+            </div>
+
+            <!-- Ratio 2: c / d -->
+            <div class="ratio-card ratio-2">
+              <div class="ratio-header">
+                <span class="ratio-title">Second Ratio (c / d)</span>
+                <span class="ratio-pill">Ratio 2</span>
+              </div>
+              <div class="ratio-controls">
+                <div class="fraction-input-group">
+                  <span style="font-size: 0.75rem; color: var(--accent-green); font-weight: 700;">Numerator (c)</span>
+                  <div class="input-box">
+                    <button class="step-btn" onclick="updateInputValue('c', -1)">-</button>
+                    <input type="number" id="inputC" class="num-input" value="6" min="-50" max="50">
+                    <button class="step-btn" onclick="updateInputValue('c', 1)">+</button>
+                  </div>
+                  
+                  <div class="fraction-line"></div>
+
+                  <div class="input-box">
+                    <button class="step-btn" onclick="updateInputValue('d', -1)">-</button>
+                    <input type="number" id="inputD" class="num-input" value="8" min="-50" max="50">
+                    <button class="step-btn" onclick="updateInputValue('d', 1)">+</button>
+                  </div>
+                  <span style="font-size: 0.75rem; color: var(--accent-green); font-weight: 700;">Denominator (d)</span>
+                </div>
+              </div>
+              <div class="simplified-preview">
+                <span>Simplified Form:</span>
+                <span class="simplified-val" id="simplifiedRatio2">6 / 8 &rarr; 3 / 4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VALIDATION ALERT -->
+          <div class="validation-alert" id="validationAlert">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="validationMsg">Denominator (b or d) cannot be zero! Please enter a non-zero denominator.</span>
+          </div>
+
+          <!-- RECTANGLE VISUALIZER WORKSPACE -->
+          <div class="visualizer-card">
+            <div class="viz-header">
+              <span class="viz-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                Geometric Equal Area Diagrams
+              </span>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">
+                Comparing Rectangle Area <strong style="color: var(--accent-blue)">a &times; d</strong> vs <strong style="color: var(--accent-green)">b &times; c</strong>
+              </span>
+            </div>
+
+            <!-- SVG CANVAS -->
+            <div class="svg-container">
+              <svg class="main-canvas" id="mainSvg" viewBox="0 0 800 380">
+                <!-- SVG Content rendered dynamically via JS -->
+              </svg>
+            </div>
+
+            <!-- DRAGGABLE SNAP RAIL CONTROL -->
+            <div class="snap-rail-container">
+              <div class="rail-label-row">
+                <span><strong style="color: var(--primary)">Interactive Snap Rail</strong> — Drag handle to scale &amp; align ratio c/d proportionally</span>
+                <span id="snapStateText" style="font-family: var(--font-mono); color: var(--text-main); font-weight: 600;">Proportion Match: 100% (Snapped)</span>
+              </div>
+              <div class="snap-track-wrapper" id="snapTrackWrapper">
+                <div class="snap-track-bg">
+                  <div class="snap-track-fill" id="snapTrackFill"></div>
+                  <!-- Snap Ticks -->
+                  <div class="snap-tick" style="left: 25%" title="1:2 Ratio Snap"></div>
+                  <div class="snap-tick" style="left: 50%" title="Equal Ratio Snap"></div>
+                  <div class="snap-tick" style="left: 75%" title="4:3 Ratio Snap"></div>
+                </div>
+                <div class="snap-thumb" id="snapThumb" tabindex="0">
+                  <div class="thumb-dots">
+                    <div class="thumb-dot"></div>
+                    <div class="thumb-dot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- EQUATIONS & EQUALITY STATUS -->
+          <div class="equations-card" id="equationsCard">
+            <div class="eq-group">
+              <span class="eq-label">First Cross Product (a &times; d)</span>
+              <div class="eq-value val-ad" id="eqAdDisplay">
+                3 &times; 8 = 24
+              </div>
+            </div>
+
+            <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-dim);" id="comparisonSign">
+              =
+            </div>
+
+            <div class="eq-group">
+              <span class="eq-label">Second Cross Product (b &times; c)</span>
+              <div class="eq-value val-bc" id="eqBcDisplay">
+                4 &times; 6 = 24
+              </div>
+            </div>
+
+            <div class="equality-status-badge status-equal" id="equalityBadge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="equalityText">Areas Are Equal (ad = bc)</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: EXPLANATION, PREDICTION & CHALLENGE -->
+        <div class="side-panels">
+          
+          <!-- WHY IT WORKS PANEL -->
+          <div class="side-card">
+            <div class="side-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Why It Works (Geometric Proof)
+            </div>
+
+            <div class="step-item">
+              <span class="step-num">Step 1 — Construct Rectangles</span>
+              <span class="step-text">Form two rectangles with sides <strong>(a, d)</strong> and <strong>(b, c)</strong>. Draw both diagonals.</span>
+              <span class="step-math" id="whyStep1Math">a = 3, d = 8 | b = 4, c = 6</span>
+            </div>
+
+            <div class="step-item">
+              <span class="step-num">Step 2 — Compare Areas</span>
+              <span class="step-text">The area of the first rectangle is <strong>a &times; d</strong>. The area of the second rectangle is <strong>b &times; c</strong>.</span>
+              <span class="step-math" id="whyStep2Math">ad = 24 square units | bc = 24 square units</span>
+            </div>
+
+            <div class="step-item">
+              <span class="step-num">Step 3 — Equivalence Conclusion</span>
+              <span class="step-text">If the ratios are equivalent <strong>(a/b = c/d)</strong>, both rectangles have <strong>EXACTLY EQUAL AREA</strong>.</span>
+              <span class="step-math" id="whyStep3Math" style="color: var(--accent-green);">24 = 24 &rArr; Ratios Are Equivalent!</span>
+            </div>
+          </div>
+
+          <!-- PREDICTION CARD -->
+          <div class="side-card">
+            <div class="side-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Predict the Rule
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--text-main); font-weight: 500;">
+              "When cross products <strong style="color: var(--accent-blue)">ad</strong> and <strong style="color: var(--accent-green)">bc</strong> are equal, what must be true about the simplified ratios?"
+            </div>
+
+            <div class="prediction-options">
+              <button class="pred-option-btn" onclick="selectPrediction(0)" id="predOpt0">
+                A. The simplified ratios are always identical.
+              </button>
+              <button class="pred-option-btn" onclick="selectPrediction(1)" id="predOpt1">
+                B. The simplified ratios can be completely different.
+              </button>
+              <button class="pred-option-btn" onclick="selectPrediction(2)" id="predOpt2">
+                C. Only the numerators must match.
+              </button>
+            </div>
+
+            <button class="btn-secondary" onclick="checkPredictionAnswer()">Check Prediction</button>
+            
+            <div class="feedback-box" id="predictionFeedback"></div>
+          </div>
+
+          <!-- CHALLENGE CARD -->
+          <div class="side-card">
+            <div class="side-card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Quick Challenge
+            </div>
+
+            <div class="challenge-box">
+              <div class="challenge-prompt" id="challengePromptText">
+                If <strong>a / b = 3 / 5</strong> and <strong>b = 15</strong>, what is <strong>a</strong>?
+              </div>
+
+              <div class="challenge-input-row">
+                <input type="number" id="challengeInput" class="challenge-input" placeholder="Enter answer for a">
+                <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="checkChallengeAnswer()">Submit</button>
+              </div>
+
+              <div class="feedback-box" id="challengeFeedback"></div>
+              
+              <button class="btn-secondary" style="margin-top: 0.2rem; font-size: 0.8rem;" onclick="generateNewChallenge()">New Question</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- VISUAL ONE-LINE PROOF CHAIN -->
+      <section class="proof-chain-card">
+        <div class="proof-header">
+          <span class="proof-title">Visual One-Line Algebraic Proof</span>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="prevProofStep()">&lt; Prev Step</button>
+            <button class="btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;" onclick="nextProofStep()">Next Step &gt;</button>
+          </div>
+        </div>
+
+        <div class="proof-steps-row">
+          <div class="proof-step-box" id="pStep1">
+            <span class="step-tag">Step 1: Ratio Equality</span>
+            <span class="step-formula" id="pStep1Math">a / b = c / d</span>
+          </div>
+
+          <span class="proof-arrow">&rarr;</span>
+
+          <div class="proof-step-box" id="pStep2">
+            <span class="step-tag">Step 2: Multiply by (b &times; d)</span>
+            <span class="step-formula" id="pStep2Math">(a/b) &times; bd = (c/d) &times; bd</span>
+          </div>
+
+          <span class="proof-arrow">&rarr;</span>
+
+          <div class="proof-step-box" id="pStep3">
+            <span class="step-tag">Step 3: Simplify Denominators</span>
+            <span class="step-formula" id="pStep3Math">a &times; d = c &times; b</span>
+          </div>
+
+          <span class="proof-arrow">&rarr;</span>
+
+          <div class="proof-step-box" id="pStep4">
+            <span class="step-tag">Step 4: Equal Area Result</span>
+            <span class="step-formula" id="pStep4Math" style="color: var(--accent-green);">ad = bc</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOTTOM CONTROLS TOOLBAR -->
+      <footer class="bottom-toolbar">
+        <div class="toggles-group">
+          <label class="toggle-item">
+            <input type="checkbox" id="chkAuxiliary" class="toggle-checkbox" checked onchange="toggleSetting('showAuxiliary', this.checked)">
+            Auxiliary Grid Projections
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="chkDiagonals" class="toggle-checkbox" checked onchange="toggleSetting('showDiagonals', this.checked)">
+            Diagonal Lines
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="chkAngles" class="toggle-checkbox" checked onchange="toggleSetting('showAngles', this.checked)">
+            Angle Arcs
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="chkGrid" class="toggle-checkbox" checked onchange="toggleSetting('showGrid', this.checked)">
+            Background Grid
+          </label>
+        </div>
+
+        <button class="btn-reset" onclick="resetStateToDefault()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Reset Initial Ratios (3/4 = 6/8)
+        </button>
+      </footer>
+
+    </div>
+  </main>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 class="modal-title">How to Use This Visual Proof</h3>
+      <button class="icon-btn" onclick="closeHelpModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>1. <strong>Ratio Inputs:</strong> Enter values for numerators <em>(a, c)</em> and denominators <em>(b, d)</em>. Observe how simplified ratios update dynamically.</p>
+      <p>2. <strong>Geometric Rectangles:</strong> The canvas visualizes two rectangles: Rectangle 1 with area <em>a &times; d</em> and Rectangle 2 with area <em>b &times; c</em>.</p>
+      <p>3. <strong>Draggable Snap Rail:</strong> Drag the center handle to smoothly adjust ratio <em>c/d</em>. The handle snaps when cross-products align!</p>
+      <p>4. <strong>Equivalence Verification:</strong> Click <strong>Check Proof State</strong> to evaluate whether <em>ad = bc</em> and highlight the equal areas.</p>
+    </div>
+    <button class="btn-primary" style="align-self: flex-end;" onclick="closeHelpModal()">Got It!</button>
+  </div>
+</div>
+
+<!-- AUDIO SYNTHESIZER & VANILLA JS ENGINE -->
+<script>
+  /* ==========================================================================
+     GLOBAL STATE OBJECT (SINGLE SHARED STATE)
+     ========================================================================== */
+  const state = {
+    a: 3,
+    b: 4,
+    c: 6,
+    d: 8,
+    dragPosition: 0.5, // 0.0 to 1.0 along snap rail
+    showAuxiliary: true,
+    showDiagonals: true,
+    showAngles: true,
+    showGrid: true,
+    selectedPrediction: null,
+    challengeAnswer: 9,
+    challengeGiven: { ratioNum: 3, ratioDen: 5, b: 15 },
+    currentProofStep: 1,
+    isAudioMuted: false
+  };
+
+  /* ==========================================================================
+     WEB AUDIO SYNTHESIZER (No external assets required)
+     ========================================================================== */
+  let audioCtx = null;
+  function playSound(type) {
+    if (state.isAudioMuted) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'snap') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } else if (type === 'click') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      } else if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+        osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      }
+    } catch (e) {
+      console.warn("Web Audio error:", e);
+    }
+  }
+
+  /* ==========================================================================
+     MATH UTILITIES
+     ========================================================================== */
+  function gcd(x, y) {
+    x = Math.abs(x);
+    y = Math.abs(y);
+    while (y) {
+      let t = y;
+      y = x % y;
+      x = t;
+    }
+    return x;
+  }
+
+  function getSimplifiedRatio(num, den) {
+    if (den === 0) return { num: NaN, den: NaN, str: 'Undefined' };
+    const divisor = gcd(num, den);
+    let sNum = num / divisor;
+    let sDen = den / divisor;
+    if (sDen < 0) {
+      sNum = -sNum;
+      sDen = -sDen;
+    }
+    return { num: sNum, den: sDen, str: `${sNum} / ${sDen}` };
+  }
+
+  /* ==========================================================================
+     RENDER ENGINE — SYNCHRONIZES ALL UI WITH SHARED STATE
+     ========================================================================== */
+  function render() {
+    const { a, b, c, d } = state;
+
+    // 1. Validation check
+    const alertEl = document.getElementById('validationAlert');
+    if (b === 0 || d === 0) {
+      alertEl.style.display = 'flex';
+      document.getElementById('validationMsg').innerText = 
+        `Invalid input: Denominator ${b === 0 ? 'b' : 'd'} cannot be zero!`;
+    } else {
+      alertEl.style.display = 'none';
+    }
+
+    // Update Input Values
+    document.getElementById('inputA').value = a;
+    document.getElementById('inputB').value = b;
+    document.getElementById('inputC').value = c;
+    document.getElementById('inputD').value = d;
+
+    // 2. Calculate simplified ratios
+    const simp1 = getSimplifiedRatio(a, b);
+    const simp2 = getSimplifiedRatio(c, d);
+
+    document.getElementById('simplifiedRatio1').innerText = simp1.str;
+    if (c === simp2.num && d === simp2.den) {
+      document.getElementById('simplifiedRatio2').innerText = simp2.str;
+    } else {
+      document.getElementById('simplifiedRatio2').innerText = `${c} / ${d} \u2192 ${simp2.str}`;
+    }
+
+    // 3. Cross products
+    const ad = a * d;
+    const bc = b * c;
+    const isEquivalent = (b !== 0 && d !== 0 && ad === bc);
+
+    // Update equations card
+    document.getElementById('eqAdDisplay').innerHTML = `${a} &times; ${d} = <strong style="margin-left:4px;">${isNaN(ad)?'NaN':ad}</strong>`;
+    document.getElementById('eqBcDisplay').innerHTML = `${b} &times; ${c} = <strong style="margin-left:4px;">${isNaN(bc)?'NaN':bc}</strong>`;
+    
+    const eqCard = document.getElementById('equationsCard');
+    const badgeEl = document.getElementById('equalityBadge');
+    const compSign = document.getElementById('comparisonSign');
+
+    if (isEquivalent) {
+      eqCard.className = 'equations-card is-equal';
+      badgeEl.className = 'equality-status-badge status-equal';
+      badgeEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span>Areas Are Equal (ad = bc)</span>`;
+      compSign.innerText = '=';
+      compSign.style.color = 'var(--accent-green)';
+    } else {
+      eqCard.className = 'equations-card is-unequal';
+      badgeEl.className = 'equality-status-badge status-unequal';
+      badgeEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <span>Not Equal Yet (ad &ne; bc)</span>`;
+      compSign.innerText = '\u2260';
+      compSign.style.color = 'var(--accent-amber)';
+    }
+
+    // 4. Update Why It Works Panel
+    document.getElementById('whyStep1Math').innerText = `a = ${a}, d = ${d} | b = ${b}, c = ${c}`;
+    document.getElementById('whyStep2Math').innerText = `ad = ${ad} sq units | bc = ${bc} sq units`;
+    const why3 = document.getElementById('whyStep3Math');
+    if (isEquivalent) {
+      why3.innerText = `${ad} = ${bc} \u2192 Ratios Are Equivalent!`;
+      why3.style.color = 'var(--accent-green)';
+    } else {
+      why3.innerText = `${ad} \u2260 ${bc} \u2192 Ratios Are Not Equivalent`;
+      why3.style.color = 'var(--accent-amber)';
+    }
+
+    // 5. Update Visual Proof Chain Step formulas
+    document.getElementById('pStep1Math').innerText = `${a}/${b} = ${c}/${d}`;
+    document.getElementById('pStep2Math').innerText = `(${a}/${b})\u00B7(${b}\u00B7${d}) = (${c}/${d})\u00B7(${b}\u00B7${d})`;
+    document.getElementById('pStep3Math').innerText = `${a}\u00B7${d} = ${c}\u00B7${b}`;
+    document.getElementById('pStep4Math').innerText = `${ad} = ${bc}`;
+
+    // Highlight active proof step
+    for (let i = 1; i <= 4; i++) {
+      const stepBox = document.getElementById(`pStep${i}`);
+      if (i === state.currentProofStep) {
+        stepBox.classList.add('active');
+      } else {
+        stepBox.classList.remove('active');
+      }
+    }
+
+    // 6. Render SVG Graphics
+    renderSvgCanvas(a, b, c, d, ad, bc, isEquivalent);
+  }
+
+  /* ==========================================================================
+     DYNAMIC SVG RENDERER FOR RECTANGLES & DIAGONALS
+     ========================================================================== */
+  function renderSvgCanvas(a, b, c, d, ad, bc, isEquivalent) {
+    const svg = document.getElementById('mainCanvas') || document.getElementById('mainSvg');
+    if (!svg) return;
+
+    // ViewBox dimensions: 800 x 380
+    let html = '';
+
+    // A. Background Grid
+    if (state.showGrid) {
+      for (let x = 0; x <= 800; x += 25) {
+        html += `<line x1="${x}" y1="0" x2="${x}" y2="380" class="grid-line" />`;
+      }
+      for (let y = 0; y <= 380; y += 25) {
+        html += `<line x1="0" y1="${y}" x2="800" y2="${y}" class="grid-line" />`;
+      }
+    }
+
+    // B. Calculate scaled geometry for Rectangles
+    // Rectangle 1: Area = a * d (width = d, height = a)
+    // Rectangle 2: Area = b * c (width = b, height = c)
+    const absA = Math.max(1, Math.abs(a));
+    const absB = Math.max(1, Math.abs(b));
+    const absC = Math.max(1, Math.abs(c));
+    const absD = Math.max(1, Math.abs(d));
+
+    // Scale factors to fit within 320x260 bounding box per rectangle
+    const maxDimension = Math.max(absA, absB, absC, absD, 12);
+    const scale = Math.min(18, 220 / maxDimension);
+
+    // Rectangle 1 Coordinates (Left Canvas Area)
+    const rect1W = absD * scale;
+    const rect1H = absA * scale;
+    const rect1X = 130 - rect1W / 2;
+    const rect1Y = 200 - rect1H / 2;
+
+    // Rectangle 2 Coordinates (Right Canvas Area)
+    const rect2W = absB * scale;
+    const rect2H = absC * scale;
+    const rect2X = 570 - rect2W / 2;
+    const rect2Y = 200 - rect2H / 2;
+
+    // C. Auxiliary Projections (Connecting dotted lines when heights/widths match)
+    if (state.showAuxiliary) {
+      // Top alignment line
+      html += `<line x1="${rect1X}" y1="${rect1Y}" x2="${rect2X + rect2W}" y2="${rect1Y}" class="aux-line" />`;
+      // Bottom alignment line
+      html += `<line x1="${rect1X}" y1="${rect1Y + rect1H}" x2="${rect2X + rect2W}" y2="${rect1Y + rect1H}" class="aux-line" />`;
+    }
+
+    // D. DRAW RECTANGLE 1 (a x d -> Area = ad)
+    html += `<rect x="${rect1X}" y="${rect1Y}" width="${rect1W}" height="${rect1H}" class="rect-a" rx="4" />`;
+    
+    // Sub-grid lines inside Rect 1
+    if (absD < 20 && absA < 20) {
+      for (let i = 1; i < absD; i++) {
+        let gx = rect1X + i * scale;
+        html += `<line x1="${gx}" y1="${rect1Y}" x2="${gx}" y2="${rect1Y + rect1H}" stroke="rgba(56,189,248,0.2)" stroke-width="1" />`;
+      }
+      for (let j = 1; j < absA; j++) {
+        let gy = rect1Y + j * scale;
+        html += `<line x1="${rect1X}" y1="${gy}" x2="${rect1X + rect1W}" y2="${gy}" stroke="rgba(56,189,248,0.2)" stroke-width="1" />`;
+      }
+    }
+
+    // Diagonal 1
+    if (state.showDiagonals) {
+      html += `<line x1="${rect1X}" y1="${rect1Y + rect1H}" x2="${rect1X + rect1W}" y2="${rect1Y}" class="diagonal-line-a" />`;
+    }
+
+    // Angle Arc 1
+    if (state.showAngles) {
+      const angleRadius = Math.min(30, rect1W * 0.4, rect1H * 0.4);
+      html += `<path d="M ${rect1X + angleRadius} ${rect1Y + rect1H} A ${angleRadius} ${angleRadius} 0 0 0 ${rect1X + angleRadius * 0.8} ${rect1Y + rect1H - angleRadius * 0.5}" class="angle-arc angle-arc-a" />`;
+      html += `<text x="${rect1X + angleRadius + 14}" y="${rect1Y + rect1H - 8}" class="svg-text-muted" fill="#7dd3fc">&theta;1</text>`;
+    }
+
+    // Rectangle 1 Labels
+    // Top width label (d)
+    html += `<text x="${rect1X + rect1W / 2}" y="${rect1Y - 14}" class="svg-text" fill="#38bdf8">width = d (${d})</text>`;
+    // Left height label (a)
+    html += `<text x="${rect1X - 20}" y="${rect1Y + rect1H / 2}" class="svg-text" fill="#38bdf8">height = a (${a})</text>`;
+    // Center Area Badge
+    html += `<rect x="${rect1X + rect1W / 2 - 55}" y="${rect1Y + rect1H / 2 - 14}" width="110" height="28" fill="rgba(15,23,42,0.85)" stroke="#38bdf8" class="svg-badge"/>`;
+    html += `<text x="${rect1X + rect1W / 2}" y="${rect1Y + rect1H / 2}" class="svg-text" fill="#38bdf8">Area ad = ${ad}</text>`;
+
+
+    // E. DRAW RECTANGLE 2 (b x c -> Area = bc)
+    html += `<rect x="${rect2X}" y="${rect2Y}" width="${rect2W}" height="${rect2H}" class="rect-b" rx="4" />`;
+    
+    // Sub-grid lines inside Rect 2
+    if (absB < 20 && absC < 20) {
+      for (let i = 1; i < absB; i++) {
+        let gx = rect2X + i * scale;
+        html += `<line x1="${gx}" y1="${rect2Y}" x2="${gx}" y2="${rect2Y + rect2H}" stroke="rgba(16,185,129,0.2)" stroke-width="1" />`;
+      }
+      for (let j = 1; j < absC; j++) {
+        let gy = rect2Y + j * scale;
+        html += `<line x1="${rect2X}" y1="${gy}" x2="${rect2X + rect2W}" y2="${gy}" stroke="rgba(16,185,129,0.2)" stroke-width="1" />`;
+      }
+    }
+
+    // Diagonal 2
+    if (state.showDiagonals) {
+      html += `<line x1="${rect2X}" y1="${rect2Y + rect2H}" x2="${rect2X + rect2W}" y2="${rect2Y}" class="diagonal-line-b" />`;
+    }
+
+    // Angle Arc 2
+    if (state.showAngles) {
+      const angleRadius = Math.min(30, rect2W * 0.4, rect2H * 0.4);
+      html += `<path d="M ${rect2X + angleRadius} ${rect2Y + rect2H} A ${angleRadius} ${angleRadius} 0 0 0 ${rect2X + angleRadius * 0.8} ${rect2Y + rect2H - angleRadius * 0.5}" class="angle-arc angle-arc-b" />`;
+      html += `<text x="${rect2X + angleRadius + 14}" y="${rect2Y + rect2H - 8}" class="svg-text-muted" fill="#6ee7b7">&theta;2</text>`;
+    }
+
+    // Rectangle 2 Labels
+    // Top width label (b)
+    html += `<text x="${rect2X + rect2W / 2}" y="${rect2Y - 14}" class="svg-text" fill="#10b981">width = b (${b})</text>`;
+    // Right height label (c)
+    html += `<text x="${rect2X + rect2W + 25}" y="${rect2Y + rect2H / 2}" class="svg-text" fill="#10b981">height = c (${c})</text>`;
+    // Center Area Badge
+    html += `<rect x="${rect2X + rect2W / 2 - 55}" y="${rect2Y + rect2H / 2 - 14}" width="110" height="28" fill="rgba(15,23,42,0.85)" stroke="#10b981" class="svg-badge"/>`;
+    html += `<text x="${rect2X + rect2W / 2}" y="${rect2Y + rect2H / 2}" class="svg-text" fill="#10b981">Area bc = ${bc}</text>`;
+
+
+    // F. Center Comparison Callout Badge between rectangles
+    const calloutColor = isEquivalent ? '#10b981' : '#f59e0b';
+    const calloutText = isEquivalent ? 'EQUAL AREAS' : 'UNEQUAL AREAS';
+    html += `<rect x="345" y="185" width="110" height="30" fill="rgba(15,23,42,0.95)" stroke="${calloutColor}" rx="15" stroke-width="2"/>`;
+    html += `<text x="400" y="200" class="svg-text" fill="${calloutColor}" font-size="11">${calloutText}</text>`;
+
+    svg.innerHTML = html;
+  }
+
+  /* ==========================================================================
+     DRAGGABLE SNAP RAIL LOGIC (POINTER EVENTS WITH CAPTURE)
+     ========================================================================== */
+  function setupSnapRail() {
+    const trackWrapper = document.getElementById('snapTrackWrapper');
+    const thumb = document.getElementById('snapThumb');
+    const trackFill = document.getElementById('snapTrackFill');
+    const snapStateText = document.getElementById('snapStateText');
+
+    let isDragging = false;
+
+    function updatePositionFromPointer(e) {
+      const rect = trackWrapper.getBoundingClientRect();
+      let offsetX = e.clientX - rect.left;
+      let ratio = Math.max(0, Math.min(1, offsetX / rect.width));
+
+      state.dragPosition = ratio;
+
+      // Update Thumb Visual Position
+      thumb.style.left = `${ratio * 100}%`;
+      trackFill.style.width = `${ratio * 100}%`;
+
+      // Check proximity to key snap points: 0.25, 0.50, 0.75
+      let snapped = false;
+      let targetRatio = ratio;
+
+      if (Math.abs(ratio - 0.50) < 0.04) {
+        targetRatio = 0.50;
+        snapped = true;
+        thumb.style.left = `50%`;
+        trackFill.style.width = `50%`;
+      } else if (Math.abs(ratio - 0.25) < 0.04) {
+        targetRatio = 0.25;
+        snapped = true;
+        thumb.style.left = `25%`;
+        trackFill.style.width = `25%`;
+      } else if (Math.abs(ratio - 0.75) < 0.04) {
+        targetRatio = 0.75;
+        snapped = true;
+        thumb.style.left = `75%`;
+        trackFill.style.width = `75%`;
+      }
+
+      if (snapped) {
+        snapStateText.innerHTML = `<span style="color: var(--accent-green);">Proportion Snapped! (Equivalent Ratio)</span>`;
+        // Scale c and d proportionally to match a and b
+        if (targetRatio === 0.50) {
+          state.c = Math.round(state.a * 2);
+          state.d = Math.round(state.b * 2);
+        } else if (targetRatio === 0.25) {
+          state.c = Math.round(state.a * 1);
+          state.d = Math.round(state.b * 1);
+        } else if (targetRatio === 0.75) {
+          state.c = Math.round(state.a * 3);
+          state.d = Math.round(state.b * 3);
+        }
+        playSound('snap');
+      } else {
+        // Continuous smooth variation of c and d during drag
+        let factor = 0.5 + targetRatio;
+        state.c = Math.max(1, Math.round(state.a * factor * 2));
+        state.d = Math.max(1, Math.round(state.b * factor * 1.5));
+        snapStateText.innerHTML = `Proportion Scale: ${(factor*100).toFixed(0)}%`;
+      }
+
+      render();
+    }
+
+    thumb.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      thumb.classList.add('dragging');
+      thumb.setPointerCapture(e.pointerId);
+      playSound('click');
+    });
+
+    thumb.addEventListener('pointermove', (e) => {
+      if (isDragging) {
+        updatePositionFromPointer(e);
+      }
+    });
+
+    thumb.addEventListener('pointerup', (e) => {
+      if (isDragging) {
+        isDragging = false;
+        thumb.classList.remove('dragging');
+        thumb.releasePointerCapture(e.pointerId);
+      }
+    });
+
+    trackWrapper.addEventListener('pointerdown', (e) => {
+      if (e.target !== thumb) {
+        updatePositionFromPointer(e);
+      }
+    });
+  }
+
+  /* ==========================================================================
+     INTERACTIVE HANDLERS (INPUTS, BUTTONS, PREDICTION, CHALLENGE)
+     ========================================================================== */
+  function updateInputValue(key, delta) {
+    playSound('click');
+    state[key] = (parseInt(state[key]) || 0) + delta;
+    render();
+  }
+
+  // Handle direct typed input change
+  ['inputA', 'inputB', 'inputC', 'inputD'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', (e) => {
+      const key = id.replace('input', '').toLowerCase();
+      const val = parseInt(e.target.value);
+      state[key] = isNaN(val) ? 0 : val;
+      render();
+    });
+  });
+
+  // Check Button Handler
+  document.getElementById('mainCheckBtn').addEventListener('click', () => {
+    const ad = state.a * state.d;
+    const bc = state.b * state.c;
+    if (state.b !== 0 && state.d !== 0 && ad === bc) {
+      playSound('success');
+      alert(`\u2713 Success! Cross products are equal (${ad} = ${bc}). The ratios ${state.a}/${state.b} and ${state.c}/${state.d} are equivalent!`);
+    } else {
+      playSound('click');
+      alert(`\u2717 Not Equal Yet: Cross product ad (${ad}) \u2260 bc (${bc}). Adjust inputs to make ratios equivalent.`);
+    }
+  });
+
+  // Prediction Selection
+  function selectPrediction(idx) {
+    playSound('click');
+    state.selectedPrediction = idx;
+    for (let i = 0; i < 3; i++) {
+      const btn = document.getElementById(`predOpt${i}`);
+      if (i === idx) btn.classList.add('selected');
+      else btn.classList.remove('selected');
+    }
+  }
+
+  function checkPredictionAnswer() {
+    const fb = document.getElementById('predictionFeedback');
+    fb.style.display = 'block';
+    if (state.selectedPrediction === 0) {
+      playSound('success');
+      fb.className = 'feedback-box feedback-success';
+      fb.innerHTML = `<strong>\u2713 Correct!</strong> Equivalent ratios always have equal cross products (ad = bc) and reduce to the same simplified fraction.`;
+    } else {
+      playSound('click');
+      fb.className = 'feedback-box feedback-error';
+      fb.innerHTML = `<strong>\u2717 Try again.</strong> Compare 3/4 and 6/8: cross products are 3&times;8=24 and 4&times;6=24, and both simplify to 3/4.`;
+    }
+  }
+
+  // Challenge Handler
+  function checkChallengeAnswer() {
+    const inputVal = parseInt(document.getElementById('challengeInput').value);
+    const fb = document.getElementById('challengeFeedback');
+    fb.style.display = 'block';
+
+    if (inputVal === state.challengeAnswer) {
+      playSound('success');
+      fb.className = 'feedback-box feedback-success';
+      fb.innerHTML = `<strong>\u2713 Correct!</strong> a = ${state.challengeAnswer} because 3 &times; 15 = 45 and ${state.challengeAnswer} &times; 5 = 45!`;
+    } else {
+      playSound('click');
+      fb.className = 'feedback-box feedback-error';
+      fb.innerHTML = `<strong>\u2717 Incorrect.</strong> Use cross multiplication: a &times; 5 = 3 &times; 15 &rArr; 5a = 45 &rArr; a = 9.`;
+    }
+  }
+
+  function generateNewChallenge() {
+    playSound('click');
+    const rNum = Math.floor(Math.random() * 4) + 2; // 2..5
+    const rDen = Math.floor(Math.random() * 4) + 6; // 6..9
+    const multiplier = Math.floor(Math.random() * 3) + 2; // 2..4
+    
+    const newB = rDen * multiplier;
+    const newA = rNum * multiplier;
+
+    state.challengeAnswer = newA;
+    document.getElementById('challengePromptText').innerHTML = 
+      `If <strong>a / b = ${rNum} / ${rDen}</strong> and <strong>b = ${newB}</strong>, what is <strong>a</strong>?`;
+    document.getElementById('challengeInput').value = '';
+    document.getElementById('challengeFeedback').style.display = 'none';
+  }
+
+  // Proof Stepper
+  function prevProofStep() {
+    playSound('click');
+    state.currentProofStep = Math.max(1, state.currentProofStep - 1);
+    render();
+  }
+
+  function nextProofStep() {
+    playSound('click');
+    state.currentProofStep = Math.min(4, state.currentProofStep + 1);
+    render();
+  }
+
+  // Toolbar Toggles
+  function toggleSetting(key, isChecked) {
+    playSound('click');
+    state[key] = isChecked;
+    render();
+  }
+
+  function resetStateToDefault() {
+    playSound('click');
+    state.a = 3;
+    state.b = 4;
+    state.c = 6;
+    state.d = 8;
+    state.dragPosition = 0.5;
+    state.showAuxiliary = true;
+    state.showDiagonals = true;
+    state.showAngles = true;
+    state.showGrid = true;
+    state.currentProofStep = 1;
+
+    document.getElementById('chkAuxiliary').checked = true;
+    document.getElementById('chkDiagonals').checked = true;
+    document.getElementById('chkAngles').checked = true;
+    document.getElementById('chkGrid').checked = true;
+
+    // Reset snap thumb position
+    const thumb = document.getElementById('snapThumb');
+    const trackFill = document.getElementById('snapTrackFill');
+    thumb.style.left = '50%';
+    trackFill.style.width = '50%';
+
+    render();
+  }
+
+  // Help Modal & Sound Toggle
+  document.getElementById('helpBtn').addEventListener('click', () => {
+    playSound('click');
+    document.getElementById('helpModal').classList.add('open');
+  });
+
+  function closeHelpModal() {
+    playSound('click');
+    document.getElementById('helpModal').classList.remove('open');
+  }
+
+  document.getElementById('soundToggleBtn').addEventListener('click', () => {
+    state.isAudioMuted = !state.isAudioMuted;
+    const soundIcon = document.getElementById('soundIcon');
+    if (state.isAudioMuted) {
+      soundIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>`;
+    } else {
+      soundIcon.innerHTML = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+      playSound('click');
+    }
+  });
+
+  /* INITIALIZATION */
+  window.addEventListener('DOMContentLoaded', () => {
+    setupSnapRail();
+    render();
+  });
+</script>
+</body>
+</html>

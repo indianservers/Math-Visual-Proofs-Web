@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "proofId": "triangle-area-half-rectangle",
+  "categorySlug": "geometry",
+  "slug": "triangle-area-half-rectangle",
+  "route": "/proofs/triangle-area",
+  "status": "interactive"
+}

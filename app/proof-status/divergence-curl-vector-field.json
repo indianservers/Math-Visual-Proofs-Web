@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "divergence-curl-vector-field",
+  "categorySlug": "engineering-mathematics",
+  "slug": "divergence-curl-vector-field",
+  "route": "/visual-proofs/engineering-mathematics/divergence-curl-vector-field",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/divergence-curl-vector-field"
+}

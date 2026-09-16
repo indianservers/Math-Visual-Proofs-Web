@@ -1,0 +1,162 @@
+/*
+ * Keep the left Maths Universe app menu. Remove / compact the bulky
+ * side bars that steal canvas space (tall action stacks, oversized
+ * mission strips, duplicate page chrome). Tools move into a slim rail.
+ */
+
+/* Prefer the in-proof left menu; hide only generic intern shells that
+   duplicate VisualProofShell without being the Maths Universe nav. */
+.sfp-sidenav,
+.sfp-header,
+.pageContainer > aside:not(.app-sidebar):not(.sidebar),
+[class*="pageContainer"] > aside:not(.app-sidebar):not(.sidebar) {
+  display: none !important;
+}
+
+/* Force-keep the left menu even if the proof's own responsive CSS
+   tries to hide it — user asked to keep the left menu. */
+aside.app-sidebar,
+.app-sidebar,
+aside.sidebar.brand-sidebar,
+body > .app-sidebar,
+body > aside.app-sidebar {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 78px !important;
+  min-width: 78px !important;
+  max-width: 78px !important;
+  flex-shrink: 0 !important;
+}
+
+.app-sidebar .nav-label,
+.app-sidebar .brand-text,
+.app-sidebar .brand-sub,
+.app-sidebar .brand-title,
+.app-sidebar .nav-link span:not(.nav-link-icon),
+.app-sidebar .settings-btn span:not(.nav-link-icon) {
+  /* Compact icon rail: keep menu, drop long labels */
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+
+.sfp-shell {
+  width: 100% !important;
+  min-height: auto !important;
+  display: block !important;
+  grid-template-columns: none !important;
+}
+
+body {
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.app-main,
+main.app-main,
+.main-wrapper {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+
+/* Collapse tall header action bars (Ask Guide / Notes / etc.) into a
+   compact wrap so they never form a left column of big buttons. */
+.header-bar,
+.header-actions,
+.top-header,
+.lesson-header {
+  flex-wrap: wrap !important;
+}
+
+.header-actions,
+.header-actions .btn-header,
+.header-actions button {
+  min-height: 34px !important;
+  height: auto !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+  border-radius: 999px !important;
+}
+
+/* Slim the mission / callout bars — keep text, drop the tall card look */
+.mission-card,
+.mission-bar,
+.analogy-banner {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px 12px !important;
+  margin: 8px 0 !important;
+  gap: 8px !important;
+}
+
+.mission-stats-group,
+.mission-stat-card {
+  min-width: 0 !important;
+  padding: 6px 8px !important;
+}
+
+.mission-stat-card .stat-val {
+  font-size: 12px !important;
+}
+
+/* Vertical tool stacks: icon-only slim rail on the canvas edge */
+.vertical-toolbar,
+.tool-rail,
+.toolbar-vertical,
+.side-tools {
+  width: 48px !important;
+  min-width: 48px !important;
+  padding: 6px 4px !important;
+  gap: 4px !important;
+}
+
+.vertical-toolbar .tool-btn,
+.vertical-toolbar button,
+.tool-rail .tool-btn,
+.side-tools button {
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 4px !important;
+  margin: 0 !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  font-size: 0 !important;
+  border-radius: 10px !important;
+}
+
+.vertical-toolbar .tool-btn .tool-name,
+.vertical-toolbar .tool-name,
+.tool-rail .tool-btn span:not(.tool-glyph):not(.tool-icon),
+.side-tools .tool-name {
+  display: none !important;
+}
+
+.vertical-toolbar .tool-icon,
+.vertical-toolbar .tool-glyph,
+.tool-rail .tool-glyph {
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+/* Give the canvas the horizontal room those bars used to own */
+.stage-canvas-row,
+.canvas-row,
+.viz-card,
+.workspace-main-col,
+.main-canvas,
+.content-grid {
+  min-width: 0 !important;
+}
+
+.canvas-wrap,
+#canvasWrap,
+#proofCanvas {
+  width: 100% !important;
+  max-width: none !important;
+}

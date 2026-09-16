@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remainder Pattern Cycles - Maths Universe</title>
+  <meta name="description" content="Discover and explain why remainder patterns repeat in modular arithmetic using interactive visual proofs and remainder clocks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f6f5fb;
+      --bg-card: #ffffff;
+      --bg-card-alt: #f9f8fe;
+      --border-color: #e5e2f3;
+      --border-color-hover: #c9c3e9;
+      --primary: #6552e1;
+      --primary-hover: #5341cd;
+      --primary-light: #f0ebfe;
+      --primary-border: #d4cbf9;
+      --text-main: #1e1941;
+      --text-muted: #676387;
+      --text-light: #9490b3;
+      --shadow-sm: 0 2px 8px rgba(100, 80, 160, 0.04);
+      --shadow-md: 0 6px 20px rgba(100, 80, 160, 0.07);
+      --shadow-lg: 0 12px 32px rgba(100, 80, 160, 0.12);
+      
+      /* Dynamic Remainder Color Tokens */
+      --rem-0-bg: #ede7fe; --rem-0-text: #5233c7; --rem-0-accent: #7c5cfc;
+      --rem-1-bg: #e0f2fe; --rem-1-text: #0369a1; --rem-1-accent: #38bdf8;
+      --rem-2-bg: #dcfce7; --rem-2-text: #15803d; --rem-2-accent: #4ade80;
+      --rem-3-bg: #fef3c7; --rem-3-text: #b45309; --rem-3-accent: #f59e0b;
+      --rem-4-bg: #ffe4e6; --rem-4-text: #be123c; --rem-4-accent: #fb7185;
+      --rem-5-bg: #f3e8ff; --rem-5-text: #7e22ce; --rem-5-accent: #c084fc;
+      --rem-6-bg: #ccfbf1; --rem-6-text: #0f766e; --rem-6-accent: #2dd4bf;
+      --rem-7-bg: #ffedd5; --rem-7-text: #c2410c; --rem-7-accent: #fb923c;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* Layout Wrapper */
+    .app-container {
+      display: flex;
+      width: 100vw;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 220px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding-left: 8px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--primary);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item a:hover {
+      background: var(--bg-card-alt);
+      color: var(--text-main);
+    }
+
+    .nav-item.active a {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .settings-nav {
+      margin-top: auto;
+      border-top: 1px solid var(--border-color);
+      padding-top: 16px;
+    }
+
+    /* Main Content Workspace */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 32px;
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      overflow-y: auto;
+      min-width: 0;
+    }
+
+    /* Top Breadcrumb & Header */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .mission-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mission-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mission-text h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .mission-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .badge-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Primary Grid Layout */
+    .grid-content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* Left Column Container */
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    /* Top Card / Modulus Card */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      min-width: 0;
+    }
+
+    /* Modulus Selection Header */
+    .modulus-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .instruction-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .instruction-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .instruction-text h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .instruction-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .modulus-selector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modulus-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .mod-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mod-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .mod-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      box-shadow: 0 4px 12px rgba(101, 82, 225, 0.3);
+    }
+
+    .mod-edit-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px dashed var(--border-color-hover);
+      background: var(--primary-light);
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .mod-edit-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Workspace 3-Column Split (Counters, Lanes, Clock) */
+    .workspace-row {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr) 240px;
+      gap: 16px;
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 20px;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    /* Counters Box */
+    .counters-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .counters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      justify-items: center;
+      align-content: start;
+    }
+
+    /* Counter Badge */
+    .counter-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: grab;
+      touch-action: none;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      flex-shrink: 0;
+    }
+
+    .counter-badge:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-md);
+      z-index: 5;
+    }
+
+    .counter-badge.dragging {
+      cursor: grabbing;
+      opacity: 0.95;
+      transform: scale(1.18);
+      box-shadow: var(--shadow-lg);
+      z-index: 2000 !important;
+      position: fixed !important;
+      pointer-events: none;
+    }
+
+    .counter-badge.ghost-slot {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px dashed var(--border-color-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-light);
+      background: transparent;
+    }
+
+    /* Remainder Lanes Box */
+    .lanes-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow-x: auto;
+    }
+
+    .lanes-container {
+      display: flex;
+      gap: 10px;
+      min-width: max-content;
+      width: 100%;
+      height: 100%;
+      min-height: 230px;
+      align-items: stretch;
+    }
+
+    .lane-col {
+      flex: 1;
+      min-width: 64px;
+      max-width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 12px;
+      background: var(--bg-card-alt);
+      padding: 8px 4px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .lane-col.drag-over {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: scale(1.02);
+    }
+
+    .lane-header {
+      width: 100%;
+      text-align: center;
+      padding-bottom: 6px;
+      border-bottom: 2px solid currentColor;
+      margin-bottom: 10px;
+    }
+
+    .lane-number {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .lane-sub {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .lane-slots {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      flex: 1;
+    }
+
+    .drop-slot {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px dashed var(--border-color-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    /* Remainder Clock Box */
+    .clock-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .clock-svg-wrapper {
+      width: 170px;
+      height: 170px;
+      position: relative;
+      margin: 4px 0;
+    }
+
+    .clock-caption {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .cycle-length-card {
+      width: 100%;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      border-radius: 14px;
+      padding: 8px 10px;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .cycle-length-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cycle-length-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+    }
+
+    .cycle-length-sub {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Cycle So Far Strip */
+    .cycle-strip-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .cycle-strip-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .strip-scroll-area {
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .strip-items {
+      display: flex;
+      gap: 8px;
+      min-width: max-content;
+      align-items: center;
+    }
+
+    .strip-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .strip-num-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .strip-rem-val {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .strip-label-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-right: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    /* Right Reasoning Sidebar ("Why it works") */
+    .right-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      min-width: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+
+    .reason-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .reason-step-item {
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 14px;
+      background: var(--bg-card-alt);
+    }
+
+    .reason-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .reason-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .reason-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .reason-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .reason-formula-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-align: center;
+      letter-spacing: 0.5px;
+      overflow-x: auto;
+    }
+
+    /* Predict Next 3 Widget */
+    .predict-widget {
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .predict-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .predict-inputs-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .predict-input {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .predict-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 14px rgba(101, 82, 225, 0.3);
+    }
+
+    .btn-reveal {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .btn-reveal:hover {
+      background: var(--primary-hover);
+    }
+
+    .reveal-content {
+      display: none;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 12px;
+      color: var(--primary);
+      line-height: 1.5;
+      margin-top: 10px;
+    }
+
+    .reveal-content.open {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-msg {
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .feedback-msg.success { color: #16a34a; }
+    .feedback-msg.error { color: #dc2626; }
+
+    /* Bottom Row: One-Line Proof & Challenge */
+    .bottom-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .proof-card, .challenge-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .proof-header, .challenge-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .proof-icon, .challenge-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .proof-title, .challenge-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    /* Proof Chain Flow */
+    .proof-flow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .proof-step-box {
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 10px 12px;
+      text-align: center;
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+
+    .proof-step-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .proof-step-formula {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .proof-dots-row {
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      margin-top: 6px;
+    }
+
+    .proof-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .proof-op {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    /* Challenge Controls & Slot Strip */
+    .challenge-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 6px 12px;
+    }
+
+    .ctrl-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .ctrl-input {
+      width: 44px;
+      height: 28px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .challenge-dots-container {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 10px 0;
+      margin-bottom: 14px;
+      min-height: 48px;
+      align-items: center;
+    }
+
+    .challenge-slot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px dashed var(--border-color-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .challenge-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-outline {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--border-color-hover);
+      color: var(--text-main);
+    }
+
+    /* Modal for Custom Modulus */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 25, 65, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 24px;
+      width: 320px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 1200px) {
+      .grid-content {
+        grid-template-columns: 1fr;
+      }
+      .right-sidebar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      .workspace-row {
+        grid-template-columns: 1fr;
+      }
+      .bottom-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main-wrapper {
+        padding: 16px;
+      }
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+  <div class="app-container">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2v20M2 12h20"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="brand-title">MATHS<br>UNIVERSE</div>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <a href="#">
+            <span class="nav-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </span>
+            Explore
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18h6m-5 4h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/>
+              </svg>
+            </span>
+            Proofs
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </span>
+            Practice
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+              </svg>
+            </span>
+            Saved
+          </a>
+        </li>
+      </ul>
+      <div class="settings-nav">
+        <li class="nav-item" style="list-style:none;">
+          <a href="#">
+            <span class="nav-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </span>
+            Settings
+          </a>
+        </li>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Content -->
+    <main class="main-wrapper">
+      <!-- Header Row -->
+      <header class="header-row">
+        <div>
+          <div class="breadcrumb">Visual Proofs / Number Theory</div>
+          <h1 class="page-title">Remainder Pattern Cycles</h1>
+          <p class="page-subtitle">How finite residue sets force repeating modular patterns.</p>
+        </div>
+        <div class="header-badges">
+          <div class="mission-card">
+            <div class="mission-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+            </div>
+            <div class="mission-text">
+              <h4>Mission</h4>
+              <p>Discover and explain why remainder patterns repeat.</p>
+            </div>
+          </div>
+          <div class="badge-pill">Intermediate</div>
+          <div class="badge-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            12 min
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Layout Grid -->
+      <div class="grid-content">
+        <!-- Left Main Content Column -->
+        <div class="left-column">
+          <!-- Main Modulus Interactive Card -->
+          <div class="card">
+            <div class="modulus-header">
+              <div class="instruction-badge">
+                <div class="instruction-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="4"/>
+                  </svg>
+                </div>
+                <div class="instruction-text">
+                  <h3>Drag counters into groups of size <i>m</i>.</h3>
+                  <p>Watch the remainders repeat in cycles.</p>
+                </div>
+              </div>
+
+              <!-- Modulus Selector Buttons -->
+              <div class="modulus-selector">
+                <span class="modulus-label">Choose modulus <i>m</i></span>
+                <button class="mod-btn" data-mod="3">3</button>
+                <button class="mod-btn" data-mod="4">4</button>
+                <button class="mod-btn active" data-mod="5">5</button>
+                <button class="mod-btn" data-mod="6">6</button>
+                <button class="mod-btn" data-mod="7">7</button>
+                <button class="mod-edit-btn" id="customModBtn" title="Custom Modulus">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Workspace Row: Counters, Lanes, Clock -->
+            <div class="workspace-row">
+              <!-- Counters Column -->
+              <div class="counters-box">
+                <div class="section-title">Counters</div>
+                <div class="counters-grid" id="countersGrid">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+              <!-- Remainder Lanes Column -->
+              <div class="lanes-box">
+                <div class="section-title" id="lanesTitle">Remainder Lanes (mod 5)</div>
+                <div class="lanes-container" id="lanesContainer">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+              <!-- Remainder Clock Column -->
+              <div class="clock-box">
+                <div class="section-title" id="clockTitle">Remainder Clock (mod 5)</div>
+                <div class="clock-svg-wrapper">
+                  <svg id="clockSvg" width="170" height="170" viewBox="0 0 170 170"></svg>
+                </div>
+                <p class="clock-caption">Each step adds 1.<br>After <span id="modText1">5</span> steps, we're back at 0.</p>
+                <div class="cycle-length-card">
+                  <div class="cycle-length-label">Cycle Length</div>
+                  <div class="cycle-length-val" id="cycleLengthVal">5</div>
+                  <div class="cycle-length-sub">(= <i>m</i>)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cycle So Far Strip -->
+            <div class="cycle-strip-box">
+              <div class="cycle-strip-title">Cycle So Far</div>
+              <div class="strip-scroll-area">
+                <div class="strip-items" id="cycleStripItems">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: One-Line Proof & Challenge -->
+          <div class="bottom-row">
+            <!-- One-Line Proof Card -->
+            <div class="proof-card">
+              <div class="proof-header">
+                <div class="proof-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                </div>
+                <div class="proof-title">One-Line Proof</div>
+              </div>
+              <div class="proof-flow" id="proofFlow">
+                <!-- Dynamic proof steps -->
+              </div>
+            </div>
+
+            <!-- Your Challenge Card -->
+            <div class="challenge-card">
+              <div class="challenge-header">
+                <div class="challenge-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M18 2H6v7a6 6 0 0 0 12 0V2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="challenge-title">Your Challenge</div>
+                  <div style="font-size: 11px; color: var(--text-muted);" id="challengeSub">Drag counters and find the cycle.</div>
+                </div>
+              </div>
+
+              <div class="challenge-controls">
+                <div class="ctrl-group">
+                  <span class="ctrl-label">Modulus</span>
+                  <input type="number" class="ctrl-input" id="challengeModInput" value="8" min="2" max="12">
+                </div>
+                <div class="ctrl-group">
+                  <span class="ctrl-label">How many?</span>
+                  <input type="number" class="ctrl-input" id="challengeCountInput" value="24" min="5" max="30">
+                </div>
+              </div>
+
+              <div class="challenge-dots-container" id="challengeDots">
+                <!-- Rendered dynamically -->
+              </div>
+
+              <div class="challenge-actions">
+                <button class="btn-outline" id="btnResetChallenge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                  </svg>
+                  Reset
+                </button>
+                <button class="btn-primary" style="width: auto; padding: 10px 18px;" id="btnCheckChallenge">Check cycle</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Reasoning Panel ("Why it works") -->
+        <aside class="right-sidebar">
+          <div class="panel-card">
+            <div class="panel-header">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              Why it works
+            </div>
+
+            <div class="reason-steps">
+              <!-- Step 1 -->
+              <div class="reason-step-item">
+                <div class="reason-head">
+                  <div class="reason-step-num">1</div>
+                  <div class="reason-title">Finite residues</div>
+                </div>
+                <p class="reason-desc">With modulus <i>m</i>, possible remainders are 0 to <i>m</i> − 1.</p>
+                <div class="reason-formula-box" id="step1Formula">
+                  0 &nbsp; 1 &nbsp; 2 &nbsp; ... &nbsp; m−2 &nbsp; m−1
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="reason-step-item">
+                <div class="reason-head">
+                  <div class="reason-step-num">2</div>
+                  <div class="reason-title">Repeat by pigeonhole</div>
+                </div>
+                <p class="reason-desc">Adding 1 moves to the next remainder. After <i>m</i> steps, one must repeat.</p>
+                <div class="reason-formula-box" id="step2Formula">
+                  0 ➔ 1 ➔ 2 ➔ ... ➔ 0
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="reason-step-item">
+                <div class="reason-head">
+                  <div class="reason-step-num">3</div>
+                  <div class="reason-title">Pattern cycles</div>
+                </div>
+                <p class="reason-desc">So the remainder pattern repeats every <i>m</i> numbers.</p>
+                <div class="reason-formula-box" id="step3Formula">
+                  0 &nbsp; 1 &nbsp; 2 &nbsp; ... &nbsp; m−1 &nbsp; 0 &nbsp; 1 ...
+                </div>
+              </div>
+
+              <!-- Predict Widget -->
+              <div class="predict-widget">
+                <div class="predict-title">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  Predict the next 3 remainders
+                </div>
+                <div class="predict-inputs-row">
+                  <input type="text" class="predict-input" id="pred0" placeholder="?" maxlength="2">
+                  <input type="text" class="predict-input" id="pred1" placeholder="?" maxlength="2">
+                  <input type="text" class="predict-input" id="pred2" placeholder="?" maxlength="2">
+                  <button class="btn-primary" style="width: auto; padding: 10px 16px;" id="btnCheckPredict">Check</button>
+                </div>
+                <div id="predictFeedback" class="feedback-msg"></div>
+              </div>
+
+              <!-- Reveal Button & Container -->
+              <button class="btn-reveal" id="btnRevealReasoning">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span id="revealText">Reveal Proof Explanation</span>
+              </button>
+              <div class="reveal-content" id="revealContent">
+                <strong>Why pigeonhole forces periodicity:</strong><br>
+                Because there are only <i>m</i> distinct remainders {0, 1, ..., m−1}, when taking <i>m</i>+1 consecutive numbers, at least two must yield the same remainder by the Pigeonhole Principle. Since each step is deterministic (add 1 mod <i>m</i>), the exact sequence of remainders repeats endlessly with a minimal period of <i>m</i>.
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <!-- Custom Modulus Modal -->
+  <div class="modal-overlay" id="customModal">
+    <div class="modal-box">
+      <div class="modal-title">Enter Custom Modulus <i>m</i></div>
+      <p style="font-size: 13px; color: var(--text-muted);">Choose a modulus between 2 and 12:</p>
+      <input type="number" id="customModInput" min="2" max="12" value="8" style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); font-size: 16px; font-weight: 700;">
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn-outline" id="btnCancelModal">Cancel</button>
+        <button class="btn-primary" style="width: auto;" id="btnApplyModal">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Global Application State
+    const state = {
+      modulus: 5,
+      counterCount: 15,
+      // Map counter value (1..15) -> lane index (0..m-1) or undefined (in pool)
+      placedCounters: {},
+      activeRemainder: 3,
+      revealOpen: false,
+      challengeModulus: 8,
+      challengeCount: 24,
+      challengeUserAnswers: {},
+    };
+
+    // Color definitions for up to 8 remainders
+    const remColors = [
+      { bg: 'var(--rem-0-bg)', text: 'var(--rem-0-text)', accent: 'var(--rem-0-accent)' },
+      { bg: 'var(--rem-1-bg)', text: 'var(--rem-1-text)', accent: 'var(--rem-1-accent)' },
+      { bg: 'var(--rem-2-bg)', text: 'var(--rem-2-text)', accent: 'var(--rem-2-accent)' },
+      { bg: 'var(--rem-3-bg)', text: 'var(--rem-3-text)', accent: 'var(--rem-3-accent)' },
+      { bg: 'var(--rem-4-bg)', text: 'var(--rem-4-text)', accent: 'var(--rem-4-accent)' },
+      { bg: 'var(--rem-5-bg)', text: 'var(--rem-5-text)', accent: 'var(--rem-5-accent)' },
+      { bg: 'var(--rem-6-bg)', text: 'var(--rem-6-text)', accent: 'var(--rem-6-accent)' },
+      { bg: 'var(--rem-7-bg)', text: 'var(--rem-7-text)', accent: 'var(--rem-7-accent)' },
+    ];
+
+    function getRemColor(rem) {
+      return remColors[rem % remColors.length];
+    }
+
+    // Helper math function: remainder modulo m
+    function getRemainder(val, mod) {
+      return val % mod;
+    }
+
+    // Initialize application state
+    function init() {
+      resetCountersPlacement();
+      setupEventListeners();
+      renderAll();
+    }
+
+    function resetCountersPlacement() {
+      // By default, place counters 1-13 in their lanes, leaving 14 & 15 or unplaced in pool for active dragging
+      state.placedCounters = {};
+      for (let i = 1; i <= 13; i++) {
+        state.placedCounters[i] = getRemainder(i, state.modulus);
+      }
+    }
+
+    // Render everything in response to state updates
+    function renderAll() {
+      renderModulusButtons();
+      renderCountersAndLanes();
+      renderClock();
+      renderCycleSoFar();
+      renderWhyItWorks();
+      renderOneLineProof();
+      renderChallenge();
+    }
+
+    // Render Modulus Selection Buttons
+    function renderModulusButtons() {
+      document.querySelectorAll('.mod-btn').forEach(btn => {
+        const modVal = parseInt(btn.dataset.mod, 10);
+        if (modVal === state.modulus) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      document.getElementById('lanesTitle').innerText = `Remainder Lanes (mod ${state.modulus})`;
+      document.getElementById('clockTitle').innerText = `Remainder Clock (mod ${state.modulus})`;
+      document.getElementById('modText1').innerText = state.modulus;
+      document.getElementById('cycleLengthVal').innerText = state.modulus;
+    }
+
+    // Render Counters Pool and Remainder Lanes
+    function renderCountersAndLanes() {
+      const countersGrid = document.getElementById('countersGrid');
+      const lanesContainer = document.getElementById('lanesContainer');
+
+      countersGrid.innerHTML = '';
+      lanesContainer.innerHTML = '';
+
+      // 1. Create Lane Columns
+      const laneSlotElements = {};
+      for (let rem = 0; rem < state.modulus; rem++) {
+        const c = getRemColor(rem);
+        const col = document.createElement('div');
+        col.className = 'lane-col';
+        col.dataset.rem = rem;
+
+        col.innerHTML = `
+          <div class="lane-header" style="color: ${c.accent}; border-color: ${c.accent};">
+            <div class="lane-number">${rem}</div>
+            <div class="lane-sub">≡ ${rem} (mod ${state.modulus})</div>
+          </div>
+          <div class="lane-slots" id="lane-slots-${rem}"></div>
+        `;
+
+        lanesContainer.appendChild(col);
+        laneSlotElements[rem] = col.querySelector(`#lane-slots-${rem}`);
+      }
+
+      // 2. Render Counters Pool Grid (Always displays all 15 counter slots)
+      for (let num = 1; num <= state.counterCount; num++) {
+        const rem = getRemainder(num, state.modulus);
+        const c = getRemColor(rem);
+        const currentLane = state.placedCounters[num];
+
+        if (currentLane !== undefined && currentLane !== null) {
+          // Counter is placed in a lane -> render ghost outline in pool slot
+          const ghostSlot = document.createElement('div');
+          ghostSlot.className = 'counter-badge ghost-slot';
+          ghostSlot.innerText = num;
+          ghostSlot.title = `Counter ${num} placed in lane ${currentLane}`;
+          countersGrid.appendChild(ghostSlot);
+
+          // Render active counter badge inside its lane column
+          const counterEl = createCounterElement(num, rem, c, true);
+          if (laneSlotElements[currentLane]) {
+            laneSlotElements[currentLane].appendChild(counterEl);
+          }
+        } else {
+          // Counter is unplaced -> render full counter badge in pool
+          const counterEl = createCounterElement(num, rem, c, false);
+          countersGrid.appendChild(counterEl);
+        }
+      }
+
+      // 3. Append empty drop slot placeholder at bottom of each lane
+      for (let rem = 0; rem < state.modulus; rem++) {
+        const dropSlot = document.createElement('div');
+        dropSlot.className = 'drop-slot';
+        dropSlot.dataset.rem = rem;
+        laneSlotElements[rem].appendChild(dropSlot);
+      }
+    }
+
+    // Helper: Create Counter Element DOM Node
+    function createCounterElement(num, rem, colorObj, isPlaced) {
+      const counterEl = document.createElement('div');
+      counterEl.className = `counter-badge ${isPlaced ? 'placed' : ''}`;
+      counterEl.innerText = num;
+      counterEl.dataset.num = num;
+      counterEl.dataset.rem = rem;
+      counterEl.style.backgroundColor = colorObj.bg;
+      counterEl.style.color = colorObj.text;
+      counterEl.style.borderColor = colorObj.accent;
+
+      attachPointerDrag(counterEl, num);
+      return counterEl;
+    }
+
+    // Pointer-Events Drag Mechanics Engine
+    function attachPointerDrag(el, num) {
+      let isDragging = false;
+      let ghostEl = null;
+
+      el.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+
+        el.setPointerCapture(e.pointerId);
+
+        // Highlight clock hand for this counter
+        const rem = getRemainder(num, state.modulus);
+        state.activeRemainder = rem;
+        renderClockHand(rem);
+
+        // Create Dragging Ghost Element
+        const rect = el.getBoundingClientRect();
+        ghostEl = el.cloneNode(true);
+        ghostEl.classList.add('dragging');
+        ghostEl.style.left = `${rect.left}px`;
+        ghostEl.style.top = `${rect.top}px`;
+        ghostEl.style.width = `${rect.width}px`;
+        ghostEl.style.height = `${rect.height}px`;
+        document.body.appendChild(ghostEl);
+
+        el.style.opacity = '0.3';
+      });
+
+      el.addEventListener('pointermove', (e) => {
+        if (!isDragging || !ghostEl) return;
+        ghostEl.style.left = `${e.clientX - 21}px`;
+        ghostEl.style.top = `${e.clientY - 21}px`;
+
+        // Highlight lane under pointer
+        ghostEl.style.display = 'none';
+        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        ghostEl.style.display = 'flex';
+
+        document.querySelectorAll('.lane-col').forEach(col => col.classList.remove('drag-over'));
+        if (elemBelow) {
+          const laneCol = elemBelow.closest('.lane-col');
+          if (laneCol) {
+            laneCol.classList.add('drag-over');
+          }
+        }
+      });
+
+      const endDrag = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        if (ghostEl) {
+          ghostEl.remove();
+          ghostEl = null;
+        }
+
+        el.style.opacity = '1';
+        document.querySelectorAll('.lane-col').forEach(col => col.classList.remove('drag-over'));
+
+        // Identify drop target under pointer
+        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        if (elemBelow) {
+          const laneCol = elemBelow.closest('.lane-col');
+          if (laneCol) {
+            const targetRem = parseInt(laneCol.dataset.rem, 10);
+            state.placedCounters[num] = targetRem;
+            renderAll();
+            return;
+          }
+
+          const poolBox = elemBelow.closest('.counters-box');
+          if (poolBox) {
+            delete state.placedCounters[num];
+            renderAll();
+            return;
+          }
+        }
+
+        // Default drop behavior: Snap back to correct mathematical remainder lane
+        state.placedCounters[num] = getRemainder(num, state.modulus);
+        renderAll();
+      };
+
+      el.addEventListener('pointerup', endDrag);
+      el.addEventListener('pointercancel', endDrag);
+    }
+
+    // Render Dynamic SVG Remainder Clock
+    function renderClock() {
+      const svg = document.getElementById('clockSvg');
+      svg.innerHTML = '';
+
+      const cx = 85, cy = 85, r = 58;
+      const mod = state.modulus;
+
+      // 1. Clock Outer Ring
+      const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      ring.setAttribute('cx', cx);
+      ring.setAttribute('cy', cy);
+      ring.setAttribute('r', r);
+      ring.setAttribute('fill', 'none');
+      ring.setAttribute('stroke', '#d4cbf9');
+      ring.setAttribute('stroke-width', '2');
+      svg.appendChild(ring);
+
+      // 2. Render Nodes around perimeter
+      for (let k = 0; k < mod; k++) {
+        const angle = -Math.PI / 2 + (2 * Math.PI * k) / mod;
+        const nx = cx + r * Math.cos(angle);
+        const ny = cy + r * Math.sin(angle);
+
+        // Node Circle
+        const nodeCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        nodeCircle.setAttribute('cx', nx);
+        nodeCircle.setAttribute('cy', ny);
+        nodeCircle.setAttribute('r', '13');
+        nodeCircle.setAttribute('fill', '#ffffff');
+        nodeCircle.setAttribute('stroke', getRemColor(k).accent);
+        nodeCircle.setAttribute('stroke-width', '2.5');
+        svg.appendChild(nodeCircle);
+
+        // Node Label
+        const nodeText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        nodeText.setAttribute('x', nx);
+        nodeText.setAttribute('y', ny + 4);
+        nodeText.setAttribute('text-anchor', 'middle');
+        nodeText.setAttribute('font-size', '11');
+        nodeText.setAttribute('font-weight', '800');
+        nodeText.setAttribute('fill', getRemColor(k).text);
+        nodeText.textContent = k;
+        svg.appendChild(nodeText);
+      }
+
+      // Render Clock Hand (Default points to activeRemainder)
+      const activeRem = state.activeRemainder !== null ? state.activeRemainder : 3 % mod;
+      renderClockHand(activeRem);
+    }
+
+    function renderClockHand(rem) {
+      const svg = document.getElementById('clockSvg');
+      let handGroup = svg.querySelector('#clockHandGroup');
+      if (handGroup) handGroup.remove();
+
+      handGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      handGroup.setAttribute('id', 'clockHandGroup');
+
+      const cx = 85, cy = 85, length = 42;
+      const mod = state.modulus;
+      const angle = -Math.PI / 2 + (2 * Math.PI * rem) / mod;
+
+      const hx = cx + length * Math.cos(angle);
+      const hy = cy + length * Math.sin(angle);
+
+      // Hand Arrow Line
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx);
+      line.setAttribute('y1', cy);
+      line.setAttribute('x2', hx);
+      line.setAttribute('y2', hy);
+      line.setAttribute('stroke', '#6552e1');
+      line.setAttribute('stroke-width', '4');
+      line.setAttribute('stroke-linecap', 'round');
+      handGroup.appendChild(line);
+
+      // Hand Pointer Arrowhead
+      const head = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      head.setAttribute('cx', hx);
+      head.setAttribute('cy', hy);
+      head.setAttribute('r', '5');
+      head.setAttribute('fill', '#6552e1');
+      handGroup.appendChild(head);
+
+      // Center Pivot Circle
+      const pivot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      pivot.setAttribute('cx', cx);
+      pivot.setAttribute('cy', cy);
+      pivot.setAttribute('r', '7');
+      pivot.setAttribute('fill', '#6552e1');
+      handGroup.appendChild(pivot);
+
+      svg.appendChild(handGroup);
+    }
+
+    // Render Cycle So Far Strip
+    function renderCycleSoFar() {
+      const container = document.getElementById('cycleStripItems');
+      container.innerHTML = '';
+
+      // Label column
+      const labelCol = document.createElement('div');
+      labelCol.className = 'strip-label-col';
+      labelCol.innerHTML = `<div>Number</div><div>Remainder</div>`;
+      container.appendChild(labelCol);
+
+      for (let i = 1; i <= state.counterCount; i++) {
+        const rem = getRemainder(i, state.modulus);
+        const c = getRemColor(rem);
+
+        const col = document.createElement('div');
+        col.className = 'strip-column';
+
+        const numBadge = document.createElement('div');
+        numBadge.className = 'strip-num-badge';
+        numBadge.innerText = i;
+        numBadge.style.backgroundColor = c.bg;
+        numBadge.style.color = c.text;
+
+        const remVal = document.createElement('div');
+        remVal.className = 'strip-rem-val';
+        remVal.innerText = rem;
+
+        col.appendChild(numBadge);
+        col.appendChild(remVal);
+        container.appendChild(col);
+      }
+
+      // Dots indication
+      const dotsCol = document.createElement('div');
+      dotsCol.className = 'strip-column';
+      dotsCol.style.justifyContent = 'center';
+      dotsCol.innerHTML = `<div style="font-weight: 800; color: var(--text-light); margin-top: 8px;">...</div>`;
+      container.appendChild(dotsCol);
+    }
+
+    // Render "Why It Works" Step Descriptions dynamically based on modulus m
+    function renderWhyItWorks() {
+      const m = state.modulus;
+      document.getElementById('step1Formula').innerText = `0   1   2   ...   ${m - 2}   ${m - 1}`;
+      document.getElementById('step2Formula').innerText = `0 ➔ 1 ➔ 2 ➔ ... ➔ 0`;
+      document.getElementById('step3Formula').innerText = `0   1   2   ...   ${m - 1}   0   1 ...`;
+    }
+
+    // Render One-Line Visual Proof Flow
+    function renderOneLineProof() {
+      const m = state.modulus;
+      const proofFlow = document.getElementById('proofFlow');
+      proofFlow.innerHTML = `
+        <div class="proof-step-box">
+          <div class="proof-step-label">Numbers</div>
+          <div class="proof-step-formula"><i>n</i>, <i>n</i>+1, ..., <i>n</i>+${m}</div>
+          <div class="proof-dots-row">
+            ${Array.from({length: Math.min(m, 5)}, (_, i) => `<div class="proof-dot" style="background: ${getRemColor(i).accent};"></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="proof-op">−</div>
+
+        <div class="proof-step-box">
+          <div class="proof-step-label">Multiples of <i>m</i></div>
+          <div class="proof-step-formula"><i>km</i>, <i>km</i>, ..., <i>km</i></div>
+          <div class="proof-dots-row">
+            ${Array.from({length: Math.min(m, 5)}, () => `<div class="proof-dot" style="background: var(--border-color-hover);"></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="proof-op">=</div>
+
+        <div class="proof-step-box">
+          <div class="proof-step-label">Remainders</div>
+          <div class="proof-step-formula">0, 1, ..., ${m-1}</div>
+          <div class="proof-dots-row">
+            ${Array.from({length: Math.min(m, 5)}, (_, i) => `<div class="proof-dot" style="background: ${getRemColor(i).accent};"></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="proof-op">➔</div>
+
+        <div class="proof-step-box">
+          <div class="proof-step-label">Pigeonhole Match</div>
+          <div class="proof-step-formula"><i>r</i><sub><i>a</i></sub> = <i>r</i><sub><i>b</i></sub></div>
+        </div>
+
+        <div class="proof-op">➔</div>
+
+        <div class="proof-step-box">
+          <div class="proof-step-label">Repeat Cycle</div>
+          <div class="proof-step-formula">Cycle = ${m}</div>
+        </div>
+      `;
+    }
+
+    // Render Challenge Section
+    function renderChallenge() {
+      const container = document.getElementById('challengeDots');
+      container.innerHTML = '';
+
+      const count = state.challengeCount;
+      const mod = state.challengeModulus;
+
+      document.getElementById('challengeSub').innerText = `Drag ${count} counters and find the cycle modulo ${mod}.`;
+
+      for (let i = 1; i <= count; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'challenge-slot';
+        slot.innerText = state.challengeUserAnswers[i] !== undefined ? state.challengeUserAnswers[i] : i;
+
+        if (state.challengeUserAnswers[i] !== undefined) {
+          const rem = getRemainder(i, mod);
+          const c = getRemColor(rem);
+          slot.style.backgroundColor = c.bg;
+          slot.style.color = c.text;
+          slot.style.borderColor = c.accent;
+        }
+
+        container.appendChild(slot);
+      }
+    }
+
+    // Attach Event Listeners for User Actions
+    function setupEventListeners() {
+      // Modulus Button Clicks
+      document.querySelectorAll('.mod-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.modulus = parseInt(btn.dataset.mod, 10);
+          resetCountersPlacement();
+          renderAll();
+        });
+      });
+
+      // Custom Modulus Modal
+      const modal = document.getElementById('customModal');
+      document.getElementById('customModBtn').addEventListener('click', () => {
+        modal.classList.add('open');
+      });
+      document.getElementById('btnCancelModal').addEventListener('click', () => {
+        modal.classList.remove('open');
+      });
+      document.getElementById('btnApplyModal').addEventListener('click', () => {
+        const val = parseInt(document.getElementById('customModInput').value, 10);
+        if (val >= 2 && val <= 12) {
+          state.modulus = val;
+          resetCountersPlacement();
+          renderAll();
+          modal.classList.remove('open');
+        }
+      });
+
+      // Predict Next 3 Remainders Check
+      document.getElementById('btnCheckPredict').addEventListener('click', () => {
+        const p0 = parseInt(document.getElementById('pred0').value, 10);
+        const p1 = parseInt(document.getElementById('pred1').value, 10);
+        const p2 = parseInt(document.getElementById('pred2').value, 10);
+
+        const next1 = getRemainder(state.counterCount + 1, state.modulus);
+        const next2 = getRemainder(state.counterCount + 2, state.modulus);
+        const next3 = getRemainder(state.counterCount + 3, state.modulus);
+
+        const feedback = document.getElementById('predictFeedback');
+        if (p0 === next1 && p1 === next2 && p2 === next3) {
+          feedback.className = 'feedback-msg success';
+          feedback.innerHTML = `✓ Correct! Next remainders are ${next1}, ${next2}, ${next3}. The cycle repeats every ${state.modulus}.`;
+        } else {
+          feedback.className = 'feedback-msg error';
+          feedback.innerHTML = `✕ Try again! Expected: ${next1}, ${next2}, ${next3} for mod ${state.modulus}.`;
+        }
+      });
+
+      // Reveal Proof Button
+      document.getElementById('btnRevealReasoning').addEventListener('click', () => {
+        state.revealOpen = !state.revealOpen;
+        const content = document.getElementById('revealContent');
+        const text = document.getElementById('revealText');
+        if (state.revealOpen) {
+          content.classList.add('open');
+          text.innerText = 'Hide Explanation';
+        } else {
+          content.classList.remove('open');
+          text.innerText = 'Reveal Proof Explanation';
+        }
+      });
+
+      // Challenge Inputs
+      document.getElementById('challengeModInput').addEventListener('change', (e) => {
+        state.challengeModulus = Math.max(2, Math.min(12, parseInt(e.target.value, 10) || 8));
+        state.challengeUserAnswers = {};
+        renderChallenge();
+      });
+
+      document.getElementById('challengeCountInput').addEventListener('change', (e) => {
+        state.challengeCount = Math.max(5, Math.min(30, parseInt(e.target.value, 10) || 24));
+        state.challengeUserAnswers = {};
+        renderChallenge();
+      });
+
+      // Challenge Check Button
+      document.getElementById('btnCheckChallenge').addEventListener('click', () => {
+        state.challengeUserAnswers = {};
+        for (let i = 1; i <= state.challengeCount; i++) {
+          state.challengeUserAnswers[i] = getRemainder(i, state.challengeModulus);
+        }
+        renderChallenge();
+        alert(`Challenge Completed! Cycle length for modulus ${state.challengeModulus} is ${state.challengeModulus}. Pattern repeats every ${state.challengeModulus} steps.`);
+      });
+
+      // Challenge Reset Button
+      document.getElementById('btnResetChallenge').addEventListener('click', () => {
+        state.challengeUserAnswers = {};
+        renderChallenge();
+      });
+    }
+
+    // Launch Application
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

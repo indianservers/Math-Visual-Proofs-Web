@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "ellipse-sum-of-distances",
+  "categorySlug": "conic-sections",
+  "slug": "ellipse-sum-of-distances",
+  "route": "/visual-proofs/conic-sections/ellipse-sum-of-distances",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/139-ellipse-sum-of-distances"
+}

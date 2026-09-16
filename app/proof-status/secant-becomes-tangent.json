@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "secant-becomes-tangent",
+  "categorySlug": "calculus",
+  "slug": "secant-becomes-tangent",
+  "route": "/visual-proofs/calculus/secant-becomes-tangent",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-25.html"
+}

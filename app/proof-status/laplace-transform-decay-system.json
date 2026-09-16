@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "laplace-transform-decay-system",
+  "categorySlug": "engineering-mathematics",
+  "slug": "laplace-transform-decay-system",
+  "route": "/visual-proofs/engineering-mathematics/laplace-transform-decay-system",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/laplace-transform-decay-system"
+}

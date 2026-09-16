@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import MathFormula from "./MathFormula";
 import { nearestSnap, useProofCanvas } from "./useProofCanvas";
@@ -54,17 +55,24 @@ function Sidebar() {
           ["♧", "Proofs"],
           ["◇", "Practice"],
           ["▱", "Saved"],
-        ].map(([icon, label]) => (
-          <button
-            key={label}
-            onClick={() => setSelected(label)}
-            aria-pressed={selected === label}
-            className={`side-item ${selected === label ? "active" : ""}`}
-          >
-            <span className="side-icon">{icon}</span>
-            {label}
-          </button>
-        ))}
+        ].map(([icon, label]) =>
+          label === "Proofs" ? (
+            <Link key={label} href="/proofs" className="side-item">
+              <span className="side-icon">{icon}</span>
+              {label}
+            </Link>
+          ) : (
+            <button
+              key={label}
+              onClick={() => setSelected(label)}
+              aria-pressed={selected === label}
+              className={`side-item ${selected === label ? "active" : ""}`}
+            >
+              <span className="side-icon">{icon}</span>
+              {label}
+            </button>
+          ),
+        )}
       </nav>
       <button
         onClick={() => setSelected("Settings")}

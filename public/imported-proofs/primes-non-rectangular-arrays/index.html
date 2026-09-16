@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maths Universe — What Makes a Number Prime?</title>
+<style>
+:root {
+  --ink: #18234f;
+  --muted: #5967a4;
+  --purple: #5c32e8;
+  --purple2: #7b57ff;
+  --lav: #f7f6ff;
+  --line: #dedff2;
+  --green: #22ad63;
+  --pink: #fff0f7;
+  --shadow: 0 10px 28px rgba(67, 48, 145, .10);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: #eef0f8;
+}
+body { overflow-x: hidden; }
+body.dragging-ui { user-select: none; cursor: grabbing; }
+
+button { font: inherit; color: inherit; }
+button:focus-visible, [tabindex]:focus-visible { outline: 3px solid rgba(92, 50, 232, .28); outline-offset: 2px; }
+
+.app {
+  min-height: 100vh;
+  padding: 10px 10px 0;
+  display: grid;
+  grid-template-columns: 104px minmax(0,1fr);
+  gap: 28px;
+  background: linear-gradient(135deg, #f8f8fd 0%, #eef0fa 55%, #f8f8ff 100%);
+}
+
+.sidebar {
+  height: calc(100vh - 20px);
+  min-height: 880px;
+  border: 1px solid #e2e3f1;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .72);
+  box-shadow: 0 5px 20px rgba(76, 61, 135, .06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: sticky;
+  top: 10px;
+}
+.logo { width: 98px; height: 128px; margin-top: 2px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.logo svg { width: 58px; height: 58px; }
+.logo b { font-size: 15px; line-height: 16px; letter-spacing: .2px; text-align: center; }
+.nav { width: 100%; padding: 8px 9px; display: flex; flex-direction: column; gap: 13px; }
+.nav button { height: 102px; border: 1px solid transparent; border-radius: 18px; background: transparent; color: #5663a0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+.nav button.active { background: #fff; box-shadow: 0 8px 18px rgba(83, 58, 180, .11); border-color: #e1e2f1; color: var(--purple); }
+.nav svg { width: 35px; height: 35px; }
+.nav span { font-size: 14px; font-weight: 600; }
+
+main { min-width: 0; padding-right: 0; }
+
+.topbar { height: 120px; padding: 15px 6px 0 0; display: flex; justify-content: space-between; align-items: flex-start; }
+.breadcrumb { font-size: 13px; color: #5a35e6; font-weight: 600; margin: 2px 0 8px; }
+.breadcrumb .slash { margin: 0 11px; color: #8d87c8; }
+h1 { font-size: 42px; line-height: 1.08; letter-spacing: -1.6px; margin: 0 0 7px; font-weight: 800; color: #172047; }
+.subtitle { font-size: 18px; color: #56649e; }
+.badges { display: flex; gap: 10px; margin-top: 31px; }
+.badge { height: 40px; border: 1px solid #e1e2ef; border-radius: 24px; background: #fff; padding: 0 17px; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(77, 57, 150, .05); font-size: 14px; color: #26316e; font-weight: 700; }
+.clockIcon { width: 21px; height: 21px; }
+
+.mission { height: 89px; border: 1px solid #e0e1f1; border-radius: 22px; background: rgba(255, 255, 255, .64); box-shadow: var(--shadow); display: flex; align-items: center; padding: 0 18px; }
+.target { width: 58px; height: 58px; border-radius: 50%; background: radial-gradient(circle, #a78aff 0 28%, #7549ef 29% 58%, #5830e0 59%); display: grid; place-items: center; box-shadow: 0 5px 14px rgba(92, 50, 232, .25); margin-right: 20px; flex: 0 0 auto; }
+.target svg { width: 42px; height: 42px; }
+.missioncopy { width: 360px; flex: 0 0 360px; }
+.missioncopy b { font-size: 16px; color: #172047; }
+.missioncopy div { font-size: 15px; color: #4f5d98; margin-top: 2px; }
+.tools { display: flex; gap: 7px; align-items: center; flex: 1; justify-content: flex-end; margin-left: auto; flex-wrap: nowrap; white-space: nowrap; min-width: 0; }
+.tool { height: 58px; flex: 0 0 auto; padding: 0 14px; border: 1px solid #e0e1f1; border-radius: 14px; background: #fafaff; display: flex; align-items: center; gap: 8px; color: #52609c; cursor: pointer; box-shadow: 0 5px 12px rgba(77, 57, 150, .04); font-weight: 600; white-space: nowrap; }
+.tool.active { background: linear-gradient(180deg, #6b3cf0, #5a2de1); color: #fff; border-color: #6b3cf0; box-shadow: 0 7px 14px rgba(91, 47, 227, .28); }
+.tool svg { width: 23px; height: 23px; flex: 0 0 auto; }
+
+.content { display: grid; grid-template-columns: minmax(680px, 1fr) 327px; gap: 19px; margin-top: 19px; align-items: start; }
+.left { min-width: 0; }
+
+/* Enlarge Workspace Container */
+.workspace {
+  height: 640px;
+  border: 1px solid #dedff0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .58);
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: 221px minmax(0,1fr);
+  gap: 20px;
+  padding: 17px;
+}
+
+.numberCard { border: 1px solid #e1e2f0; border-radius: 22px; background: rgba(255, 255, 255, .48); overflow: hidden; min-height: 600px; display: flex; flex-direction: column; position: relative; }
+.numberHead { text-align: center; padding: 0 8px; }
+.numberHead .label { font-size: 13px; color: #5030e6; font-weight: 800; margin-top: 0; letter-spacing: 0.5px; }
+.num { font-size: 48px; line-height: 1.05; color: #5030e6; font-weight: 500; margin: 7px 0 4px; }
+.prime-prompt { font-size: 13px; color: #5967a4; font-weight: 600; padding: 4px 8px; border-radius: 12px; background: #f0eeff; display: inline-block; margin: 0 auto; text-align: center; }
+.prime-prompt.discovered-prime { color: #169458; background: #eefbf4; border: 1px solid #bce5cb; font-weight: 700; font-size: 14px; }
+.prime-prompt.discovered-composite { color: #d63847; background: #fdf2f4; border: 1px solid #f2c7ce; font-weight: 700; font-size: 14px; }
+
+.arrows { display: flex; justify-content: space-between; position: relative; top: -68px; padding: 0 9px; }
+.roundbtn { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #e1e2f2; background: #fff; color: #6c78ad; cursor: pointer; font-size: 23px; line-height: 1; }
+
+.place { margin: 0; border-top: 1px solid #eeeef7; border-radius: 20px 20px 0 0; padding: 10px 10px 6px; text-align: center; }
+.place b { font-size: 14px; color: #26347d; }
+.drag-hint { font-size: 13px; color: #5030e6; font-weight: 800; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.arrow-bounce { display: inline-block; animation: bounceRight 1.2s infinite ease-in-out; font-size: 15px; }
+
+@keyframes bounceRight {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+.place div { font-size: 13px; color: #6470a5; margin-top: 2px; }
+
+.dots { height: 260px; margin: 0 12px; border: 1px solid #dedff0; border-radius: 17px; background: #f8f8ff; display: grid; grid-template-columns: repeat(4, 1fr); align-content: center; justify-items: center; gap: 9px; padding: 11px; }
+.dot { width: 31px; height: 31px; border-radius: 50%; border: 1px solid #5931dc; background: radial-gradient(circle at 35% 30%,#a88bff,#6a3ee6 58%,#512bd3); box-shadow: inset 0 1px 3px rgba(255, 255, 255, .65), 0 4px 8px rgba(86, 45, 210, .18); cursor: grab; touch-action: none; user-select: none; transition: transform 0.15s ease, opacity 0.15s ease; }
+.dots.compact { gap: 5px; padding: 8px; }
+.dots.compact .dot { width: 23px; height: 23px; }
+.dot.dragging { opacity: 0.3; cursor: grabbing; }
+
+.clear { display: block; position: relative; z-index: 8; margin: 12px auto 10px; width: 151px; height: 41px; border: 1px solid #e0e1f0; border-radius: 11px; background: #fbfbff; color: #6470a1; cursor: pointer; font-weight: 600; }
+.clear svg { vertical-align: -3px; margin-right: 7px; }
+.clear:hover { background: #f1edff; border-color: #cfc4ff; color: #4f30e6; }
+.clear:active { transform: translateY(1px); }
+
+.arrayArea { position: relative; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) 200px; grid-template-rows: auto 440px 57px; column-gap: 16px; align-items: start; }
+.arrayTitle { grid-column: 1/-1; text-align: center; color: #4f30e6; font-size: 20px; font-weight: 800; margin: 0 0 10px; }
+
+/* Large Structured Dropzone Container */
+.dropzone {
+  height: 440px;
+  grid-column: 1;
+  grid-row: 2;
+  border: 2px dashed #cfc3ff;
+  border-radius: 16px;
+  background: rgba(247, 246, 255, .40);
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+.dropzone.valid { background: #f4efff; border-color: #7b57ff; box-shadow: inset 0 0 0 3px rgba(123,87,255,.15); }
+
+/* Top Instructions */
+.dropText {
+  position: relative;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #53619c;
+  font-size: 16px;
+  line-height: 1.3;
+  z-index: 4;
+  padding: 8px 14px;
+  background: rgba(247, 246, 255, .95);
+  border-radius: 12px;
+  border: 1px solid #e2ddfe;
+  flex: 0 0 auto;
+}
+.dropText .statusLine { display: block; white-space: normal; font-weight: 700; color: #352099; }
+.dropText .statusSub { display: block; margin-top: 3px; font-size: 13px; color: #53619c; }
+
+/* Middle Row Controls */
+.rowControls {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+  background: rgba(255, 255, 255, .92);
+  border-radius: 12px;
+  border: 1px solid #e1e2f2;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+}
+.rowBtnLabel { font-size: 12px; font-weight: 700; color: #5030e6; margin-right: 2px; }
+.rowBtn { height: 32px; padding: 0 10px; border: 1px solid #d9d4f8; border-radius: 8px; background: #fff; color: #4935a8; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.15s ease; }
+.rowBtn:hover { background: #f1edff; border-color: #7d5cf0; color: #582be0; }
+.rowBtn.active { background: linear-gradient(180deg, #6b3cf0, #5a2de1); color: #fff; border-color: #5a2de1; }
+
+/* Dedicated SVG Canvas below controls - zero overlaps! */
+.arrayCanvas {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 280px;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+
+.factorbox {
+  position: relative;
+  right: auto;
+  top: auto;
+  width: 200px;
+  min-height: 440px;
+  grid-column: 2;
+  grid-row: 2;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .88);
+  padding: 14px 12px 12px;
+  border: 1px solid #e1e2f1;
+  box-shadow: 0 5px 15px rgba(80, 60, 150, .05);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+}
+.factorbox b { color: #5030e6; font-size: 15px; line-height: 1.2; display: block; margin-bottom: 6px; }
+
+.discoveredList { border: 1px solid #e1e2f0; border-radius: 12px; background: #fbfbff; padding: 8px; text-align: center; box-shadow: 0 3px 8px rgba(80, 60, 150, .04); min-height: 100px; max-height: 180px; overflow: auto; display: flex; flex-direction: column; gap: 5px; justify-content: center; }
+.discoveredTag { display: block; background: #efeaff; border: 1px solid #d6c9ff; color: #4c2be1; border-radius: 7px; padding: 4px 0; font-size: 15px; font-weight: 700; }
+.emptyDiscovered { font-size: 13px; color: #8590c2; font-style: italic; }
+
+.discoveredExplanation { font-size: 12px; line-height: 1.35; color: #4f5c95; margin-top: 8px; background: #f4f1ff; border: 1px solid #dfd8ff; border-radius: 8px; padding: 8px; }
+
+.info { height: 57px; grid-column: 1/-1; grid-row: 3; border: 1px solid #dedff0; border-radius: 17px; margin-top: 12px; background: #fbfbff; display: flex; align-items: center; justify-content: center; gap: 14px; color: #4f5e9b; font-size: 14px; padding: 0 15px; text-align: center; }
+.info svg { width: 23px; flex: 0 0 auto; }
+.info strong { color: #3e51a0; }
+
+.reason { border: 1px solid #dedff0; border-radius: 24px; background: rgba(255, 255, 255, .56); box-shadow: var(--shadow); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.reason h2 { font-size: 18px; color: #4c2be1; margin: 3px 0 4px 4px; }
+.reason h2:before { content: "✦"; font-size: 21px; margin-right: 10px; }
+
+.step { border: 1px solid #e1e2f0; border-radius: 17px; background: rgba(255, 255, 255, .78); padding: 12px 12px 14px; position: relative; }
+.stepno { position: absolute; left: 10px; top: 10px; width: 26px; height: 26px; border-radius: 50%; background: #5b2fe6; color: white; display: grid; place-items: center; font-weight: 800; font-size: 13px; }
+.step h3 { margin: 2px 0 6px 35px; font-size: 15px; color: #243068; }
+.step p { margin: 0 0 0 35px; font-size: 13px; line-height: 1.45; color: #3e4c88; }
+.step .subnote { margin: 8px 0 0 35px; font-size: 12px; color: #56649d; font-weight: 600; background: #f4f3ff; border-radius: 8px; padding: 6px 10px; }
+
+.takeawayCard { border: 1px solid #cfc4ff; border-radius: 18px; background: linear-gradient(135deg, #f6f3ff 0%, #edebff 100%); padding: 14px; box-shadow: 0 4px 14px rgba(92, 50, 232, .08); }
+.takeawayCard h3 { font-size: 16px; color: #4c2be1; margin: 0 0 8px; display: flex; align-items: center; gap: 6px; }
+.takeawayCard p { margin: 0 0 6px; font-size: 13px; line-height: 1.4; color: #27336e; }
+.takeawayCard .eg { font-weight: 700; color: #5030e6; font-size: 13px; background: #fff; border-radius: 8px; padding: 6px 10px; margin-top: 6px; border: 1px solid #dfd8ff; display: inline-block; }
+
+.proof { margin-top: 19px; border: 1px solid #dedff0; border-radius: 23px; background: rgba(255, 255, 255, .75); box-shadow: var(--shadow); padding: 16px 20px; }
+.proof h2 { font-size: 18px; color: #4c2be1; margin: 0 0 12px; }
+
+.discoverySummary { display: flex; flex-direction: column; gap: 8px; }
+.attemptItem { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; background: #f8f7ff; border: 1px solid #e2e1f5; border-radius: 10px; font-size: 14px; font-weight: 600; color: #2c386c; }
+.attemptItem.ok { background: #effbf4; border-color: #b8e5cb; color: #169458; }
+.attemptItem.no { background: #fdf2f4; border-color: #f2c7ce; color: #c83647; }
+
+.primeRevealCard {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 16px;
+  border-radius: 16px;
+  margin-top: 12px;
+  display: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+.primeRevealCard.is-prime { background: #eefbf4; color: #169458; border: 2px solid #2fbd74; }
+.primeRevealCard.is-composite { background: #fdf2f4; color: #d63847; border: 2px solid #e25c69; }
+
+.revealBtn { display: block; width: 100%; margin-top: 10px; padding: 11px; border: 0; border-radius: 10px; background: linear-gradient(180deg, #6b3cf0, #5a2de1); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(91, 47, 227, 0.25); }
+.revealBtn:hover { background: linear-gradient(180deg, #7a4cfd, #6737ee); }
+
+.challenge { height: 94px; margin-top: 18px; border: 1px solid #dedff0; border-radius: 23px; background: rgba(255, 255, 255, .62); box-shadow: var(--shadow); display: flex; align-items: center; padding: 0 20px; gap: 18px; }
+.challengeTitle { font-size: 16px; color: #4c2be1; font-weight: 800; flex-shrink: 0; }
+.challengeTitle span { font-size: 24px; margin-right: 6px; }
+.challengeCopy { border-left: 1px solid #d9daf0; padding-left: 16px; flex-shrink: 0; }
+.challengeCopy b { font-size: 14px; color: #18234f; }
+.challengeCopy div { font-size: 13px; color: #55639c; margin-top: 2px; }
+.choices { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: nowrap; }
+.choose { font-size: 12px; color: #5a679d; margin-right: 2px; }
+.choice { height: 38px; min-width: 44px; padding: 0 11px; border: 1px solid #dfe0ef; border-radius: 9px; background: #fafaff; color: #4e5c95; cursor: pointer; font-weight: 700; transition: all 0.15s ease; }
+.choice.active { border-color: #6b48e8; color: #5a30dc; background: #f1edff; }
+
+/* Floating Cursor Follower Dot during Drag */
+#dragGhostDot {
+  position: fixed;
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  border: 2px solid #5931dc;
+  background: radial-gradient(circle at 35% 30%, #a88bff, #6a3ee6 58%, #512bd3);
+  box-shadow: 0 8px 18px rgba(86, 45, 210, .45);
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  transform: translate(-50%, -50%);
+}
+
+.sr { position: absolute!important; width: 1px!important; height: 1px!important; padding: 0!important; margin: -1px!important; overflow: hidden!important; clip: rect(0,0,0,0)!important; white-space: nowrap!important; border: 0!important; }
+
+@media(max-width: 1280px) {
+  .mission { padding-left: 14px; padding-right: 14px; }
+  .missioncopy { width: 300px; flex-basis: 300px; }
+  .tool { padding-left: 8px; padding-right: 8px; font-size: 13px; }
+  .app { grid-template-columns: 88px 1fr; gap: 15px; }
+  .tool { padding: 0 9px; }
+  .content { grid-template-columns: minmax(0,1fr) 310px; }
+  h1 { font-size: 36px; }
+  .challenge { flex-wrap: wrap; height: auto; padding: 12px; }
+}
+@media(max-width: 1120px) {
+  .tools { overflow-x: auto; max-width: 100%; padding-bottom: 2px; }
+  .content { grid-template-columns: 1fr; }
+  .reason { height: auto; }
+  .choices { flex-wrap: wrap; }
+  .topbar { height: auto; min-height: 110px; }
+}
+@media(max-width: 760px) {
+  .app { display: block; padding: 6px; }
+  .sidebar { position: static; width: 100%; height: auto; min-height: 0; display: block; border-radius: 16px; margin-bottom: 8px; }
+  .logo { display: none; }
+  .nav { display: flex; flex-direction: row; overflow: auto; padding: 5px; }
+  .nav button { height: 52px; min-width: 78px; gap: 2px; }
+  .nav svg { width: 22px; height: 22px; }
+  .nav span { font-size: 11px; }
+  .topbar { display: block; padding: 10px 8px; }
+  .badges { margin-top: 12px; }
+  .content { display: block; }
+  .mission { height: auto; min-height: 89px; display: grid; grid-template-columns: 58px 1fr; padding: 12px; }
+  .target { margin: 0; }
+  .missioncopy { width: auto; flex-basis: auto; margin-left: 0; }
+  .tools { grid-column: 1/-1; margin: 10px 0 0; overflow-x: auto; justify-content: flex-start; }
+  .workspace { height: auto; grid-template-columns: 1fr; padding: 12px; }
+  .numberCard { min-height: 420px; }
+  .arrayArea { margin-top: 8px; grid-template-columns: 1fr; grid-template-rows: auto 440px auto 57px; }
+  .dropzone { grid-column: 1; grid-row: 2; }
+  .factorbox { position: relative; right: auto; top: auto; width: 100%; grid-column: 1; grid-row: 3; margin-top: 12px; min-height: 220px; }
+  .info { grid-column: 1; grid-row: 4; margin-bottom: 14px; }
+  .reason { margin-top: 14px; }
+  .challenge { height: auto; flex-direction: column; align-items: flex-start; padding: 14px; }
+  .challengeCopy { border-left: 0; border-top: 1px solid #ddd; padding: 12px 0 0; }
+  .choices { justify-content: flex-start; }
+  h1 { font-size: 28px; }
+  .subtitle { font-size: 15px; }
+}
+@media(prefers-reduced-motion:reduce) { * { scroll-behavior: auto!important; transition: none!important; } }
+</style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+<div class="app">
+<aside class="sidebar" aria-label="Maths Universe navigation">
+  <div class="logo" aria-label="Maths Universe">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="25" fill="none" stroke="#6336e8" stroke-width="3"/><path d="M32 7v50M7 32h50M16 16l32 32M48 16L16 48" stroke="#6b3ff0" stroke-width="3"/><circle cx="32" cy="32" r="8" fill="white" stroke="#6b3ff0" stroke-width="3"/></svg>
+    <b>MATHS<br>UNIVERSE</b>
+  </div>
+  <nav class="nav">
+    <button class="active" aria-label="Explore"><svg viewBox="0 0 40 40"><path d="M20 4l12 28H8L20 4z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 29l12-19M25 29L14 10" stroke="currentColor" stroke-width="3"/></svg><span>Explore</span></button>
+    <button aria-label="Proofs"><svg viewBox="0 0 40 40"><path d="M20 5c-8 0-13 7-11 14 1 4 5 6 6 9h10c1-3 5-5 6-9 2-7-3-14-11-14zM15 33h10M17 37h6" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Proofs</span></button>
+    <button aria-label="Practice"><svg viewBox="0 0 40 40"><path d="M8 33V9h15l9 9v15H8z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 9v10h9M13 27l13-13M20 13l7 7" stroke="currentColor" stroke-width="2"/></svg><span>Practice</span></button>
+    <button aria-label="Saved"><svg viewBox="0 0 40 40"><path d="M10 8h20v29l-10-6-10 6V8z" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Saved</span></button>
+    <button aria-label="Notes"><svg viewBox="0 0 40 40"><path d="M9 8h22v26H9zM14 13h12M14 19h12M14 25h9" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Notes</span></button>
+    <button aria-label="Settings" style="margin-top:auto"><svg viewBox="0 0 40 40"><path d="M20 5l3 3 5-1 2 4 5 2-1 5 3 3-3 4 1 5-5 2-2 4-5-1-3 3-4-3-5 1-2-4-5-2 1-5-3-4 3-3-1-5 5-2 2-4 5 1 3-3z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></button>
+  </nav>
+</aside>
+
+<main>
+<header class="topbar">
+  <div>
+    <div class="breadcrumb">Visual Proofs <span class="slash">/</span> <span class="slash">/</span> Number Theory</div>
+    <h1>What Makes a Number Prime?</h1>
+    <div class="subtitle">Arrange the dots into equal rows and see what you discover.</div>
+  </div>
+  <div class="badges">
+    <div class="badge">Beginner</div>
+    <div class="badge"><svg class="clockIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#26316e" stroke-width="2"/><path d="M12 7v6l4 2" fill="none" stroke="#26316e" stroke-width="2"/></svg>10 min</div>
+  </div>
+</header>
+
+<section class="mission" aria-label="Mission and number models">
+  <div class="target"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="17" fill="none" stroke="white" stroke-width="2"/><circle cx="24" cy="24" r="9" fill="none" stroke="white" stroke-width="2"/><path d="M24 2v9M24 37v9M2 24h9M37 24h9" stroke="white" stroke-width="2"/><path d="M29 12l8-6-3 10" fill="none" stroke="white" stroke-width="2"/></svg></div>
+  <div class="missioncopy">
+    <b>🎯 YOUR MISSION</b>
+    <div>Can you arrange all the dots into equal rows?</div>
+    <div style="font-size:13px;color:#55639c;margin-top:2px;">Try different numbers of rows.</div>
+  </div>
+  <div class="tools" role="toolbar" aria-label="Number models">
+    <button class="tool active" data-mode="Arrays"><svg viewBox="0 0 28 28"><g fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="14" cy="5" r="2"/><circle cx="23" cy="5" r="2"/><circle cx="5" cy="14" r="2"/><circle cx="14" cy="14" r="2"/><circle cx="23" cy="14" r="2"/><circle cx="5" cy="23" r="2"/><circle cx="14" cy="23" r="2"/><circle cx="23" cy="23" r="2"/></g></svg>Arrays</button>
+    <button class="tool" data-mode="Groups"><svg viewBox="0 0 28 28"><g fill="currentColor"><circle cx="6" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="22" cy="6" r="2"/><circle cx="6" cy="14" r="2"/><circle cx="14" cy="14" r="2"/><circle cx="22" cy="14" r="2"/><circle cx="6" cy="22" r="2"/><circle cx="14" cy="22" r="2"/><circle cx="22" cy="22" r="2"/></g></svg>Groups</button>
+    <button class="tool" data-mode="Factor Tree"><svg viewBox="0 0 28 28"><circle cx="14" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="7" cy="22" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="21" cy="22" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 8v6M14 14L7 19M14 14l7 5" stroke="currentColor" stroke-width="2"/></svg>Factor Tree</button>
+  </div>
+</section>
+
+<div class="content">
+<div class="left">
+<section class="workspace">
+  <div class="numberCard">
+    <div class="numberHead">
+      <div class="label">NUMBER</div>
+      <div class="num" id="number">13</div>
+      <div id="primePrompt" class="prime-prompt">Can you figure out if it is prime?</div>
+    </div>
+    <div class="arrows"><button class="roundbtn" id="prev" aria-label="Previous number">‹</button><button class="roundbtn" id="next" aria-label="Next number">›</button></div>
+    <div class="place">
+      <b>Your dots</b>
+      <div class="drag-hint">Drag these dots <span class="arrow-bounce">→</span></div>
+      <div><span id="placed">0</span> / <span id="total">13</span> dots placed</div>
+    </div>
+    <div class="dots" id="dots" aria-label="Draggable counters"></div>
+    <button class="clear" id="clear"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 7h12M9 7V4h6v3M8 10v8M12 10v8M16 10v8M6 7l1 14h10l1-14" fill="none" stroke="currentColor" stroke-width="2"/></svg>Clear</button>
+  </div>
+
+  <div class="arrayArea">
+    <div class="arrayTitle">Make equal rows</div>
+    <div class="dropzone" id="dropzone" aria-label="Array workspace. Drag dots here and test equal row arrangements.">
+      <div class="dropText" id="dropText">
+        <span class="statusLine">Drop the dots here to make equal rows.</span>
+        <span class="statusSub">Every row must have the same number of dots.</span>
+      </div>
+      <div class="rowControls" id="rowControls">
+        <span class="rowBtnLabel">Try rows:</span>
+        <button class="rowBtn" data-rows="1">1 row</button>
+        <button class="rowBtn" data-rows="2">2 rows</button>
+        <button class="rowBtn" data-rows="3">3 rows</button>
+        <button class="rowBtn" data-rows="4">4 rows</button>
+      </div>
+      <svg class="arrayCanvas" id="arrayCanvas" viewBox="0 0 500 280" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </div>
+    <div class="factorbox">
+      <b>Ways that work</b>
+      <div class="discoveredList" id="discoveredList">
+        <div class="emptyDiscovered">No arrangements yet.</div>
+      </div>
+      <div class="discoveredExplanation" id="discoveredExplanation">
+        Put all dots into the workspace and test different row counts.
+      </div>
+    </div>
+    <div class="info"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="none" stroke="#5633e8" stroke-width="2"/><path d="M15 13v8M15 8v2" stroke="#5633e8" stroke-width="2"/></svg><span id="infoText">Drag these dots → Drop the dots here to make equal rows.</span></div>
+  </div>
+</section>
+
+<section class="proof">
+  <h2>🔎 What did we discover?</h2>
+  <div class="discoverySummary" id="discoverySummary">
+    <div style="color:#5967a4;font-size:14px;font-style:italic;">Test rows above to build your list of arrangements.</div>
+  </div>
+  <button class="revealBtn" id="revealBtn">Check if <span id="revealN">13</span> is prime</button>
+  <div class="primeRevealCard" id="primeRevealBanner"></div>
+</section>
+
+<section class="challenge">
+  <div class="challengeTitle"><span>🏆</span>Try another number</div>
+  <div class="challengeCopy"><b>Can you find a number that makes more than one kind of rectangle?</b><div>Select a number to load its dots and reset the experiment.</div></div>
+  <div class="choices">
+    <span class="choose">Select:</span>
+    <button class="choice" data-n="12">12</button>
+    <button class="choice active" data-n="13">13</button>
+    <button class="choice" data-n="15">15</button>
+    <button class="choice" data-n="16">16</button>
+    <button class="choice" data-n="21">21</button>
+    <button class="choice" data-n="25">25</button>
+    <button class="choice" data-n="27">27</button>
+    <button class="choice" id="custom">Custom</button>
+  </div>
+</section>
+</div>
+
+<aside class="reason" aria-label="Why it works">
+  <h2>Why it works</h2>
+  <article class="step">
+    <span class="stepno">1</span>
+    <h3>1. Try different rows</h3>
+    <p>Can you make equal rows?</p>
+    <div class="subnote" id="step1Note">Try 1 row, 2 rows, 3 rows...</div>
+  </article>
+  <article class="step">
+    <span class="stepno">2</span>
+    <h3>2. Check your rows</h3>
+    <p>Every row must have the same number of dots.</p>
+    <div class="subnote" id="step2Note">If dots are left over, the row arrangement doesn't work.</div>
+  </article>
+  <article class="step">
+    <span class="stepno">3</span>
+    <h3>3. What did you discover?</h3>
+    <p>Every way that works gives us factors.</p>
+    <div class="subnote" id="step3Note">Discovered factors will appear here.</div>
+  </article>
+  <div class="takeawayCard">
+    <h3>💡 Remember</h3>
+    <p>A prime number has exactly <strong>TWO factors</strong>: 1 and itself.</p>
+    <div class="eg" id="takeawayEg">13 → 1 and 13 (So 13 is prime)</div>
+  </div>
+</aside>
+</div>
+</main>
+</div>
+
+<!-- Floating Follower Dot during Drag -->
+<div id="dragGhostDot"></div>
+
+<div id="announce" class="sr" aria-live="polite"></div>
+
+<script>
+(() => {
+  const state = {
+    n: 13,
+    placed: new Set(),
+    discoveredPairs: new Set(),
+    testedRows: new Map(), // r -> { valid: boolean, cols: number, rem: number }
+    currentRows: null,
+    revealed: false,
+    mode: 'Arrays',
+    history: [],
+    future: [],
+    dragging: null
+  };
+
+  const numbers = [12, 13, 15, 16, 21, 25, 27];
+  const $ = id => document.getElementById(id);
+  const els = {
+    n: $('number'), primePrompt: $('primePrompt'), placed: $('placed'), total: $('total'), dots: $('dots'),
+    drop: $('dropzone'), canvas: $('arrayCanvas'), dropText: $('dropText'), info: $('infoText'),
+    announce: $('announce'), rowControls: $('rowControls'),
+    discoveredList: $('discoveredList'), discoveredExplanation: $('discoveredExplanation'),
+    discoverySummary: $('discoverySummary'), revealBtn: $('revealBtn'), revealN: $('revealN'),
+    primeRevealBanner: $('primeRevealBanner'), step1Note: $('step1Note'), step2Note: $('step2Note'),
+    step3Note: $('step3Note'), takeawayEg: $('takeawayEg'), dragGhostDot: $('dragGhostDot')
+  };
+
+  function isPrime(n){
+    if(n<2)return false;
+    for(let i=2;i*i<=n;i++) if(n%i===0)return false;
+    return true;
+  }
+  function pairs(n){
+    const out=[];
+    for(let i=1;i*i<=n;i++) if(n%i===0) out.push([i,n/i]);
+    return out;
+  }
+  function allPairs(n){
+    return pairs(n).flatMap(([a,b])=>a===b?[[a,b]]:[[a,b],[b,a]]);
+  }
+  function snapshot(){
+    return {
+      n: state.n,
+      placed: [...state.placed],
+      discoveredPairs: [...state.discoveredPairs],
+      testedRows: new Map(state.testedRows),
+      currentRows: state.currentRows,
+      revealed: state.revealed,
+      mode: state.mode
+    };
+  }
+  function restore(s){
+    state.n = s.n;
+    state.placed = new Set(s.placed);
+    state.discoveredPairs = new Set(s.discoveredPairs);
+    state.testedRows = new Map(s.testedRows);
+    state.currentRows = s.currentRows;
+    state.revealed = s.revealed;
+    state.mode = s.mode;
+    document.querySelectorAll('.tool').forEach(b=>b.classList.toggle('active',b.dataset.mode===state.mode));
+    document.querySelectorAll('.choice[data-n]').forEach(b=>b.classList.toggle('active',+b.dataset.n===state.n));
+    render();
+  }
+  function commit(before){
+    state.history.push(before);
+    if(state.history.length>30) state.history.shift();
+    state.future=[];
+  }
+  function announce(t){els.announce.textContent=t}
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+  function render(){
+    const prime = isPrime(state.n);
+    els.n.textContent = state.n;
+    els.total.textContent = state.n;
+    els.placed.textContent = state.placed.size;
+    els.revealN.textContent = state.n;
+
+    if(!state.revealed){
+      els.primePrompt.className = 'prime-prompt';
+      els.primePrompt.textContent = 'Can you figure out if it is prime?';
+      els.primeRevealBanner.style.display = 'none';
+      els.revealBtn.style.display = 'block';
+    } else {
+      const allFactorPairs = allPairs(state.n);
+      const factorSet = new Set();
+      allFactorPairs.forEach(([a,b])=> { factorSet.add(a); factorSet.add(b); });
+      const sortedFactors = Array.from(factorSet).sort((a,b)=>a-b).join(', ');
+
+      if(prime){
+        els.primePrompt.className = 'prime-prompt discovered-prime';
+        els.primePrompt.textContent = `${state.n} is prime ✓`;
+        els.primeRevealBanner.className = 'primeRevealCard is-prime';
+        els.primeRevealBanner.innerHTML = `
+          <div style="font-size:20px;margin-bottom:6px;">✓ ${state.n} is PRIME</div>
+          <div style="font-size:14px;font-weight:600;">${state.n} is prime because it has only two factors: 1 and ${state.n}.</div>
+        `;
+      } else {
+        els.primePrompt.className = 'prime-prompt discovered-composite';
+        els.primePrompt.textContent = `${state.n} is NOT prime ✗`;
+        els.primeRevealBanner.className = 'primeRevealCard is-composite';
+        els.primeRevealBanner.innerHTML = `
+          <div style="font-size:20px;margin-bottom:6px;">${state.n} is NOT prime</div>
+          <div style="font-size:14px;font-weight:600;">It has more than two factors: ${sortedFactors}.</div>
+        `;
+      }
+      els.primeRevealBanner.style.display = 'block';
+    }
+
+    renderDots();
+    renderRowControls();
+    renderWorkspace();
+    renderDiscoveredList();
+    renderDiscoverySummary();
+
+    els.takeawayEg.textContent = prime 
+      ? `${state.n} → 1 and ${state.n} (So ${state.n} is prime)` 
+      : `${state.n} has multiple factors (So ${state.n} is NOT prime)`;
+  }
+
+  function renderDots(){
+    els.dots.innerHTML = '';
+    const count = state.n;
+    const cols = count <= 13 ? 4 : 5;
+    const compact = count > 20;
+    els.dots.classList.toggle('compact', compact);
+    els.dots.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+    for(let i=0; i<count; i++){
+      const b = document.createElement('button');
+      b.className = 'dot';
+      b.type = 'button';
+      b.dataset.index = i;
+      b.setAttribute('aria-label', `Dot ${i+1} of ${count}${state.placed.has(i)?', placed in workspace':''}`);
+      b.setAttribute('aria-pressed', state.placed.has(i)?'true':'false');
+      if(state.placed.has(i)){
+        b.style.opacity = '.22';
+        b.style.transform = 'scale(0.85)';
+        b.style.borderStyle = 'dashed';
+      }
+      
+      b.addEventListener('pointerdown', startDrag);
+      b.addEventListener('keydown', e=>{
+        if(e.key==='Enter'||e.key===' '){
+          e.preventDefault();
+          const before = snapshot();
+          if(state.placed.has(i)) state.placed.delete(i); else state.placed.add(i);
+          commit(before); render();
+          announce(state.placed.has(i)?`Dot ${i+1} placed.`:`Dot ${i+1} returned.`);
+        }
+      });
+      els.dots.appendChild(b);
+    }
+  }
+
+  function renderRowControls(){
+    els.rowControls.innerHTML = '<span class="rowBtnLabel">Try rows:</span>';
+    const n = state.n;
+    const opts = [1, 2, 3, 4];
+    if(!opts.includes(n) && n<=15) opts.push(n);
+    if(n>12 && !opts.includes(6)) opts.push(6);
+
+    opts.sort((a,b)=>a-b).forEach(r => {
+      const btn = document.createElement('button');
+      btn.className = 'rowBtn' + (state.currentRows === r ? ' active' : '');
+      btn.type = 'button';
+      btn.textContent = `${r} row${r===1?'':'s'}`;
+      btn.addEventListener('click', ()=>{
+        testRows(r);
+      });
+      els.rowControls.appendChild(btn);
+    });
+  }
+
+  function testRows(r){
+    const before = snapshot();
+    if(state.placed.size < state.n){
+      for(let i=0; i<state.n; i++) state.placed.add(i);
+    }
+    state.currentRows = r;
+    const valid = state.n % r === 0;
+    const cols = Math.floor(state.n / r);
+    const rem = state.n % r;
+
+    state.testedRows.set(r, { valid, cols, rem });
+    if(valid){
+      state.discoveredPairs.add(`${r} × ${cols}`);
+      state.discoveredPairs.add(`${cols} × ${r}`);
+    }
+    commit(before); render();
+
+    if(valid){
+      announce(`Yes! These are equal rows. ${r} × ${cols} = ${state.n}, so ${r} and ${cols} are factors.`);
+    } else {
+      announce(`Not quite — ${rem} dot is left over.`);
+    }
+  }
+
+  function setStatus(line, sub=''){
+    els.dropText.innerHTML = `<span class="statusLine">${escapeHtml(line)}</span>${sub ? `<span class="statusSub">${escapeHtml(sub)}</span>` : ''}`;
+  }
+
+  /* Core Fixed Workspace Render Function */
+  function renderWorkspace(){
+    els.canvas.innerHTML = '';
+    const placed = state.placed.size;
+    const r = state.currentRows;
+    els.drop.classList.toggle('valid', !!state.dragging);
+
+    if(state.mode === 'Groups'){
+      const groupSize = r ? Math.min(r, Math.floor(state.n/r)||2) : 3;
+      setStatus(`Groups view for ${state.n}`, `Divided into equal groups of ${groupSize}.`);
+      els.info.innerHTML = `Showing ${state.n} dots grouped into sets of ${groupSize}.`;
+      drawMode();
+      return;
+    }
+
+    if(state.mode === 'Factor Tree'){
+      setStatus(`Factor Tree for ${state.n}`, 'Visualizing prime factor decomposition.');
+      els.info.innerHTML = `Factor tree showing factors of ${state.n}.`;
+      drawMode();
+      return;
+    }
+
+    if(!placed){
+      setStatus('Drop the dots here to make equal rows.', 'Every row must have the same number of dots.');
+      els.info.innerHTML = 'Drag these dots → Drop the dots here to make equal rows.';
+      return; // 0 dots placed -> canvas remains clean
+    }
+
+    if(placed < state.n){
+      setStatus(`${placed} / ${state.n} dots placed.`, 'Keep dragging dots into the box!');
+      els.info.innerHTML = `<strong>${placed} / ${state.n} dots placed.</strong> Visible inside workspace!`;
+      drawMode(); // CRITICAL FIX: Draw placed dots immediately as soon as dropped!
+      return;
+    }
+
+    if(!r){
+      setStatus('✓ All dots are in!', 'Now try making equal rows using the buttons below.');
+      els.info.innerHTML = '✓ All dots are in! Now try making equal rows.';
+      drawMode(); // CRITICAL FIX: Draw placed dots immediately!
+      return;
+    }
+
+    const test = state.testedRows.get(r);
+    if(test && test.valid){
+      setStatus(`Yes! These are equal rows.`, `${r} × ${test.cols} = ${state.n}, so ${r} and ${test.cols} are factors.`);
+      els.info.innerHTML = `<strong>Yes! Equal rows:</strong> ${r} × ${test.cols} = ${state.n}, so ${r} and ${test.cols} are factors.`;
+    } else if(test){
+      setStatus(`Not quite — ${test.rem} dot is left over.`, `Cannot split all ${state.n} dots into ${r} equal rows.`);
+      els.info.innerHTML = `<strong>Not quite — ${test.rem} dot is left over:</strong> ${r} equal rows impossible.`;
+    }
+    drawMode();
+  }
+
+  function addCircle(svg,cx,cy,r=10,fill='#6b3ff0',stroke='#4c2be1'){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill',fill);c.setAttribute('stroke',stroke);c.setAttribute('stroke-width','2');
+    svg.appendChild(c);
+  }
+  function addText(svg,x,y,text,size=13,anchor='middle',fill='#52609c',weight='400'){
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('fill',fill);t.setAttribute('font-size',size);t.setAttribute('font-weight',weight);t.setAttribute('text-anchor',anchor);t.textContent=text;svg.appendChild(t);
+  }
+  function addLine(svg,x1,y1,x2,y2){
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke','#8d79eb');l.setAttribute('stroke-width','2');svg.appendChild(l);
+  }
+
+  function drawMode(){
+    if(state.mode==='Arrays') drawCurrentRows();
+    if(state.mode==='Groups') drawGroups(els.canvas);
+    if(state.mode==='Factor Tree') drawTree(els.canvas);
+  }
+
+  /* Clean, Non-overlapping Array & Grid Renderer */
+  function drawCurrentRows(){
+    const svg = els.canvas;
+    const placed = state.placed.size;
+    if(!placed) return;
+
+    const r = state.currentRows;
+    const W = 500, H = 260;
+    const dotRadius = state.n > 20 ? 8 : (state.n > 13 ? 9 : 11);
+
+    if(!r){
+      // Unarranged placed dots grid layout
+      const cols = Math.min(8, Math.max(1, Math.ceil(Math.sqrt(placed * 1.5))));
+      const rows = Math.ceil(placed / cols);
+      const gapX = Math.min(32, (W - 80) / Math.max(1, cols - 1));
+      const gapY = Math.min(32, (H - 60) / Math.max(1, rows - 1));
+      const startX = W / 2 - ((cols - 1) * gapX) / 2;
+      const startY = H / 2 - ((rows - 1) * gapY) / 2 + 10;
+      for(let i=0; i<placed; i++){
+        const row = Math.floor(i / cols), col = i % cols;
+        addCircle(svg, startX + col * gapX, startY + row * gapY, dotRadius, '#6a3ee6', '#512bd3');
+      }
+      return;
+    }
+
+    const cols = Math.floor(placed / r);
+    const rem = placed % r;
+
+    const maxCols = Math.max(1, Math.floor(state.n / r));
+    const gapX = maxCols <= 1 ? 0 : Math.min(32, (W - 90) / Math.max(1, maxCols - 1));
+    const gapY = r <= 1 ? 0 : Math.min(32, (H - 80) / Math.max(1, r - 1));
+    const startX = W / 2 - ((Math.max(1, cols) - 1) * gapX) / 2;
+    const startY = H / 2 - ((r - 1) * gapY) / 2 - (rem > 0 ? 14 : 0) + 10;
+
+    let placedCount = 0;
+    for(let row = 0; row < r; row++){
+      for(let col = 0; col < cols; col++){
+        if(placedCount < placed){
+          addCircle(svg, startX + col * gapX, startY + row * gapY, dotRadius, '#6a3ee6', '#512bd3');
+          placedCount++;
+        }
+      }
+    }
+    if(rem > 0){
+      for(let i = 0; i < rem; i++){
+        const extraX = startX + i * Math.min(28, gapX || 28);
+        const extraY = startY + r * gapY + 22;
+        addCircle(svg, extraX, extraY, dotRadius, '#e25c69', '#c53847');
+      }
+      addText(svg, W / 2, startY + r * gapY + 44, `${rem} dot is left over!`, 13, 'middle', '#d63847', '700');
+    }
+  }
+
+  function drawGroups(svg){
+    const placed=state.placed.size || state.n;
+    const groupSize=state.currentRows ? Math.floor(state.n/state.currentRows)||2 : 3;
+    const groups=Math.ceil(placed/groupSize);
+    const cols=Math.min(4,groups), rows=Math.ceil(groups/cols);
+    const groupW=96, groupH=74;
+    const startX=250-((cols-1)*groupW)/2;
+    const startY=130-((rows-1)*groupH)/2;
+    for(let g=0;g<groups;g++){
+      const row=Math.floor(g/cols), col=g%cols;
+      const gx=startX+col*groupW, gy=startY+row*groupH;
+      const count=Math.min(groupSize,placed-g*groupSize);
+      const dotGap=Math.min(18,Math.max(12,68/Math.max(1,count-1)));
+      const localStart=gx-((count-1)*dotGap)/2;
+      for(let i=0;i<count;i++) addCircle(svg,localStart+i*dotGap,gy,8);
+      addText(svg,gx,gy+28,`${count} equal ${count===1?'dot':'dots'}`,12);
+    }
+  }
+
+  function drawTree(svg){
+    const n=state.n;
+    const cx=250;
+    if(isPrime(n)){
+      addTreeNode(svg,cx,45,n,22);
+      addLine(svg,cx,67,cx-70,120); addLine(svg,cx,67,cx+70,120);
+      addTreeNode(svg,cx-70,140,1,20); addTreeNode(svg,cx+70,140,n,20);
+      addText(svg,cx,195,`Prime: only 1 × ${n}`,15,'middle','#52609c','600');
+      return;
+    }
+    const multi = allPairs(n).find(([a,b])=>a>1&&b>1) || [1,n];
+    const [a,b]=multi;
+    addTreeNode(svg,cx,45,n,22);
+    addLine(svg,cx,67,cx-75,120); addLine(svg,cx,67,cx+75,120);
+    addTreeNode(svg,cx-75,140,a,20); addTreeNode(svg,cx+75,140,b,20);
+    addText(svg,cx,205,`${a} × ${b} = ${n}`,16,'middle','#52609c','600');
+  }
+
+  function addTreeNode(svg,x,y,value,r){
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',r);c.setAttribute('fill','#f3efff');c.setAttribute('stroke','#6d48e7');c.setAttribute('stroke-width','2');svg.appendChild(c);
+    addText(svg,x,y+4,String(value),12,'middle','#52609c','600');
+  }
+
+  function renderDiscoveredList(){
+    const list = els.discoveredList;
+    list.innerHTML = '';
+    if(state.discoveredPairs.size === 0){
+      list.innerHTML = '<div class="emptyDiscovered">No arrangements yet.</div>';
+      els.discoveredExplanation.textContent = 'Put dots into the workspace and test row counts.';
+      els.step3Note.textContent = 'Discovered factors will appear here.';
+      return;
+    }
+    state.discoveredPairs.forEach(pair => {
+      const tag = document.createElement('div');
+      tag.className = 'discoveredTag';
+      tag.textContent = `${pair} ✓`;
+      list.appendChild(tag);
+    });
+
+    const factorSet = new Set();
+    state.discoveredPairs.forEach(pair => {
+      const parts = pair.split('×').map(s=>s.trim());
+      factorSet.add(parts[0]); factorSet.add(parts[1]);
+    });
+    const factorsArr = Array.from(factorSet).sort((a,b)=>+a-+b);
+
+    els.discoveredExplanation.innerHTML = `You found <strong>${factorsArr.join(', ')}</strong>. These are called <strong>factors</strong> of ${state.n}.`;
+    els.step3Note.innerHTML = `Factors found so far: <strong>${factorsArr.join(', ')}</strong>.`;
+  }
+
+  function renderDiscoverySummary(){
+    const container = els.discoverySummary;
+    container.innerHTML = '';
+
+    if(state.testedRows.size === 0){
+      container.innerHTML = '<div style="color:#5967a4;font-size:14px;font-style:italic;">Test rows above to build your list of arrangements.</div>';
+      return;
+    }
+
+    state.testedRows.forEach((val, r) => {
+      const item = document.createElement('div');
+      item.className = 'attemptItem ' + (val.valid ? 'ok' : 'no');
+      if(val.valid){
+        item.innerHTML = `<span>${r} row${r===1?'':'s'} × ${val.cols} dots</span> <span>✓ Works (${r} × ${val.cols})</span>`;
+      } else {
+        item.innerHTML = `<span>${r} row${r===1?'':'s'}</span> <span>✗ ${val.rem} dot is left over</span>`;
+      }
+      container.appendChild(item);
+    });
+  }
+
+  // Pointer dragging logic with real-time floating ghost dot
+  function startDrag(e){
+    if(e.pointerType==='mouse' && e.button!==0)return;
+    e.preventDefault();
+    const el=e.currentTarget, index=+el.dataset.index;
+    if(state.placed.has(index)) return;
+
+    state.dragging = { index, el, pointerId: e.pointerId, before: snapshot() };
+    el.classList.add('dragging');
+    document.body.classList.add('dragging-ui');
+
+    els.dragGhostDot.style.display = 'block';
+    els.dragGhostDot.style.left = e.clientX + 'px';
+    els.dragGhostDot.style.top = e.clientY + 'px';
+
+    try { el.setPointerCapture(e.pointerId); } catch(_) { }
+    els.drop.classList.add('valid');
+
+    window.addEventListener('pointermove', moveDrag, { passive: false });
+    window.addEventListener('pointerup', endDrag, { once: true });
+    window.addEventListener('pointercancel', cancelDrag, { once: true });
+    announce(`Dragging dot ${index+1}. Move it into the workspace.`);
+  }
+
+  function moveDrag(e){
+    if(!state.dragging) return;
+    e.preventDefault();
+    els.dragGhostDot.style.left = e.clientX + 'px';
+    els.dragGhostDot.style.top = e.clientY + 'px';
+
+    const r = els.drop.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    els.drop.classList.toggle('valid', inside);
+  }
+
+  function cleanupDrag(){
+    if(!state.dragging) return;
+    const d = state.dragging;
+    d.el.classList.remove('dragging');
+    document.body.classList.remove('dragging-ui');
+    els.dragGhostDot.style.display = 'none';
+
+    try { d.el.releasePointerCapture(d.pointerId); } catch(_) { }
+    window.removeEventListener('pointermove', moveDrag);
+    window.removeEventListener('pointerup', endDrag);
+    window.removeEventListener('pointercancel', cancelDrag);
+    els.drop.classList.remove('valid');
+  }
+
+  function endDrag(e){
+    if(!state.dragging) return;
+    const d = state.dragging;
+    const r = els.drop.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+
+    cleanupDrag();
+    state.dragging = null;
+
+    if(!inside){
+      announce('Drop the dot inside the box.');
+      return;
+    }
+    if(state.placed.size >= state.n){
+      announce('All dots are already placed.');
+      return;
+    }
+    state.placed.add(d.index);
+    commit(d.before);
+    render();
+    announce(`Dot ${d.index+1} placed. ${state.placed.size} of ${state.n} dots in workspace.`);
+  }
+
+  function cancelDrag(){
+    if(!state.dragging) return;
+    cleanupDrag();
+    state.dragging = null;
+    announce('Drag cancelled.');
+  }
+
+  function setNumber(n){
+    n = Math.max(1, Math.floor(n));
+    const before = snapshot();
+    state.n = n;
+    state.placed = new Set();
+    state.discoveredPairs = new Set();
+    state.testedRows = new Map();
+    state.currentRows = null;
+    state.revealed = false;
+    commit(before); render();
+    announce(`Loaded ${n}. Try arranging ${n} dots.`);
+  }
+
+  $('prev').addEventListener('click',()=>{
+    const i=numbers.indexOf(state.n); setNumber(numbers[(i-1+numbers.length)%numbers.length]);
+  });
+  $('next').addEventListener('click',()=>{
+    const i=numbers.indexOf(state.n); setNumber(numbers[(i+1)%numbers.length]);
+  });
+  $('clear').addEventListener('click',()=>{
+    const before=snapshot();
+    state.placed=new Set();
+    state.currentRows=null;
+    commit(before); render();
+    announce('Workspace cleared. Dots returned to tray.');
+  });
+
+  els.revealBtn.addEventListener('click', ()=>{
+    const before=snapshot();
+    state.revealed=true;
+    testRows(1);
+    if(state.n > 1) testRows(2);
+    commit(before); render();
+    announce(`Result revealed: ${state.n} is ${isPrime(state.n)?'prime':'not prime'}.`);
+  });
+
+  document.querySelectorAll('.tool').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const before=snapshot();
+      state.mode=b.dataset.mode;
+      commit(before);
+      document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('active',x===b));
+      render();
+      announce(`${state.mode} view selected.`);
+    });
+  });
+
+  document.querySelectorAll('.choice[data-n]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.choice').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      setNumber(+b.dataset.n);
+    });
+  });
+
+  $('custom').addEventListener('click',()=>{
+    const x=prompt('Enter a whole number','12');
+    if(x!==null && /^\d+$/.test(x) && +x>0) setNumber(+x);
+  });
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && state.dragging) cancelDrag();
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){
+      e.preventDefault();
+      if(!state.history.length)return announce('Nothing to undo.');
+      state.future.push(snapshot());
+      restore(state.history.pop());
+      announce('Undone.');
+    }
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){
+      e.preventDefault();
+      if(!state.future.length)return announce('Nothing to redo.');
+      state.history.push(snapshot());
+      restore(state.future.pop());
+      announce('Redone.');
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

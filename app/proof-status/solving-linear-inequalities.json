@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "solving-linear-inequalities",
+  "categorySlug": "inequalities",
+  "slug": "solving-linear-inequalities",
+  "route": "/visual-proofs/inequalities/solving-linear-inequalities",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Pavan/146-solving-linear-inequalities"
+}

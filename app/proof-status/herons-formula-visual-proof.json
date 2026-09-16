@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "herons-formula-visual-proof",
+  "categorySlug": "geometry",
+  "slug": "herons-formula-visual-proof",
+  "route": "/visual-proofs/geometry/herons-formula-visual-proof",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/herons-formula-visual-proof"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "arithmetic-progression-equal-steps",
+  "categorySlug": "sequences-and-series",
+  "slug": "arithmetic-progression-equal-steps",
+  "route": "/visual-proofs/sequences-and-series/arithmetic-progression-equal-steps",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/arithmetic-progression-equal-steps"
+}

@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundamental Theorem of Arithmetic | Factor Trees</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #f4f3ff;
+      --bg-card: #ffffff;
+      --border-purple: #e2e0fb;
+      --border-subtle: rgba(108, 92, 231, 0.15);
+      
+      --purple-primary: #6c5ce7;
+      --purple-dark: #5849df;
+      --purple-light: #a29bfe;
+      --purple-subtle: #f0edff;
+      --purple-gradient: linear-gradient(135deg, #6c5ce7 0%, #8c7ae6 100%);
+      
+      --blue-node: #3b82f6;
+      --teal-node: #10b981;
+      --purple-node: #6c5ce7;
+      
+      --text-main: #2d3142;
+      --text-muted: #717591;
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      --shadow-sm: 0 2px 8px rgba(108, 92, 231, 0.04);
+      --shadow-md: 0 6px 18px rgba(108, 92, 231, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-layout {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* LEFT SIDEBAR NAVIGATION */
+    .sidebar {
+      width: 100px;
+      background: white;
+      border-right: 1px solid var(--border-purple);
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 20;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 24px;
+      text-decoration: none;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      color: var(--purple-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .brand-text {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--indigo-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 0;
+      width: 100%;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      color: var(--purple-primary);
+      background: var(--purple-subtle);
+    }
+
+    .nav-item.active {
+      color: var(--purple-primary);
+      background: var(--purple-subtle);
+      font-weight: 800;
+    }
+
+    .nav-item .icon { font-size: 20px; }
+
+    /* MAIN CONTENT AREA */
+    .main-wrapper {
+      flex: 1;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+
+    /* HEADER BAR */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .breadcrumb {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--purple-primary);
+      margin-bottom: 2px;
+    }
+
+    .header-titles h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--indigo-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .header-titles .subtitle {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge-pill {
+      background: #f0edff;
+      color: var(--purple-primary);
+      padding: 6px 16px;
+      border-radius: var(--radius-full);
+      font-size: 12.5px;
+      font-weight: 700;
+      border: 1px solid rgba(108, 92, 231, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* MISSION CARD */
+    .mission-banner {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-lg);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mission-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .target-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: var(--purple-gradient);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .mission-text-content {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .mission-text-content strong { color: var(--purple-primary); }
+
+    .btn-how-to-play {
+      background: white;
+      border: 1px solid var(--border-purple);
+      color: var(--purple-primary);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-how-to-play:hover {
+      background: var(--purple-subtle);
+      transform: translateY(-1px);
+    }
+
+    /* MAIN PROOF SECTION GRID */
+    .proof-section-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .main-proof-card {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 4-STEP PROGRESS BAR */
+    .progress-bar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fcfbfe;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+    }
+
+    .step-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .step-num-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-sm);
+      background: #eeeaff;
+      color: var(--purple-primary);
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-box.active .step-num-badge { background: var(--purple-primary); color: white; }
+    .step-box.completed .step-num-badge { background: var(--teal-node); color: white; }
+
+    .step-info { display: flex; flex-direction: column; }
+    .step-name { font-size: 12px; font-weight: 800; color: var(--indigo-dark); }
+    .step-subtext { font-size: 10px; color: var(--text-muted); }
+    .step-arrow-icon { color: var(--purple-light); font-size: 14px; font-weight: 800; }
+
+    /* THREE SUBPANELS SIDE-BY-SIDE */
+    .three-subpanels-grid {
+      display: grid;
+      grid-template-columns: 310px 1.2fr 240px;
+      gap: 16px;
+      min-height: 400px;
+    }
+
+    .subpanel {
+      background: #faf9fe;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .subpanel-header { font-size: 14px; font-weight: 800; color: var(--indigo-dark); }
+
+    .tabs-row {
+      display: flex;
+      background: #eef0fa;
+      padding: 3px;
+      border-radius: var(--radius-full);
+      gap: 2px;
+    }
+
+    .tab-pill {
+      flex: 1;
+      padding: 5px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .tab-pill.active {
+      background: var(--purple-primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* COUNTERS VIEWPORT */
+    .model-viewport-box {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      align-items: center;
+    }
+
+    .counters-wrapper {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .counters-grid-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .counter-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* LARGE INTERACTIVE COUNTER DOTS */
+    .counter-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+      cursor: grab;
+      touch-action: none;
+      transition: transform 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      user-select: none;
+    }
+
+    .counter-dot:hover { transform: scale(1.25); }
+
+    .counter-row-purple .counter-dot { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+    .counter-row-blue .counter-dot { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    .counter-row-teal .counter-dot { background: linear-gradient(135deg, #55efc4, #00b894); }
+    .counter-row-orange .counter-dot { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); }
+    .counter-row-pink .counter-dot { background: linear-gradient(135deg, #ff7675, #d63031); }
+
+    .factor-boxes-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .dashed-factor-box {
+      border: 1.5px dashed #a29bfe;
+      border-radius: var(--radius-sm);
+      padding: 4px 8px;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--purple-primary);
+      text-align: center;
+      background: white;
+      cursor: pointer;
+    }
+
+    .dashed-factor-box:hover { background: var(--purple-subtle); }
+
+    /* RECTANGULAR ARRAY VIEW STYLING */
+    .array-view-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .array-equation-badge {
+      background: var(--purple-subtle);
+      color: var(--purple-primary);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid var(--border-purple);
+    }
+
+    .array-dim-selector {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .dim-btn {
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-purple);
+      background: white;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .dim-btn.active {
+      background: var(--purple-primary);
+      color: white;
+      border-color: transparent;
+    }
+
+    .array-matrix-grid {
+      display: grid;
+      gap: 5px;
+      padding: 10px;
+      background: #faf9fe;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      max-height: 170px;
+      overflow: auto;
+    }
+
+    /* CLOCK VIEW STYLING */
+    .clock-view-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    svg.clock-svg {
+      width: 160px;
+      height: 160px;
+    }
+
+    .clock-info-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--indigo-dark);
+      text-align: center;
+      background: #eeeaff;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    /* REMAINDERS VIEW STYLING */
+    .remainders-view-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .divisor-selector-row {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .divisor-btn {
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-purple);
+      background: white;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .divisor-btn.active {
+      background: var(--purple-primary);
+      color: white;
+    }
+
+    .remainder-equation-card {
+      background: var(--indigo-dark);
+      color: white;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-family: 'Fira Code', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .remainder-equation-card.is-factor {
+      background: var(--teal-node);
+    }
+
+    .remainder-groups-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .remainder-group-box {
+      border: 1.5px solid var(--border-purple);
+      background: #faf9fe;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+    }
+
+    .remainder-leftover-box {
+      border: 1.5px dashed #fd79a8;
+      background: #fff0f5;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      gap: 3px;
+      flex-wrap: wrap;
+    }
+
+    .tip-box-bottom {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .btn-clear {
+      border: 1px solid var(--border-purple);
+      background: white;
+      color: var(--text-main);
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* SUBPANEL 2: FACTOR TREE WORKSPACE */
+    .tree-subpanel {
+      background: white;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tree-header-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-switch {
+      width: 34px;
+      height: 18px;
+      background: #ccc;
+      border-radius: var(--radius-full);
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .toggle-switch.active { background: var(--purple-primary); }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-radius: var(--radius-full);
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s ease;
+    }
+
+    .toggle-switch.active::after { transform: translateX(16px); }
+
+    .tree-canvas-area {
+      width: 100%;
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 280px;
+    }
+
+    svg.tree-svg-lines {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    .tree-nodes-container {
+      position: relative;
+      width: 100%; height: 100%;
+    }
+
+    /* TREE NODE STYLING */
+    .ref-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      color: white;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .ref-node:hover { transform: translate(-50%, -50%) scale(1.1); box-shadow: var(--shadow-md); }
+
+    .ref-node.root-purple { background: var(--purple-gradient); width: 46px; height: 46px; font-size: 17px; }
+    .ref-node.node-blue { background: #3b82f6; }
+    .ref-node.node-teal { background: #10b981; }
+    .ref-node.node-leaf-prime { background: #10b981; border: 2px solid white; box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+
+    .node-split-label {
+      position: absolute;
+      bottom: -8px;
+      background: var(--purple-primary);
+      color: white;
+      font-size: 8.5px;
+      padding: 1px 5px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .node-prime-leaf-icon {
+      position: absolute;
+      top: -6px;
+      right: -4px;
+      font-size: 12px;
+    }
+
+    .tree-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-reset-tree, .btn-alt-branch {
+      background: white;
+      border: 1px solid var(--border-purple);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-alt-branch { color: var(--purple-primary); }
+
+    /* SUBPANEL 3: PRIME LEAVES + EXPONENT FORM + PREDICTION */
+    .right-subpanel { display: flex; flex-direction: column; gap: 12px; }
+
+    .prime-leaves-section { display: flex; flex-direction: column; gap: 8px; }
+
+    .section-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--indigo-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .leaves-row { display: flex; gap: 6px; flex-wrap: wrap; min-height: 36px; align-items: center; }
+
+    .leaf-circle-node {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--purple-primary);
+      color: white;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      animation: popIn 0.3s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .exponent-formula-box {
+      font-family: 'Fira Code', monospace;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--indigo-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .exponent-formula-box sup { color: var(--purple-primary); font-size: 13px; }
+
+    .prediction-card {
+      background: #fffdf0;
+      border: 1px solid #ffeaa7;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .prediction-title { font-size: 11.5px; font-weight: 800; color: #d63031; display: flex; align-items: center; gap: 4px; }
+    .prediction-desc { font-size: 10.5px; color: var(--text-muted); line-height: 1.3; }
+
+    .btn-reveal-purple {
+      background: var(--purple-gradient);
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* RIGHT COLUMN: "WHY IT WORKS" CARD */
+    .why-it-works-card {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .why-header { font-size: 15px; font-weight: 800; color: var(--purple-primary); display: flex; align-items: center; gap: 6px; }
+
+    .why-step-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #faf9fe;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 10px;
+    }
+
+    .why-step-num {
+      width: 20px; height: 20px;
+      border-radius: var(--radius-full);
+      background: var(--purple-primary);
+      color: white; font-weight: 800; font-size: 11px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .why-step-title-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 800; color: var(--indigo-dark); }
+    .why-step-desc { font-size: 11px; color: var(--text-muted); line-height: 1.35; }
+
+    .why-diagram-mini {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      text-align: center;
+      color: var(--indigo-dark);
+    }
+
+    .dropdown-must-be-true {
+      background: white;
+      border: 1px solid var(--border-purple);
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      margin-top: auto;
+    }
+
+    /* BOTTOM ROW CARDS */
+    .bottom-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 280px;
+      gap: 16px;
+    }
+
+    .bottom-card {
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bottom-card-title { font-size: 12px; font-weight: 800; color: var(--purple-primary); }
+
+    .visual-proof-eq-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      flex-wrap: wrap;
+    }
+
+    .eq-box {
+      border: 1px solid var(--border-purple);
+      background: #faf9fe;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+    }
+
+    .bottom-card-footer { font-size: 10.5px; color: var(--text-muted); }
+
+    .challenge-btns-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+    .challenge-num-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-purple);
+      background: white;
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .challenge-num-btn.active {
+      background: var(--purple-primary);
+      color: white;
+      border-color: transparent;
+    }
+
+    .unicorn-card {
+      background: linear-gradient(135deg, #f3e8ff 0%, #e0e7ff 100%);
+      border: 1px solid #c084fc;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+    }
+
+    .unicorn-icon { font-size: 32px; }
+    .unicorn-text h4 { font-size: 13px; font-weight: 800; color: #6b21a8; }
+    .unicorn-text p { font-size: 10.5px; color: #7e22ce; }
+
+    /* POPOVER FACTOR SELECTOR */
+    .split-popover {
+      position: absolute;
+      background: white;
+      border: 1px solid var(--border-purple);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      box-shadow: var(--shadow-md);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+      transform: translate(-50%, 10px);
+    }
+
+    .popover-header { font-size: 9.5px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px; }
+
+    .factor-pair-btn {
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-purple);
+      background: #faf9fe;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .factor-pair-btn:hover { background: var(--purple-subtle); color: var(--purple-primary); }
+
+    /* HOW TO PLAY MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(45, 49, 66, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-box {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 90%; max-width: 500px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .modal-header { display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--indigo-dark); }
+    .modal-close { background: #f0edff; border: none; width: 28px; height: 28px; border-radius: var(--radius-full); font-size: 14px; cursor: pointer; color: var(--purple-primary); font-weight: 800; }
+
+    .instruction-step { display: flex; gap: 12px; align-items: flex-start; }
+    .instruction-num { width: 24px; height: 24px; border-radius: var(--radius-full); background: var(--purple-primary); color: white; font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .instruction-text h4 { font-size: 13px; font-weight: 700; color: var(--indigo-dark); margin-bottom: 2px; }
+    .instruction-text p { font-size: 11.5px; color: var(--text-muted); }
+
+    .btn-got-it {
+      background: var(--purple-gradient);
+      color: white; border: none; padding: 10px;
+      border-radius: var(--radius-md); font-weight: 800; font-size: 13px;
+      cursor: pointer; text-align: center;
+    }
+
+    canvas#confetti-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99; }
+
+    @media (max-width: 1100px) {
+      .proof-section-grid { grid-template-columns: 1fr; }
+      .three-subpanels-grid { grid-template-columns: 1fr; }
+      .bottom-row-grid { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-layout">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div>
+        <a href="#" class="brand-logo">
+          <div class="brand-icon">⚛️</div>
+          <div class="brand-text">Maths<br>Universe</div>
+        </a>
+
+        <ul class="nav-menu">
+          <li class="nav-item active"><span class="icon">⨳</span> Explore</li>
+          <li class="nav-item"><span class="icon">💡</span> Proofs</li>
+          <li class="nav-item"><span class="icon">✏️</span> Practice</li>
+          <li class="nav-item"><span class="icon">📖</span> Library</li>
+          <li class="nav-item"><span class="icon">🔖</span> Saved</li>
+        </ul>
+      </div>
+
+      <div class="nav-item" style="margin-top: auto;">
+        <span class="icon">⚙️</span> Settings
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-wrapper">
+
+      <!-- HEADER BAR -->
+      <header class="header-bar">
+        <div class="header-titles">
+          <div class="breadcrumb">Visual Proofs / Number Theory</div>
+          <h1>Fundamental Theorem of Arithmetic</h1>
+          <div class="subtitle">through Factor Trees</div>
+        </div>
+
+        <div class="header-badges">
+          <div class="badge-pill">Intermediate</div>
+          <div class="badge-pill">⏱ 12 min</div>
+        </div>
+      </header>
+
+      <!-- MISSION BANNER -->
+      <section class="mission-banner">
+        <div class="mission-left">
+          <div class="target-icon">🎯</div>
+          <div class="mission-text-content">
+            <strong>Mission:</strong> Every whole number greater than 1 can be written as a product of primes in one unique way (up to order). Build a factor tree to see why.
+          </div>
+        </div>
+        <button class="btn-how-to-play" id="btn-how-to-play"><span>▷</span> How to play</button>
+      </section>
+
+      <!-- MAIN PROOF SECTION GRID -->
+      <div class="proof-section-grid">
+        
+        <!-- MAIN PROOF CARD (4-STEPS + 3 SUBPANELS) -->
+        <div class="main-proof-card">
+          
+          <!-- HORIZONTAL 4-STEP PROGRESS BAR -->
+          <div class="progress-bar-row">
+            <div class="step-box active" id="step-1">
+              <div class="step-num-badge">1</div>
+              <div class="step-info">
+                <div class="step-name">Number Model</div>
+                <div class="step-subtext">See divisibility patterns</div>
+              </div>
+            </div>
+
+            <div class="step-arrow-icon">➔</div>
+
+            <div class="step-box" id="step-2">
+              <div class="step-num-badge">2</div>
+              <div class="step-info">
+                <div class="step-name">Factor Tree</div>
+                <div class="step-subtext">Split into factors</div>
+              </div>
+            </div>
+
+            <div class="step-arrow-icon">➔</div>
+
+            <div class="step-box" id="step-3">
+              <div class="step-num-badge">3</div>
+              <div class="step-info">
+                <div class="step-name">Prime Leaves</div>
+                <div class="step-subtext">Collect primes</div>
+              </div>
+            </div>
+
+            <div class="step-arrow-icon">➔</div>
+
+            <div class="step-box" id="step-4">
+              <div class="step-num-badge">4</div>
+              <div class="step-info">
+                <div class="step-name">Factorization</div>
+                <div class="step-subtext">Write in exponent form</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- THREE SUBPANELS SIDE-BY-SIDE -->
+          <div class="three-subpanels-grid">
+            
+            <!-- SUBPANEL 1: NUMBER MODEL -->
+            <div class="subpanel">
+              <div class="subpanel-header">Build the number <span id="target-num-text">60</span></div>
+
+              <div class="tabs-row">
+                <button class="tab-pill active" data-tab="counters">Counters</button>
+                <button class="tab-pill" data-tab="array">Array</button>
+                <button class="tab-pill" data-tab="clock">Clock</button>
+                <button class="tab-pill" data-tab="remainders">Remainders</button>
+              </div>
+
+              <div class="model-viewport-box" id="model-viewport-box">
+                <!-- Rendered dynamically for active tab -->
+              </div>
+
+              <div class="tip-box-bottom">
+                <span>💡 Tip: Try making groups to see which numbers divide evenly.</span>
+                <button class="btn-clear" id="btn-clear-model">🔄 Clear</button>
+              </div>
+            </div>
+
+            <!-- SUBPANEL 2: FACTOR TREE WORKSPACE -->
+            <div class="subpanel tree-subpanel">
+              <div class="tree-header-row">
+                <div style="font-size: 11px; font-weight: 700; color: var(--purple-primary);">🌿 Dynamic Tree</div>
+                <div class="toggle-label">
+                  Auto-check <div class="toggle-switch" id="auto-check-toggle"></div>
+                </div>
+              </div>
+
+              <div class="tree-canvas-area" id="tree-canvas-area">
+                <svg class="tree-svg-lines" id="tree-svg-lines">
+                  <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8c7ae6" />
+                    </marker>
+                  </defs>
+                </svg>
+                <div class="tree-nodes-container" id="tree-nodes-container"></div>
+              </div>
+
+              <div class="tree-actions-row">
+                <button class="btn-alt-branch" id="btn-alt-branch">🔀 Try Alt Branch</button>
+                <button class="btn-reset-tree" id="btn-reset-tree">🔄 Reset Tree</button>
+              </div>
+            </div>
+
+            <!-- SUBPANEL 3: PRIME LEAVES + EXPONENT FORM + PREDICTION -->
+            <div class="subpanel right-subpanel">
+              
+              <div class="prime-leaves-section">
+                <div class="section-title">🍃 Prime leaves</div>
+                <div class="leaves-row" id="leaves-row"></div>
+              </div>
+
+              <div style="border-top: 1px dashed var(--border-purple); margin: 2px 0;"></div>
+
+              <div class="section-title">✨ Exponent form</div>
+              <div class="exponent-formula-box" id="exponent-formula-box"></div>
+
+              <div class="prediction-card">
+                <div class="prediction-title">💡 Prediction</div>
+                <div class="prediction-desc">Predict the prime exponents for <span id="pred-num-text">60</span>, then reveal to check.</div>
+                <button class="btn-reveal-purple" id="btn-reveal">👁️ Reveal</button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDE COLUMN: "WHY IT WORKS" CARD -->
+        <div class="why-it-works-card">
+          <div class="why-header">✨ Why it works</div>
+
+          <div class="why-step-item">
+            <div class="why-step-title-row">
+              <div class="why-step-num">1</div>
+              <span>Split</span>
+            </div>
+            <div class="why-step-desc">Choose any number > 1 and split it into two smaller factors.</div>
+            <div class="why-diagram-mini">n ➔ a × b</div>
+          </div>
+
+          <div class="why-step-item">
+            <div class="why-step-title-row">
+              <div class="why-step-num">2</div>
+              <span>Repeat</span>
+            </div>
+            <div class="why-step-desc">Keep splitting non-prime factors until all leaves are prime.</div>
+            <div class="why-diagram-mini">n ➔ ... ➔ (primes)</div>
+          </div>
+
+          <div class="why-step-item">
+            <div class="why-step-title-row">
+              <div class="why-step-num">3</div>
+              <span>Unique (up to order)</span>
+            </div>
+            <div class="why-step-desc">The prime leaves are always the same, no matter how you split.</div>
+            <div class="why-diagram-mini" id="why-unique-formula">(2)(2)(3)(5) = (2)(2)(3)(5)</div>
+          </div>
+
+          <div class="dropdown-must-be-true">
+            <span>What must be true?</span>
+            <span>▼</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM ROW CARDS -->
+      <div class="bottom-row-grid">
+        
+        <!-- VISUAL PROOF CARD -->
+        <div class="bottom-card">
+          <div class="bottom-card-title">One-line visual proof</div>
+          <div class="visual-proof-eq-row">
+            <div class="eq-box" id="proof-target-num">60</div>
+            <span>➔</span>
+            <span>🌿</span>
+            <span>➔</span>
+            <span id="proof-leaves-str">(2)(2)(3)(5)</span>
+            <span>=</span>
+            <span id="proof-exponent-str" style="color: var(--purple-primary);">2² × 3¹ × 5¹</span>
+          </div>
+          <div class="bottom-card-footer">Every split preserves the product. Reaching primes fixes the multiset of prime factors.</div>
+        </div>
+
+        <!-- CHALLENGE CARD -->
+        <div class="bottom-card">
+          <div class="bottom-card-title">Challenge: Your turn</div>
+          <div class="bottom-card-footer" style="margin-bottom: 4px;">Choose a number and factor it.</div>
+          <div class="challenge-btns-row">
+            <button class="challenge-num-btn active" data-num="60">60</button>
+            <button class="challenge-num-btn" data-num="72">72</button>
+            <button class="challenge-num-btn" data-num="84">84</button>
+            <button class="challenge-num-btn" data-num="90">90</button>
+            <button class="challenge-num-btn" data-num="126">126</button>
+            <button class="challenge-num-btn" id="btn-custom-num">Custom</button>
+          </div>
+        </div>
+
+        <!-- UNICORN REWARD CARD -->
+        <div class="bottom-card unicorn-card">
+          <div class="unicorn-icon">🦄</div>
+          <div class="unicorn-text">
+            <h4>Well done!</h4>
+            <p>You're building number superpowers!</p>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- HOW TO PLAY MODAL -->
+  <div class="modal-overlay" id="how-to-play-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">How to Play & Master Factor Trees 🌿</div>
+        <button class="modal-close" id="modal-close-btn">✕</button>
+      </div>
+
+      <div class="instruction-step">
+        <div class="instruction-num">1</div>
+        <div class="instruction-text">
+          <h4>Choose a Composite Number</h4>
+          <p>Click any challenge number (60, 72, 84, 90, 126, or Custom) to begin.</p>
+        </div>
+      </div>
+
+      <div class="instruction-step">
+        <div class="instruction-num">2</div>
+        <div class="instruction-text">
+          <h4>Click Nodes to Split Factors</h4>
+          <p>Click any non-prime node to select a valid factor pair (e.g. 60 ➔ 6 × 10).</p>
+        </div>
+      </div>
+
+      <div class="instruction-step">
+        <div class="instruction-num">3</div>
+        <div class="instruction-text">
+          <h4>Collect Prime Atoms 🍃</h4>
+          <p>When factors reach prime numbers (2, 3, 5, 7, etc.), they lock into green leaves.</p>
+        </div>
+      </div>
+
+      <div class="instruction-step">
+        <div class="instruction-num">4</div>
+        <div class="instruction-text">
+          <h4>Build the Unique Exponent Formula</h4>
+          <p>Click "Reveal" to check the unique canonical prime factorization formula!</p>
+        </div>
+      </div>
+
+      <button class="btn-got-it" id="btn-got-it">Got it! Let's Explore</button>
+    </div>
+  </div>
+
+  <script>
+    class SoundEngine {
+      constructor() { this.ctx = null; }
+      init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+      playPop() {
+        this.init(); if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.08);
+      }
+      playVictory() {
+        this.init(); if (!this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime + idx * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.09 + 0.22);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + idx * 0.09);
+          osc.stop(this.ctx.currentTime + idx * 0.09 + 0.22);
+        });
+      }
+    }
+    const sound = new SoundEngine();
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#6c5ce7', '#00b894', '#fd79a8', '#fdcb6e', '#0984e3'];
+
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: canvas.width / 2, y: canvas.height / 2 - 50,
+          vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.7) * 12,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: Math.random() * 6 + 4, rotation: Math.random() * 360, vRot: (Math.random() - 0.5) * 10
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let activeCount = 0;
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.vy += 0.32; p.rotation += p.vRot;
+          if (p.y < canvas.height) activeCount++;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        });
+        if (activeCount > 0) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      render();
+    }
+
+    function isPrime(n) {
+      if (n <= 1) return false;
+      if (n <= 3) return true;
+      if (n % 2 === 0 || n % 3 === 0) return false;
+      for (let i = 5; i * i <= n; i += 6) {
+        if (n % i === 0 || n % (i + 2) === 0) return false;
+      }
+      return true;
+    }
+
+    function getFactorPairs(n) {
+      const pairs = [];
+      for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) pairs.push([i, n / i]);
+      }
+      return pairs;
+    }
+
+    class InteractiveModelTabsApp {
+      constructor() {
+        this.targetNumber = 60;
+        this.activeTab = 'counters';
+        this.arrayDimensions = { rows: 6, cols: 10 };
+        this.remainderDivisor = 7;
+        this.clockDivisor = 4;
+        this.autoCheck = false;
+        this.treeRoot = null;
+        this.nodeCounter = 0;
+        this.revealed = false;
+
+        this.initDOM();
+        this.initEvents();
+        this.loadNumber(60);
+      }
+
+      initDOM() {
+        this.container = document.getElementById('tree-canvas-area');
+        this.svg = document.getElementById('tree-svg-lines');
+        this.layer = document.getElementById('tree-nodes-container');
+        this.targetText = document.getElementById('target-num-text');
+        this.predNumText = document.getElementById('pred-num-text');
+        this.viewportBox = document.getElementById('model-viewport-box');
+        this.leavesRow = document.getElementById('leaves-row');
+        this.exponentBox = document.getElementById('exponent-formula-box');
+        this.proofTargetNum = document.getElementById('proof-target-num');
+        this.proofLeavesStr = document.getElementById('proof-leaves-str');
+        this.proofExponentStr = document.getElementById('proof-exponent-str');
+        this.whyUniqueFormula = document.getElementById('why-unique-formula');
+        this.autoCheckToggle = document.getElementById('auto-check-toggle');
+        this.modal = document.getElementById('how-to-play-modal');
+      }
+
+      initEvents() {
+        document.getElementById('btn-how-to-play').addEventListener('click', () => this.modal.classList.add('active'));
+        document.getElementById('modal-close-btn').addEventListener('click', () => this.modal.classList.remove('active'));
+        document.getElementById('btn-got-it').addEventListener('click', () => this.modal.classList.remove('active'));
+
+        this.autoCheckToggle.addEventListener('click', () => {
+          this.autoCheck = !this.autoCheck;
+          this.autoCheckToggle.classList.toggle('active', this.autoCheck);
+          sound.playPop();
+        });
+
+        document.querySelectorAll('.challenge-num-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            if (e.target.id === 'btn-custom-num') {
+              const custom = prompt('Enter a whole number greater than 1:', '120');
+              if (custom && parseInt(custom) > 1) {
+                document.querySelectorAll('.challenge-num-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.loadNumber(parseInt(custom));
+              }
+              return;
+            }
+            document.querySelectorAll('.challenge-num-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            const val = parseInt(e.target.getAttribute('data-num'));
+            this.loadNumber(val);
+          });
+        });
+
+        document.querySelectorAll('.tab-pill').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            this.activeTab = e.target.getAttribute('data-tab');
+            this.renderModelView();
+          });
+        });
+
+        document.getElementById('btn-reset-tree').addEventListener('click', () => {
+          sound.playPop();
+          this.loadNumber(this.targetNumber);
+        });
+
+        document.getElementById('btn-alt-branch').addEventListener('click', () => {
+          sound.playPop();
+          this.generateAlternateBranch();
+        });
+
+        document.getElementById('btn-clear-model').addEventListener('click', () => {
+          sound.playPop();
+          this.renderModelView();
+        });
+
+        document.getElementById('btn-reveal').addEventListener('click', () => {
+          this.revealed = true;
+          sound.playVictory();
+          triggerConfetti();
+          this.updateFormulaDisplay();
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.ref-node') && !e.target.closest('.split-popover')) {
+            this.closePopover();
+          }
+        });
+
+        window.addEventListener('resize', () => this.drawTree());
+      }
+
+      loadNumber(num) {
+        this.targetNumber = num;
+        this.targetText.innerText = num;
+        this.predNumText.innerText = num;
+        this.proofTargetNum.innerText = num;
+        this.nodeCounter = 0;
+        this.revealed = false;
+
+        // Default initial array dimensions
+        const pairs = getFactorPairs(num);
+        if (pairs.length > 0) {
+          this.arrayDimensions = { rows: pairs[0][0], cols: pairs[0][1] };
+        } else {
+          this.arrayDimensions = { rows: 1, cols: num };
+        }
+        this.remainderDivisor = 7;
+        this.clockDivisor = pairs.length > 0 ? pairs[0][0] : 2;
+
+        this.treeRoot = {
+          id: ++this.nodeCounter,
+          val: num,
+          isPrime: isPrime(num),
+          colorClass: 'root-purple',
+          children: []
+        };
+
+        if (num === 60) {
+          this.treeRoot.children = [
+            {
+              id: ++this.nodeCounter, val: 6, isPrime: false, colorClass: 'node-blue',
+              children: [
+                { id: ++this.nodeCounter, val: 2, isPrime: true, colorClass: 'node-leaf-prime', children: [] },
+                { id: ++this.nodeCounter, val: 3, isPrime: true, colorClass: 'node-leaf-prime', children: [] }
+              ]
+            },
+            {
+              id: ++this.nodeCounter, val: 10, isPrime: false, colorClass: 'node-teal',
+              children: [
+                { id: ++this.nodeCounter, val: 2, isPrime: true, colorClass: 'node-leaf-prime', children: [] },
+                { id: ++this.nodeCounter, val: 5, isPrime: true, colorClass: 'node-leaf-prime', children: [] }
+              ]
+            }
+          ];
+        }
+
+        this.updateStepProgress(1);
+        this.renderModelView();
+        this.drawTree();
+        this.updatePrimeLeavesDisplay();
+        this.updateFormulaDisplay();
+      }
+
+      // RENDER ALL 4 MODEL TABS WITH REAL FULL INTERACTIVITY
+      renderModelView() {
+        const n = this.targetNumber;
+        this.viewportBox.innerHTML = '';
+
+        if (this.activeTab === 'counters') {
+          // 1. COUNTERS TAB: Large draggable dots for every unit of targetNumber
+          const wrapper = document.createElement('div');
+          wrapper.className = 'counters-wrapper';
+
+          const cCol = document.createElement('div');
+          cCol.className = 'counters-grid-col';
+
+          const colorClasses = ['counter-row-purple', 'counter-row-blue', 'counter-row-teal', 'counter-row-orange', 'counter-row-pink'];
+          const groupSize = 10;
+          const numRows = Math.ceil(n / groupSize);
+
+          for (let r = 0; r < numRows; r++) {
+            const rowEl = document.createElement('div');
+            rowEl.className = `counter-row ${colorClasses[r % colorClasses.length]}`;
+            const countInRow = Math.min(groupSize, n - r * groupSize);
+            for (let c = 0; c < countInRow; c++) {
+              const dot = document.createElement('div');
+              dot.className = 'counter-dot';
+              dot.innerText = (r * groupSize + c + 1);
+              this.enableDotDragging(dot);
+              rowEl.appendChild(dot);
+            }
+            cCol.appendChild(rowEl);
+          }
+          wrapper.appendChild(cCol);
+
+          const fCol = document.createElement('div');
+          fCol.className = 'factor-boxes-col';
+
+          const pairs = getFactorPairs(n);
+          if (pairs.length === 0) {
+            fCol.innerHTML = `<div class="dashed-factor-box">Prime Atom (1 factor pair)</div>`;
+          } else {
+            pairs.forEach(pair => {
+              const box = document.createElement('div');
+              box.className = 'dashed-factor-box';
+              box.innerText = `${pair[0]} × ${pair[1]} factors`;
+              box.addEventListener('click', () => {
+                this.arrayDimensions = { rows: pair[0], cols: pair[1] };
+                this.activeTab = 'array';
+                document.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+                document.querySelector('.tab-pill[data-tab="array"]').classList.add('active');
+                this.renderModelView();
+              });
+              fCol.appendChild(box);
+            });
+          }
+          wrapper.appendChild(fCol);
+
+          this.viewportBox.appendChild(wrapper);
+
+        } else if (this.activeTab === 'array') {
+          // 2. RECTANGULAR ARRAY TAB: Interactive matrix with dimension selector
+          const container = document.createElement('div');
+          container.className = 'array-view-container';
+
+          const eqBadge = document.createElement('div');
+          eqBadge.className = 'array-equation-badge';
+          const r = this.arrayDimensions.rows;
+          const c = this.arrayDimensions.cols;
+          eqBadge.innerText = `${r} × ${c} = ${r * c}`;
+          container.appendChild(eqBadge);
+
+          const dimSelector = document.createElement('div');
+          dimSelector.className = 'array-dim-selector';
+
+          const pairs = getFactorPairs(n);
+          if (pairs.length === 0) {
+            dimSelector.innerHTML = `<span style="font-size: 11px; color: var(--text-muted);">1 × ${n} (Prime Array)</span>`;
+          } else {
+            pairs.forEach(pair => {
+              const btn = document.createElement('button');
+              btn.className = `dim-btn ${pair[0] === r && pair[1] === c ? 'active' : ''}`;
+              btn.innerText = `${pair[0]} × ${pair[1]}`;
+              btn.addEventListener('click', () => {
+                this.arrayDimensions = { rows: pair[0], cols: pair[1] };
+                sound.playPop();
+                this.renderModelView();
+              });
+              dimSelector.appendChild(btn);
+            });
+          }
+          container.appendChild(dimSelector);
+
+          // Grid matrix
+          const matrix = document.createElement('div');
+          matrix.className = 'array-matrix-grid';
+          matrix.style.gridTemplateColumns = `repeat(${c}, 1fr)`;
+
+          for (let i = 0; i < r * c; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'counter-dot counter-row-purple';
+            dot.style.width = '18px';
+            dot.style.height = '18px';
+            dot.innerText = i + 1;
+            matrix.appendChild(dot);
+          }
+          container.appendChild(matrix);
+          this.viewportBox.appendChild(container);
+
+        } else if (this.activeTab === 'clock') {
+          // 3. ANALOG CLOCK TAB: Interactive clock showing division of targetNumber on clock dial
+          const container = document.createElement('div');
+          container.className = 'clock-view-container';
+
+          const div = this.clockDivisor;
+          const sliceVal = n / div;
+          const isExact = n % div === 0;
+
+          const infoText = document.createElement('div');
+          infoText.className = 'clock-info-text';
+          infoText.innerText = isExact ? `⏱ ${n} ÷ ${div} = ${sliceVal} (Exact Factor)` : `⏱ ${n} ÷ ${div} = ${Math.floor(n/div)} R${n%div}`;
+          container.appendChild(infoText);
+
+          // SVG Clock Face
+          const svgClock = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svgClock.setAttribute('class', 'clock-svg');
+          svgClock.setAttribute('viewBox', '0 0 100 100');
+
+          // Clock dial circle
+          const face = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          face.setAttribute('cx', '50'); face.setAttribute('cy', '50'); face.setAttribute('r', '45');
+          face.setAttribute('fill', '#ffffff'); face.setAttribute('stroke', '#6c5ce7'); face.setAttribute('stroke-width', '3');
+          svgClock.appendChild(face);
+
+          // Clock ticks for divisors
+          const divisors = [2, 3, 4, 5, 6, 10, 12];
+          divisors.forEach((d, idx) => {
+            const angle = (idx / divisors.length) * 2 * Math.PI - Math.PI / 2;
+            const tx = 50 + 36 * Math.cos(angle);
+            const ty = 50 + 36 * Math.sin(angle);
+
+            const tick = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            tick.setAttribute('x', tx.toString());
+            tick.setAttribute('y', (ty + 3).toString());
+            tick.setAttribute('text-anchor', 'middle');
+            tick.setAttribute('font-size', '8');
+            tick.setAttribute('font-weight', '800');
+            tick.setAttribute('fill', d === div ? '#6c5ce7' : '#717591');
+            tick.style.cursor = 'pointer';
+            tick.textContent = `÷${d}`;
+            tick.addEventListener('click', () => {
+              this.clockDivisor = d;
+              sound.playPop();
+              this.renderModelView();
+            });
+            svgClock.appendChild(tick);
+          });
+
+          // Clock Hand pointing to current division slice
+          const angle = (1 / div) * 2 * Math.PI - Math.PI / 2;
+          const handX = 50 + 30 * Math.cos(angle);
+          const handY = 50 + 30 * Math.sin(angle);
+
+          const hand = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          hand.setAttribute('x1', '50'); hand.setAttribute('y1', '50');
+          hand.setAttribute('x2', handX.toString()); hand.setAttribute('y2', handY.toString());
+          hand.setAttribute('stroke', '#6c5ce7'); hand.setAttribute('stroke-width', '4');
+          hand.setAttribute('stroke-linecap', 'round');
+          svgClock.appendChild(hand);
+
+          // Center cap
+          const cap = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          cap.setAttribute('cx', '50'); cap.setAttribute('cy', '50'); cap.setAttribute('r', '5');
+          cap.setAttribute('fill', '#5849df');
+          svgClock.appendChild(cap);
+
+          container.appendChild(svgClock);
+
+          const hint = document.createElement('div');
+          hint.style.fontSize = '10px'; hint.style.color = 'var(--text-muted)'; hint.innerText = 'Click any ÷ tick on the clock to test division!';
+          container.appendChild(hint);
+
+          this.viewportBox.appendChild(container);
+
+        } else if (this.activeTab === 'remainders') {
+          // 4. REMAINDERS TAB: Interactive division into equal groups + leftover remainder
+          const container = document.createElement('div');
+          container.className = 'remainders-view-container';
+
+          const d = this.remainderDivisor;
+          const quotient = Math.floor(n / d);
+          const remainder = n % d;
+          const isFactor = remainder === 0;
+
+          const eqCard = document.createElement('div');
+          eqCard.className = `remainder-equation-card ${isFactor ? 'is-factor' : ''}`;
+          eqCard.innerText = `${n} ÷ ${d} = ${quotient} ${remainder > 0 ? 'R' + remainder : '(Rem 0 ✨)'}`;
+          container.appendChild(eqCard);
+
+          const divSelector = document.createElement('div');
+          divSelector.className = 'divisor-selector-row';
+
+          [2, 3, 4, 5, 6, 7, 8, 9, 10, 12].forEach(val => {
+            const btn = document.createElement('button');
+            btn.className = `divisor-btn ${val === d ? 'active' : ''}`;
+            btn.innerText = `÷ ${val}`;
+            btn.addEventListener('click', () => {
+              this.remainderDivisor = val;
+              sound.playPop();
+              this.renderModelView();
+            });
+            divSelector.appendChild(btn);
+          });
+          container.appendChild(divSelector);
+
+          // Render quotient groups + remainder leftover box
+          const groupsDisplay = document.createElement('div');
+          groupsDisplay.className = 'remainder-groups-display';
+
+          for (let g = 0; g < Math.min(12, quotient); g++) {
+            const group = document.createElement('div');
+            group.className = 'remainder-group-box';
+            for (let i = 0; i < d; i++) {
+              const dot = document.createElement('div');
+              dot.className = 'counter-dot counter-row-teal';
+              dot.style.width = '14px'; dot.style.height = '14px';
+              group.appendChild(dot);
+            }
+            groupsDisplay.appendChild(group);
+          }
+
+          if (remainder > 0) {
+            const leftover = document.createElement('div');
+            leftover.className = 'remainder-leftover-box';
+            leftover.title = `Leftover Remainder (${remainder})`;
+            for (let r = 0; r < remainder; r++) {
+              const dot = document.createElement('div');
+              dot.className = 'counter-dot counter-row-pink';
+              dot.style.width = '14px'; dot.style.height = '14px';
+              leftover.appendChild(dot);
+            }
+            groupsDisplay.appendChild(leftover);
+          }
+
+          container.appendChild(groupsDisplay);
+          this.viewportBox.appendChild(container);
+        }
+      }
+
+      enableDotDragging(dot) {
+        let isDragging = false;
+        let startX, startY, origX = 0, origY = 0;
+
+        const onStart = (e) => {
+          e.preventDefault();
+          isDragging = true;
+          sound.playPop();
+
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+          startX = clientX - origX;
+          startY = clientY - origY;
+
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onEnd);
+          document.addEventListener('touchmove', onMove, { passive: false });
+          document.addEventListener('touchend', onEnd);
+        };
+
+        const onMove = (e) => {
+          if (!isDragging) return;
+          if (e.touches) e.preventDefault();
+
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+          origX = clientX - startX;
+          origY = clientY - startY;
+
+          dot.style.transform = `translate(${origX}px, ${origY}px) scale(1.3)`;
+        };
+
+        const onEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+
+          dot.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          dot.style.transform = 'translate(0px, 0px) scale(1)';
+          origX = 0; origY = 0;
+
+          setTimeout(() => { dot.style.transition = ''; }, 300);
+
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onEnd);
+          document.removeEventListener('touchmove', onMove);
+          document.removeEventListener('touchend', onEnd);
+        };
+
+        dot.addEventListener('mousedown', onStart);
+        dot.addEventListener('touchstart', onStart, { passive: false });
+      }
+
+      generateAlternateBranch() {
+        const pairs = getFactorPairs(this.targetNumber);
+        if (pairs.length <= 1) return;
+
+        let pair = pairs[Math.floor(Math.random() * pairs.length)];
+        this.treeRoot.children = [
+          { id: ++this.nodeCounter, val: pair[0], isPrime: isPrime(pair[0]), colorClass: 'node-blue', children: [] },
+          { id: ++this.nodeCounter, val: pair[1], isPrime: isPrime(pair[1]), colorClass: 'node-teal', children: [] }
+        ];
+
+        this.drawTree();
+        this.updatePrimeLeavesDisplay();
+        this.updateFormulaDisplay();
+      }
+
+      calculatePositions() {
+        const containerWidth = this.container.clientWidth || 320;
+        const startY = 40;
+        const levelHeight = 70;
+
+        const assignPos = (node, minX, maxX, depth) => {
+          node.x = (minX + maxX) / 2;
+          node.y = startY + depth * levelHeight;
+          node.depth = depth;
+
+          if (node.children && node.children.length === 2) {
+            assignPos(node.children[0], minX, node.x, depth + 1);
+            assignPos(node.children[1], node.x, maxX, depth + 1);
+          }
+        };
+
+        assignPos(this.treeRoot, 25, containerWidth - 25, 0);
+      }
+
+      drawTree() {
+        this.closePopover();
+        this.calculatePositions();
+
+        const defsHTML = `<defs><marker id="arrow" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8c7ae6" /></marker></defs>`;
+        this.svg.innerHTML = defsHTML;
+        this.layer.innerHTML = '';
+
+        const drawBranch = (node) => {
+          const el = document.createElement('div');
+          const isNodePrime = isPrime(node.val);
+          node.isPrime = isNodePrime;
+
+          el.className = `ref-node ${node.colorClass || 'root-purple'} ${isNodePrime ? 'node-leaf-prime' : ''}`;
+          el.style.left = `${node.x}px`;
+          el.style.top = `${node.y}px`;
+          el.innerText = node.val;
+
+          if (!isNodePrime && node.children.length === 0) {
+            const label = document.createElement('div');
+            label.className = 'node-split-label';
+            label.innerText = 'Split Me';
+            el.appendChild(label);
+          } else if (isNodePrime) {
+            const icon = document.createElement('div');
+            icon.className = 'node-prime-leaf-icon';
+            icon.innerText = '🍃';
+            el.appendChild(icon);
+          }
+
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!isNodePrime && node.children.length === 0) {
+              this.showPopover(node);
+            }
+          });
+
+          this.enableNodeDragging(el, node);
+          this.layer.appendChild(el);
+
+          if (node.children && node.children.length === 2) {
+            const childA = node.children[0];
+            const childB = node.children[1];
+
+            const pathA = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathA.setAttribute('id', `line-${node.id}-${childA.id}`);
+            pathA.setAttribute('d', `M ${node.x} ${node.y} C ${node.x} ${(node.y + childA.y)/2}, ${childA.x} ${(node.y + childA.y)/2}, ${childA.x} ${childA.y}`);
+            pathA.setAttribute('stroke', '#a29bfe');
+            pathA.setAttribute('stroke-width', '2.5');
+            pathA.setAttribute('fill', 'none');
+            pathA.setAttribute('marker-end', 'url(#arrow)');
+            this.svg.appendChild(pathA);
+
+            const pathB = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathB.setAttribute('id', `line-${node.id}-${childB.id}`);
+            pathB.setAttribute('d', `M ${node.x} ${node.y} C ${node.x} ${(node.y + childB.y)/2}, ${childB.x} ${(node.y + childB.y)/2}, ${childB.x} ${childB.y}`);
+            pathB.setAttribute('stroke', '#a29bfe');
+            pathB.setAttribute('stroke-width', '2.5');
+            pathB.setAttribute('fill', 'none');
+            pathB.setAttribute('marker-end', 'url(#arrow)');
+            this.svg.appendChild(pathB);
+
+            drawBranch(childA);
+            drawBranch(childB);
+          }
+        };
+
+        drawBranch(this.treeRoot);
+      }
+
+      enableNodeDragging(el, node) {
+        let isDragging = false;
+        let startX, startY;
+
+        const onStart = (e) => {
+          e.stopPropagation();
+          isDragging = true;
+          sound.playPop();
+
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+          startX = clientX - node.x;
+          startY = clientY - node.y;
+
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onEnd);
+          document.addEventListener('touchmove', onMove, { passive: false });
+          document.addEventListener('touchend', onEnd);
+        };
+
+        const onMove = (e) => {
+          if (!isDragging) return;
+          if (e.touches) e.preventDefault();
+
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+          node.x = clientX - startX;
+          node.y = clientY - startY;
+
+          el.style.left = `${node.x}px`;
+          el.style.top = `${node.y}px`;
+
+          this.redrawLines();
+        };
+
+        const onEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onEnd);
+          document.removeEventListener('touchmove', onMove);
+          document.removeEventListener('touchend', onEnd);
+        };
+
+        el.addEventListener('mousedown', onStart);
+        el.addEventListener('touchstart', onStart, { passive: false });
+      }
+
+      redrawLines() {
+        const updateLine = (parent, child) => {
+          const line = document.getElementById(`line-${parent.id}-${child.id}`);
+          if (line) {
+            line.setAttribute('d', `M ${parent.x} ${parent.y} C ${parent.x} ${(parent.y + child.y)/2}, ${child.x} ${(parent.y + child.y)/2}, ${child.x} ${child.y}`);
+          }
+        };
+
+        const traverse = (node) => {
+          if (node.children && node.children.length === 2) {
+            updateLine(node, node.children[0]);
+            updateLine(node, node.children[1]);
+            traverse(node.children[0]);
+            traverse(node.children[1]);
+          }
+        };
+
+        traverse(this.treeRoot);
+      }
+
+      showPopover(node) {
+        this.closePopover();
+        sound.playPop();
+
+        const pairs = getFactorPairs(node.val);
+        if (pairs.length === 0) return;
+
+        const popover = document.createElement('div');
+        popover.className = 'split-popover';
+        popover.id = 'active-popover';
+        popover.style.left = `${node.x}px`;
+        popover.style.top = `${node.y + 20}px`;
+
+        popover.innerHTML = `<div class="popover-header">Split ${node.val}:</div>`;
+
+        pairs.forEach(pair => {
+          const btn = document.createElement('button');
+          btn.className = 'factor-pair-btn';
+          btn.innerHTML = `<span>${pair[0]} × ${pair[1]}</span> <span>➔</span>`;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.splitNode(node, pair[0], pair[1]);
+          });
+          popover.appendChild(btn);
+        });
+
+        this.layer.appendChild(popover);
+      }
+
+      closePopover() {
+        const p = document.getElementById('active-popover');
+        if (p) p.remove();
+      }
+
+      splitNode(node, factorA, factorB) {
+        sound.playPop();
+
+        if (this.autoCheck && factorA * factorB !== node.val) {
+          alert(`Invalid factor split! ${factorA} × ${factorB} ≠ ${node.val}`);
+          return;
+        }
+
+        node.children = [
+          { id: ++this.nodeCounter, val: factorA, isPrime: isPrime(factorA), colorClass: isPrime(factorA) ? 'node-leaf-prime' : 'node-blue', children: [] },
+          { id: ++this.nodeCounter, val: factorB, isPrime: isPrime(factorB), colorClass: isPrime(factorB) ? 'node-leaf-prime' : 'node-teal', children: [] }
+        ];
+
+        this.updateStepProgress(2);
+        this.drawTree();
+        this.updatePrimeLeavesDisplay();
+        this.updateFormulaDisplay();
+
+        if (this.isTreeFullyFactored(this.treeRoot)) {
+          this.updateStepProgress(4);
+          sound.playVictory();
+          triggerConfetti();
+        }
+      }
+
+      isTreeFullyFactored(node) {
+        if (node.isPrime || isPrime(node.val)) return true;
+        if (node.children.length === 0) return false;
+        return this.isTreeFullyFactored(node.children[0]) && this.isTreeFullyFactored(node.children[1]);
+      }
+
+      collectAllPrimeLeaves(node, leaves = []) {
+        if (node.children.length === 0) {
+          if (isPrime(node.val)) leaves.push(node.val);
+        } else if (node.children.length === 2) {
+          this.collectAllPrimeLeaves(node.children[0], leaves);
+          this.collectAllPrimeLeaves(node.children[1], leaves);
+        }
+        return leaves;
+      }
+
+      updateStepProgress(stepNum) {
+        for (let i = 1; i <= 4; i++) {
+          const box = document.getElementById(`step-${i}`);
+          box.classList.remove('active', 'completed');
+          if (i === stepNum) box.classList.add('active');
+          else if (i < stepNum) box.classList.add('completed');
+        }
+      }
+
+      updatePrimeLeavesDisplay() {
+        const leaves = this.collectAllPrimeLeaves(this.treeRoot).sort((a,b)=>a-b);
+        this.leavesRow.innerHTML = '';
+
+        if (leaves.length === 0) {
+          this.leavesRow.innerHTML = `<span style="font-size: 11px; color: var(--text-muted); font-style: italic;">Click nodes to split...</span>`;
+          this.proofLeavesStr.innerText = '(?)';
+          return;
+        }
+
+        this.updateStepProgress(3);
+
+        leaves.forEach(val => {
+          const leafNode = document.createElement('div');
+          leafNode.className = 'leaf-circle-node';
+          leafNode.innerText = val;
+          this.leavesRow.appendChild(leafNode);
+        });
+
+        const leavesStr = leaves.map(l => `(${l})`).join('');
+        this.proofLeavesStr.innerText = leavesStr;
+        this.whyUniqueFormula.innerText = `${leavesStr} = ${leavesStr}`;
+      }
+
+      updateFormulaDisplay() {
+        const leaves = this.collectAllPrimeLeaves(this.treeRoot).sort((a,b)=>a-b);
+
+        if (leaves.length === 0) {
+          this.exponentBox.innerHTML = `${this.targetNumber} = ?`;
+          this.proofExponentStr.innerHTML = `?`;
+          return;
+        }
+
+        const counts = {};
+        leaves.forEach(val => { counts[val] = (counts[val] || 0) + 1; });
+
+        const parts = Object.keys(counts).map(val => {
+          const p = counts[val];
+          return `${val}<sup>${this.revealed ? p : '?'}</sup>`;
+        });
+
+        const canonicalFormula = parts.join(' × ');
+        this.exponentBox.innerHTML = `${this.targetNumber} = ${canonicalFormula}`;
+        this.proofExponentStr.innerHTML = canonicalFormula;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.app = new InteractiveModelTabsApp();
+    });
+  </script>
+</body>
+</html>

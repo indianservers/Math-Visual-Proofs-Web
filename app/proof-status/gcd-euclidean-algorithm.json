@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "gcd-euclidean-algorithm",
+  "categorySlug": "number-theory",
+  "slug": "gcd-euclidean-algorithm",
+  "route": "/visual-proofs/number-theory/gcd-euclidean-algorithm",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/79/index.html"
+}

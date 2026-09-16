@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "exponent-quotient-rule",
+  "categorySlug": "logarithms-exponents",
+  "slug": "exponent-quotient-rule",
+  "route": "/visual-proofs/logarithms-exponents/exponent-quotient-rule",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Praveen/exponent-quotient-rule"
+}

@@ -1,0 +1,1176 @@
+/* Even and Odd Numbers as Pairing Patterns - Pixel Perfect CSS */
+
+.pageContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Left Sidebar */
+.sidebar {
+  width: 90px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  flex-shrink: 0;
+  justify-content: space-between;
+}
+
+.sidebarTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 24px;
+}
+
+.logoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.logoIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+  color: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.15);
+}
+
+.logoText {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #1e1b4b;
+  line-height: 1.1;
+}
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 14px;
+  width: 72px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.navItem:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.navItemActive {
+  background: #ede9fe;
+  color: #4f46e5;
+}
+
+.navIcon {
+  font-size: 20px;
+}
+
+.sidebarBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Main Content Area */
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 36px 36px 36px;
+  max-width: 1536px;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+/* Header */
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.breadcrumbs {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6366f1;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.headerBadges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* Control Strip */
+.controlStrip {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #ffffff;
+  padding: 10px 20px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  flex-wrap: wrap;
+}
+
+.numberChooser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e1b4b;
+}
+
+.stepperContainer {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 2px 8px;
+  gap: 8px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.stepperValue {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  min-width: 22px;
+  text-align: center;
+}
+
+.stepperBtns {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.stepperBtn {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  font-size: 10px;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 2px;
+}
+
+.stepperBtn:hover {
+  color: #4f46e5;
+  background: #ede9fe;
+}
+
+.modelSelector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e1b4b;
+}
+
+.modelPills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.modelPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modelPill:hover {
+  background: #f1f5f9;
+  color: #1e1b4b;
+}
+
+.modelPillActive {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+  color: #4338ca;
+  box-shadow: 0 1px 3px rgba(99, 102, 241, 0.15);
+}
+
+.controlActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.actionBtnSmall {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionBtnSmall:hover {
+  background: #f1f5f9;
+  color: #1e1b4b;
+}
+
+/* Two Column Layout: Center Workspace + Right Column */
+.centerGrid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Main Workspace Card */
+.workspaceCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 480px;
+}
+
+.pairingWorkspaceSplit {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 20px;
+}
+
+/* Left Counters Subpanel */
+.countersSubpanel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 380px;
+}
+
+.countersHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.countersTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.countersSubtitle {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.countersPool {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 14px 0;
+  justify-items: center;
+}
+
+.counterToken {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.counterToken:hover {
+  transform: scale(1.08);
+}
+
+.counterToken:active,
+.counterTokenDragging {
+  cursor: grabbing;
+  transform: scale(1.12);
+  z-index: 50;
+}
+
+.shuffleBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shuffleBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Main Pairing Subpanel */
+.pairingSubpanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 380px;
+}
+
+.pairingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pairingTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearBtn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+/* Grid of Pair Slot Boxes */
+.pairBoxesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 16px;
+  position: relative;
+  min-height: 240px;
+  align-content: start;
+}
+
+.pairBox {
+  position: relative;
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 18px;
+  padding: 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  transition: all 0.2s ease;
+}
+
+.pairBoxComplete {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.checkmarkBadge {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 2px 5px rgba(34, 197, 94, 0.4);
+}
+
+.pairConnectorLine {
+  width: 24px;
+  height: 3px;
+  background: #94a3b8;
+  border-radius: 2px;
+}
+
+.socketPlaceholder {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px dashed #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.socketHighlight {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+  transform: scale(1.05);
+}
+
+/* Animated Curved Arrow for Leftover */
+.curvedArrowContainer {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Status Banner inside Pairing Area */
+.statusBanner {
+  background: #ede9fe;
+  border: 1px solid #ddd6fe;
+  border-radius: 16px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.statusLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bulbIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #7c3aed;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.statusText {
+  font-size: 13px;
+  color: #334155;
+}
+
+.statusTextBold {
+  font-weight: 800;
+  color: #1e1b4b;
+}
+
+.leftoverBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #c4b5fd;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4338ca;
+}
+
+.leftoverMiniToken {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2dd4bf 0%, #0d9488 100%);
+}
+
+/* Alternate Models Views */
+.alternateModelContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  min-height: 360px;
+}
+
+.arrayGridVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.arrayRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.clockVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.remainderLaneVisual {
+  width: 100%;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.factorTreeVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Right Column Cards */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Why It Works Card */
+.whyItWorksCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e1b4b;
+}
+
+.whyStepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.whyStepItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 10px 12px;
+  border: 1px solid #f1f5f9;
+}
+
+.whyStepHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.stepNumberCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4f46e5;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.stepInstructionText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.35;
+}
+
+.stepDiagramRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.dotPairMini {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.miniDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #8b5cf6;
+}
+
+.miniDotGreen {
+  background: #10b981;
+}
+
+.miniDotAmber {
+  background: #f59e0b;
+}
+
+.miniDotLine {
+  width: 14px;
+  height: 2px;
+  background: #cbd5e1;
+}
+
+/* Prediction Card */
+.predictionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.predictionPrompt {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.predictionButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.predictBtn {
+  flex: 1;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.predictBtnActive {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border-color: #4338ca;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+}
+
+.predictFeedback {
+  font-size: 11px;
+  color: #475569;
+  background: #ede9fe;
+  padding: 8px 10px;
+  border-radius: 10px;
+  line-height: 1.35;
+}
+
+/* Reveal Formula Card */
+.revealCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.revealBtn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+  border: none;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s ease;
+}
+
+.revealBtn:hover {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  transform: translateY(-1px);
+}
+
+.formulaDisplayArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.formulaMain {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.formulaExplanation {
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.35;
+}
+
+.formulaGeneralPill {
+  display: inline-block;
+  background: #ede9fe;
+  border-radius: 10px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4338ca;
+  margin-top: 4px;
+}
+
+/* Bottom Grid (One-line Proof + Challenge) */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* One Line Visual Proof Card */
+.oneLineProofCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.oneLineContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.oneLineDiagramBase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sixDotsGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.vertPair {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.oneLineSubtext {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.arrowSymbol {
+  font-size: 18px;
+  color: #6366f1;
+  font-weight: 800;
+}
+
+.branchCardEven {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 90px;
+}
+
+.branchTitleEven {
+  font-size: 10px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.branchFormula {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.branchCardOdd {
+  background: #ede9fe;
+  border: 1px solid #ddd6fe;
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 90px;
+}
+
+.branchTitleOdd {
+  font-size: 10px;
+  font-weight: 700;
+  color: #5b21b6;
+}
+
+.orDividerBadge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.conclusionTextBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Challenge Card */
+.challengeCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.challengeLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.challengePrompt {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.challengeControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkBtn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+  transition: all 0.2s ease;
+}
+
+.checkBtn:hover {
+  transform: translateY(-1px);
+}
+
+.challengeDotsGrid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #f1f5f9;
+}
+
+.challengeDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #8b5cf6;
+}
+
+.challengeDotLeftover {
+  background: #f59e0b;
+}
+
+/* Guided Proof Bar & Hint Drawer */
+.guidedBar {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.guidedSteps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stepPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  background: #f8fafc;
+}
+
+.stepPillActive {
+  background: #4f46e5;
+  color: #ffffff;
+  border-color: #4338ca;
+}
+
+.stepPillDone {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.hintBox {
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 12px;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Accessibility hidden */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .centerGrid {
+    grid-template-columns: 1fr;
+  }
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 12px 16px;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .sidebarTop {
+    flex-direction: row;
+    gap: 12px;
+  }
+  .navGroup {
+    flex-direction: row;
+    gap: 8px;
+  }
+  .mainWrapper {
+    padding: 16px;
+  }
+  .pairingWorkspaceSplit {
+    grid-template-columns: 1fr;
+  }
+}

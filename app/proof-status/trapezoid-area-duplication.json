@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "trapezoid-area-duplication",
+  "categorySlug": "geometry",
+  "slug": "trapezoid-area-duplication",
+  "route": "/visual-proofs/geometry/trapezoid-area-duplication",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-05.html"
+}

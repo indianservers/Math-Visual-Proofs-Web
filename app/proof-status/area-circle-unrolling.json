@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "area-circle-unrolling",
+  "categorySlug": "geometry",
+  "slug": "area-of-circle-by-unrolling",
+  "route": "/visual-proofs/geometry/area-of-circle-by-unrolling",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-02.html"
+}

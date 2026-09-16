@@ -335,3 +335,81 @@ R-to-rotate, and Enter-to-dock alternatives.
 Prefer extending these small, tested primitives over adding a generic diagram
 editor. Add a library only when at least two distinct proofs need it and its
 mathematical state can be tested independently of rendering.
+
+
+13. INTELLIGENT REUSABLE CANVAS ARCHITECTURE
+---------------------------------------------
+
+The proof engine is configuration-driven. A proof configuration describes the
+mathematics; shared engine modules decide how interaction behaves.
+
+  app/proof-engine/types.ts
+    Defines 2D and 3D transforms, geometry primitives, capabilities, movement
+    constraints, magnetic targets, docking slots, canvas configuration, and
+    drop outcomes.
+
+  app/proof-engine/configSchema.ts
+    Validates authored or AI-generated proof configurations with Zod before a
+    scene renders. It rejects broken object-to-slot references, invalid shapes,
+    invalid bounds, and inconsistent zoom limits.
+
+  app/proof-engine/canvasEngine.ts
+    Pure interaction intelligence. It applies bounds, axis, grid, path, and
+    rotation constraints; filters and ranks magnetic targets; ranks compatible
+    docking slots; and returns a deterministic dock/free/reject outcome with a
+    learner-friendly explanation. Pointer, touch, keyboard, and animation input
+    must all call these same functions.
+
+  app/proof-engine/ProofShape.tsx
+    Shared config-driven renderer for polygons, rectangles, circles, ellipses,
+    segments, arcs, and projected polyhedra. Theorem-specific labels, angle
+    marks, and annotations may remain custom children.
+
+  app/proof-engine/geometry3d.ts
+    Lightweight 3D transform, projection, depth sorting, cube, and pyramid
+    primitives. This supports interactive projected solids without forcing a
+    large WebGL dependency into every 2D proof. Add a Three.js renderer adapter
+    only when a proof genuinely needs lighting, materials, camera orbit, mesh
+    loading, or GPU rendering; retain the same config and interaction contracts.
+
+Configuration authoring rules:
+
+  - Give each object a stable ID, mathematicalType, semantic tags, geometry,
+    capabilities, constraints, allowed rotations, and valid docking slots.
+  - Give each slot accepted IDs/types/tags, a target transform, tolerance,
+    priority, and the mathematical event produced by docking.
+  - Use constraint arrays for mathematically meaningful movement: bounds for a
+    free object, axis for a sliding apex, path for a locus, grid for block-style
+    proof building, rotation-step for discrete orientation, and scale-range for
+    similarity or dilation.
+  - Use magnetic snap targets for guides, centers, vertices, grids, and helper
+    points that do not complete a formal docking event.
+  - Keep rendering replaceable. SVG is the default for precise 2D geometry and
+    accessible labels. Projected SVG polyhedra cover simple 3D proofs. A future
+    WebGL adapter must consume the same scene state rather than introducing a
+    second proof-state system.
+  - Never put theorem correctness inside pointer handlers or renderer code.
+    Correctness belongs in pure configuration and validation functions so it
+    can be unit-tested.
+
+Adding a new interaction mode:
+
+  1. Add a serializable capability or constraint to types.ts.
+  2. Add Zod validation in configSchema.ts.
+  3. Implement the behavior as a pure function in canvasEngine.ts or a focused
+     geometry module.
+  4. Add unit tests for valid, invalid, boundary, and conflicting cases.
+  5. Connect pointer, touch, keyboard, and animation commands to the same
+     function.
+  6. Add visual feedback and accessible text without altering mathematical
+     state.
+PARALLEL DEVELOPMENT RULES
+==========================
+
+When multiple AI tools or developers expand the library, each proof must be created with:
+
+  npm run proof:new -- --id <catalog-id> --owner <name>
+
+Keep all proof-specific code, styles, configuration, and assets inside the generated proof directory. Update only that proof's unique file in app/proof-status. Never add new proofs to a shared route map, never place proof styles in app/globals.css, and never combine a proof implementation with changes to the shared canvas engine.
+
+If a new capability is required, implement it once as a backward-compatible proof-engine change in a separate pull request. After it merges, proof branches should rebase and consume the shared API. Full workflow: docs/PARALLEL_PROOF_WORKFLOW.md.

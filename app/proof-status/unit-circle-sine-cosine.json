@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "unit-circle-sine-cosine",
+  "categorySlug": "trigonometry",
+  "slug": "unit-circle-sine-cosine",
+  "route": "/visual-proofs/trigonometry/unit-circle-sine-cosine",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Aditya/lesson-16.html"
+}

@@ -1,0 +1,231 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #101a44;
+  background: radial-gradient(circle at 50% 0%, #ffffff 0%, #f3f5ff 78%);
+}
+
+/* Slim horizontal strip — never a tall left column of Workspace/About bars */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 1rem;
+  width: min(1600px, 100%);
+  margin: 0 auto;
+  padding: 0.65rem clamp(0.75rem, 2vw, 1.25rem);
+  border-bottom: 1px solid #e4e8f6;
+  background: rgb(255 255 255 / 88%);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: #5a6798;
+}
+
+.crumbs a {
+  color: #4f2cff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.title {
+  flex: 1 1 220px;
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+}
+
+.chip {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d9def2;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.78rem;
+  color: #3a4580;
+  white-space: nowrap;
+}
+
+.aboutToggle {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #cfc8ff;
+  border-radius: 999px;
+  background: #f5f2ff;
+  color: #4e2fd2;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.aboutToggle:hover,
+.aboutToggle:focus-visible {
+  outline: 2px solid #7c5cff;
+  outline-offset: 2px;
+}
+
+.aboutPanel {
+  width: min(1600px, 100%);
+  margin: 0 auto;
+  padding: 0.65rem clamp(0.75rem, 2vw, 1.25rem) 0.85rem;
+  color: #46548b;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  border-bottom: 1px solid #e8ecf8;
+  background: #f7f8ff;
+}
+
+.feelStrip {
+  width: min(1600px, 100%);
+  margin: 0 auto;
+  padding: 0.55rem clamp(0.75rem, 2vw, 1.25rem);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 0.75rem 1rem;
+  align-items: center;
+  border-bottom: 1px solid #e4e8f6;
+  background: linear-gradient(90deg, #f7f9ff, #eefcf7 55%, #fff8f1);
+  animation: feel-in 0.45s ease both;
+}
+
+.feelGlyph {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.65rem;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid #d7def5;
+  color: #2f3f8a;
+  font-size: 1.05rem;
+}
+
+.feelCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.feelCopy b {
+  font-size: 0.82rem;
+  color: #1d2a63;
+}
+
+.feelCopy span {
+  font-size: 0.78rem;
+  color: #5a6798;
+}
+
+.feelAha {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #31407a;
+  font-style: italic;
+}
+
+.toneRearrange {
+  background: linear-gradient(90deg, #f4f7ff, #eef8ff);
+}
+.toneAngle {
+  background: linear-gradient(90deg, #f7f4ff, #fff5f8);
+}
+.toneMeasure {
+  background: linear-gradient(90deg, #f3fbff, #f4fff8);
+}
+.toneTile {
+  background: linear-gradient(90deg, #fff8ef, #f4f7ff);
+}
+.toneLimit {
+  background: linear-gradient(90deg, #f3f8ff, #f5f2ff);
+}
+.toneGrid {
+  background: linear-gradient(90deg, #f6f8ff, #eefaf6);
+}
+.toneTransform {
+  background: linear-gradient(90deg, #f8f4ff, #fff7ef);
+}
+.toneNumber {
+  background: linear-gradient(90deg, #fff7f0, #f4f8ff);
+}
+.toneCompare {
+  background: linear-gradient(90deg, #f4fff8, #f6f4ff);
+}
+.toneSimulate {
+  background: linear-gradient(90deg, #f3fbff, #fff6f2);
+}
+.toneData {
+  background: linear-gradient(90deg, #f5f7ff, #f2fbf6);
+}
+.toneVector {
+  background: linear-gradient(90deg, #f3f7ff, #fff4f6);
+}
+.toneComplex {
+  background: linear-gradient(90deg, #f6f3ff, #f3fbff);
+}
+.toneGrowth {
+  background: linear-gradient(90deg, #fff8f0, #f4fff7);
+}
+.toneApplied {
+  background: linear-gradient(90deg, #f5f7fb, #fff6ef);
+}
+.tonePattern {
+  background: linear-gradient(90deg, #f7f4ff, #f4fbff);
+}
+.toneGeneral {
+  background: linear-gradient(90deg, #f7f9ff, #eefcf7 55%, #fff8f1);
+}
+
+@keyframes feel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.workspace {
+  flex: 1;
+  width: min(1600px, 100%);
+  margin: 0 auto;
+  padding: 0.5rem clamp(0.35rem, 1vw, 0.75rem) 1rem;
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .meta {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .feelStrip {
+    grid-template-columns: auto 1fr;
+  }
+
+  .feelAha {
+    grid-column: 1 / -1;
+  }
+}

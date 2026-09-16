@@ -1,8 +1,9 @@
 "use client";
 
 import clsx, { type ClassValue } from "clsx";
-import { PointerEvent, useCallback, useRef, useState } from "react";
+import { PointerEvent, useCallback, useMemo, useRef, useState } from "react";
 import { distance, type Point } from "../lib/geometry";
+import { calculateViewBox } from "../proof-engine/canvasEngine";
 
 export type CanvasPoint = Point;
 
@@ -198,5 +199,47 @@ export function useCanvasHistory<T>(initialState: T, limit = 50) {
     reset,
     canUndo: past.length > 0,
     canRedo: future.length > 0,
+  };
+}
+
+export function useCanvasViewport(
+  width: number,
+  height: number,
+  options: { minZoom?: number; maxZoom?: number; step?: number } = {},
+) {
+  const minZoom = options.minZoom ?? 1;
+  const maxZoom = options.maxZoom ?? 3;
+  const step = options.step ?? 0.25;
+  const [zoom, setZoomValue] = useState(minZoom);
+  const [center, setCenter] = useState({ x: width / 2, y: height / 2 });
+  const setZoom = useCallback(
+    (next: number | ((current: number) => number)) =>
+      setZoomValue((current) => {
+        const value = typeof next === "function" ? next(current) : next;
+        return Math.min(maxZoom, Math.max(minZoom, value));
+      }),
+    [maxZoom, minZoom],
+  );
+  const viewBox = useMemo(
+    () => calculateViewBox(width, height, zoom, center),
+    [center, height, width, zoom],
+  );
+  const fit = useCallback(() => {
+    setZoomValue(minZoom);
+    setCenter({ x: width / 2, y: height / 2 });
+  }, [height, minZoom, width]);
+
+  return {
+    zoom,
+    zoomPercent: Math.round(zoom * 100),
+    viewBox: `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`,
+    canZoomIn: zoom < maxZoom,
+    canZoomOut: zoom > minZoom,
+    zoomIn: () => setZoom((value) => value + step),
+    zoomOut: () => setZoom((value) => value - step),
+    setZoom,
+    panBy: (dx: number, dy: number) =>
+      setCenter((current) => ({ x: current.x + dx, y: current.y + dy })),
+    fit,
   };
 }

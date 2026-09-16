@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AM-GM Inequality | Visual Proofs & Interactive Mathematics</title>
+  
+  <!-- KaTeX LaTeX Renderer CDN -->
+  <link rel="stylesheet" href="/vendor/katex/katex.min.css">
+  <script defer src="/vendor/katex/katex.min.js"></script>
+  <script defer src="/vendor/katex/auto-render.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #635bff;
+      --primary-hover: #4f46e5;
+      --primary-light: #eeedfd;
+      --accent-purple: #8b5cf6;
+      --accent-purple-light: #f3e8ff;
+      --accent-pink: #ec4899;
+      --accent-pink-light: #fce7f3;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #dbeafe;
+      --accent-green: #10b981;
+      --accent-green-light: #d1fae5;
+      --accent-orange: #f59e0b;
+      --accent-orange-light: #fef3c7;
+      --bg-main: #f4f5fb;
+      --card-bg: #ffffff;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #818cf8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(99,91,255,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-math: 'Cambria Math', 'Latin Modern Math', 'Times New Roman', serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Fallback Math Styling if KaTeX is loading/offline */
+    .frac-fb { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-family: var(--font-math); line-height: 1.1; margin: 0 2px; }
+    .num-fb { border-bottom: 1.5px solid currentColor; padding: 0 2px; }
+    .den-fb { padding: 0 2px; }
+    .sqrt-fb { border-top: 1.5px solid currentColor; padding-top: 1px; margin-left: 1px; font-family: var(--font-math); }
+    .sqrt-symbol { font-family: var(--font-math); font-size: 1.1em; }
+    .boxed-math-fb { border: 2px solid var(--primary); padding: 2px 8px; border-radius: 4px; display: inline-block; font-weight: bold; background: white; }
+
+    /* Layout Structure */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 1200px) {
+      .app-layout { grid-template-columns: 100px 1fr; }
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 28px;
+      z-index: 10;
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .brand-logo svg { width: 36px; height: 36px; }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .nav-item button {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 64px;
+      padding: 8px 0;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+
+    .nav-item button svg { width: 22px; height: 22px; }
+
+    .nav-item button:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-item.active button {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 700;
+    }
+
+    .sidebar-footer { margin-top: auto; }
+
+    /* Main Workspace */
+    .main-wrapper {
+      padding: 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Header */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .breadcrumb {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .header-title-area h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon-action {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: var(--text-dark);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon-action:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-focus);
+    }
+
+    /* Top Controls Configuration Card */
+    .top-controls-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .top-controls-grid {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .mission-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      max-width: 380px;
+    }
+
+    .mission-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b5cf6, #635bff);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(99,91,255,0.25);
+    }
+
+    .mission-text h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .mission-text p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Proof Model Dropdown Box */
+    .proof-model-selector-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 260px;
+      max-width: 380px;
+    }
+
+    .control-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .proof-model-dropdown {
+      background: var(--card-bg);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 14px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(99,91,255,0.12);
+      transition: all 0.2s ease;
+    }
+
+    .proof-model-dropdown:hover, .proof-model-dropdown:focus {
+      border-color: var(--primary-hover);
+      background: var(--primary-light);
+    }
+
+    .model-subtitle-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    .inputs-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .input-unit {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .input-unit label {
+      font-weight: 800;
+      font-size: 15px;
+      font-family: var(--font-math);
+    }
+
+    .input-unit label.label-a { color: var(--accent-pink); }
+    .input-unit label.label-b { color: var(--accent-blue); }
+
+    .input-num-field {
+      width: 64px;
+      padding: 5px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-num-field:focus { border-color: var(--border-focus); }
+
+    .validation-alert-banner {
+      width: 100%;
+      background: var(--accent-pink-light);
+      border: 1px solid #f472b6;
+      color: #9d174d;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 1100px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr 400px;
+      }
+    }
+
+    .workspace-main-col {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Core Inequality Hero Card */
+    .hero-inequality-card {
+      background: linear-gradient(135deg, #eeedfd 0%, #f3e8ff 100%);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-formula-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .inequality-formula-main {
+      font-family: var(--font-math);
+      font-size: 26px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .inequality-live-substitute {
+      font-family: var(--font-math);
+      font-size: 18px;
+      font-weight: 700;
+      color: #4338ca;
+      background: white;
+      padding: 6px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid #c7d2fe;
+    }
+
+    .equality-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .equality-status-badge.active-eq {
+      background: var(--accent-green-light);
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+
+    .equality-status-badge.strict-ineq {
+      background: var(--accent-blue-light);
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+
+    /* Interactive Visualizer Card */
+    .graph-viewport-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Graph Toolbar Top (Zoom & Tools Only - Proof Model Dropdown is strictly in Top Controls) */
+    .graph-toolbar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+    }
+
+    .graph-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .graph-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-tool-action {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+    }
+
+    .btn-tool-action:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--border-focus);
+    }
+
+    .btn-tool-action.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .toggle-snap-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .switch-toggle {
+      position: relative;
+      display: inline-block;
+      width: 32px;
+      height: 18px;
+    }
+
+    .switch-toggle input { opacity: 0; width: 0; height: 0; }
+
+    .slider-toggle {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 18px;
+    }
+
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 14px; width: 14px;
+      left: 2px; bottom: 2px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider-toggle { background-color: var(--primary); }
+    input:checked + .slider-toggle:before { transform: translateX(14px); }
+
+    .zoom-btn-group {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-zoom-action {
+      background: none;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-zoom-action:hover { background: #f1f5f9; color: var(--primary); }
+
+    .zoom-level-text {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .graph-canvas-container {
+      width: 100%;
+      height: 440px;
+      background: #fafbfe;
+      border: 1px solid #f1f5f9;
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .main-canvas-svg {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    .main-canvas-svg.panning { cursor: grabbing; }
+
+    /* Mathematical Formula & Live Values Summary Box Inside Workspace */
+    .math-summary-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .summary-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .summary-card-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .summary-card-value {
+      font-family: var(--font-math);
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .summary-card-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Visual Proof Section (Bottom Flowchart) */
+    .visual-proof-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .visual-proof-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .proof-steps-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+
+    .proof-step-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .proof-step-num {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .proof-step-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .proof-step-formula {
+      font-family: var(--font-math);
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--primary);
+      background: white;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    /* Right Panel (Why it works) */
+    .why-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 120px);
+      min-height: 620px;
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+    }
+
+    .why-panel-header {
+      flex: 0 0 auto;
+      padding: 18px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .why-panel-header h2 { font-size: 17px; font-weight: 800; color: var(--text-dark); }
+
+    .why-panel-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .why-panel-scroll::-webkit-scrollbar { width: 6px; }
+    .why-panel-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+    .why-panel-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .why-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .why-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .why-num-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .boxed-formula-math {
+      background: #f8fafc;
+      border: 2px solid var(--primary);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-math);
+      font-size: 15px;
+      text-align: center;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .why-num-calc {
+      background: #f1f5f9;
+      border-left: 3px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: var(--font-math);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    /* Prediction Card */
+    .prediction-card-box {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .feedback-msg {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feedback-msg.correct { background: var(--accent-green-light); color: #065f46; }
+    .feedback-msg.incorrect { background: #fce7f3; color: #9f1239; }
+
+    /* Challenge Card */
+    .challenge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <a href="#" class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2.5"/>
+          <path d="M 12 10 Q 20 20 12 30 M 28 10 Q 20 20 28 30" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Maths</span>
+      </a>
+      <ul class="nav-list">
+        <li class="nav-item active">
+          <button title="Explore Visuals">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Explore
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Proofs">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h-0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            Proofs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button title="Practice">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Practice
+          </button>
+        </li>
+      </ul>
+      <div class="sidebar-footer nav-item">
+        <button title="Settings">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+          Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Container -->
+    <main class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-area">
+          <a href="#" class="breadcrumb">&lsaquo; Visual Proofs / Algebra</a>
+          <h1>AM-GM Inequality</h1>
+          <p class="header-subtitle">Why the arithmetic mean is at least the geometric mean.</p>
+        </div>
+        <div class="header-actions">
+          <span class="pill-badge">Intermediate</span>
+          <span class="pill-badge">⏱ 10 min</span>
+          <button class="btn-icon-action" id="btn-share" title="Share page">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Share
+          </button>
+        </div>
+      </header>
+
+      <!-- Top Controls Configuration Card (Strictly contains Proof Model Dropdown) -->
+      <section class="top-controls-card">
+        <div class="top-controls-grid">
+          <div class="mission-box">
+            <div class="mission-icon">🎯</div>
+            <div class="mission-text">
+              <h3>Mission</h3>
+              <p>Drag division point P or enter positive values for a and b to explore why the geometric mean never exceeds the arithmetic average.</p>
+            </div>
+          </div>
+
+          <!-- PROOF MODEL DROPDOWN (VISIBLY & UNMISTAKABLY ABOVE THE GRAPH) -->
+          <div class="proof-model-selector-box">
+            <label for="select-proof-model" class="control-label">Proof Model</label>
+            <select id="select-proof-model" class="proof-model-dropdown">
+              <option value="semicircle">Semicircle Model</option>
+              <option value="area">Rectangle &amp; Square Model</option>
+            </select>
+            <div id="model-subtitle-desc" class="model-subtitle-desc">
+              Compare the radius of a semicircle with the altitude of the right triangle formed by splitting its diameter into a and b.
+            </div>
+          </div>
+
+          <div class="inputs-group">
+            <div class="input-unit">
+              <label class="label-a">a =</label>
+              <input type="number" id="input-val-a" class="input-num-field" value="5" step="0.5" min="0.1">
+            </div>
+            <div class="input-unit">
+              <label class="label-b">b =</label>
+              <input type="number" id="input-val-b" class="input-num-field" value="3" step="0.5" min="0.1">
+            </div>
+            <button class="btn-icon-action" id="btn-reset-all" title="Reset to default (a=5, b=3)">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <div id="validation-banner" class="validation-alert-banner" style="display:none;">
+          ⚠️ AM-GM requires a &gt; 0 and b &gt; 0. Please enter positive numbers.
+        </div>
+      </section>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Main Workspace Column -->
+        <div class="workspace-main-col">
+
+          <!-- Core Inequality Hero Card -->
+          <div class="hero-inequality-card">
+            <div class="hero-formula-wrap">
+              <div style="font-size:11.5px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Arithmetic–Geometric Mean Inequality</div>
+              <div class="inequality-formula-main" id="hero-main-formula">
+                \frac{a + b}{2} \ge \sqrt{ab}
+              </div>
+            </div>
+
+            <div class="inequality-live-substitute" id="hero-live-sub">
+              \frac{5.0 + 3.0}{2} = 4.00 \ge \sqrt{15.0} = 3.87
+            </div>
+
+            <div id="equality-status-badge" class="equality-status-badge strict-ineq">
+              Strict: AM &gt; GM
+            </div>
+          </div>
+
+          <!-- Central Interactive Canvas -->
+          <section class="graph-viewport-card">
+            <!-- Graph Toolbar Top (Contains Graph View Controls & Zoom Controls) -->
+            <div class="graph-toolbar-top">
+              <div class="graph-toolbar-left">
+                <button class="btn-tool-action active" id="tool-select">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+                  Select &amp; Drag
+                </button>
+                <button class="btn-tool-action" id="tool-pan">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5a1.5 1.5 0 013 0v4.5m0-4.5a1.5 1.5 0 013 0V11"/></svg>
+                  Pan
+                </button>
+                <div class="toggle-snap-box">
+                  <span>Snap integer</span>
+                  <label class="switch-toggle">
+                    <input type="checkbox" id="toggle-snap">
+                    <span class="slider-toggle"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="graph-toolbar-right">
+                <span style="font-size:12px; font-weight:700; color:var(--text-muted);">Graph Zoom:</span>
+                <div class="zoom-btn-group">
+                  <button class="btn-zoom-action" id="btn-zoom-out" title="Zoom Out">&minus;</button>
+                  <span class="zoom-level-text" id="zoom-level-txt">100%</span>
+                  <button class="btn-zoom-action" id="btn-zoom-in" title="Zoom In">&plus;</button>
+                  <button class="btn-zoom-action" id="btn-reset-view" title="Reset View" style="width:auto; padding:0 8px; font-size:11px;">Reset View</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="graph-canvas-container" id="graph-canvas-container">
+              <!-- SVG Visualizer -->
+              <svg id="main-svg" class="main-canvas-svg"></svg>
+            </div>
+
+            <!-- Live Summary Cards -->
+            <div class="math-summary-bar">
+              <div class="summary-card">
+                <span class="summary-card-title">Arithmetic Mean (AM)</span>
+                <span class="summary-card-value" id="card-am-val">4.000</span>
+                <span class="summary-card-subtitle">Formula: (a + b) / 2</span>
+              </div>
+              <div class="summary-card">
+                <span class="summary-card-title">Geometric Mean (GM)</span>
+                <span class="summary-card-value" id="card-gm-val">3.873</span>
+                <span class="summary-card-subtitle">Formula: &radic;(a &times; b)</span>
+              </div>
+              <div class="summary-card">
+                <span class="summary-card-title">Difference (AM &minus; GM)</span>
+                <span class="summary-card-value" id="card-diff-val">0.127</span>
+                <span class="summary-card-subtitle">Hypotenuse minus leg</span>
+              </div>
+              <div class="summary-card">
+                <span class="summary-card-title">Ratio (AM / GM)</span>
+                <span class="summary-card-value" id="card-ratio-val">1.033</span>
+                <span class="summary-card-subtitle">Always &ge; 1.000</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Visual Proof Section (Flowchart) -->
+          <section class="visual-proof-card">
+            <div class="visual-proof-header">
+              <span>Visual Proof Steps &amp; Geometry Flow</span>
+            </div>
+
+            <div class="proof-steps-flow">
+              <div class="proof-step-box">
+                <span class="proof-step-num">Step 1</span>
+                <span class="proof-step-title">Base Parameters</span>
+                <div class="proof-step-formula" id="proof-step-1">a = 5.0, b = 3.0</div>
+                <span style="font-size:11px; color:var(--text-muted);">Construct diameter line of total length a + b.</span>
+              </div>
+
+              <div class="proof-step-box">
+                <span class="proof-step-num">Step 2</span>
+                <span class="proof-step-title">Arithmetic Mean</span>
+                <div class="proof-step-formula" id="proof-step-2">AM = 4.00</div>
+                <span style="font-size:11px; color:var(--text-muted);">Semicircle radius or balanced average length.</span>
+              </div>
+
+              <div class="proof-step-box">
+                <span class="proof-step-num">Step 3</span>
+                <span class="proof-step-title">Geometric Mean</span>
+                <div class="proof-step-formula" id="proof-step-3">GM = 3.87</div>
+                <span style="font-size:11px; color:var(--text-muted);">Perpendicular altitude height or square side.</span>
+              </div>
+
+              <div class="proof-step-box">
+                <span class="proof-step-num">Step 4</span>
+                <span class="proof-step-title">Pythagorean Geometry</span>
+                <div class="proof-step-formula" id="proof-step-4">AM&sup2; = GM&sup2; + d&sup2;</div>
+                <span style="font-size:11px; color:var(--text-muted);">&Delta;CPQ has hypotenuse AM and leg GM.</span>
+              </div>
+
+              <div class="proof-step-box" style="background:#eeedfd; border-color:var(--primary);">
+                <span class="proof-step-num" style="color:var(--primary);">Step 5 (Conclusion)</span>
+                <span class="proof-step-title">Inequality Established</span>
+                <div class="proof-step-formula" id="proof-step-5" style="background:var(--primary); color:white;">4.00 &ge; 3.87</div>
+                <span style="font-size:11px; color:var(--text-dark);">Hypotenuse &ge; Leg &rArr; AM &ge; GM.</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Side Explanation & Interaction Panel (Why it works) -->
+        <aside class="why-panel">
+          <div class="why-panel-header">
+            <h2>Why it works 💡</h2>
+          </div>
+
+          <div class="why-panel-scroll">
+            <!-- Step 1: Arithmetic Mean -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">1</span>
+                <span>Arithmetic Mean (AM)</span>
+              </div>
+              <p style="font-size:13px; color:var(--text-dark);">
+                For two positive numbers <b>a</b> and <b>b</b>, their arithmetic mean is their ordinary average: add the two numbers and divide their sum by 2.
+              </p>
+              <div class="boxed-formula-math" id="why-box-1">
+                \text{AM} = \frac{a + b}{2}
+              </div>
+              <div class="why-num-calc" id="why-num-1">
+                For a = 5.0, b = 3.0: AM = (5.0 + 3.0) / 2 = 4.000
+              </div>
+            </section>
+
+            <!-- Step 2: Geometric Mean -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">2</span>
+                <span>Geometric Mean (GM)</span>
+              </div>
+              <p style="font-size:13px; color:var(--text-dark);">
+                For two positive numbers <b>a</b> and <b>b</b>, their geometric mean is obtained by multiplying the two numbers and taking the square root of their product.
+              </p>
+              <div class="boxed-formula-math" id="why-box-2">
+                \text{GM} = \sqrt{ab}
+              </div>
+              <div class="why-num-calc" id="why-num-2">
+                For a = 5.0, b = 3.0: GM = \sqrt{5.0 \cdot 3.0} = \sqrt{15.0} \approx 3.873
+              </div>
+              <div class="why-num-calc" id="why-num-summary" style="background:#eeedfd; border-left-color:var(--primary); color:var(--primary);">
+                AM = 4.000<br>GM = 3.873<br>Therefore AM &gt; GM
+              </div>
+            </section>
+
+            <!-- Step 3: The AM-GM Inequality -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">3</span>
+                <span>The AM-GM Inequality</span>
+              </div>
+              <p style="font-size:13px; color:var(--text-dark);">
+                The arithmetic mean of two positive numbers is always greater than or equal to their geometric mean:
+              </p>
+              <div class="boxed-formula-math" id="why-box-3">
+                \frac{a + b}{2} \ge \sqrt{ab}
+              </div>
+            </section>
+
+            <!-- Step 4: Model-Specific Explicit Geometric Proof -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">4</span>
+                <span id="why-title-4">How the semicircle represents AM and GM</span>
+              </div>
+              <div id="why-proof-steps-body" style="font-size:13px; color:var(--text-dark); display:flex; flex-direction:column; gap:10px;">
+                <!-- Dynamic step-by-step mathematical breakdown inserted via JS -->
+              </div>
+            </section>
+
+            <!-- Step 5: Equality Condition -->
+            <section class="why-section">
+              <div class="why-section-title">
+                <span class="why-num-badge">5</span>
+                <span>When does equality occur?</span>
+              </div>
+              <p style="font-size:13px; color:var(--text-dark);">
+                Equality occurs exactly when <b>a = b</b>. If <b>a = b = 4</b>:
+              </p>
+              <div class="boxed-formula-math" id="why-box-5">
+                \text{AM} = \frac{4+4}{2} = 4, \quad \text{GM} = \sqrt{4 \cdot 4} = 4 \implies \text{AM} = \text{GM}
+              </div>
+              <div class="why-num-calc" id="why-num-equality-state">
+                Currently: a = 5.0, b = 3.0 &rArr; AM = 4.000 > GM = 3.873
+              </div>
+            </section>
+
+            <!-- Interactive Prediction Section -->
+            <div class="prediction-card-box">
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Test Your Prediction ❓</h4>
+              <p style="font-size:12px; color:var(--text-muted);">Which quantity is larger for any positive numbers a and b?</p>
+
+              <select id="select-prediction" class="input-num-field" style="width:100%; text-align:left; padding:8px 12px; font-size:13px;">
+                <option value="">-- Choose your answer --</option>
+                <option value="AM">Arithmetic Mean (AM)</option>
+                <option value="GM">Geometric Mean (GM)</option>
+                <option value="EQUAL">They are always equal</option>
+              </select>
+
+              <button class="btn-primary" id="btn-check-prediction">Check Prediction</button>
+              <div id="predict-feedback" class="feedback-msg" style="display:none;"></div>
+            </div>
+
+            <!-- Interactive Challenge Section -->
+            <div class="challenge-card">
+              <h4 style="font-size:14px; font-weight:800; color:var(--text-dark);">Your Challenge 🏆</h4>
+              <p style="font-size:12px; color:var(--text-muted);">Calculate AM &amp; GM for given inputs and test your answer:</p>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <span style="font-size:12px; font-weight:700;">a = <span id="ch-lbl-a">6</span>, b = <span id="ch-lbl-b">2</span></span>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span style="font-size:12px; font-weight:600;">AM = </span>
+                  <input type="number" id="ch-input-am" class="input-num-field" style="width:90px;" placeholder="e.g. 4.0">
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span style="font-size:12px; font-weight:600;">GM = </span>
+                  <input type="number" id="ch-input-gm" class="input-num-field" style="width:90px;" placeholder="e.g. 3.46">
+                </div>
+              </div>
+
+              <button class="btn-primary" id="btn-test-challenge" style="background:var(--accent-purple);">Test Solution</button>
+              <div id="challenge-feedback" class="feedback-msg" style="display:none;"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * AM-GM Inequality Interactive Engine & SVG Visualizer
+     * Robust Mathematical State Engine with KaTeX Renderer
+     */
+
+    // --- 0. Canonical Mathematical State ---
+    const state = {
+      a: 5,
+      b: 3,
+      modelType: 'semicircle', // 'semicircle' | 'area'
+      activeTool: 'select',    // 'select' | 'pan' | null
+      snapEnabled: false,
+
+      // Viewport Camera System
+      view: {
+        zoom: 1.0,
+        panX: 0,
+        panY: 0
+      },
+
+      // Drag State
+      isDraggingP: false,
+      dragStartX: 0,
+      initialA: 5,
+      initialB: 3
+    };
+
+    // --- 1. Pure Mathematical Solver ---
+    function solveAMGM(a, b) {
+      const validA = Math.max(0.001, a);
+      const validB = Math.max(0.001, b);
+
+      const am = (validA + validB) / 2;
+      const gm = Math.sqrt(validA * validB);
+      const diff = am - gm;
+      const ratio = gm > 0 ? am / gm : 1;
+      const isEqual = Math.abs(am - gm) < 1e-7;
+
+      return {
+        a: validA,
+        b: validB,
+        am,
+        gm,
+        diff,
+        ratio,
+        isEqual,
+        isValid: (a > 0 && b > 0)
+      };
+    }
+
+    // --- 2. KaTeX TeX LaTeX Math Renderer Helper ---
+    function renderMath(element, texString, displayMode = false) {
+      if (!element) return;
+      if (window.katex) {
+        try {
+          katex.render(texString, element, { displayMode, throwOnError: false });
+          return;
+        } catch (e) {
+          console.warn("KaTeX rendering error:", e);
+        }
+      }
+      // Fallback HTML math rendering if KaTeX CDN script is blocked/offline
+      let html = texString
+        .replace(/\\boxed\{([^}]+)\}/g, '<span class="boxed-math-fb">$1</span>')
+        .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '<span class="frac-fb"><span class="num-fb">$1</span><span class="den-fb">$2</span></span>')
+        .replace(/\\sqrt\{([^}]+)\}/g, '<span class="sqrt-symbol">&radic;</span><span class="sqrt-fb">$1</span>')
+        .replace(/\\ge/g, '&ge;')
+        .replace(/\\le/g, '&le;')
+        .replace(/\\approx/g, '&approx;')
+        .replace(/\\implies/g, '&rArr;')
+        .replace(/\\iff/g, '&hArr;')
+        .replace(/\\cdot/g, '&middot;')
+        .replace(/\\ne/g, '&ne;')
+        .replace(/\\quad/g, '&nbsp;&nbsp;')
+        .replace(/\\text\{([^}]+)\}/g, '$1');
+      element.innerHTML = html;
+    }
+
+    // --- 3. SVG Geometry Renderer ---
+    function renderVisualizerSVG(svgElem, model) {
+      if (!svgElem) return;
+
+      const width = svgElem.clientWidth || 700;
+      const height = svgElem.clientHeight || 440;
+
+      const scale = 32 * state.view.zoom;
+      const originX = (width / 2) + state.view.panX - ((model.a + model.b) * scale / 2);
+      const originY = (height / 2 + 75) + state.view.panY;
+
+      let html = `<defs>
+        <pattern id="grid-pattern-amgm" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+        </pattern>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+        </marker>
+        <filter id="drop-shadow" x="-10%" y="-10%" width="130%" height="130%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.1"/>
+        </filter>
+      </defs>
+
+      <!-- Background Grid -->
+      <rect width="100%" height="100%" fill="url(#grid-pattern-amgm)" />`;
+
+      if (state.modelType === 'semicircle') {
+        // --- SEMICIRCLE MODEL RENDERING ---
+        const xO = originX;
+        const xP = originX + model.a * scale;
+        const xE = originX + (model.a + model.b) * scale;
+        const xC = originX + model.am * scale;
+
+        const yBase = originY;
+        const radiusPx = model.am * scale;
+        const gmHeightPx = model.gm * scale;
+        const yQ = yBase - gmHeightPx;
+
+        // Key Geometric Mapping Legend Overlay Banner
+        html += `<g transform="translate(16, 16)" filter="url(#drop-shadow)">
+          <rect width="250" height="54" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+          <line x1="14" y1="20" x2="44" y2="20" stroke="#635bff" stroke-width="3" stroke-dasharray="4 4"/>
+          <text x="52" y="24" font-family="var(--font-main)" font-size="12" font-weight="800" fill="#635bff">Radius ───&gt; AM = (a+b)/2 = ${model.am.toFixed(2)}</text>
+          <line x1="14" y1="38" x2="44" y2="38" stroke="#10b981" stroke-width="3.5"/>
+          <text x="52" y="42" font-family="var(--font-main)" font-size="12" font-weight="800" fill="#10b981">Altitude ─&gt; GM = &radic;ab = ${model.gm.toFixed(2)}</text>
+        </g>`;
+
+        // 1. Semicircle Arc Path
+        const pathSemicircle = `M ${xO} ${yBase} A ${radiusPx} ${radiusPx} 0 0 1 ${xE} ${yBase}`;
+        html += `<path d="${pathSemicircle}" fill="#f3e8ff" fill-opacity="0.3" stroke="#8b5cf6" stroke-width="3"/>`;
+
+        // 2. Base Segment a (Pink) & Base Segment b (Blue)
+        html += `<line x1="${xO}" y1="${yBase}" x2="${xP}" y2="${yBase}" stroke="#ec4899" stroke-width="6" stroke-linecap="round"/>`;
+        html += `<line x1="${xP}" y1="${yBase}" x2="${xE}" y2="${yBase}" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>`;
+
+        // Base Segment Labels
+        html += `<text x="${(xO + xP)/2}" y="${yBase + 24}" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#ec4899" text-anchor="middle">a = ${model.a.toFixed(1)}</text>`;
+        html += `<text x="${(xP + xE)/2}" y="${yBase + 24}" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#2563eb" text-anchor="middle">b = ${model.b.toFixed(1)}</text>`;
+
+        // Total Diameter Label & Arrows
+        html += `<line x1="${xO}" y1="${yBase + 40}" x2="${xE}" y2="${yBase + 40}" stroke="#64748b" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>`;
+        html += `<text x="${xC}" y="${yBase + 58}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#475569" text-anchor="middle">Diameter = a + b = ${(model.a + model.b).toFixed(1)}</text>`;
+
+        // 3. Perpendicular Altitude PQ = GM (Green Solid Line)
+        html += `<line x1="${xP}" y1="${yBase}" x2="${xP}" y2="${yQ}" stroke="#10b981" stroke-width="4"/>`;
+        html += `<circle cx="${xP}" cy="${yQ}" r="5" fill="#10b981" />`;
+
+        // Right angle marker at division point P
+        const sz = 10;
+        const dir = model.a >= model.b ? -1 : 1;
+        html += `<path d="M ${xP + dir*sz} ${yBase} L ${xP + dir*sz} ${yBase - sz} L ${xP} ${yBase - sz}" fill="none" stroke="#10b981" stroke-width="1.5"/>`;
+
+        // Altitude GM Label Box
+        const lblOffX = model.a >= model.b ? -55 : 55;
+        html += `<g transform="translate(${xP + lblOffX}, ${(yBase + yQ)/2})" filter="url(#drop-shadow)">
+          <rect x="-50" y="-13" width="100" height="26" rx="13" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+          <text x="0" y="4" font-family="var(--font-math)" font-size="12.5" font-weight="bold" fill="#10b981" text-anchor="middle">Altitude = GM = ${model.gm.toFixed(2)}</text>
+        </g>`;
+
+        // 4. Radius Line CQ = AM (Purple Dashed Line) & Center C
+        html += `<line x1="${xC}" y1="${yBase}" x2="${xP}" y2="${yQ}" stroke="#635bff" stroke-width="3" stroke-dasharray="5 5"/>`;
+        html += `<circle cx="${xC}" cy="${yBase}" r="5.5" fill="#635bff"/>`;
+        html += `<text x="${xC}" y="${yBase + 18}" font-family="var(--font-math)" font-size="12" font-weight="bold" fill="#635bff" text-anchor="middle">C (Center)</text>`;
+
+        // Radius AM Label Box
+        const mx = (xC + xP) / 2;
+        const my = (yBase + yQ) / 2;
+        html += `<g transform="translate(${mx}, ${my - 16})" filter="url(#drop-shadow)">
+          <rect x="-50" y="-13" width="100" height="26" rx="13" fill="#ffffff" stroke="#635bff" stroke-width="2"/>
+          <text x="0" y="4" font-family="var(--font-math)" font-size="12.5" font-weight="bold" fill="#635bff" text-anchor="middle">Radius = AM = ${model.am.toFixed(2)}</text>
+        </g>`;
+
+        // 5. Interactive Draggable Division Point P Handle
+        const cursorP = state.activeTool === 'select' ? 'ew-resize' : 'default';
+        const opacityP = state.activeTool === 'select' ? '1' : '0.6';
+        html += `<g transform="translate(${xP}, ${yBase})">
+          <circle cx="0" cy="0" r="10" fill="#ec4899" stroke="#ffffff" stroke-width="3" class="drag-handle-p" id="handle-point-p" style="cursor:${cursorP}; opacity:${opacityP};" filter="url(#drop-shadow)"/>
+          <text x="0" y="-16" font-family="var(--font-main)" font-size="12" font-weight="800" fill="#ec4899" text-anchor="middle">P${state.activeTool === 'select' ? ' (Drag)' : ''}</text>
+        </g>`;
+
+        // Equality Pulsing Highlight Effect when a == b
+        if (model.isEqual) {
+          html += `<g transform="translate(${xC}, ${yBase - radiusPx})">
+            <circle cx="0" cy="0" r="14" fill="none" stroke="#10b981" stroke-width="3" opacity="0.8">
+              <animate attributeName="r" values="10;24;10" dur="2s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <text x="0" y="-22" font-family="var(--font-main)" font-size="13" font-weight="800" fill="#065f46" text-anchor="middle">AM = GM (Equality!)</text>
+          </g>`;
+        }
+
+      } else {
+        // --- RECTANGLE & EQUAL-AREA SQUARE MODEL RENDERING ---
+        const scaleArea = 28 * state.view.zoom;
+        const xO = originX + 20;
+        const yO = originY - 140;
+
+        const wRect = (model.a + model.b) * scaleArea;
+        const hRect = model.b * scaleArea;
+
+        // Legend Overlay Banner
+        html += `<g transform="translate(16, 16)" filter="url(#drop-shadow)">
+          <rect width="320" height="54" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+          <text x="14" y="24" font-family="var(--font-main)" font-size="12" font-weight="800" fill="#2563eb">Average Dimension (AM) = (a+b)/2 = ${model.am.toFixed(2)}</text>
+          <text x="14" y="42" font-family="var(--font-main)" font-size="12" font-weight="800" fill="#8b5cf6">Equal-Area Square Side (GM) = &radic;ab = ${model.gm.toFixed(2)}</text>
+        </g>`;
+
+        // 1. Rectangle (Base = a+b, Height = b)
+        html += `<rect x="${xO}" y="${yO}" width="${wRect}" height="${hRect}" fill="#dbeafe" fill-opacity="0.6" stroke="#2563eb" stroke-width="3" rx="4"/>`;
+        html += `<text x="${xO + wRect/2}" y="${yO - 10}" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#2563eb" text-anchor="middle">Base = a + b = ${(model.a + model.b).toFixed(1)}</text>`;
+        html += `<text x="${xO - 14}" y="${yO + hRect/2}" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#2563eb" text-anchor="end">b = ${model.b.toFixed(1)}</text>`;
+        html += `<text x="${xO + wRect/2}" y="${yO + hRect/2}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#1e40af" text-anchor="middle">Rectangle Area = ab = ${(model.a * model.b).toFixed(1)}</text>`;
+
+        // 2. Equal-Area Square (Side s = sqrt(ab) = GM)
+        const sideS = model.gm * scaleArea;
+        const sqX = xO + 40;
+        const sqY = yO + hRect + 50;
+
+        html += `<rect x="${sqX}" y="${sqY}" width="${sideS}" height="${sideS}" fill="#f3e8ff" fill-opacity="0.8" stroke="#8b5cf6" stroke-width="3.5" rx="4"/>`;
+        html += `<text x="${sqX + sideS/2}" y="${sqY - 10}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#8b5cf6" text-anchor="middle">Side s = GM = ${model.gm.toFixed(2)}</text>`;
+        html += `<text x="${sqX + sideS/2}" y="${sqY + sideS/2 + 4}" font-family="var(--font-math)" font-size="14" font-weight="bold" fill="#6d28d9" text-anchor="middle">Square Area = ab = ${(model.a * model.b).toFixed(1)}</text>`;
+
+        // Comparison Visual Arrow
+        html += `<path d="M ${sqX + sideS + 20} ${sqY + sideS/2} Q ${sqX + sideS + 80} ${sqY + sideS/2} ${sqX + sideS + 120} ${sqY + sideS/2}" stroke="#635bff" stroke-width="2" fill="none" marker-end="url(#arrow)"/>`;
+        html += `<text x="${sqX + sideS + 140}" y="${sqY + sideS/2 + 5}" font-family="var(--font-math)" font-size="15" font-weight="bold" fill="#635bff">s = GM &le; AM</text>`;
+      }
+
+      svgElem.innerHTML = html;
+    }
+
+    // --- 4. DOM Elements Cache ---
+    const elements = {
+      inputValA: document.getElementById('input-val-a'),
+      inputValB: document.getElementById('input-val-b'),
+      btnResetAll: document.getElementById('btn-reset-all'),
+      validationBanner: document.getElementById('validation-banner'),
+      btnShare: document.getElementById('btn-share'),
+
+      selectProofModel: document.getElementById('select-proof-model'),
+      modelSubtitleDesc: document.getElementById('model-subtitle-desc'),
+
+      heroMainFormula: document.getElementById('hero-main-formula'),
+      heroLiveSub: document.getElementById('hero-live-sub'),
+      equalityStatusBadge: document.getElementById('equality-status-badge'),
+
+      mainSvg: document.getElementById('main-svg'),
+      graphContainer: document.getElementById('graph-canvas-container'),
+      toolSelect: document.getElementById('tool-select'),
+      toolPan: document.getElementById('tool-pan'),
+      toggleSnap: document.getElementById('toggle-snap'),
+
+      btnZoomOut: document.getElementById('btn-zoom-out'),
+      btnZoomIn: document.getElementById('btn-zoom-in'),
+      zoomLevelTxt: document.getElementById('zoom-level-txt'),
+      btnResetView: document.getElementById('btn-reset-view'),
+
+      cardAmVal: document.getElementById('card-am-val'),
+      cardGmVal: document.getElementById('card-gm-val'),
+      cardDiffVal: document.getElementById('card-diff-val'),
+      cardRatioVal: document.getElementById('card-ratio-val'),
+
+      proofStep1: document.getElementById('proof-step-1'),
+      proofStep2: document.getElementById('proof-step-2'),
+      proofStep3: document.getElementById('proof-step-3'),
+      proofStep4: document.getElementById('proof-step-4'),
+      proofStep5: document.getElementById('proof-step-5'),
+
+      whyBox1: document.getElementById('why-box-1'),
+      whyNum1: document.getElementById('why-num-1'),
+      whyBox2: document.getElementById('why-box-2'),
+      whyNum2: document.getElementById('why-num-2'),
+      whyNumSummary: document.getElementById('why-num-summary'),
+      whyBox3: document.getElementById('why-box-3'),
+      whyTitle4: document.getElementById('why-title-4'),
+      whyProofStepsBody: document.getElementById('why-proof-steps-body'),
+      whyBox5: document.getElementById('why-box-5'),
+      whyNumEqualityState: document.getElementById('why-num-equality-state'),
+
+      selectPrediction: document.getElementById('select-prediction'),
+      btnCheckPrediction: document.getElementById('btn-check-prediction'),
+      predictFeedback: document.getElementById('predict-feedback'),
+
+      chLblA: document.getElementById('ch-lbl-a'),
+      chLblB: document.getElementById('ch-lbl-b'),
+      chInputAm: document.getElementById('ch-input-am'),
+      chInputGm: document.getElementById('ch-input-gm'),
+      btnTestChallenge: document.getElementById('btn-test-challenge'),
+      challengeFeedback: document.getElementById('challenge-feedback')
+    };
+
+    // --- 4b. Tool State Manager ---
+    function toggleTool(toolName) {
+      if (state.activeTool === toolName) {
+        state.activeTool = null;
+      } else {
+        state.activeTool = toolName;
+      }
+      renderUI();
+    }
+
+    function updateToolUI() {
+      if (elements.toolSelect) {
+        if (state.activeTool === 'select') {
+          elements.toolSelect.classList.add('active');
+        } else {
+          elements.toolSelect.classList.remove('active');
+        }
+      }
+
+      if (elements.toolPan) {
+        if (state.activeTool === 'pan') {
+          elements.toolPan.classList.add('active');
+        } else {
+          elements.toolPan.classList.remove('active');
+        }
+      }
+
+      // Update SVG Canvas Cursor
+      if (elements.mainSvg) {
+        if (state.activeTool === 'pan') {
+          elements.mainSvg.style.cursor = isPanning ? 'grabbing' : 'grab';
+        } else {
+          elements.mainSvg.style.cursor = 'default';
+        }
+      }
+    }
+
+    // --- 5. Central UI Redraw Dispatcher & KaTeX Math Updater ---
+    function renderUI() {
+      const model = solveAMGM(state.a, state.b);
+
+      // Validation Alert Banner
+      if (!model.isValid) {
+        elements.validationBanner.style.display = 'flex';
+      } else {
+        elements.validationBanner.style.display = 'none';
+      }
+
+      // Input Controls Sync
+      elements.inputValA.value = state.a;
+      elements.inputValB.value = state.b;
+
+      // Proof Model Selector Sync & Dynamic Subtitle Description
+      if (elements.selectProofModel) {
+        elements.selectProofModel.value = state.modelType;
+      }
+      if (state.modelType === 'semicircle') {
+        elements.modelSubtitleDesc.textContent = "Compare the radius of a semicircle with the altitude of the right triangle formed by splitting its diameter into a and b.";
+      } else {
+        elements.modelSubtitleDesc.textContent = "Compare the side of an equal-area square with the average of the rectangle's two side lengths.";
+      }
+
+      // Hero Card Live Formula Substitution (Rendered via KaTeX)
+      const aStr = model.a.toFixed(1);
+      const bStr = model.b.toFixed(1);
+      const amStr = model.am.toFixed(2);
+      const gmStr = model.gm.toFixed(2);
+      const abStr = (model.a * model.b).toFixed(1);
+
+      renderMath(elements.heroMainFormula, "\\frac{a + b}{2} \\ge \\sqrt{ab}", true);
+      renderMath(elements.heroLiveSub, `\\frac{${aStr} + ${bStr}}{2} = ${amStr} \\ge \\sqrt{${abStr}} = ${gmStr}`, false);
+
+      if (model.isEqual) {
+        elements.equalityStatusBadge.className = 'equality-status-badge active-eq';
+        elements.equalityStatusBadge.innerHTML = '✓ Equality Holds: a = b';
+      } else {
+        elements.equalityStatusBadge.className = 'equality-status-badge strict-ineq';
+        elements.equalityStatusBadge.innerHTML = 'Strict: AM > GM';
+      }
+
+      // SVG Graph Render
+      const zoomPct = Math.round(state.view.zoom * 100);
+      elements.zoomLevelTxt.textContent = `${zoomPct}%`;
+      renderVisualizerSVG(elements.mainSvg, model);
+
+      // Summary Cards
+      elements.cardAmVal.textContent = model.am.toFixed(3);
+      elements.cardGmVal.textContent = model.gm.toFixed(3);
+      elements.cardDiffVal.textContent = model.diff.toFixed(3);
+      elements.cardRatioVal.textContent = model.ratio.toFixed(3);
+
+      // Proof Flowchart Sync
+      elements.proofStep1.textContent = `a = ${aStr}, b = ${bStr}`;
+      elements.proofStep2.textContent = `AM = ${amStr}`;
+      elements.proofStep3.textContent = `GM = ${gmStr}`;
+      elements.proofStep4.textContent = `(${amStr})\u00B2 = (${gmStr})\u00B2 + (${Math.abs((model.a - model.b)/2).toFixed(2)})\u00B2`;
+      elements.proofStep5.textContent = `${amStr} \u2265 ${gmStr}`;
+
+      // Educational Panel KaTeX Formulas (Step 1, 2, 3)
+      renderMath(elements.whyBox1, "\\boxed{\\text{AM} = \\frac{a+b}{2}}", true);
+      elements.whyNum1.innerHTML = `For <b>a = ${aStr}, b = ${bStr}</b>: AM = (${aStr} + ${bStr}) / 2 = <b>${model.am.toFixed(3)}</b>`;
+
+      renderMath(elements.whyBox2, "\\boxed{\\text{GM} = \\sqrt{ab}}", true);
+      elements.whyNum2.innerHTML = `For <b>a = ${aStr}, b = ${bStr}</b>: GM = &radic;(${aStr} &middot; ${bStr}) = &radic;${abStr} &approx; <b>${model.gm.toFixed(3)}</b>`;
+
+      elements.whyNumSummary.innerHTML = model.isEqual
+        ? `<b>AM = ${model.am.toFixed(3)}</b><br><b>GM = ${model.gm.toFixed(3)}</b><br><b>Therefore AM = GM (Equality!)</b>`
+        : `<b>AM = ${model.am.toFixed(3)}</b><br><b>GM = ${model.gm.toFixed(3)}</b><br><b>Therefore AM &gt; GM</b>`;
+
+      renderMath(elements.whyBox3, "\\frac{a + b}{2} \\ge \\sqrt{ab}", true);
+
+      // Step 4: Model-Specific Explicit Proof Steps
+      if (state.modelType === 'semicircle') {
+        elements.whyTitle4.textContent = "How the semicircle represents AM and GM";
+        elements.whyProofStepsBody.innerHTML = `
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step A — Make the diameter:</b><br>
+            The diameter of the semicircle is <b>a + b = ${aStr} + ${bStr} = ${(model.a + model.b).toFixed(1)}</b>.<br>
+            Therefore the radius is <span id="tex-step-a"></span>.
+          </div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step B — Split the diameter:</b><br>
+            Divide the diameter into two adjacent parts of lengths <b>a = ${aStr}</b> and <b>b = ${bStr}</b> at division point P.
+          </div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step C — Draw the perpendicular:</b><br>
+            At division point P, draw a line perpendicular to the diameter until it reaches the semicircle at Q. Call its length <b>h</b>.
+          </div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step D — Apply right-triangle geometric-mean theorem:</b><br>
+            The construction creates a right triangle in which altitude <b>h</b> satisfies <b>h&sup2; = ab</b> &rArr; <span id="tex-step-d"></span>.
+          </div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step E — Compare the two lengths:</b><br>
+            In right triangle &Delta;CPQ, the radius <b>CQ = R = AM</b> is the hypotenuse, while altitude <b>PQ = h = GM</b> is a leg.<br>
+            Since hypotenuse &ge; leg (<b>R &ge; h</b>), we substitute:
+            <div id="tex-step-e" style="margin-top:6px; font-size:15px; font-weight:bold; color:var(--primary); text-align:center;"></div>
+          </div>
+        `;
+
+        renderMath(document.getElementById('tex-step-a'), `R = \\frac{a+b}{2} \\implies \\boxed{R = \\text{AM} = ${amStr}}`);
+        renderMath(document.getElementById('tex-step-d'), `h = \\sqrt{ab} \\implies \\boxed{h = \\text{GM} = ${gmStr}}`);
+        renderMath(document.getElementById('tex-step-e'), `\\frac{a+b}{2} \\ge \\sqrt{ab} \\implies \\boxed{\\text{AM} \\ge \\text{GM}}`, true);
+
+      } else {
+        elements.whyTitle4.textContent = "How the rectangle & square represent AM and GM";
+        elements.whyProofStepsBody.innerHTML = `
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step 1 — Rectangle:</b><br>
+            Construct a rectangle with side lengths <b>a = ${aStr}</b> and <b>b = ${bStr}</b>.<br>
+            Its area is <span id="tex-area-rect"></span>.
+          </div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step 2 — Equal-area square:</b><br>
+            Construct a square having the same area <b>ab = ${abStr}</b>. If its side length is <b>s</b>, then <b>s&sup2; = ab</b> &rArr; <span id="tex-area-sq"></span>.
+          </div>
+          <div style="background:#f8fafc; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+            <b style="color:var(--primary);">Step 3 — Compare with the arithmetic mean:</b><br>
+            The average dimension of the rectangle is <b>AM = (a+b)/2 = ${amStr}</b>. Reshaping into an equal-area square shows that side length <b>s</b> cannot exceed this average:
+            <div id="tex-area-comp" style="margin-top:6px; font-size:15px; font-weight:bold; color:var(--primary); text-align:center;"></div>
+          </div>
+        `;
+
+        renderMath(document.getElementById('tex-area-rect'), `\\boxed{A = ab = ${abStr}}`);
+        renderMath(document.getElementById('tex-area-sq'), `s = \\sqrt{ab} \\implies \\boxed{s = \\text{GM} = ${gmStr}}`);
+        renderMath(document.getElementById('tex-area-comp'), `s \\le \\frac{a+b}{2} \\implies \\boxed{\\sqrt{ab} \\le \\frac{a+b}{2}} \\implies \\boxed{\\text{GM} \\le \\text{AM}}`, true);
+      }
+
+      // Step 5: Equality Section Formula & Live State
+      renderMath(elements.whyBox5, "\\text{AM} = \\frac{4+4}{2} = 4, \\quad \\text{GM} = \\sqrt{4 \\cdot 4} = 4 \\implies \\boxed{\\text{AM} = \\text{GM}}", true);
+
+      if (model.isEqual) {
+        elements.whyNumEqualityState.className = 'why-num-calc';
+        elements.whyNumEqualityState.style.borderLeftColor = 'var(--accent-green)';
+        elements.whyNumEqualityState.style.background = 'var(--accent-green-light)';
+        elements.whyNumEqualityState.style.color = '#065f46';
+        elements.whyNumEqualityState.innerHTML = `✓ <b>AM = GM</b><br><b>Equality condition holds: a = b = ${aStr}</b>`;
+      } else {
+        elements.whyNumEqualityState.className = 'why-num-calc';
+        elements.whyNumEqualityState.style.borderLeftColor = 'var(--accent-blue)';
+        elements.whyNumEqualityState.style.background = '#f1f5f9';
+        elements.whyNumEqualityState.style.color = 'var(--text-dark)';
+        elements.whyNumEqualityState.innerHTML = `Currently <b>a &ne; b</b> (${aStr} &ne; ${bStr}) &rArr; <b>AM (${model.am.toFixed(3)}) &gt; GM (${model.gm.toFixed(3)})</b>`;
+      }
+
+      // Challenge Labels
+      elements.chLblA.textContent = model.a.toFixed(1);
+      elements.chLblB.textContent = model.b.toFixed(1);
+
+      // Tool Active State & Cursor Sync
+      updateToolUI();
+    }
+
+    // --- 6. Interactive Event Listeners & Dragging Engine ---
+    function updateInputsFromUser() {
+      const valA = parseFloat(elements.inputValA.value);
+      const valB = parseFloat(elements.inputValB.value);
+
+      if (!isNaN(valA)) state.a = valA;
+      if (!isNaN(valB)) state.b = valB;
+
+      renderUI();
+    }
+
+    elements.inputValA.addEventListener('input', updateInputsFromUser);
+    elements.inputValB.addEventListener('input', updateInputsFromUser);
+
+    // Tool Selection Event Listeners
+    if (elements.toolSelect) {
+      elements.toolSelect.addEventListener('click', () => toggleTool('select'));
+    }
+
+    if (elements.toolPan) {
+      elements.toolPan.addEventListener('click', () => toggleTool('pan'));
+    }
+
+    // Proof Model Selector Dropdown Change Listener (Strictly in Top Controls Card)
+    if (elements.selectProofModel) {
+      elements.selectProofModel.addEventListener('change', (e) => {
+        state.modelType = e.target.value;
+        renderUI();
+      });
+    }
+
+    // Snap Toggle
+    elements.toggleSnap.addEventListener('change', (e) => {
+      state.snapEnabled = e.target.checked;
+    });
+
+    // Reset Button
+    elements.btnResetAll.addEventListener('click', () => {
+      state.a = 5;
+      state.b = 3;
+      state.view.zoom = 1.0;
+      state.view.panX = 0;
+      state.view.panY = 0;
+      renderUI();
+    });
+
+    // Share Button
+    elements.btnShare.addEventListener('click', () => {
+      if (navigator.share) {
+        navigator.share({ title: 'AM-GM Inequality', url: window.location.href });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Page URL copied to clipboard!');
+      }
+    });
+
+    // Zoom & Pan Event Listeners
+    elements.btnZoomIn.addEventListener('click', () => {
+      state.view.zoom = Math.min(3.0, state.view.zoom * 1.15);
+      renderUI();
+    });
+
+    elements.btnZoomOut.addEventListener('click', () => {
+      state.view.zoom = Math.max(0.4, state.view.zoom / 1.15);
+      renderUI();
+    });
+
+    elements.btnResetView.addEventListener('click', () => {
+      state.view.zoom = 1.0;
+      state.view.panX = 0;
+      state.view.panY = 0;
+      renderUI();
+    });
+
+    // Mouse Wheel Zoom
+    elements.graphContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+      state.view.zoom = Math.max(0.4, Math.min(3.0, state.view.zoom * factor));
+      renderUI();
+    }, { passive: false });
+
+    // Dragging Point P Handle & Canvas Panning
+    let isPanning = false;
+    let panStartX = 0, panStartY = 0;
+
+    elements.mainSvg.addEventListener('mousedown', (e) => {
+      const targetId = e.target.id;
+
+      if (targetId === 'handle-point-p') {
+        if (state.activeTool === 'select') {
+          state.isDraggingP = true;
+          state.dragStartX = e.clientX;
+          state.initialA = state.a;
+          state.initialB = state.b;
+        }
+      } else {
+        if (state.activeTool === 'pan') {
+          isPanning = true;
+          panStartX = e.clientX - state.view.panX;
+          panStartY = e.clientY - state.view.panY;
+          elements.mainSvg.classList.add('panning');
+          updateToolUI();
+        }
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (state.isDraggingP && state.activeTool === 'select') {
+        const dxPixels = e.clientX - state.dragStartX;
+        const scale = 32 * state.view.zoom;
+        const dxMath = dxPixels / scale;
+
+        let newA = state.initialA + dxMath;
+        let totalSpan = state.initialA + state.initialB;
+
+        if (newA < 0.2) newA = 0.2;
+        if (newA > totalSpan - 0.2) newA = totalSpan - 0.2;
+
+        let newB = totalSpan - newA;
+
+        if (state.snapEnabled) {
+          newA = Math.round(newA);
+          newB = Math.round(newB);
+          if (newA <= 0) newA = 1;
+          if (newB <= 0) newB = 1;
+        }
+
+        state.a = newA;
+        state.b = newB;
+        renderUI();
+      } else if (isPanning && state.activeTool === 'pan') {
+        state.view.panX = e.clientX - panStartX;
+        state.view.panY = e.clientY - panStartY;
+        renderUI();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      state.isDraggingP = false;
+      if (isPanning) {
+        isPanning = false;
+        elements.mainSvg.classList.remove('panning');
+        updateToolUI();
+      }
+    });
+
+    // Touch Support for Dragging & Panning
+    elements.mainSvg.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const targetId = e.target.id;
+        if (targetId === 'handle-point-p') {
+          if (state.activeTool === 'select') {
+            state.isDraggingP = true;
+            state.dragStartX = touch.clientX;
+            state.initialA = state.a;
+            state.initialB = state.b;
+          }
+        } else {
+          if (state.activeTool === 'pan') {
+            isPanning = true;
+            panStartX = touch.clientX - state.view.panX;
+            panStartY = touch.clientY - state.view.panY;
+          }
+        }
+      }
+    }, { passive: false });
+
+    elements.mainSvg.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        if (state.isDraggingP && state.activeTool === 'select') {
+          e.preventDefault();
+          const dxPixels = touch.clientX - state.dragStartX;
+          const scale = 32 * state.view.zoom;
+          const dxMath = dxPixels / scale;
+
+          let newA = state.initialA + dxMath;
+          let totalSpan = state.initialA + state.initialB;
+          if (newA < 0.2) newA = 0.2;
+          if (newA > totalSpan - 0.2) newA = totalSpan - 0.2;
+          let newB = totalSpan - newA;
+
+          if (state.snapEnabled) {
+            newA = Math.round(newA);
+            newB = Math.round(newB);
+          }
+
+          state.a = newA;
+          state.b = newB;
+          renderUI();
+        } else if (isPanning && state.activeTool === 'pan') {
+          e.preventDefault();
+          state.view.panX = touch.clientX - panStartX;
+          state.view.panY = touch.clientY - panStartY;
+          renderUI();
+        }
+      }
+    }, { passive: false });
+
+    elements.mainSvg.addEventListener('touchend', () => {
+      state.isDraggingP = false;
+      isPanning = false;
+    });
+
+    // Prediction Section Verification
+    elements.btnCheckPrediction.addEventListener('click', () => {
+      const val = elements.selectPrediction.value;
+      const model = solveAMGM(state.a, state.b);
+
+      if (!val) {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.innerHTML = '⚠️ Please select an option first.';
+        elements.predictFeedback.style.display = 'flex';
+        return;
+      }
+
+      let isCorrect = false;
+      if (model.isEqual && val === 'EQUAL') isCorrect = true;
+      else if (!model.isEqual && val === 'AM') isCorrect = true;
+
+      if (isCorrect) {
+        elements.predictFeedback.className = 'feedback-msg correct';
+        elements.predictFeedback.innerHTML = model.isEqual
+          ? '✓ Correct! Since a = b, the Arithmetic Mean equals the Geometric Mean.'
+          : '✓ Correct! For positive a \u2265 b, the Arithmetic Mean is strictly greater than the Geometric Mean.';
+      } else {
+        elements.predictFeedback.className = 'feedback-msg incorrect';
+        elements.predictFeedback.innerHTML = model.isEqual
+          ? '✘ Not quite. Since a = b, AM and GM are equal!'
+          : '✘ Not quite. AM is always greater than or equal to GM (AM \u2265 GM).';
+      }
+      elements.predictFeedback.style.display = 'flex';
+    });
+
+    // Challenge Section Verification
+    elements.btnTestChallenge.addEventListener('click', () => {
+      const userAM = parseFloat(elements.chInputAm.value);
+      const userGM = parseFloat(elements.chInputGm.value);
+      const model = solveAMGM(state.a, state.b);
+
+      if (isNaN(userAM) || isNaN(userGM)) {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = '⚠️ Please enter both AM and GM values.';
+        elements.challengeFeedback.style.display = 'flex';
+        return;
+      }
+
+      const matchAM = Math.abs(userAM - model.am) < 0.1;
+      const matchGM = Math.abs(userGM - model.gm) < 0.1;
+
+      if (matchAM && matchGM) {
+        elements.challengeFeedback.className = 'feedback-msg correct';
+        elements.challengeFeedback.innerHTML = `✓ Excellent! AM = ${model.am.toFixed(2)} and GM = ${model.gm.toFixed(2)}. AM \u2265 GM is verified!`;
+      } else {
+        elements.challengeFeedback.className = 'feedback-msg incorrect';
+        elements.challengeFeedback.innerHTML = `✘ Check your calculations! Correct AM = ${model.am.toFixed(2)}, GM = ${model.gm.toFixed(2)}.`;
+      }
+      elements.challengeFeedback.style.display = 'flex';
+    });
+
+    // Initial KaTeX Auto-Render Trigger on Window Load
+    window.addEventListener('load', () => {
+      renderUI();
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body);
+      }
+    });
+
+    // Initial Execution
+    renderUI();
+  </script>
+</body>
+</html>

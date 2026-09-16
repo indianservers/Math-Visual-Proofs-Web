@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Universe — Circle as Equal Distance from Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome / Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+        .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
+        body { display: block !important; min-height: auto !important; }
+        .app-container, .proof-app { padding-left: 0 !important; }
+      </style></head>
+<body>
+    <div class="app-container">
+        <!-- Top Header Navigation -->
+        <header class="main-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fa-solid fa-compass-drafting logo-icon"></i>
+                    <div class="logo-text">
+                        <span class="brand">MATHS</span>
+                        <span class="subbrand">UNIVERSE</span>
+                    </div>
+                </div>
+                <div class="breadcrumbs">
+                    <span>Visual Proofs</span> / <span>Coordinate Geometry</span>
+                    <h1 class="page-title">Circle as Equal Distance from Center</h1>
+                    <p class="page-subtitle">Every point on a circle is the exact same distance from its center.</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <span class="badge difficulty-intermediate"><i class="fa-solid fa-signal"></i> Intermediate</span>
+                <span class="badge duration-badge"><i class="fa-regular fa-clock"></i> 12 min</span>
+                <button class="btn btn-secondary" id="btnNewProof"><i class="fa-solid fa-wand-magic-sparkles"></i> Reset Sandbox</button>
+            </div>
+        </header>
+
+        <!-- Main Workspace Grid -->
+        <div class="workspace-grid">
+            
+            <!-- Left Sidebar Controls -->
+            <aside class="sidebar-left card">
+                <div class="sidebar-tabs">
+                    <button class="tab-btn active" data-tab="objects"><i class="fa-solid fa-shapes"></i> Objects</button>
+                    <button class="tab-btn" data-tab="view"><i class="fa-solid fa-eye"></i> View</button>
+                </div>
+
+                <div class="tab-content" id="tab-objects">
+                    <!-- Mode Switch Bar -->
+                    <div class="mode-switch-container">
+                        <div class="mode-switch">
+                            <button class="mode-btn active" id="modeTestBtn" data-mode="test">
+                                <i class="fa-solid fa-location-crosshairs"></i> Test Any Point
+                            </button>
+                            <button class="mode-btn" id="modeLocusBtn" data-mode="locus">
+                                <i class="fa-solid fa-circle-dot"></i> Point on Circle
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Center C(h,k) Section -->
+                    <div class="control-group">
+                        <div class="group-header">
+                            <span class="color-dot dot-purple"></span>
+                            <label>Center C(h, k)</label>
+                        </div>
+                        <div class="input-row dual-inputs">
+                            <div class="input-field">
+                                <span>h</span>
+                                <input type="number" id="inputH" step="0.5" value="1">
+                            </div>
+                            <div class="input-field">
+                                <span>k</span>
+                                <input type="number" id="inputK" step="0.5" value="-1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Radius r Section -->
+                    <div class="control-group">
+                        <div class="group-header">
+                            <span class="color-dot dot-green"></span>
+                            <label>Radius r</label>
+                        </div>
+                        <div class="input-row flex-row">
+                            <div class="input-field radius-input">
+                                <span>r</span>
+                                <input type="number" id="inputR" min="0.1" max="15" step="0.1" value="4.12">
+                            </div>
+                            <input type="range" id="sliderR" min="0.1" max="15" step="0.05" value="4.12" class="range-slider">
+                        </div>
+                    </div>
+
+                    <!-- Test Point P(x,y) Section -->
+                    <div class="control-group">
+                        <div class="group-header">
+                            <span class="color-dot dot-blue"></span>
+                            <label>Test Point P(x, y)</label>
+                        </div>
+                        <div class="input-row dual-inputs">
+                            <div class="input-field">
+                                <span>x</span>
+                                <input type="number" id="inputPX" step="0.1" value="3.91">
+                            </div>
+                            <div class="input-field">
+                                <span>y</span>
+                                <input type="number" id="inputPY" step="0.1" value="1.91">
+                            </div>
+                        </div>
+                        <div class="action-buttons-row">
+                            <button class="btn btn-sm btn-outline" id="btnSnapP">
+                                <i class="fa-solid fa-magnet"></i> Snap P to Circle
+                            </button>
+                            <button class="btn btn-sm btn-outline" id="btnRandomP">
+                                <i class="fa-solid fa-dice"></i> Random Point
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Plot & Random Circle Section -->
+                    <div class="control-group highlight-group">
+                        <div class="group-header">
+                            <label><i class="fa-solid fa-compass"></i> Create Your Circle</label>
+                        </div>
+                        <div class="action-buttons-row">
+                            <button class="btn btn-primary" id="btnPlotCircle">
+                                <i class="fa-solid fa-draw-polygon"></i> Plot Circle
+                            </button>
+                            <button class="btn btn-secondary" id="btnRandomCircle">
+                                <i class="fa-solid fa-shuffle"></i> Random Circle
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Optional Directrix Section -->
+                    <div class="control-group optional-group">
+                        <div class="group-header">
+                            <span class="color-dot dot-pink"></span>
+                            <label>Directrix x = a</label>
+                            <input type="checkbox" id="chkShowDirectrix" class="toggle-checkbox">
+                        </div>
+                        <div class="input-row input-single" id="directrixInputRow" style="display: none;">
+                            <div class="input-field">
+                                <span>a</span>
+                                <input type="number" id="inputDirectrixA" step="0.5" value="-5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Show / Hide Toggles -->
+                </div>
+
+                <div class="tab-content" id="tab-view" hidden>
+                    <div class="control-group">
+                        <label class="section-subtitle">Show / Hide</label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-item"><input type="checkbox" id="chkDistances" checked> Distances</label>
+                            <label class="checkbox-item"><input type="checkbox" id="chkEquation" checked> Equation</label>
+                            <label class="checkbox-item"><input type="checkbox" id="chkGrid" checked> Grid</label>
+                            <label class="checkbox-item"><input type="checkbox" id="chkInequalityRegions"> Inequality Regions</label>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="group-header">
+                            <i class="fa-solid fa-arrows-to-circle"></i>
+                            <label>Canvas View</label>
+                        </div>
+                        <p class="view-help">Use the graph controls to zoom, fit the circle, or drag the canvas to pan.</p>
+                    </div>
+
+                    <button class="btn btn-text" id="btnResetView">
+                        <i class="fa-solid fa-rotate-left"></i> Reset view & coordinates
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Center Interactive Canvas View -->
+            <main class="main-canvas-area card">
+                <!-- SVG Canvas Container -->
+                <div class="canvas-wrapper" id="canvasWrapper">
+                    <svg id="geoCanvas" width="100%" height="100%"></svg>
+                    
+                    <!-- Floating Graph Badges / Overlay Info -->
+                    <div class="graph-overlay-equation" id="graphEquationBadge">
+                        <div class="eq-general">(x - h)&sup2; + (y - k)&sup2; = r&sup2;</div>
+                        <div class="eq-numeric" id="graphNumericEq">(x - 1)&sup2; + (y + 1)&sup2; = 16.97</div>
+                    </div>
+
+                    <!-- Floating Distance Badges -->
+                    <div class="floating-badge badge-cp" id="badgeCP">
+                        <span class="badge-label">Distance to center</span>
+                        <span class="badge-value" id="badgeCPValue">CP = 4.12</span>
+                    </div>
+
+                    <div class="floating-badge badge-directrix" id="badgeDirectrix" style="display: none;">
+                        <span class="badge-label">Distance to directrix</span>
+                        <span class="badge-value" id="badgeDirectrixValue">|x - a| = 9.20</span>
+                    </div>
+
+                    <!-- Real-Time Classification Banner -->
+                    <div class="classification-banner" id="classBanner">
+                        <i class="fa-solid fa-circle-info" id="classIcon"></i>
+                        <span id="classMessage">P is on the circle — CP = r</span>
+                    </div>
+
+                    <!-- Canvas Navigation & Zoom Controls -->
+                    <div class="canvas-controls">
+                        <button class="btn-canvas-ctrl" id="btnPanReset" title="Reset View"><i class="fa-solid fa-rotate-left"></i></button>
+                        <button class="btn-canvas-ctrl" id="btnZoomOut" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+                        <span class="zoom-level" id="zoomLevelText">100%</span>
+                        <button class="btn-canvas-ctrl" id="btnZoomIn" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+                        <button class="btn-canvas-ctrl" id="btnFitCircle" title="Fit Circle"><i class="fa-solid fa-expand"></i></button>
+                    </div>
+
+                    <!-- Legend Overlay -->
+                    <div class="graph-legend">
+                        <div class="legend-item"><span class="legend-symbol line-circle"></span> Locus (Circle)</div>
+                        <div class="legend-item"><span class="legend-symbol dot-center"></span> Center C</div>
+                        <div class="legend-item"><span class="legend-symbol dot-point"></span> Point P</div>
+                        <div class="legend-item legend-directrix-item" style="display: none;"><span class="legend-symbol line-directrix"></span> Directrix</div>
+                        <div class="legend-item"><span class="legend-symbol line-radius"></span> Radius</div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar: Why it works & Predict/Check & Challenge -->
+            <aside class="sidebar-right">
+                
+                <!-- Section 1: Why it works -->
+                <div class="card panel-card">
+                    <div class="card-title"><i class="fa-solid fa-lightbulb"></i> Why it works</div>
+                    <ol class="steps-list">
+                        <li>
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <strong>Locus definition</strong>
+                                <p>A circle is the set of all points P such that the distance from P to the center C is constant radius r.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <strong>Equal distance</strong>
+                                <p>As P moves along the circle, CP stays equal to r. All such points form the circle.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <strong>Equation obtained</strong>
+                                <p>Using distance formula: &radic;((x-h)&sup2; + (y-k)&sup2;) = r &rArr; (x-h)&sup2; + (y-k)&sup2; = r&sup2;</p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Section 2: Predict & Check -->
+                <div class="card panel-card">
+                    <div class="card-title">
+                        <i class="fa-solid fa-calculator"></i> Predict & Check
+                    </div>
+                    <p class="card-subtitle">Enter or drag any point P. If it satisfies the equation, it lies on the circle.</p>
+                    
+                    <div class="predict-box">
+                        <div class="predict-point-display">
+                            P(x, y) = ( 
+                            <input type="number" id="predictX" step="0.1" value="3.91" class="inline-input"> 
+                            , 
+                            <input type="number" id="predictY" step="0.1" value="1.91" class="inline-input"> 
+                            )
+                        </div>
+                        <div class="predict-eval-row">
+                            <div class="eval-column">
+                                <span class="eval-label">Left side: (x-h)&sup2; + (y-k)&sup2;</span>
+                                <div class="eval-box" id="predictLeftVal">16.97</div>
+                            </div>
+                            <div class="eval-vs">?</div>
+                            <div class="eval-column">
+                                <span class="eval-label">Right side: r&sup2;</span>
+                                <div class="eval-box" id="predictRightVal">16.97</div>
+                            </div>
+                        </div>
+
+                        <div class="predict-result-badge" id="predictResultBadge">
+                            <i class="fa-solid fa-check" id="predictIcon"></i> <span id="predictResultText">Equal! Point is on the circle.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Exact Challenge Generator -->
+                <div class="card panel-card challenge-card">
+                    <div class="card-title">
+                        <i class="fa-solid fa-bullseye"></i> Your Exact Challenge
+                    </div>
+                    <div class="challenge-body" id="challengeBody">
+                        <p class="challenge-prompt" id="challengePrompt">
+                            Place or enter a point P that lies <strong>ON</strong> the circle with center C(2,-3) and radius r = 5.
+                        </p>
+                        <div class="challenge-input-row">
+                            <span>Your P(x, y) = (</span>
+                            <input type="number" id="challengeX" step="0.1" placeholder="x" class="inline-input">
+                            <span>,</span>
+                            <input type="number" id="challengeY" step="0.1" placeholder="y" class="inline-input">
+                            <span>)</span>
+                        </div>
+                        <div class="challenge-actions">
+                            <button class="btn btn-primary btn-sm" id="btnCheckChallenge">
+                                <i class="fa-solid fa-circle-check"></i> Check Solution
+                            </button>
+                            <button class="btn btn-outline btn-sm" id="btnNewChallenge">
+                                <i class="fa-solid fa-dice"></i> New Challenge
+                            </button>
+                        </div>
+                        <div class="challenge-feedback" id="challengeFeedback" style="display: none;"></div>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+
+        <!-- Bottom Visual Proof & Derivation Section -->
+        <footer class="bottom-proof-bar card">
+            <div class="proof-header">
+                <i class="fa-solid fa-graduation-cap proof-icon"></i>
+                <div class="proof-title-area">
+                    <h3>Visual Proof & Distance Derivation</h3>
+                    <p>Let P(x,y) be any point on the coordinate plane. The distance to center C(h,k) is compared to radius r:</p>
+                </div>
+            </div>
+            <div class="proof-steps-flex">
+                <div class="proof-step-box">
+                    <span class="proof-step-label">Distance Formula</span>
+                    <div class="proof-math" id="proofMathDistance">
+                        CP = &radic;((x - h)&sup2; + (y - k)&sup2;) = &radic;((3.91 - 1)&sup2; + (1.91 - (-1))&sup2;) = 4.12
+                    </div>
+                </div>
+                <div class="proof-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="proof-step-box">
+                    <span class="proof-step-label">Compare with r</span>
+                    <div class="proof-math" id="proofMathCompare">
+                        CP = 4.12 &nbsp; vs &nbsp; r = 4.12 &rArr; <strong>CP = r</strong>
+                    </div>
+                </div>
+                <div class="proof-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="proof-step-box highlight-step">
+                    <span class="proof-step-label">Locus Equation</span>
+                    <div class="proof-math" id="proofMathEquation">
+                        (x - 1)&sup2; + (y + 1)&sup2; = 4.12&sup2; = 16.97
+                    </div>
+                    <span class="proof-badge" id="proofStatusBadge"><i class="fa-solid fa-circle-check"></i> Point on locus</span>
+                </div>
+            </div>
+            
+            <div class="footer-mission">
+                <span><i class="fa-solid fa-rocket"></i> Mission: See the structure. Trust the logic. Build the truth.</span>
+                <span class="footer-credit">Maths Universe &mdash; Visual Proofs</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>

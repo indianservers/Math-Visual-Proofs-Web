@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "first-order-differential-equation-slope-field",
+  "categorySlug": "engineering-mathematics",
+  "slug": "first-order-differential-equation-slope-field",
+  "route": "/visual-proofs/engineering-mathematics/first-order-differential-equation-slope-field",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported from Harikishore/first-order-differential-equation-slope-field"
+}

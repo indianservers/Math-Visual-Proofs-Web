@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "primes-non-rectangular-arrays",
+  "categorySlug": "number-theory",
+  "slug": "primes-non-rectangular-arrays",
+  "route": "/visual-proofs/number-theory/primes-non-rectangular-arrays",
+  "status": "interactive",
+  "owner": "github-intern-import",
+  "notes": "Imported HTML from Asad/75-code/prime-non-rectangular-arrays-fixed (2).html"
+}

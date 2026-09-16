@@ -9,17 +9,22 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "vitest run --config vitest.config.ts && npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "npm run proof:validate && vitest run --config vitest.config.ts && npm run build && node --test tests/rendered-html.test.mjs",
     "test:unit": "vitest run --config vitest.config.ts",
+    "proof:new": "node scripts/create-proof.mjs",
+    "proof:validate": "node scripts/validate-proof-workspace.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "drizzle-orm": "0.45.2",
     "katex": "^0.18.4",
+    "lucide-react": "^1.46.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
+    "react-katex": "^3.1.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -28,6 +33,7 @@
     "@next/eslint-plugin-next": "16.2.6",
     "@openai/sites-vite-plugin": "0.1.0",
     "@tailwindcss/postcss": "4.2.1",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

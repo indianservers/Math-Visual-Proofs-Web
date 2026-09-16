@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "sector-area-formula",
+  "categorySlug": "geometry",
+  "slug": "sector-area-formula",
+  "route": "/visual-proofs/geometry/sector-area-formula",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive proof using shared canvas engine, ProofShape, ProofUI, MathFormula, and lucide icons."
+}

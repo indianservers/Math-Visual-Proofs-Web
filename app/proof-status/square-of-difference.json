@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "square-of-difference",
+  "categorySlug": "algebraic-identities",
+  "slug": "square-of-difference",
+  "route": "/visual-proofs/algebraic-identities/square-of-difference",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive proof using shared canvas engine, ProofShape, ProofUI, MathFormula, and lucide icons."
+}

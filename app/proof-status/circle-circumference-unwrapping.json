@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "circle-circumference-unwrapping",
+  "categorySlug": "geometry",
+  "slug": "circle-circumference-unwrapping",
+  "route": "/visual-proofs/geometry/circle-circumference-unwrapping",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive proof using shared canvas engine, ProofShape, ProofUI, MathFormula, and lucide icons."
+}

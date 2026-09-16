@@ -1,0 +1,442 @@
+.proof {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.25rem;
+  border: 1px solid #dce1f4;
+  border-radius: 1.5rem;
+  background: linear-gradient(180deg, #ffffff, #f7f9ff);
+  box-shadow: 0 12px 30px rgb(26 39 94 / 10%);
+}
+
+.mission {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  background: #eef6ff;
+  border: 1px solid #d5e4f8;
+  color: #3550b0;
+}
+
+.mission b {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: #1d2f6b;
+}
+
+.mission p {
+  margin: 0;
+  color: #44548a;
+  line-height: 1.45;
+  font-size: 0.95rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.controls button {
+  height: 2.2rem;
+  padding: 0 0.85rem;
+  border: 1px solid #cfd6ef;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #2f3f7a;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.controls button[aria-pressed="true"] {
+  border-color: #7b63e4;
+  background: #f3efff;
+  color: #3d2bb8;
+}
+
+.canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  background: #fbfcff;
+  border: 1px solid #e3e7f5;
+}
+
+.ground {
+  stroke: #9aa6cf;
+  stroke-width: 3;
+}
+
+.travel {
+  stroke: #2f9d6a;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.radius {
+  stroke: #d4553a;
+  stroke-width: 2.5;
+}
+
+.mark {
+  fill: #d4553a;
+}
+
+.label {
+  fill: #3a4a80;
+  font-size: 12px;
+}
+
+.unwrapped {
+  stroke: #7a4ad2;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.foreignFormula {
+  color: #3a2f8a;
+  font-size: 13px;
+}
+
+.invariants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.formulaRow {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.85rem;
+  background: #f5f2ff;
+  color: #3a2f8a;
+  overflow-x: auto;
+}
+
+.proved {
+  padding: 0.85rem 1rem;
+  border-radius: 0.9rem;
+  background: #e8faf1;
+  border: 1px solid #b6e7cb;
+  color: #0f6b45;
+  font-weight: 700;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(220px, 0.95fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.sector {
+  fill: #7aa2ff;
+  fill-opacity: 0.55;
+  stroke: #3556c7;
+  stroke-width: 2.5;
+}
+
+.panel {
+  display: grid;
+  gap: 0.65rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid #e0e5f4;
+  background: #fff;
+}
+
+.panelHead {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  color: #24316d;
+}
+
+.meter {
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #e8ecf8;
+  overflow: hidden;
+}
+
+.meter i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #6f8fff, #3f62d8);
+}
+
+.sectionTitle {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+  color: #24316d;
+}
+
+.count {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  color: #31407a;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.buildGrid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.cell {
+  min-height: 5.2rem;
+  padding: 0.55rem;
+  border: 1px solid #d5dcf3;
+  border-radius: 0.9rem;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+}
+
+.cell:hover,
+.cell:focus-visible {
+  border-color: #7b63e4;
+  outline: 2px solid #b7a7ff;
+  outline-offset: 2px;
+}
+
+.stack {
+  display: grid;
+  gap: 0.15rem;
+  width: 2rem;
+}
+
+.cubeOn,
+.cubeOff {
+  display: block;
+  height: 0.55rem;
+  border-radius: 0.2rem;
+}
+
+.cubeOn {
+  background: linear-gradient(90deg, #6f8fff, #4d63d4);
+}
+
+.cubeOff {
+  background: #edf0f8;
+}
+
+.projections {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.projCard {
+  padding: 0.75rem;
+  border: 1px solid #e0e5f4;
+  border-radius: 0.9rem;
+  background: #fff;
+}
+
+.projCard b {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #24316d;
+  font-size: 0.82rem;
+}
+
+.topGrid {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.topFilled,
+.topEmpty {
+  aspect-ratio: 1;
+  border-radius: 0.3rem;
+}
+
+.topFilled {
+  background: #4d63d4;
+}
+
+.topEmpty {
+  background: #e8ecf6;
+}
+
+.barRow {
+  display: flex;
+  gap: 0.35rem;
+  align-items: end;
+}
+
+.barCol {
+  display: grid;
+  gap: 0.15rem;
+  width: 1.4rem;
+}
+
+.barOn,
+.barOff {
+  display: block;
+  height: 0.55rem;
+  border-radius: 0.2rem;
+}
+
+.barOn {
+  background: #2f9d6a;
+}
+
+.barOff {
+  background: #e7ecef;
+}
+
+.solids {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.solidCard {
+  text-align: left;
+  padding: 0.9rem;
+  border: 1px solid #e0e5f4;
+  border-radius: 1rem;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.solidCard span {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+  color: #667397;
+  font-size: 0.85rem;
+}
+
+.solidActive {
+  border-color: #d9893b;
+  box-shadow: 0 0 0 2px #f3d2a8;
+  background: #fffaf3;
+}
+
+.heightMap {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+.heightMap i {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 0.35rem;
+  font-style: normal;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  background: #c5cbe0;
+}
+
+.heightMap i[data-h="1"] {
+  background: #7aa2ff;
+}
+
+.heightMap i[data-h="2"] {
+  background: #3f62d8;
+}
+
+.heightMap i[data-h="0"] {
+  color: #8b93b0;
+  background: #edf0f8;
+}
+
+.compare {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e0e5f4;
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.compare h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #24316d;
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.views {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+}
+
+.viewStrip {
+  padding: 0.65rem;
+  border-radius: 0.75rem;
+  background: #f7f8fd;
+  border: 1px solid #e4e8f5;
+}
+
+.viewStrip b {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+  color: #31407a;
+}
+
+.topMini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.2rem;
+}
+
+.on,
+.off {
+  aspect-ratio: 1;
+  border-radius: 0.25rem;
+}
+
+.on {
+  background: #3f62d8;
+}
+
+.off {
+  background: #dde3f2;
+}
+
+.heights {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.heights span {
+  min-width: 1.4rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 0.4rem;
+  background: #e8faf1;
+  color: #0f6b45;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 840px) {
+  .layout,
+  .solids,
+  .views {
+    grid-template-columns: 1fr;
+  }
+}

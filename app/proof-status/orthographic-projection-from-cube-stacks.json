@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "orthographic-projection-from-cube-stacks",
+  "categorySlug": "geometry",
+  "slug": "orthographic-projection-from-cube-stacks",
+  "route": "/visual-proofs/geometry/orthographic-projection-from-cube-stacks",
+  "status": "interactive",
+  "owner": "cursor-agent",
+  "notes": "Native interactive proof using shared canvas engine, ProofShape, ProofUI, MathFormula, and lucide icons."
+}

@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Taylor Series Approximation", category: "Calculus", description: "Build a local polynomial term by term and compare its curve and error with the original function.", difficulty: "Advanced", estimatedTime: "10 min" } as const;

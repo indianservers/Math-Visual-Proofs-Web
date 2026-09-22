@@ -61,9 +61,9 @@
       "difficultyRange": "Intermediate to Advanced",
       "targetAudience": "Senior school, engineering entrance preparation, undergraduate mathematics, engineering mathematics",
       "iconName": "FunctionSquare",
-      "proofCount": 16,
+      "proofCount": 17,
       "status": "available",
-      "actualProofCount": 16
+      "actualProofCount": 17
     },
     {
       "title": "Number Theory",
@@ -127,9 +127,9 @@
       "difficultyRange": "Intermediate to Advanced",
       "targetAudience": "Engineering and degree students",
       "iconName": "Grid3X3",
-      "proofCount": 11,
+      "proofCount": 12,
       "status": "available",
-      "actualProofCount": 11
+      "actualProofCount": 12
     },
     {
       "title": "Vectors",
@@ -182,9 +182,9 @@
       "difficultyRange": "Intermediate to Advanced",
       "targetAudience": "Olympiad, JEE, and undergraduate learners",
       "iconName": "GitFork",
-      "proofCount": 8,
+      "proofCount": 7,
       "status": "available",
-      "actualProofCount": 8
+      "actualProofCount": 7
     },
     {
       "title": "Logarithms and Exponents",
@@ -193,9 +193,9 @@
       "difficultyRange": "Beginner to Advanced",
       "targetAudience": "High school, science, and engineering students",
       "iconName": "FunctionSquare",
-      "proofCount": 13,
+      "proofCount": 12,
       "status": "available",
-      "actualProofCount": 13
+      "actualProofCount": 12
     },
     {
       "title": "Transformations and Symmetry",
@@ -9010,7 +9010,7 @@
       "title": "Volume of Cuboid and Cube",
       "slug": "cuboid-cube-volume",
       "shortDescription": "Build a base layer of unit cubes and stack height layers to get volume.",
-      "longDescription": "A unit-cube stack shows base area length x width, height as number of layers, and cube mode as side^3. The measurement scene connects surface, volume, perimeter, and unit changes to visible parts of the object.",
+      "longDescription": "Orbit a Three.js unit-cube stack, count length × width cubes in each layer, separate the height layers, and see cube volume as side cubed.",
       "difficulty": "Beginner",
       "tags": [
         "mensuration",
@@ -9019,7 +9019,7 @@
         "cube",
         "unit cubes"
       ],
-      "estimatedTime": "9 minutes",
+      "estimatedTime": "8 minutes",
       "prerequisites": [
         "Area of rectangle",
         "Multiplication",
@@ -9047,18 +9047,16 @@
       "hasFormulaTokens": true,
       "hasPredictionPrompt": true,
       "hasSnapshotSupport": true,
-      "expectedVisualKind": "svg",
-      "expectedPrimarySelector": "[data-testid=\"visual-proof-primary-visual\"] svg",
-      "expectedMinimumVisualElements": 3,
+      "expectedVisualKind": "canvas",
+      "expectedPrimarySelector": "[data-testid=\"cuboid-three-scene\"] canvas",
+      "expectedMinimumVisualElements": 1,
       "expectedInteractiveControls": [
-        "previous",
-        "next",
+        "dimensions",
+        "cube-mode",
+        "separate-layers",
+        "animate",
         "reset",
-        "labels",
-        "formula",
-        "reveal",
-        "challenge",
-        "teacher"
+        "challenge"
       ],
       "category": {
         "title": "Mensuration",
@@ -10285,7 +10283,7 @@
     {
       "catalogNumber": 151,
       "id": "cauchy-schwarz-dot-product-bound",
-      "title": "Cauchy-Schwarz Inequality: Dot Product Bound",
+      "title": "Cauchy–Schwarz Inequality",
       "slug": "cauchy-schwarz-dot-product-bound",
       "shortDescription": "Drag two vectors and bound the dot product using projection and cos theta.",
       "longDescription": "A vector-field model connects u dot v = |u||v|cos theta with |cos theta|<=1, proving |u dot v|<=|u||v|. The comparison model shows which side, interval, or region remains valid as the boundary changes.",
@@ -10309,9 +10307,9 @@
         "Identify equality for parallel or opposite vectors"
       ],
       "componentKey": "CauchySchwarzDotProductBoundProof",
-      "categorySlug": "inequalities",
+      "categorySlug": "matrices-linear-algebra",
       "level": "Olympiad and Engineering Inequality Foundations",
-      "route": "/visual-proofs/inequalities/cauchy-schwarz-dot-product-bound",
+      "route": "/visual-proofs/matrices-linear-algebra/cauchy-schwarz-dot-product-bound",
       "status": "available",
       "thumbnailKey": "CauchySchwarzDotProductBoundProof",
       "proofLearningModel": "vector-field",
@@ -10339,13 +10337,13 @@
         "teacher"
       ],
       "category": {
-        "title": "Inequalities",
-        "slug": "inequalities",
-        "description": "Geometric, algebraic, and graph-based proofs for classic inequalities.",
+        "title": "Matrices and Linear Algebra",
+        "slug": "matrices-linear-algebra",
+        "description": "Matrix operations, determinants, rank, eigenvectors, and transformations as visual arguments.",
         "difficultyRange": "Intermediate to Advanced",
-        "targetAudience": "Olympiad, JEE, and undergraduate learners",
-        "iconName": "GitFork",
-        "proofCount": 8,
+        "targetAudience": "Engineering and degree students",
+        "iconName": "Grid3X3",
+        "proofCount": 12,
         "status": "available"
       }
     },
@@ -10909,9 +10907,9 @@
         "Use compound growth to approximate e"
       ],
       "componentKey": "NaturalExponentialEProof",
-      "categorySlug": "logarithms-exponents",
+      "categorySlug": "calculus",
       "level": "High School to Engineering Precalculus Foundations",
-      "route": "/visual-proofs/logarithms-exponents/natural-exponential-e",
+      "route": "/visual-proofs/calculus/natural-exponential-e",
       "status": "available",
       "thumbnailKey": "NaturalExponentialEProof",
       "proofLearningModel": "growth-scale",
@@ -10939,13 +10937,13 @@
         "teacher"
       ],
       "category": {
-        "title": "Logarithms and Exponents",
-        "slug": "logarithms-exponents",
-        "description": "Growth, inverse functions, laws of exponents, and logarithmic scales as visual proofs.",
-        "difficultyRange": "Beginner to Advanced",
-        "targetAudience": "High school, science, and engineering students",
+        "title": "Calculus Visual Proofs",
+        "slug": "calculus",
+        "description": "Interactive visual proofs for limits, derivatives, tangent lines, area under curves, integration, the Fundamental Theorem of Calculus, and Taylor series.",
+        "difficultyRange": "Intermediate to Advanced",
+        "targetAudience": "Senior school, engineering entrance preparation, undergraduate mathematics, engineering mathematics",
         "iconName": "FunctionSquare",
-        "proofCount": 13,
+        "proofCount": 17,
         "status": "available"
       }
     },

@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Binomial Theorem", category: "Sequences & Series", description: "Choose factors of x or y, inspect Pascal's triangle, and reveal the coefficient of each term.", difficulty: "Intermediate", estimatedTime: "9 min" } as const;

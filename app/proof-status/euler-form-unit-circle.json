@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "proofId": "euler-form-unit-circle",
+  "categorySlug": "complex-numbers",
+  "slug": "euler-form-unit-circle",
+  "route": "/visual-proofs/complex-numbers/euler-form-unit-circle",
+  "status": "interactive",
+  "owner": "math-universe-port",
+  "notes": "Ported from Math Universe Visualizations."
+}

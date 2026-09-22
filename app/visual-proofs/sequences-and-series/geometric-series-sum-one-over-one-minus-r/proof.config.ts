@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Geometric-Series Sum", catalogTitle: "Geometric-Series Sum: 1 + r + r^2 + ... = 1/(1-r)", category: "Sequences & Series", description: "Tile a finite region with powers of r and watch the unfilled tail shrink to zero.", difficulty: "Intermediate", estimatedTime: "8 min" } as const;

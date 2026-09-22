@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Natural Exponential and Euler’s Number e", catalogTitle: "Natural Exponential and Euler's Number e", category: "Calculus", description: "See discrete compounding approach smooth exponential growth and reveal e.", difficulty: "Intermediate", estimatedTime: "12 min" } as const;

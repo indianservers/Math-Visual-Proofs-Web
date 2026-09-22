@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ITEMS = [
+  { href: "/proofs", id: "home", icon: "⌂", label: "Home" },
   { href: "/proofs#proof-grid", id: "explore", icon: "△", label: "Explore" },
   { href: "/proofs", id: "proofs", icon: "♧", label: "Proofs" },
   { href: "/proofs#catalog-title", id: "practice", icon: "◇", label: "Practice" },
@@ -30,7 +31,9 @@ export default function ProofMainMenu() {
             item.id === "proofs"
               ? pathname.startsWith("/proofs") ||
                 pathname.startsWith("/visual-proofs")
-              : item.id === "explore" && onLibrary;
+              : item.id === "home"
+                ? onLibrary
+                : item.id === "explore" && onLibrary;
           return (
             <Link
               key={item.id}

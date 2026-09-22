@@ -1,0 +1,1 @@
+export const proofConfig={title:"Trigonometric Graphs from the Unit Circle",category:"Trigonometry",description:"See a rotating point generate the sine and cosine waves in real time.",difficulty:"Intermediate",estimatedTime:"10 min"} as const;

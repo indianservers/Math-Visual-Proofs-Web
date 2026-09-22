@@ -4,7 +4,7 @@ import { proofConfig } from "./proof.config";
 
 export default function Page() {
   return (
-    <VisualProofShell {...proofConfig}>
+    <VisualProofShell {...proofConfig} nativeWorkspace>
       <Proof />
     </VisualProofShell>
   );

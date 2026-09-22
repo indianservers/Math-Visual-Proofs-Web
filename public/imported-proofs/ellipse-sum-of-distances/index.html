@@ -1048,6 +1048,11 @@
     .point-locus { fill: #10b981; stroke: #ffffff; stroke-width: 3; cursor: grab; }
     .point-locus:active { cursor: grabbing; }
 
+    :focus-visible { outline: 3px solid #4f46e5; outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
     .svg-text { font-family: var(--font-main); font-size: 12px; fill: #475569; user-select: none; }
     .svg-text-math { font-family: var(--font-math); font-size: 13px; font-weight: 600; fill: #1e293b; }
     .svg-label-bg { fill: rgba(255,255,255,0.92); rx: 4; ry: 4; }
@@ -1056,6 +1061,31 @@
         .app-sidebar, .sidebar, aside.sidebar, .sfp-sidenav { display: none !important; }
         body { display: block !important; min-height: auto !important; }
         .app-container, .proof-app { padding-left: 0 !important; }
+        .app-layout { display: block; min-height: 0; }
+        .main-wrapper { width: 100%; max-width: 1600px; padding: 16px; margin: 0 auto; }
+        .top-header { display: none; }
+        .dashboard-grid { grid-template-columns: minmax(0, 1fr) minmax(300px, 400px); }
+        .graph-card, .explanation-column { min-width: 0; }
+        @media (max-width: 1100px) {
+          .dashboard-grid { grid-template-columns: minmax(0, 1fr); }
+          .explanation-column { max-height: none; overflow: visible; }
+        }
+        @media (max-width: 600px) {
+          .main-wrapper { padding: 8px; }
+          .graph-toolbar { padding: 8px; align-items: stretch; }
+          .tool-group { width: 100%; flex-wrap: wrap; }
+          .tool-btn { padding: 6px 8px; font-size: 12px; }
+          .toggle-group { justify-content: space-between; gap: 8px; }
+          .graph-viewport-container { height: auto; display: flex; flex-direction: column; }
+          .graph-viewport-container svg.math-svg { order: 0; height: 360px; flex: none; }
+          .overlay-parameters, .overlay-distances {
+            order: 1; position: relative; top: auto; left: auto; right: auto;
+            width: auto; margin: 8px;
+          }
+          .overlay-zoom-controls { top: 308px; bottom: auto; right: 8px; }
+          .overlay-inequality { top: 365px; bottom: auto; left: 8px; }
+          #label-pf1-g, #label-pf2-g { display: none; }
+        }
       </style></head>
 <body>
 
@@ -1119,10 +1149,6 @@
         <div class="header-actions">
           <span class="pill-badge">Intermediate</span>
           <span class="pill-badge">⏱ 15 min</span>
-          <button class="btn-secondary" id="btn-reset" title="Reset all to default parameters">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            Reset
-          </button>
         </div>
       </header>
 
@@ -1132,8 +1158,8 @@
         <section class="graph-card">
           <!-- Toolbar -->
           <div class="graph-toolbar">
-            <div class="tool-group" role="radiogroup" aria-label="Interaction Modes">
-              <button class="tool-btn active" id="tool-select" data-mode="select" title="Select & Inspect">
+            <div class="tool-group" role="group" aria-label="Interaction Modes">
+              <button class="tool-btn active" id="tool-select" data-mode="select" title="Select & Inspect" aria-pressed="true">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
                 Select
               </button>
@@ -1154,6 +1180,8 @@
                 Directrix View
               </button>
             </div>
+
+            <button class="btn-secondary" id="btn-reset" title="Reset all to default parameters">↺ Reset</button>
 
             <div class="toggle-group">
               <label class="toggle-label" title="Toggle Inequality Region Shading">
@@ -1184,11 +1212,11 @@
                 <span class="param-label">a =</span>
                 <div class="param-input-box">
                   <button class="btn-step" id="btn-a-dec" title="Decrease a">-</button>
-                  <input type="number" id="input-a" class="param-input" value="4.50" step="0.1" min="0.5" max="10.0" aria-label="Semi-major axis a">
+                  <input type="number" id="input-a" class="param-input" value="4.50" step="0.1" min="1.0" max="10.0" aria-label="Semi-major axis a">
                   <button class="btn-step" id="btn-a-inc" title="Increase a">+</button>
                 </div>
               </div>
-              <input type="range" id="slider-a" class="slider-range" value="4.5" min="1.0" max="8.0" step="0.1" aria-label="a slider">
+              <input type="range" id="slider-a" class="slider-range" value="4.5" min="1.0" max="10.0" step="0.1" aria-label="Semi-major axis a slider">
 
               <!-- Semi-minor axis b -->
               <div class="param-row">
@@ -1199,7 +1227,7 @@
                   <button class="btn-step" id="btn-b-inc" title="Increase b">+</button>
                 </div>
               </div>
-              <input type="range" id="slider-b" class="slider-range" value="3.6" min="0.5" max="7.5" step="0.1" aria-label="b slider">
+              <input type="range" id="slider-b" class="slider-range" value="3.6" min="0.2" max="9.9" step="0.1" aria-label="Semi-minor axis b slider">
 
               <!-- Readouts -->
               <div class="readout-list">
@@ -1315,6 +1343,10 @@
                 <!-- Construction Distance Lines PF1 and PF2 -->
                 <line id="line-pf1" class="line-pf1"/>
                 <line id="line-pf2" class="line-pf2"/>
+                <g id="test-point-g" style="display:none" aria-label="Tested point">
+                  <circle id="test-point-marker" r="6" fill="#ec4899" stroke="#fff" stroke-width="2"/>
+                  <text id="test-point-label" class="svg-text-math" fill="#9f1239">Tested point</text>
+                </g>
 
                 <!-- Distance Labels on Lines -->
                 <g id="label-pf1-g">
@@ -1345,7 +1377,7 @@
 
                 <!-- Locus Point P -->
                 <circle id="point-locus-halo" fill="rgba(16, 185, 129, 0.2)" r="14"/>
-                <circle id="point-locus" class="point-locus" r="7"/>
+                <circle id="point-locus" class="point-locus" r="7" role="slider" tabindex="0" aria-label="Point P around the ellipse" aria-valuemin="0" aria-valuemax="359" aria-valuenow="45"/>
                 <g id="label-locus-g">
                   <rect class="svg-label-bg" width="125" height="22" rx="4"/>
                   <text id="text-locus-label" class="svg-text-math" fill="#047857">P(2.70, 2.88)</text>
@@ -1788,6 +1820,7 @@
       ineqInside: true,
       ineqOutside: false,
       proofRevealed: false,
+      testedPoint: null,
       
       // Dynamic Challenge State
       challengeTarget2a: 12.0,
@@ -1843,11 +1876,15 @@
       textEllipseEq: document.getElementById('text-ellipse-eq'),
       linePf1: document.getElementById('line-pf1'),
       linePf2: document.getElementById('line-pf2'),
+      testPointG: document.getElementById('test-point-g'),
+      testPointMarker: document.getElementById('test-point-marker'),
+      testPointLabel: document.getElementById('test-point-label'),
       labelPf1G: document.getElementById('label-pf1-g'),
       labelPf2G: document.getElementById('label-pf2-g'),
       textPf1Label: document.getElementById('text-pf1-label'),
       textPf2Label: document.getElementById('text-pf2-label'),
       pointCenter: document.getElementById('point-center'),
+      labelCenter: document.getElementById('label-center'),
       pointFocus1: document.getElementById('point-focus1'),
       pointFocus2: document.getElementById('point-focus2'),
       labelFocus1G: document.getElementById('label-focus1-g'),
@@ -1936,10 +1973,19 @@
     // --- 5. Rendering Pipeline ---
 
     function updateViewportDimensions() {
-      const rect = elements.viewportContainer.getBoundingClientRect();
+      const rect = elements.svg.getBoundingClientRect();
       view.width = rect.width || 800;
       view.height = rect.height || 580;
+      fitView();
       render();
+    }
+
+    function fitView() {
+      view.originX = view.width / 2;
+      view.originY = view.height / 2;
+      view.scale = Math.max(10, Math.min(65,
+        (view.width - 64) / (2 * state.a),
+        (view.height - 64) / (2 * state.b)));
     }
 
     function renderGrid() {
@@ -2045,6 +2091,8 @@
       // Center C(0,0)
       elements.pointCenter.setAttribute('cx', view.originX);
       elements.pointCenter.setAttribute('cy', view.originY);
+      elements.labelCenter.setAttribute('x', view.originX + 8);
+      elements.labelCenter.setAttribute('y', view.originY - 8);
     }
 
     function renderEllipse() {
@@ -2114,10 +2162,10 @@
       elements.pointFocus2.setAttribute('cy', f2Screen.sy);
 
       elements.textFocus1Label.textContent = `F₁(-${c.toFixed(2)}, 0)`;
-      elements.labelFocus1G.setAttribute('transform', `translate(${f1Screen.sx - 40}, ${f1Screen.sy + 12})`);
+      elements.labelFocus1G.setAttribute('transform', `translate(${Math.max(2, Math.min(view.width - 82, f1Screen.sx - 40))}, ${f1Screen.sy + 12})`);
 
       elements.textFocus2Label.textContent = `F₂(${c.toFixed(2)}, 0)`;
-      elements.labelFocus2G.setAttribute('transform', `translate(${f2Screen.sx - 40}, ${f2Screen.sy + 12})`);
+      elements.labelFocus2G.setAttribute('transform', `translate(${Math.max(2, Math.min(view.width - 82, f2Screen.sx - 40))}, ${f2Screen.sy + 12})`);
 
       // Directrices x = ± a / e = ± a² / c
       if (c > 0 && e > 0) {
@@ -2187,13 +2235,17 @@
 
       elements.pointLocus.setAttribute('cx', Pscreen.sx);
       elements.pointLocus.setAttribute('cy', Pscreen.sy);
+      elements.pointLocus.setAttribute('aria-valuenow', String(Math.round(((state.angleT * 180 / Math.PI) % 360 + 360) % 360) % 360));
+      elements.pointLocus.setAttribute('aria-valuetext', `P at (${P.x.toFixed(2)}, ${P.y.toFixed(2)})`);
       elements.pointLocusHalo.setAttribute('cx', Pscreen.sx);
       elements.pointLocusHalo.setAttribute('cy', Pscreen.sy);
 
       elements.textLocusLabel.textContent = `P(${P.x.toFixed(2)}, ${P.y.toFixed(2)})`;
       const labelOffsetX = P.x >= 0 ? 12 : -135;
       const labelOffsetY = P.y >= 0 ? -12 : 24;
-      elements.labelLocusG.setAttribute('transform', `translate(${Pscreen.sx + labelOffsetX}, ${Pscreen.sy + labelOffsetY})`);
+      const labelX = Math.max(4, Math.min(view.width - 130, Pscreen.sx + labelOffsetX));
+      const labelY = Math.max(20, Math.min(view.height - 24, Pscreen.sy + labelOffsetY));
+      elements.labelLocusG.setAttribute('transform', `translate(${labelX}, ${labelY})`);
 
       // Foci Screen Coordinates
       const f1Screen = view.toScreen(-c, 0);
@@ -2250,6 +2302,22 @@
       const midPf2Y = (Pscreen.sy + f2Screen.sy) / 2;
       elements.textPf2Label.textContent = `PF₂ = ${pf2.toFixed(2)}`;
       elements.labelPf2G.setAttribute('transform', `translate(${midPf2X - 35}, ${midPf2Y - 14})`);
+
+      if (state.testedPoint) {
+        const tested = state.testedPoint;
+        const screen = view.toScreen(tested.x, tested.y);
+        const onEllipse = MathEngine.isOnEllipse(tested.x, tested.y, a, b)
+          && Math.abs(Math.hypot(tested.x + c, tested.y) + Math.hypot(tested.x - c, tested.y) - 2 * a) < 1e-4;
+        elements.testPointG.style.display = 'block';
+        elements.testPointMarker.setAttribute('cx', screen.sx);
+        elements.testPointMarker.setAttribute('cy', screen.sy);
+        elements.testPointMarker.setAttribute('fill', onEllipse ? '#10b981' : '#ec4899');
+        elements.testPointLabel.setAttribute('x', Math.max(4, Math.min(view.width - 105, screen.sx + 10)));
+        elements.testPointLabel.setAttribute('y', Math.max(18, Math.min(view.height - 8, screen.sy - 10)));
+        elements.testPointLabel.textContent = `Test (${tested.x.toFixed(2)}, ${tested.y.toFixed(2)})`;
+      } else {
+        elements.testPointG.style.display = 'none';
+      }
     }
 
     function updateReadouts() {
@@ -2318,31 +2386,39 @@
       }, 3500);
     }
 
+    function restoreAxisControls() {
+      elements.inputA.value = state.a.toFixed(2);
+      elements.inputB.value = state.b.toFixed(2);
+      elements.sliderA.value = state.a;
+      elements.sliderB.value = state.b;
+    }
+
     function setAandB(newA, newB) {
       const parsedA = parseFloat(newA);
       const parsedB = parseFloat(newB);
 
       if (isNaN(parsedA) || isNaN(parsedB)) {
         showError('Please enter valid numerical values for semi-axes a and b.');
+        restoreAxisControls();
+        return;
+      }
+
+      if (parsedA < 1 || parsedA > 10 || parsedB < 0.2 || parsedB > 9.9) {
+        showError('Use 1 ≤ a ≤ 10 and 0.2 ≤ b ≤ 9.9.');
+        restoreAxisControls();
         return;
       }
 
       if (parsedA <= parsedB) {
         showError(`Semi-major axis 'a' (${parsedA.toFixed(2)}) must be strictly greater than semi-minor axis 'b' (${parsedB.toFixed(2)}).`);
-        elements.inputA.value = state.a.toFixed(2);
-        elements.inputB.value = state.b.toFixed(2);
-        return;
-      }
-
-      if (parsedB <= 0) {
-        showError('Semi-minor axis \'b\' must be strictly positive (b > 0).');
-        elements.inputA.value = state.a.toFixed(2);
-        elements.inputB.value = state.b.toFixed(2);
+        restoreAxisControls();
         return;
       }
 
       state.a = parsedA;
       state.b = parsedB;
+      state.testedPoint = null;
+      fitView();
       render();
     }
 
@@ -2354,19 +2430,19 @@
     elements.sliderB.addEventListener('input', (e) => setAandB(state.a, e.target.value));
 
     elements.btnADec.addEventListener('click', () => {
-      if (state.a - 0.25 > state.b) setAandB(state.a - 0.25, state.b);
+      if (state.a - 0.1 > state.b) setAandB(Number((state.a - 0.1).toFixed(1)), state.b);
     });
 
     elements.btnAInc.addEventListener('click', () => {
-      setAandB(state.a + 0.25, state.b);
+      setAandB(Number((state.a + 0.1).toFixed(1)), state.b);
     });
 
     elements.btnBDec.addEventListener('click', () => {
-      if (state.b > 0.25) setAandB(state.a, state.b - 0.25);
+      if (state.b > 0.2) setAandB(state.a, Number((state.b - 0.1).toFixed(1)));
     });
 
     elements.btnBInc.addEventListener('click', () => {
-      if (state.b + 0.25 < state.a) setAandB(state.a, state.b + 0.25);
+      if (state.b + 0.1 < state.a) setAandB(state.a, Number((state.b + 0.1).toFixed(1)));
     });
 
     // Zoom Controls
@@ -2376,22 +2452,25 @@
     });
 
     elements.btnZoomOut.addEventListener('click', () => {
-      view.scale = Math.max(15, view.scale / 1.15);
+      view.scale = Math.max(10, view.scale / 1.15);
       render();
     });
 
     elements.btnZoomReset.addEventListener('click', () => {
-      view.originX = view.width / 2;
-      view.originY = view.height / 2;
-      view.scale = 45;
+      fitView();
       render();
     });
 
     // Toolbar Modes
     elements.toolBtns.forEach(btn => {
+      btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
       btn.addEventListener('click', () => {
-        elements.toolBtns.forEach(b => b.classList.remove('active'));
+        elements.toolBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
         btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
         state.mode = btn.dataset.mode;
 
         if (state.mode === 'pan') {
@@ -2427,11 +2506,21 @@
 
     // Independent Expandable Accordion Cards
     document.querySelectorAll('.accordion-header').forEach(header => {
+      header.setAttribute('role', 'button');
+      header.setAttribute('tabindex', '0');
+      header.setAttribute('aria-expanded', String(header.closest('.accordion-card')?.classList.contains('active')));
       header.addEventListener('click', () => {
         const card = header.closest('.accordion-card');
         if (card) {
           card.classList.toggle('active');
+          header.setAttribute('aria-expanded', String(card.classList.contains('active')));
           render();
+        }
+      });
+      header.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          header.click();
         }
       });
     });
@@ -2442,6 +2531,7 @@
       const targetCard = document.getElementById(`acc-card-${topicId}`);
       if (targetCard) {
         targetCard.classList.add('active');
+        targetCard.querySelector('.accordion-header')?.setAttribute('aria-expanded', 'true');
         targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         render();
       }
@@ -2532,8 +2622,7 @@
       }
       elements.testFeedback.style.display = 'inline-flex';
 
-      // Update angleT to nearest point for visual convenience if desired
-      state.angleT = Math.atan2(ty / state.b, tx / state.a);
+      state.testedPoint = { x: tx, y: ty };
       render();
     });
 
@@ -2542,6 +2631,7 @@
       state.a = 4.5;
       state.b = 3.6;
       state.angleT = Math.PI / 4;
+      state.testedPoint = null;
       state.mode = 'select';
       state.showGrid = true;
       state.showInequality = false;
@@ -2549,9 +2639,7 @@
       state.ineqOutside = false;
       state.proofRevealed = false;
 
-      view.originX = 400;
-      view.originY = 290;
-      view.scale = 45;
+      fitView();
 
       elements.toggleGrid.checked = true;
       elements.toggleInequality.checked = false;
@@ -2561,8 +2649,12 @@
       elements.challengeFeedback.style.display = 'none';
       elements.testFeedback.style.display = 'none';
 
-      elements.toolBtns.forEach(b => b.classList.remove('active'));
+      elements.toolBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       document.getElementById('tool-select').classList.add('active');
+      document.getElementById('tool-select').setAttribute('aria-pressed', 'true');
       elements.viewportContainer.className = 'graph-viewport-container';
 
       render();
@@ -2672,6 +2764,15 @@
       render();
     }
 
+    elements.pointLocus.addEventListener('keydown', (event) => {
+      const direction = ['ArrowRight', 'ArrowUp'].includes(event.key) ? 1
+        : ['ArrowLeft', 'ArrowDown'].includes(event.key) ? -1 : 0;
+      if (!direction) return;
+      event.preventDefault();
+      state.angleT += direction * (event.shiftKey ? 1 : 5) * Math.PI / 180;
+      render();
+    });
+
     // Scroll Zooming
     elements.viewportContainer.addEventListener('wheel', (e) => {
       e.preventDefault();
@@ -2679,7 +2780,7 @@
       const mouseCoords = getSVGCoordinates(e);
       const mathBefore = view.toMath(mouseCoords.sx, mouseCoords.sy);
 
-      const newScale = Math.min(Math.max(15, view.scale * zoomFactor), 160);
+      const newScale = Math.min(Math.max(10, view.scale * zoomFactor), 160);
       view.scale = newScale;
 
       view.originX = mouseCoords.sx - mathBefore.mx * view.scale;

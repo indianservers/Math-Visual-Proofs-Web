@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Bayes’ Theorem", catalogTitle: "Bayes' Theorem", category: "Probability", description: "Reverse conditional probability with a linked probability tree and population area model.", difficulty: "Intermediate", estimatedTime: "10 min" } as const;

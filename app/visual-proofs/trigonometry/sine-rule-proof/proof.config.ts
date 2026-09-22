@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Sine Rule / Law of Sines", category: "Trigonometry", description: "Drag an inscribed triangle and discover that each side-to-opposite-sine ratio is the circle's diameter.", difficulty: "Intermediate", estimatedTime: "10 min" } as const;

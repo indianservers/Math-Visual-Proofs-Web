@@ -8,6 +8,7 @@ export default function Proof() {
     <ImportedHtmlProof
       src="/imported-proofs/ellipse-sum-of-distances/index.html"
       title={proofConfig.title}
+      autoHeightOnMobile
     />
   );
 }

@@ -41,7 +41,7 @@ test("server-renders every dedicated visual-proof route", async () => {
     const response = await render(pathname);
     assert.equal(response.status, 200, pathname);
     assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-    const html = await response.text();
+    const html = (await response.text()).replace(/&#x27;|&#39;|&apos;/gi, "'");
     assert.match(
       html,
       new RegExp(title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
@@ -60,7 +60,7 @@ test("server-renders a dedicated page for every catalog proof", async () => {
     const pathname = `/visual-proofs/${proof.categorySlug}/${proof.slug}`;
     const response = await render(pathname);
     assert.equal(response.status, 200, pathname);
-    const html = await response.text();
+    const html = (await response.text()).replace(/&#x27;|&#39;|&apos;/gi, "'");
     assert.match(
       html,
       new RegExp(proof.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),

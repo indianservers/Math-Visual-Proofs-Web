@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Central Limit Theorem", category: "Statistics", description: "Sample several source distributions and watch the distribution of means approach a normal curve.", difficulty: "Intermediate", estimatedTime: "12 min" } as const;

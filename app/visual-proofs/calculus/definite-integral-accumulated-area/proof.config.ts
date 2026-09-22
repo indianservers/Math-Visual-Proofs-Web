@@ -1,0 +1,1 @@
+export const proofConfig={title:"Definite Integral as Accumulated Area",category:"Calculus",description:"See the integral grow as signed area accumulates under the curve.",difficulty:"Intermediate",estimatedTime:"8 min"} as const;

@@ -1,0 +1,1 @@
+export const proofConfig={title:"Roots of Unity",category:"Complex Numbers",description:"Explore how the solutions of zⁿ = 1 form a perfectly symmetric regular polygon.",difficulty:"Intermediate",estimatedTime:"10 min"} as const;

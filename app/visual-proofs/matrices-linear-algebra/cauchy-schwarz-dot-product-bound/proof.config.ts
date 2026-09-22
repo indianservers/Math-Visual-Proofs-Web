@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Cauchy–Schwarz Inequality", category: "Linear Algebra", description: "Dot product, projection, and angle reveal why |u·v| never exceeds ||u|| ||v||.", difficulty: "Intermediate", estimatedTime: "12 min" } as const;

@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
-import styles from "./VisualProofShell.module.css";
+import type { ReactNode } from "react";
+import ProofDeskTabs from "./ProofDeskTabs";
+import ProofMainMenu from "./ProofMainMenu";
+import { ProofCanvasHost } from "../proof-engine/ProofCanvasHost";
 
 type VisualProofShellProps = {
   title: string;
@@ -11,9 +13,10 @@ type VisualProofShellProps = {
   estimatedTime: string;
   description: string;
   children: ReactNode;
+  nativeWorkspace?: boolean;
 };
 
-/** Canvas-first shared chrome, preserving the compact remote navigation. */
+/** Shared page chrome, menu, and canvas tools for independently developed proofs. */
 export default function VisualProofShell({
   title,
   category,
@@ -21,33 +24,63 @@ export default function VisualProofShell({
   estimatedTime,
   description,
   children,
+  nativeWorkspace = false,
 }: VisualProofShellProps) {
-  const [aboutOpen, setAboutOpen] = useState(false);
-
   return (
-    <main className={styles.page}>
-      <header className={styles.topbar}>
-        <nav className={styles.crumbs} aria-label="Breadcrumb">
-          <Link href="/proofs">Visual Proofs</Link>
-          <span aria-hidden="true">/</span>
-          <span>{category}</span>
-        </nav>
-        <h1 className={styles.title}>{title}</h1>
-        <div className={styles.meta} aria-label="Proof details">
-          <span className={styles.chip}>{difficulty}</span>
-          <span className={styles.chip}>{estimatedTime}</span>
-          <button
-            type="button"
-            className={styles.aboutToggle}
-            aria-expanded={aboutOpen}
-            onClick={() => setAboutOpen((value) => !value)}
-          >
-            About
-          </button>
-        </div>
-      </header>
-      {aboutOpen && <p className={styles.aboutPanel} role="note">{description}</p>}
-      <section className={styles.workspace}>{children}</section>
+    <main className="proof-app visual-proof-shell">
+      <ProofMainMenu />
+      <ProofDeskTabs
+        defaultTab="workspace"
+        dock={
+          <header className="page-head">
+            <div>
+              <nav className="crumb" aria-label="Breadcrumb">
+                <Link href="/proofs">Visual Proofs</Link>
+                <span aria-hidden="true"> / </span>
+                <span>{category}</span>
+              </nav>
+              <h1>{title}</h1>
+            </div>
+            <div className="badges" aria-label="Proof details">
+              <div className="pill">{difficulty}</div>
+              <div className="pill time"><span className="clock" />{estimatedTime}</div>
+            </div>
+          </header>
+        }
+        tabs={[
+          {
+            id: "workspace",
+            label: "Workspace",
+            content: (
+              <div className="shell-workspace">
+                {nativeWorkspace ? children : (
+                  <ProofCanvasHost
+                    mode="embed"
+                    instruction={`Explore ${title}. Use zoom and arrows for the shared canvas; this proof keeps its own moves.`}
+                    hints={[
+                      description,
+                      "Try this proof's own buttons and sliders first.",
+                      "Zoom in on a detail, then press Fit to see the whole argument.",
+                    ]}
+                  >
+                    {children}
+                  </ProofCanvasHost>
+                )}
+              </div>
+            ),
+          },
+          {
+            id: "about",
+            label: "About",
+            content: (
+              <section className="mission generic-mission desk-about">
+                <div className="target">◎</div>
+                <div className="mission-copy"><b>Mission:</b> {description}</div>
+              </section>
+            ),
+          },
+        ]}
+      />
     </main>
   );
 }

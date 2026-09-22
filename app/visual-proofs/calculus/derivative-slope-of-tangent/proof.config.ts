@@ -1,0 +1,1 @@
+export const proofConfig={title:"Derivative as the Slope of a Tangent",catalogTitle:"Derivative as Slope of Tangent",category:"Calculus",description:"Watch a secant line converge to the tangent as the second point approaches the first.",difficulty:"Intermediate",estimatedTime:"8 min"} as const;

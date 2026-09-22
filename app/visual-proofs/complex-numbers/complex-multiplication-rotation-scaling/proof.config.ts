@@ -1,0 +1,1 @@
+export const proofConfig={title:"Complex Multiplication as Rotation and Scaling",category:"Complex Numbers",description:"Multiply complex numbers by combining a stretch and a rotation on the complex plane.",difficulty:"Advanced",estimatedTime:"11 min"} as const;

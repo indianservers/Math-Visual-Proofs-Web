@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Mean Value Theorem", category: "Calculus", description: "Drag an interval and find the points where the tangent parallels its secant.", difficulty: "Intermediate", estimatedTime: "8 min" } as const;

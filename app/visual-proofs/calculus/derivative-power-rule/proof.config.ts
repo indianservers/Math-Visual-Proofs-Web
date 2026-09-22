@@ -1,0 +1,1 @@
+export const proofConfig = { title: "Power Rule for Derivatives", category: "Calculus", description: "Expand a finite difference and watch its extra terms vanish into the tangent slope.", difficulty: "Intermediate", estimatedTime: "8 min" } as const;

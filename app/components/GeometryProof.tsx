@@ -1,8 +1,11 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
 import MathFormula from "./MathFormula";
-import { nearestSnap, useProofCanvas } from "./useProofCanvas";
+import ProofDeskTabs from "./ProofDeskTabs";
+import ProofMainMenu from "./ProofMainMenu";
+import { nearestSnap, useCanvasViewport, useProofCanvas } from "./useProofCanvas";
+import { ProofCanvasHost } from "../proof-engine/ProofCanvasHost";
+import type { CanvasDirection } from "../proof-engine/canvasEngine";
 
 type Kind = "area" | "angles" | "exterior" | "similar";
 const meta = {
@@ -39,51 +42,6 @@ const meta = {
   },
 };
 
-function Sidebar() {
-  const [selected, setSelected] = useState("Explore");
-  return (
-    <aside className="sidebar" aria-label="Primary navigation">
-      <div className="brand-mark">✣</div>
-      <div className="brand">
-        MATHS
-        <br />
-        UNIVERSE
-      </div>
-      <nav className="side-nav">
-        {[
-          ["△", "Explore"],
-          ["♧", "Proofs"],
-          ["◇", "Practice"],
-          ["▱", "Saved"],
-        ].map(([icon, label]) =>
-          label === "Proofs" ? (
-            <Link key={label} href="/proofs" className="side-item">
-              <span className="side-icon">{icon}</span>
-              {label}
-            </Link>
-          ) : (
-            <button
-              key={label}
-              onClick={() => setSelected(label)}
-              aria-pressed={selected === label}
-              className={`side-item ${selected === label ? "active" : ""}`}
-            >
-              <span className="side-icon">{icon}</span>
-              {label}
-            </button>
-          ),
-        )}
-      </nav>
-      <button
-        onClick={() => setSelected("Settings")}
-        aria-pressed={selected === "Settings"}
-        className={`side-item settings ${selected === "Settings" ? "active" : ""}`}
-      >
-        <span className="side-icon">⚙</span>Settings
-      </button>
-    </aside>
-  );
-}
 function Header({ kind }: { kind: Kind }) {
   const m = meta[kind];
   return (
@@ -95,7 +53,7 @@ function Header({ kind }: { kind: Kind }) {
             {kind === "exterior" || kind === "similar" ? " Proofs" : ""}
           </div>
           <h1>{m.title}</h1>
-          {m.subtitle && <div className="subtitle">{m.subtitle}</div>}
+          {m.subtitle && <p className="subtitle">{m.subtitle}</p>}
         </div>
         <div className="badges">
           <div className="pill">{m.difficulty}</div>
@@ -153,10 +111,12 @@ function AreaSvg({
   apex,
   phase,
   onApex,
+  viewBox = "0 0 940 390",
 }: {
   apex: number;
   phase: number;
   onApex: (x: number) => void;
+  viewBox?: string;
 }) {
   const canvas = useProofCanvas<"apex">(
     940,
@@ -167,8 +127,7 @@ function AreaSvg({
   return (
     <svg
       className={canvas.canvasClassName("proof-svg", "interactive-svg")}
-      viewBox="0 0 940 390"
-      aria-label="Triangle duplicated and sheared into a rectangle"
+      viewBox={viewBox}
       {...canvas.canvasProps}
     >
       <defs>
@@ -298,11 +257,13 @@ function AnglesSvg({
   vertexX,
   onVertex,
   onLift,
+  viewBox = "0 0 940 420",
 }: {
   lift: number;
   vertexX: number;
   onVertex: (x: number) => void;
   onLift: (v: number) => void;
+  viewBox?: string;
 }) {
   const canvas = useProofCanvas<"vertex" | "arc">(
     940,
@@ -324,7 +285,7 @@ function AnglesSvg({
         "angles-svg",
         "interactive-svg",
       )}
-      viewBox="0 0 940 420"
+      viewBox={viewBox}
       aria-label="Three triangle angles lifted to a straight line"
       {...canvas.canvasProps}
     >
@@ -437,11 +398,13 @@ function ExteriorSvg({
   onExtend,
   showArcs,
   showLabels,
+  viewBox = "0 0 940 420",
 }: {
   extend: number;
   onExtend: (x: number) => void;
   showArcs: boolean;
   showLabels: boolean;
+  viewBox?: string;
 }) {
   const canvas = useProofCanvas<"point-d">(
     940,
@@ -453,7 +416,7 @@ function ExteriorSvg({
   return (
     <svg
       className={canvas.canvasClassName("proof-svg", "interactive-svg")}
-      viewBox="0 0 940 420"
+      viewBox={viewBox}
       aria-label="Exterior angle equals the two remote interior angles"
       {...canvas.canvasProps}
     >
@@ -593,10 +556,12 @@ function SimilarSvg({
   scale,
   onScale,
   guides,
+  viewBox = "0 0 940 430",
 }: {
   scale: number;
   onScale: (x: number) => void;
   guides: boolean;
+  viewBox?: string;
 }) {
   const canvas = useProofCanvas<"scale">(
     940,
@@ -613,7 +578,7 @@ function SimilarSvg({
   return (
     <svg
       className={canvas.canvasClassName("proof-svg", "interactive-svg")}
-      viewBox="0 0 940 430"
+      viewBox={viewBox}
       aria-label="Similar triangles with proportional sides"
       {...canvas.canvasProps}
     >
@@ -880,6 +845,10 @@ function Why({
 
 export default function GeometryProof({ kind }: { kind: Kind }) {
   const [revealed, setRevealed] = useState(true);
+  const viewport = useCanvasViewport(
+    940,
+    kind === "area" ? 390 : kind === "similar" ? 430 : 420,
+  );
   const [action, setAction] = useState(
     kind === "area"
       ? "Move apex"
@@ -940,14 +909,77 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
       if (x === "Move Angle") setScale(2);
       if (x === "Show Guides") setGuides((v) => !v);
       if (x === "Snap") setScale(Math.round(scale * 2) / 2);
+      if (x === "Reset") setScale(2);
     }
   };
   return (
     <main className={`proof-app proof-${kind}`}>
-      <Sidebar />
-      <Header kind={kind} />
-      <div className="main-grid">
+      <ProofMainMenu />
+      <ProofDeskTabs
+        defaultTab="prove"
+        dock={<Header kind={kind} />}
+        tabs={[
+          {
+            id: "prove",
+            label: "Prove",
+            content: (
+      <div className="main-grid desk-canvas-grid">
         <section className="work-card generic-work">
+          <ProofCanvasHost
+            mode="scene"
+            snap={action === "Snap" || action === "Snap arcs"}
+            onSnap={() => doAction(kind === "angles" ? "Snap arcs" : "Snap")}
+            onReset={() => doAction("Reset")}
+            onWatch={
+              kind === "angles"
+                ? () => setLift((v) => (v > 190 ? 0 : 220))
+                : kind === "area"
+                  ? () => setPhase((v) => (v >= 2 ? 0 : v + 1))
+                  : undefined
+            }
+            items={[
+              {
+                id: "handle",
+                label:
+                  kind === "area"
+                    ? "Apex"
+                    : kind === "angles"
+                      ? "Vertex"
+                      : kind === "exterior"
+                        ? "Point D"
+                        : "Scale",
+                color: "#7351f5",
+              },
+            ]}
+            selectedId="handle"
+            onNudge={(direction: CanvasDirection) => {
+              const step = direction === "left" || direction === "right" ? 8 : 0.1;
+              if (kind === "area" && (direction === "left" || direction === "right"))
+                setApex((value) =>
+                  Math.max(0, Math.min(120, value + (direction === "right" ? 8 : -8))),
+                );
+              if (kind === "angles" && (direction === "left" || direction === "right"))
+                setVertexX((value) =>
+                  Math.max(350, Math.min(590, value + (direction === "right" ? 12 : -12))),
+                );
+              if (kind === "exterior" && (direction === "left" || direction === "right"))
+                setExtend((value) =>
+                  Math.max(0, Math.min(240, value + (direction === "right" ? 12 : -12))),
+                );
+              if (kind === "similar") {
+                if (direction === "up") setScale((value) => Math.min(2.5, value + 0.1));
+                if (direction === "down") setScale((value) => Math.max(1, value - 0.1));
+              }
+              void step;
+            }}
+            zoomPercent={viewport.zoomPercent}
+            canZoomIn={viewport.canZoomIn}
+            canZoomOut={viewport.canZoomOut}
+            onZoomIn={viewport.zoomIn}
+            onZoomOut={viewport.zoomOut}
+            onFit={viewport.fit}
+            instruction="Use the shared canvas controls, then this proof's own tools below."
+          >
           <Toolbar kind={kind} onAction={doAction} action={action} />
           {kind === "area" && (
             <>
@@ -960,7 +992,12 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
                 value={apex}
                 onChange={(e) => setApex(+e.target.value)}
               />
-              <AreaSvg apex={apex} phase={phase} onApex={setApex} />
+              <AreaSvg
+                apex={apex}
+                phase={phase}
+                onApex={setApex}
+                viewBox={viewport.viewBox}
+              />
               <label className="lower-slider">
                 Shear to rectangle
                 <input
@@ -980,6 +1017,7 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
                 vertexX={vertexX}
                 onVertex={setVertexX}
                 onLift={setLift}
+                viewBox={viewport.viewBox}
               />
               <div className="animation-box">
                 <b>Animation</b>
@@ -1007,6 +1045,7 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
                 onExtend={setExtend}
                 showArcs={showArcs}
                 showLabels={showLabels}
+                viewBox={viewport.viewBox}
               />
               <label className="lower-slider">
                 Angle Lab Controls
@@ -1023,7 +1062,12 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
           )}
           {kind === "similar" && (
             <>
-              <SimilarSvg scale={scale} onScale={setScale} guides={guides} />
+              <SimilarSvg
+                scale={scale}
+                onScale={setScale}
+                guides={guides}
+                viewBox={viewport.viewBox}
+              />
               <label className="lower-slider">
                 Scale factor k = {scale.toFixed(1)}
                 <input
@@ -1038,10 +1082,33 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
               </label>
             </>
           )}
+          </ProofCanvasHost>
         </section>
-        <Why kind={kind} revealed={revealed} setRevealed={setRevealed} />
       </div>
-      <Bottom kind={kind} scale={scale} />
+            ),
+          },
+          {
+            id: "why",
+            label: "Why it works",
+            content: (
+              <>
+                <section className="mission generic-mission desk-about">
+                  <div className="target">◎</div>
+                  <div className="mission-copy">
+                    <b>Mission:</b> {meta[kind].mission}
+                  </div>
+                </section>
+                <Why kind={kind} revealed={revealed} setRevealed={setRevealed} />
+              </>
+            ),
+          },
+          {
+            id: "check",
+            label: "Check",
+            content: <Bottom kind={kind} scale={scale} />,
+          },
+        ]}
+      />
     </main>
   );
 }

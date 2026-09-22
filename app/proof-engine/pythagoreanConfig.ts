@@ -163,13 +163,13 @@ export const INITIAL_PYTHAGOREAN_SCENE: ProofScene<PythagoreanPieceId> = {
 };
 
 export const PYTHAGOREAN_REASONING = [
-  "Both arrangements use the same (a + b) × (a + b) outer square.",
-  "The movable shapes are synchronized copies of the same four congruent triangles.",
-  "Rearranging pieces does not change their total area.",
-  "Therefore the uncovered regions in the two frames have equal total area.",
-  "Arrangement A leaves the square c²; Arrangement B leaves a² and b².",
-  "Dock the area blocks to state the equality.",
-  "Hence, a² + b² = c².",
+  "A right triangle has legs a and b meeting at 90°, and hypotenuse c opposite that corner.",
+  "a², b², and c² are areas of squares built on those three sides — not just abstract numbers.",
+  "Both pictures sit in the same outer square of side a + b, so both have the same total area.",
+  "The four coloured triangles are identical copies. Moving them does not change their area.",
+  "Arrangement A hides a tilted square whose side is the hypotenuse, so that leftover area is c².",
+  "Arrangement B hides an upright a-square and b-square, so that leftover area is a² + b².",
+  "Same whole minus the same four triangles leaves equal remainders, therefore a² + b² = c².",
 ] as const;
 
 export const PYTHAGOREAN_STEPS = [

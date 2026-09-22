@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { VISUAL_PROOF_RESET_EVENT } from "../proof-engine/ProofCanvasHost";
 import styles from "./ImportedHtmlProof.module.css";
 
 type ImportedHtmlProofProps = {
@@ -29,7 +30,10 @@ export default function ImportedHtmlProof({ src, title }: ImportedHtmlProofProps
       doc.head.appendChild(link);
     };
 
+    const reload = () => { frame.src = src; };
+
     frame.addEventListener("load", injectOverrides);
+    window.addEventListener(VISUAL_PROOF_RESET_EVENT, reload);
     // Handle fast cache hits where load already fired.
     if (frame.contentDocument?.readyState === "complete") {
       injectOverrides();
@@ -37,6 +41,7 @@ export default function ImportedHtmlProof({ src, title }: ImportedHtmlProofProps
 
     return () => {
       frame.removeEventListener("load", injectOverrides);
+      window.removeEventListener(VISUAL_PROOF_RESET_EVENT, reload);
       frame.src = "about:blank";
     };
   }, [src]);

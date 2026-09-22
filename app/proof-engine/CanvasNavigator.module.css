@@ -87,6 +87,54 @@
 .progress { height: 4px; margin-top: 8px; overflow: hidden; border-radius: 999px; background: #e5e8f5; }
 .progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7c55f7, #18b883); transition: width .25s ease; }
 
+@media (min-width: 701px) {
+  .navigator {
+    position:relative;
+    margin:0;
+    padding:0;
+    border:0;
+    box-shadow:none;
+    background:transparent;
+    display:grid;
+    grid-template-columns:minmax(112px,auto) minmax(0,1fr);
+    align-items:center;
+    gap:8px;
+  }
+  .topline{justify-content:flex-start;gap:6px;min-width:0}
+  .topline div{
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+  }
+  .topline b{font-size:11px;white-space:nowrap}
+  .topline span{display:none}
+  .helpButton{padding:5px 8px;font-size:11px;white-space:nowrap}
+  .help{
+    position:absolute;
+    z-index:20;
+    right:0;
+    top:42px;
+    width:max-content;
+    max-width:min(560px,72vw);
+    margin:0;
+    box-shadow:0 10px 28px rgb(31 43 98 / 16%);
+  }
+  .controls{justify-content:flex-end;gap:7px;margin-top:0;min-width:0}
+  .picker{flex:none;flex-wrap:nowrap;min-width:66px;overflow-x:auto;padding:3px}
+  .progress{position:absolute;left:0;right:0;bottom:-6px;height:2px;margin:0}
+  .piece{flex:none;min-height:30px;padding:3px 6px 3px 3px}
+  .piece i{width:23px;height:23px}
+  .moveGroup{grid-template:repeat(3,18px)/repeat(3,26px);gap:2px;flex:none}
+  .moveGroup button{font-size:13px}
+  .actions{flex:none}
+  .actions button{min-height:34px;padding:4px 8px}
+  .zoom{flex:none}
+  .zoom button{min-width:27px;min-height:29px}
+  .zoom output{min-width:38px}
+}
+
 @media (max-width: 900px) {
   .controls { flex-wrap: wrap; }
   .picker { width: 100%; }

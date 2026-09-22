@@ -28,10 +28,13 @@ export async function generateMetadata({
   const { category, slug } = await params;
   const proof = getCatalogProof(category, slug);
   if (!proof) return { title: "Visual Proof Not Found — Maths Universe" };
-  const title = `${proof.title} — Visual Proof`;
+  const ready = Boolean(interactiveRouteForProof(proof));
+  const title = ready
+    ? `${proof.title} — Visual Proof`
+    : `${proof.title} — Upcoming`;
   return {
     title,
-    description: proof.shortDescription,
+    description: ready ? proof.shortDescription : "Upcoming",
     openGraph: { title, description: proof.shortDescription, images: [] },
     twitter: { title, description: proof.shortDescription, images: [] },
   };
@@ -68,6 +71,19 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
           </Link>
           <span>/</span>#{String(proof.catalogNumber).padStart(3, "0")}
         </div>
+        {!interactiveRoute ? (
+          <section className="catalog-upcoming" aria-label="Upcoming visual proof">
+            <p className="catalog-upcoming-kicker">
+              #{String(proof.catalogNumber).padStart(3, "0")} · {categoryInfo?.title ?? category}
+            </p>
+            <h1>{proof.title}</h1>
+            <p className="catalog-upcoming-label">Upcoming</p>
+            <Link href="/proofs" className="browse-more">
+              Browse more proofs
+            </Link>
+          </section>
+        ) : (
+        <>
         <section className="catalog-detail-hero">
           <div className="catalog-detail-copy">
             <div className="catalog-detail-chips">
@@ -79,18 +95,12 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
             <p className="catalog-detail-lead">{proof.shortDescription}</p>
             <p>{proof.longDescription}</p>
             <div className="catalog-detail-actions">
-              {interactiveRoute ? (
-                <Link
-                  href={interactiveRoute}
-                  className="open-interactive-proof"
-                >
-                  ▶ Open interactive proof
-                </Link>
-              ) : (
-                <span className="catalog-page-status">
-                  Dedicated proof page #{proof.catalogNumber}
-                </span>
-              )}
+              <Link
+                href={interactiveRoute}
+                className="open-interactive-proof"
+              >
+                ▶ Open interactive proof
+              </Link>
               <Link href="/proofs" className="browse-more">
                 Browse more proofs
               </Link>
@@ -161,15 +171,20 @@ export default async function VisualProofCatalogPage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              {related.map((item) => (
+              {related.map((item) => {
+                const ready = Boolean(interactiveRouteForProof(item));
+                return (
                 <Link key={item.id} href={catalogProofRoute(item)}>
                   <small>#{String(item.catalogNumber).padStart(3, "0")}</small>
                   <b>{item.title}</b>
-                  <span>View proof →</span>
+                  <span>{ready ? "View proof →" : "Upcoming"}</span>
                 </Link>
-              ))}
+                );
+              })}
             </div>
           </section>
+        )}
+        </>
         )}
       </article>
     </main>

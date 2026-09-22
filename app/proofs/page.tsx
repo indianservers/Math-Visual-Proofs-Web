@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ProofCatalogBrowser from "../components/ProofCatalogBrowser";
+import ProofMainMenu from "../components/ProofMainMenu";
 import { PROOF_DEFINITIONS } from "../lib/proofRegistry";
 import {
   ALL_VISUAL_PROOFS,
@@ -65,31 +66,7 @@ const cardDetails: Record<
 export default function ProofsIndex() {
   return (
     <main className="proof-library">
-      <aside className="library-sidebar" aria-label="Primary navigation">
-        <Link
-          href="/proofs"
-          className="library-brand"
-          aria-label="Maths Universe proof library"
-        >
-          <span className="brand-mark">✣</span>
-          <b>
-            MATHS
-            <br />
-            UNIVERSE
-          </b>
-        </Link>
-        <nav className="side-nav">
-          <Link href="/proofs" className="side-item active">
-            <span className="side-icon">♧</span>Proofs
-          </Link>
-          <a href="#proof-grid" className="side-item">
-            <span className="side-icon">△</span>Explore
-          </a>
-          <a href="#how-it-works" className="side-item">
-            <span className="side-icon">◎</span>How it works
-          </a>
-        </nav>
-      </aside>
+      <ProofMainMenu />
 
       <section className="library-content">
         <header className="library-hero">

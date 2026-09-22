@@ -1,10 +1,10 @@
 /* ─── Exterior Angle Sum of Polygon — Page Styles ────────────────────────────── */
 
 .eas-shell {
-  width: 100vw;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 120px 1fr 340px;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   padding: 0;
   gap: 0;
   background: #f8f7ff;
@@ -14,13 +14,7 @@
 }
 
 .eas-sidenav {
-  background: #ffffff;
-  border-right: 1px solid #e8e6f8;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 18px 0 24px;
-  min-height: 100vh;
+  display: none;
 }
 
 .eas-logo {
@@ -61,10 +55,10 @@
 .eas-main {
   display: flex;
   flex-direction: column;
-  padding: 28px 36px 36px 32px;
+  padding: 0 0 16px;
   gap: 20px;
   min-width: 0;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 .eas-header {
@@ -92,13 +86,13 @@
 
 .eas-rail {
   background: #ffffff;
-  border-left: 1px solid #e8e6f8;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-  min-height: 100vh;
+  border-top: 1px solid #e8e6f8;
+  padding: 20px 4px 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  overflow: visible;
+  min-height: 0;
 }
 
 .eas-why-card {

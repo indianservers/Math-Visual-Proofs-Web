@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import Link from "next/link";
 import {
   PointerEvent,
   useCallback,
@@ -15,7 +14,7 @@ import {
   InvariantIndicator,
   ProofStepNavigator,
 } from "../proof-engine/ProofUI";
-import { CanvasNavigator } from "../proof-engine/CanvasNavigator";
+import { ProofCanvasHost } from "../proof-engine/ProofCanvasHost";
 import {
   constrainTransform,
   resolveDrop,
@@ -36,6 +35,8 @@ import type {
 } from "../proof-engine/types";
 import { normalizeRotation } from "../proof-engine/validation";
 import MathFormula from "./MathFormula";
+import ProofDeskTabs from "./ProofDeskTabs";
+import ProofMainMenu from "./ProofMainMenu";
 import {
   useCanvasHistory,
   useCanvasViewport,
@@ -94,52 +95,6 @@ const ANIMATION_STEPS = [
     formula: "\\boxed{a^2+b^2=c^2}",
   },
 ] as const;
-
-function Sidebar() {
-  const [selected, setSelected] = useState("Explore");
-  return (
-    <aside className="sidebar" aria-label="Primary navigation">
-      <div className="brand-mark">✣</div>
-      <div className="brand">
-        MATHS
-        <br />
-        UNIVERSE
-      </div>
-      <nav className="side-nav">
-        {[
-          ["△", "Explore"],
-          ["♧", "Proofs"],
-          ["◇", "Practice"],
-          ["▱", "Saved"],
-        ].map(([icon, label]) =>
-          label === "Proofs" ? (
-            <Link key={label} href="/proofs" className="side-item">
-              <span className="side-icon">{icon}</span>
-              {label}
-            </Link>
-          ) : (
-            <button
-              key={label}
-              onClick={() => setSelected(label)}
-              aria-pressed={selected === label}
-              className={`side-item ${selected === label ? "active" : ""}`}
-            >
-              <span className="side-icon">{icon}</span>
-              {label}
-            </button>
-          ),
-        )}
-      </nav>
-      <button
-        onClick={() => setSelected("Settings")}
-        aria-pressed={selected === "Settings"}
-        className={`side-item settings ${selected === "Settings" ? "active" : ""}`}
-      >
-        <span className="side-icon">⚙</span>Settings
-      </button>
-    </aside>
-  );
-}
 
 function phaseStep(phase: ProofState) {
   if (phase === "INITIAL" || phase === "OBSERVING_INVARIANTS") return 0;
@@ -237,6 +192,52 @@ function Triangle({
   );
 }
 
+function TheoremMeaningDiagram({ a, b }: { a: number; b: number }) {
+  const c = Math.sqrt(a * a + b * b);
+  const cLabel = Number.isInteger(c) ? String(c) : c.toFixed(2);
+  return (
+    <figure className="theorem-meaning-figure">
+      <svg viewBox="0 0 340 250" role="img" aria-label="Right triangle with a square on each side">
+        <rect x="24" y="18" width="78" height="78" className="meaning-sq meaning-sq-a" />
+        <text x="63" y="56" className="meaning-sq-label">
+          a²
+        </text>
+        <text x="63" y="74" className="meaning-sq-sub">
+          {a}×{a}
+        </text>
+        <polygon points="102,96 102,176 214,176" className="meaning-triangle" />
+        <path d="M102 160h16v16" className="right-angle-mark" />
+        <text x="84" y="142" className="meaning-side">
+          a
+        </text>
+        <text x="150" y="196" className="meaning-side">
+          b
+        </text>
+        <text x="168" y="128" className="meaning-side meaning-side-c">
+          c
+        </text>
+        <rect x="102" y="176" width="112" height="56" className="meaning-sq meaning-sq-b" />
+        <text x="158" y="204" className="meaning-sq-label">
+          b²
+        </text>
+        <text x="158" y="220" className="meaning-sq-sub">
+          {b}×{b}
+        </text>
+        <polygon points="102,96 214,176 258,114 146,34" className="meaning-sq meaning-sq-c" />
+        <text x="186" y="88" className="meaning-sq-label">
+          c²
+        </text>
+        <text x="186" y="104" className="meaning-sq-sub">
+          {cLabel}×{cLabel}
+        </text>
+      </svg>
+      <figcaption>
+        Squares on legs a and b together match the square on hypotenuse c.
+      </figcaption>
+    </figure>
+  );
+}
+
 export default function PythagoreanProof() {
   const history = useCanvasHistory<ProofScene<PythagoreanPieceId>>(
     INITIAL_PYTHAGOREAN_SCENE,
@@ -250,7 +251,7 @@ export default function PythagoreanProof() {
   const [trace, setTrace] = useState(false);
   const [hintLevel, setHintLevel] = useState(0);
   const [message, setMessage] = useState(
-    "Pick a numbered triangle. Its matching slot will light up.",
+    "A right triangle has legs a, b and hypotenuse c. This page shows why the squares on those sides satisfy a² + b² = c².",
   );
   const [question, setQuestion] = useState(false);
   const [formulaReset, setFormulaReset] = useState(0);
@@ -259,6 +260,7 @@ export default function PythagoreanProof() {
   const [speed, setSpeed] = useState(1);
   const [a, setA] = useState(3);
   const [b, setB] = useState(4);
+  const [deskTab, setDeskTab] = useState("prove");
   const viewport = useCanvasViewport(820, 420, {
     minZoom: 1,
     maxZoom: 2.25,
@@ -480,6 +482,7 @@ export default function PythagoreanProof() {
     setMessage("Construction reset. Pick any numbered triangle.");
   }, [history]);
   const startAnimation = () => {
+    setDeskTab("prove");
     setFormulaReset((value) => value + 1);
     setAnimationStep(0);
     setPlaying(true);
@@ -514,16 +517,16 @@ export default function PythagoreanProof() {
   const unlockCount = proofComplete
     ? 7
     : equationEnabled
-      ? 6
+      ? 7
       : scene.comparisonConfirmed
-        ? 5
+        ? 6
         : arrangementComplete
-          ? 4
+          ? 5
           : dockedCount > 0
-            ? 3
+            ? 4
             : scene.phase === "INITIAL"
-              ? 1
-              : 2;
+              ? 2
+              : 3;
   const hintPiece =
     PYTHAGOREAN_PIECES.find((piece) => !scene.objects[piece.id].dockedSlotId) ??
     null;
@@ -594,125 +597,69 @@ export default function PythagoreanProof() {
 
   return (
     <main className="proof-app pythagorean-engine">
-      <Sidebar />
-      <header className="page-head">
-        <div>
-          <div className="crumb">Visual Proofs / Geometry</div>
-          <h1>Pythagorean Theorem</h1>
-          <div className="subtitle">Rearrange the evidence</div>
-        </div>
-        <div className="badges">
-          <div className="pill">Intermediate</div>
-          <div className="pill time">
-            <span className="clock" />
-            10 min
-          </div>
-        </div>
-      </header>
-      <section className="mission pyth-mission">
-        <div className="target">◎</div>
-        <div className="mission-copy">
-          <b>Use the same four triangles to build Arrangement B.</b>
-          <br />
-          <span>Rotate, dock, then compare the uncovered areas.</span>
-        </div>
-        <div className="mission-invariants">
-          <InvariantIndicator
-            icon="□"
-            label="same frame"
-            complete={scene.phase !== "INITIAL"}
-          />
-          <InvariantIndicator
-            icon="△"
-            label="same pieces"
-            complete={dockedCount > 0}
-          />
-          <InvariantIndicator
-            icon="≍"
-            label="compare gaps"
-            complete={scene.comparisonConfirmed}
-          />
-        </div>
-      </section>
-      <div className="main-grid">
+      <ProofMainMenu />
+      <ProofDeskTabs
+        defaultTab="prove"
+        activeTab={deskTab}
+        onTabChange={setDeskTab}
+        dock={
+          <header className="page-head">
+            <div>
+              <div className="crumb">Visual Proofs / Geometry</div>
+              <h1>Pythagorean Theorem</h1>
+              <p className="subtitle">
+                In a right triangle, the square on the hypotenuse equals the two
+                squares on the legs: a² + b² = c².
+              </p>
+            </div>
+            <div className="badges">
+              <div className="pill">Intermediate</div>
+              <div className="pill time">
+                <span className="clock" />
+                10 min
+              </div>
+            </div>
+          </header>
+        }
+        tabs={[
+          {
+            id: "prove",
+            label: "Prove",
+            content: (
+              <>
+      <div className="main-grid desk-canvas-grid">
         <section
           className="work-card engine-work-card"
           aria-label="Interactive Pythagorean rearrangement workspace"
         >
-          <div className="engine-toolbar" aria-label="Proof tools">
-            <button
-              className={clsx("engine-tool", selected && "active")}
-              onClick={() =>
-                setMessage("Select a triangle directly on the canvas.")
-              }
-            >
-              <span>☝</span>Select
-            </button>
-            <button className="engine-tool" onClick={rotateSelected}>
-              <span>↻</span>Rotate
-            </button>
-            <button
-              className={clsx("engine-tool", snap && "active")}
-              aria-pressed={snap}
-              onClick={() => setSnap((value) => !value)}
-            >
-              <span>∪</span>Snap
-            </button>
-            <button
-              className={clsx("engine-tool", trace && "active")}
-              aria-pressed={trace}
-              onClick={() => setTrace((value) => !value)}
-            >
-              <span>⌁</span>Trace
-            </button>
-            <button
-              className="engine-tool"
-              disabled={!history.canUndo}
-              onClick={history.undo}
-            >
-              <span>↶</span>Undo
-            </button>
-            <button
-              className="engine-tool"
-              disabled={!history.canRedo}
-              onClick={history.redo}
-            >
-              <span>↷</span>Redo
-            </button>
-            <button className="engine-tool" onClick={resetAll}>
-              <span>⟲</span>Reset
-            </button>
-            <button
-              className={clsx("engine-tool", hintLevel > 0 && "active")}
-              onClick={() => {
-                const next = hintLevel >= 3 ? 0 : hintLevel + 1;
-                setHintLevel(next);
-                setMessage(
-                  next === 1
-                    ? "Hint 1: matching piece and slot are glowing."
-                    : next === 2
-                      ? "Hint 2: follow the curved path and rotate."
-                      : next === 3
-                        ? "Hint 3: match the transparent ghost exactly."
-                        : "Hints hidden. Try the next move yourself.",
-                );
-              }}
-            >
-              <span>?</span>Hint {hintLevel || ""}
-            </button>
-            <button
-              className="engine-tool animate-tool"
-              onClick={startAnimation}
-              aria-label="Watch the guided animated proof"
-            >
-              <span>▶</span>Watch proof
-            </button>
-          </div>
-          <div className="canvas-message" role="status" aria-live="polite">
-            <span className="grab-cue">✋</span>
-            {message}
-          </div>
-          <CanvasNavigator
+          <ProofCanvasHost
+            mode="scene"
+            selected={Boolean(selected)}
+            snap={snap}
+            onSnap={() => setSnap((value) => !value)}
+            trace={trace}
+            onTrace={() => setTrace((value) => !value)}
+            hintLevel={hintLevel}
+            onHint={() => {
+              const next = hintLevel >= 3 ? 0 : hintLevel + 1;
+              setHintLevel(next);
+              setMessage(
+                next === 1
+                  ? "Hint 1: matching piece and slot are glowing."
+                  : next === 2
+                    ? "Hint 2: follow the curved path and rotate."
+                    : next === 3
+                      ? "Hint 3: match the transparent ghost exactly."
+                      : "Hints hidden. Try the next move yourself.",
+              );
+            }}
+            canUndo={history.canUndo}
+            canRedo={history.canRedo}
+            onUndo={history.undo}
+            onRedo={history.redo}
+            onReset={resetAll}
+            onWatch={startAnimation}
+            onRotate={rotateSelected}
             items={PYTHAGOREAN_PIECES.map((piece) => ({
               id: piece.id,
               label: piece.label,
@@ -727,7 +674,6 @@ export default function PythagoreanProof() {
               );
             }}
             onNudge={nudgeSelected}
-            onRotate={rotateSelected}
             onDock={() => selected && dockPiece(selected)}
             zoomPercent={viewport.zoomPercent}
             canZoomIn={viewport.canZoomIn}
@@ -737,7 +683,7 @@ export default function PythagoreanProof() {
             onFit={viewport.fit}
             completedCount={dockedCount}
             instruction={message}
-          />
+          >
           <svg
             className={canvas.canvasClassName(
               "pyth-svg",
@@ -745,6 +691,7 @@ export default function PythagoreanProof() {
               canvas.dragging && "has-active-drag",
             )}
             viewBox={viewport.viewBox}
+            preserveAspectRatio="xMidYMid meet"
             {...canvas.canvasProps}
             role="img"
             aria-label="Two identical square frames. Arrangement A is complete. Drag synchronized copies of its four numbered triangles into the dashed slots in empty Arrangement B."
@@ -768,10 +715,10 @@ export default function PythagoreanProof() {
               </linearGradient>
             </defs>
             <text x="155" y="20" className="svg-title">
-              Arrangement A · reference
+              Arrangement A · c² left in the middle
             </text>
-            <text x="610" y="20" className="svg-title">
-              Arrangement B · you build it
+            <text x="520" y="20" className="svg-title">
+              Arrangement B · a² and b²
             </text>
             <g className="frame-dim">
               <line x1="70" y1="50" x2="330" y2="50" />
@@ -823,8 +770,11 @@ export default function PythagoreanProof() {
             <text x="184" y="222" className="region-label">
               c²
             </text>
+            <text x="184" y="242" className="copy-note">
+              square on hypotenuse
+            </text>
             <text x="72" y="373" className="copy-note">
-              Move the outlined copies — Arrangement A stays for comparison.
+              Four identical right triangles. Each has legs a, b and hypotenuse c.
             </text>
             <rect
               x="520"
@@ -848,11 +798,17 @@ export default function PythagoreanProof() {
             />
             {arrangementComplete && (
               <>
-                <text x="562" y="151" className="region-label">
+                <text x="562" y="141" className="region-label">
                   a²
                 </text>
-                <text x="692" y="282" className="region-label">
+                <text x="562" y="158" className="copy-note">
+                  square on leg a
+                </text>
+                <text x="692" y="272" className="region-label">
                   b²
+                </text>
+                <text x="692" y="289" className="copy-note">
+                  square on leg b
                 </text>
               </>
             )}
@@ -939,82 +895,12 @@ export default function PythagoreanProof() {
               );
             })}
           </svg>
+          </ProofCanvasHost>
           <ProofStepNavigator
             labels={PYTHAGOREAN_STEPS}
             active={phaseStep(scene.phase)}
           />
         </section>
-        <aside className="why-card engine-why">
-          <h2 className="why-title">
-            <span>✧</span>Why it works
-          </h2>
-          <button className="guided-proof-button" onClick={startAnimation}>
-            <span>▶</span>
-            <span>
-              <b>Watch the proof</b>
-              <small>8 slow, explained steps</small>
-            </span>
-          </button>
-          <div className="reasoning-list">
-            {PYTHAGOREAN_REASONING.map((text, index) => (
-              <div
-                key={text}
-                className={clsx(
-                  "reason engine-reason",
-                  index >= unlockCount && "locked",
-                )}
-              >
-                <div className="reason-head">
-                  <i className="reason-no">
-                    {index < unlockCount ? index + 1 : "🔒"}
-                  </i>
-                  <span>
-                    {index < unlockCount
-                      ? text
-                      : "Complete the current step to unlock."}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button
-            className="select-row"
-            onClick={() => setQuestion((value) => !value)}
-            aria-expanded={question}
-          >
-            Why can we remove the triangles?<span>{question ? "⌃" : "⌄"}</span>
-          </button>
-          {question && (
-            <div className="inline-answer">
-              <b>Same whole − same pieces = same remainder.</b>
-              <br />
-              Both squares are equal, and both contain the same four triangles.
-              Removing those equal triangle areas leaves c² on the left and a² +
-              b² on the right.
-            </div>
-          )}
-          <button
-            className="primary"
-            disabled={!arrangementComplete}
-            onClick={() =>
-              history.commit((current) => ({
-                ...current,
-                phase: "BUILDING_EQUATION",
-                comparisonConfirmed: true,
-              }))
-            }
-          >
-            {arrangementComplete
-              ? "Compare uncovered areas"
-              : `Dock ${4 - dockedCount} more triangle${4 - dockedCount === 1 ? "" : "s"}`}
-          </button>
-          {proofComplete && (
-            <div className="completion-mini">
-              <MathFormula latex="a^2+b^2=c^2" />
-              <span>✓ The remaining areas are equal.</span>
-            </div>
-          )}
-        </aside>
       </div>
       {animationStep >= 0 && (
         <section
@@ -1109,6 +995,160 @@ export default function PythagoreanProof() {
           </div>
         </section>
       )}
+              </>
+            ),
+          },
+          {
+            id: "meaning",
+            label: "What it means",
+            content: (
+              <section className="theorem-meaning" aria-label="What the Pythagorean theorem means">
+                <section className="mission pyth-mission desk-about">
+                  <div className="target">◎</div>
+                  <div className="mission-copy">
+                    <b>Prove the claim by rearranging the same four triangles.</b>
+                    Arrangement A already shows c² in the middle. Dock the copies so
+                    Arrangement B shows a² and b² instead.
+                  </div>
+                  <div className="mission-invariants">
+                    <InvariantIndicator
+                      icon="□"
+                      label="same frame"
+                      complete={scene.phase !== "INITIAL"}
+                    />
+                    <InvariantIndicator
+                      icon="△"
+                      label="same pieces"
+                      complete={dockedCount > 0}
+                    />
+                    <InvariantIndicator
+                      icon="≍"
+                      label="compare gaps"
+                      complete={scene.comparisonConfirmed}
+                    />
+                  </div>
+                </section>
+                <TheoremMeaningDiagram a={a} b={b} />
+                <div className="theorem-meaning-copy">
+                  <p className="theorem-meaning-kicker">What this theorem is saying</p>
+                  <ol className="theorem-meaning-list">
+                    <li>
+                      <b>Start with a right triangle.</b> One corner is 90°. The two sides
+                      that form that corner are the <i>legs</i> <strong>a</strong> and{" "}
+                      <strong>b</strong>. The longest side, opposite the right angle, is
+                      the <i>hypotenuse</i> <strong>c</strong>.
+                    </li>
+                    <li>
+                      <b>Build a square on each side.</b> a² is the area of a square whose
+                      side is a. b² is the square on b. c² is the square on c. The theorem
+                      is about those three areas, not just the side lengths.
+                    </li>
+                    <li>
+                      <b>The claim:</b> no matter how you stretch the legs, the two small
+                      squares together always fill the large square. In symbols,{" "}
+                      <MathFormula latex="a^2+b^2=c^2" />.
+                    </li>
+                    <li>
+                      <b>How you will see it here.</b> Arrangement A packs four copies of
+                      the triangle around the c-square. You rebuild the same four
+                      triangles in Arrangement B so the leftovers are the a-square and
+                      b-square. Same outer square, same triangles, therefore the leftover
+                      areas are equal.
+                    </li>
+                  </ol>
+                </div>
+              </section>
+            ),
+          },
+          {
+            id: "why",
+            label: "Why it works",
+            content: (
+              <aside className="why-card engine-why">
+                <h2 className="why-title">
+                  <span>✧</span>Why it works
+                </h2>
+                <div className="theorem-claim">
+                  <MathFormula latex="a^2+b^2=c^2" />
+                  <p>
+                    The two leg-squares have the same total area as the hypotenuse
+                    square. The steps below show why that must be true.
+                  </p>
+                </div>
+                <button className="guided-proof-button" onClick={startAnimation}>
+                  <span>▶</span>
+                  <span>
+                    <b>Watch the proof</b>
+                    <small>Opens in the Prove tab as 8 slow steps</small>
+                  </span>
+                </button>
+                <div className="reasoning-list">
+                  {PYTHAGOREAN_REASONING.map((text, index) => (
+                    <div
+                      key={text}
+                      className={clsx(
+                        "reason engine-reason",
+                        index >= unlockCount && "locked",
+                      )}
+                    >
+                      <div className="reason-head">
+                        <i className="reason-no">
+                          {index < unlockCount ? index + 1 : "🔒"}
+                        </i>
+                        <span>
+                          {index < unlockCount
+                            ? text
+                            : "Complete the current step to unlock."}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  className="select-row"
+                  onClick={() => setQuestion((value) => !value)}
+                  aria-expanded={question}
+                >
+                  Why can we remove the triangles?<span>{question ? "⌃" : "⌄"}</span>
+                </button>
+                {question && (
+                  <div className="inline-answer">
+                    <b>Same whole − same pieces = same remainder.</b>
+                    <br />
+                    Both outer squares have area (a + b)². Both contain the same four
+                    triangles (total area 2ab). What is left must match: the hole in A
+                    is the square on the hypotenuse (c²); the holes in B are the
+                    squares on the legs (a² + b²).
+                  </div>
+                )}
+                <button
+                  className="primary"
+                  disabled={!arrangementComplete}
+                  onClick={() =>
+                    history.commit((current) => ({
+                      ...current,
+                      phase: "BUILDING_EQUATION",
+                      comparisonConfirmed: true,
+                    }))
+                  }
+                >
+                  {arrangementComplete
+                    ? "Compare uncovered areas"
+                    : `Dock ${4 - dockedCount} more triangle${4 - dockedCount === 1 ? "" : "s"}`}
+                </button>
+                {proofComplete && (
+                  <div className="completion-mini">
+                    <MathFormula latex="a^2+b^2=c^2" />
+                    <span>The leftover squares have equal area — that is the theorem.</span>
+                  </div>
+                )}
+              </aside>
+            ),
+          },
+          {
+            id: "check",
+            label: "Check",
+            content: (
       <div className="bottom-row engine-bottom-row">
         <section className="bottom-card formula-card">
           <FormulaDock
@@ -1119,7 +1159,11 @@ export default function PythagoreanProof() {
           />
         </section>
         <section className="bottom-card explore-card">
-          <div className="try-title">Explore a right triangle</div>
+          <div className="try-title">See it on any right triangle</div>
+          <p className="try-lead">
+            a and b are the legs. c is the hypotenuse, forced by a² + b² = c².
+            Try 3 and 4: you get the 3–4–5 triangle, because 9 + 16 = 25.
+          </p>
           <div className="inputs">
             <label>
               a<br />
@@ -1175,6 +1219,10 @@ export default function PythagoreanProof() {
           )}
         </section>
       </div>
+            ),
+          },
+        ]}
+      />
     </main>
   );
 }

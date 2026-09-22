@@ -136,7 +136,7 @@ export default function ProofCatalogBrowser({
         <div className="catalog-proof-grid">
           {filtered.map((proof) => (
             <article
-              className="catalog-proof-card"
+              className={`catalog-proof-card${proof.interactiveHref ? "" : " catalog-proof-upcoming"}`}
               key={`${proof.categorySlug}-${proof.slug}`}
             >
               <Link href={proof.href} className="catalog-proof-main">
@@ -148,7 +148,7 @@ export default function ProofCatalogBrowser({
                 <p>{proof.shortDescription}</p>
                 <div className="catalog-proof-foot">
                   <span>{proof.estimatedTime}</span>
-                  <b>View proof →</b>
+                  <b>{proof.interactiveHref ? "View proof →" : "Upcoming"}</b>
                 </div>
               </Link>
               {proof.interactiveHref && (

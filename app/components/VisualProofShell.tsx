@@ -13,11 +13,7 @@ type VisualProofShellProps = {
   children: ReactNode;
 };
 
-/**
- * Canvas-first chrome for visual proofs.
- * Keeps a slim top strip only — no tall Workspace/About side bars.
- * About details live in a compact disclosure instead of a left column.
- */
+/** Canvas-first shared chrome, preserving the compact remote navigation. */
 export default function VisualProofShell({
   title,
   category,
@@ -50,13 +46,7 @@ export default function VisualProofShell({
           </button>
         </div>
       </header>
-
-      {aboutOpen && (
-        <p className={styles.aboutPanel} role="note">
-          {description}
-        </p>
-      )}
-
+      {aboutOpen && <p className={styles.aboutPanel} role="note">{description}</p>}
       <section className={styles.workspace}>{children}</section>
     </main>
   );

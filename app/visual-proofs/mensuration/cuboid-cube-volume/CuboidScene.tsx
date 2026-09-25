@@ -43,9 +43,10 @@ export default function CuboidScene(props: SceneProps) {
       return;
     }
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // Integrated GPUs and software WebGL can stall if this large scene is
+    // redrawn at full device resolution on every animation frame.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
+    renderer.shadowMap.enabled = false;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.38;
@@ -72,7 +73,7 @@ export default function CuboidScene(props: SceneProps) {
     scene.add(new THREE.HemisphereLight("#dff6ff", "#ebe3ff", 1.8));
     const sun = new THREE.DirectionalLight("#ffffff", 2.5);
     sun.position.set(-8, 17, 11);
-    sun.castShadow = true;
+    sun.castShadow = false;
     sun.shadow.mapSize.set(1024, 1024);
     sun.shadow.camera.left = -24;
     sun.shadow.camera.right = 24;
@@ -178,6 +179,9 @@ export default function CuboidScene(props: SceneProps) {
     const projection = new THREE.Vector3();
     const size = { width: 1, height: 1 };
     let frame = 0;
+    let dirty = true;
+    const markDirty = () => { dirty = true; };
+    controls.addEventListener("change", markDirty);
 
     const fitCamera = (dimensions: CuboidDimensions, separated: boolean, resetDirection: boolean) => {
       const gap = separated ? 0.5 : 0;
@@ -236,7 +240,7 @@ export default function CuboidScene(props: SceneProps) {
       const total = length * width * height;
       const count = Math.max(0, Math.min(total, values.visibleCount));
       const signature = `${dimensionsKey},${count},${values.showUnitCubes},${values.showGrid},${values.showDimensions}`;
-      if (signature === lastSignature) return;
+      if (signature === lastSignature) return false;
       lastSignature = signature;
       grid.visible = values.showGrid;
       dimensionGroup.visible = values.showDimensions;
@@ -273,6 +277,7 @@ export default function CuboidScene(props: SceneProps) {
       }
       cubes.instanceMatrix.needsUpdate = true;
       wireAttribute.needsUpdate = true;
+      return true;
     };
 
     const projectLabel = (element: HTMLSpanElement | null, anchor: THREE.Vector3) => {
@@ -288,12 +293,15 @@ export default function CuboidScene(props: SceneProps) {
 
     const animate = () => {
       frame = window.requestAnimationFrame(animate);
-      refreshScene();
+      const sceneChanged = refreshScene();
       controls.update();
-      projectLabel(lengthRef.current, labelAnchors[0]);
-      projectLabel(widthRef.current, labelAnchors[1]);
-      projectLabel(heightRef.current, labelAnchors[2]);
-      renderer.render(scene, camera);
+      if (dirty || sceneChanged) {
+        projectLabel(lengthRef.current, labelAnchors[0]);
+        projectLabel(widthRef.current, labelAnchors[1]);
+        projectLabel(heightRef.current, labelAnchors[2]);
+        renderer.render(scene, camera);
+        dirty = false;
+      }
     };
     const resize = () => {
       size.width = Math.max(1, host.clientWidth);
@@ -302,6 +310,7 @@ export default function CuboidScene(props: SceneProps) {
       camera.updateProjectionMatrix();
       renderer.setSize(size.width, size.height, false);
       fitCamera(currentProps.current.dimensions, currentProps.current.separated, false);
+      dirty = true;
     };
     const observer = new ResizeObserver(resize);
     observer.observe(host);
@@ -325,6 +334,7 @@ export default function CuboidScene(props: SceneProps) {
         if (next >= 0) cubes.setColorAt(next, HOVER);
         hovered = next;
         if (cubes.instanceColor) cubes.instanceColor.needsUpdate = true;
+        dirty = true;
       }
       tooltip.style.display = next >= 0 ? "block" : "none";
       tooltip.style.left = `${event.clientX - rect.left + 12}px`;
@@ -334,6 +344,7 @@ export default function CuboidScene(props: SceneProps) {
       if (hovered >= 0) cubes.setColorAt(hovered, WHITE);
       hovered = -1;
       if (cubes.instanceColor) cubes.instanceColor.needsUpdate = true;
+      dirty = true;
       if (hoverRef.current) hoverRef.current.style.display = "none";
     };
     renderer.domElement.addEventListener("pointermove", onPointerMove);
@@ -345,6 +356,7 @@ export default function CuboidScene(props: SceneProps) {
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       renderer.domElement.removeEventListener("pointerleave", onPointerLeave);
       controls.dispose();
+      controls.removeEventListener("change", markDirty);
       clearArrows();
       coneGeometry.dispose();
       arrowMaterials.forEach((material) => material.dispose());
@@ -365,6 +377,7 @@ export default function CuboidScene(props: SceneProps) {
       grid.geometry.dispose();
       gridMaterials.forEach((material) => material.dispose());
       renderer.dispose();
+      renderer.forceContextLoss();
       renderer.domElement.remove();
     };
   }, []);

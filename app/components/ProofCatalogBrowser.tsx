@@ -76,7 +76,7 @@ export default function ProofCatalogBrowser({
       <div className="catalog-browser-head">
         <div>
           <span className="eyebrow">COMPLETE CATALOG</span>
-          <h2 id="catalog-title">Browse 223 visual proofs</h2>
+          <h2 id="catalog-title">Browse {proofs.length} visual proofs</h2>
           <p>Explore every theorem by topic, level, or mathematical idea.</p>
         </div>
         <label className="proof-search">

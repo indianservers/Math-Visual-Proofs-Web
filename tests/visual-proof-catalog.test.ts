@@ -8,7 +8,7 @@ import {
 
 describe("visual proof catalog", () => {
   it("registers all supplied proofs and categories", () => {
-    expect(ALL_VISUAL_PROOFS).toHaveLength(223);
+    expect(ALL_VISUAL_PROOFS).toHaveLength(264);
     expect(VISUAL_PROOF_CATEGORIES).toHaveLength(19);
   });
 

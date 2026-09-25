@@ -1,5 +1,6 @@
 import catalogData from "../data/visual-proofs-detailed.json";
 import { getProofImplementation } from "./proofImplementation";
+import { GEOMETRY_FORMULA_MOCKUPS } from "../data/geometryFormulaMockups";
 
 export type VisualProofCategory = {
   title: string;
@@ -49,8 +50,11 @@ type VisualProofCatalog = {
 };
 
 export const VISUAL_PROOF_CATALOG = catalogData as VisualProofCatalog;
-export const VISUAL_PROOF_CATEGORIES = VISUAL_PROOF_CATALOG.categories;
-export const ALL_VISUAL_PROOFS = VISUAL_PROOF_CATALOG.visualProofs;
+export const VISUAL_PROOF_CATEGORIES = VISUAL_PROOF_CATALOG.categories.map((category) => {
+  const added = GEOMETRY_FORMULA_MOCKUPS.filter((proof) => proof.categorySlug === category.slug).length;
+  return added ? { ...category, proofCount: category.proofCount + added, actualProofCount: category.actualProofCount + added } : category;
+});
+export const ALL_VISUAL_PROOFS = [...VISUAL_PROOF_CATALOG.visualProofs, ...GEOMETRY_FORMULA_MOCKUPS];
 
 export function catalogProofRoute(proof: CatalogVisualProof) {
   return `/visual-proofs/${proof.categorySlug}/${proof.slug}`;

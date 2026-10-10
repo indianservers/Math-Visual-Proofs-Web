@@ -222,6 +222,13 @@ button,input{font:inherit;color:inherit} button{cursor:pointer}
   min-height:0;
 }
 .proof-desk-panel[hidden]{display:none !important}
+.proof-area .top-tools{position:static;width:100%;flex-direction:row;flex-wrap:wrap;border:0;border-bottom:1px solid #e4e7f4;border-radius:0;padding:8px;gap:8px}
+.proof-area .compact-tool{width:auto;min-width:100px}
+.proof-area .range-control{position:static;display:block;width:min(360px,90%);margin:12px auto}
+.proof-area .lower-slider{padding:12px;flex-shrink:0}
+.proof-area .proof-svg{width:100%;height:auto!important;min-height:260px!important;max-height:calc(100vh - 300px);flex:1}
+.proof-area .generic-work{overflow:auto!important}
+.proof-area .main-grid .proof-svg{min-width:0}
 .proof-desk-panel:not([hidden]){
   display:flex;
   flex-direction:column;

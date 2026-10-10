@@ -84,7 +84,7 @@ function Toolbar({
 }) {
   const items =
     kind === "area"
-      ? ["Move apex", "Clone", "Flip 180°", "Snap", "Reset"]
+      ? ["Move apex", "Clone", "Flip 180°", "Shear", "Reset"]
       : kind === "angles"
         ? ["Move vertex", "Lift angle", "Snap arcs", "Parallel line", "Reset"]
         : kind === "exterior"
@@ -107,150 +107,31 @@ function Toolbar({
   );
 }
 
-function AreaSvg({
-  apex,
-  phase,
-  onApex,
-  viewBox = "0 0 940 390",
-}: {
-  apex: number;
-  phase: number;
-  onApex: (x: number) => void;
-  viewBox?: string;
+function AreaSvg({ apex, phase, onApex, viewBox = "0 0 940 390" }: {
+  apex: number; phase: number; onApex: (x: number) => void; viewBox?: string;
 }) {
-  const canvas = useProofCanvas<"apex">(
-    940,
-    390,
-    (_target, point) => onApex(Math.max(0, Math.min(120, point.x - 80))),
-    () => onApex(nearestSnap(apex, [0, 50, 120], 20)),
+  const canvas = useProofCanvas<"apex">(940, 390,
+    (_target, point) => onApex(Math.max(0, Math.min(120, (point.x - 220) / 2))),
   );
-  return (
-    <svg
-      className={canvas.canvasClassName("proof-svg", "interactive-svg")}
-      viewBox={viewBox}
-      {...canvas.canvasProps}
-    >
-      <defs>
-        <linearGradient id="coral">
-          <stop stopColor="#ffaaa8" />
-          <stop offset="1" stopColor="#ff6e6c" />
-        </linearGradient>
-        <linearGradient id="cyan">
-          <stop stopColor="#a9edf1" />
-          <stop offset="1" stopColor="#52c7d1" />
-        </linearGradient>
-      </defs>
-      <path d="M22 72h280" stroke="#6f50ff" strokeDasharray="4 5" />
-      <circle
-        data-testid="area-apex-handle"
-        data-value={apex}
-        className="drag-handle"
-        cx={80 + apex}
-        cy="72"
-        r="11"
-        fill="#ff625c"
-        stroke="white"
-        strokeWidth="3"
-        onPointerDown={(e) => canvas.beginDrag("apex", e)}
-        tabIndex={0}
-        role="slider"
-        aria-label="Drag triangle apex"
-        aria-valuemin={0}
-        aria-valuemax={120}
-        aria-valuenow={Math.round(apex)}
-        onKeyDown={(e) => {
-          if (e.key === "ArrowLeft") onApex(Math.max(0, apex - 5));
-          if (e.key === "ArrowRight") onApex(Math.min(120, apex + 5));
-        }}
-      />
-      <text x="48" y="32" className="svg-title">
-        1　Original triangle
-      </text>
-      <polygon
-        points={`45,290 ${80 + apex},92 190,290`}
-        fill="url(#coral)"
-        stroke="#f04d51"
-        className="shape"
-      />
-      <text x="108" y="225" className="svg-math">
-        1
-      </text>
-      <line x1="30" y1="92" x2="30" y2="290" className="ghost" />
-      <text x="16" y="195" className="svg-math">
-        h
-      </text>
-      <text x="100" y="322" className="svg-math">
-        b
-      </text>
-      <text x="252" y="32" className="svg-title">
-        2　Clone
-      </text>
-      <polygon
-        points="240,290 285,92 390,290"
-        fill="url(#cyan)"
-        stroke="#159aaa"
-        strokeDasharray="6 5"
-      />
-      <text x="305" y="225" className="svg-math">
-        2
-      </text>
-      <text x="433" y="32" className="svg-title">
-        3　Flip to match
-      </text>
-      <g
-        transform={`translate(${phase > 0 ? 18 : 0} 0) rotate(${phase > 1 ? 10 : 0} 480 195)`}
-      >
-        <polygon
-          points="445,290 455,92 525,245"
-          fill="url(#cyan)"
-          stroke="#159aaa"
-          strokeDasharray="6 5"
-        />
-      </g>
-      <text x="470" y="225" className="svg-math">
-        2
-      </text>
-      <text x="592" y="32" className="svg-title">
-        4　Make parallelogram
-      </text>
-      <polygon
-        points="610,290 640,92 790,92 760,290"
-        fill="url(#cyan)"
-        stroke="#087f95"
-      />
-      <polygon
-        points="610,290 640,92 790,92"
-        fill="url(#coral)"
-        stroke="#e85155"
-      />
-      <text x="650" y="190" className="svg-math">
-        1
-      </text>
-      <text x="718" y="230" className="svg-math">
-        2
-      </text>
-      <text x="815" y="32" className="svg-title">
-        5　Shear to rectangle
-      </text>
-      <rect
-        x="815"
-        y="92"
-        width="112"
-        height="198"
-        fill="url(#cyan)"
-        stroke="#087f95"
-      />
-      <path
-        d="M815 92h25l-25 198"
-        fill="url(#coral)"
-        stroke="#e85155"
-        strokeDasharray="5 4"
-      />
-      <text x="842" y="322" className="svg-math">
-        b × h
-      </text>
-    </svg>
-  );
+  const x = phase === 3 ? 220 : 220 + apex * 2;
+  const status = ["Drag the red apex: base and height stay fixed.", "Clone: a second congruent triangle has the same area.", "Rotate the clone 180°: two triangles fill a parallelogram.", "Shear: slide the top edge to form a rectangle. Area stays constant."][phase];
+  return <svg className={canvas.canvasClassName("proof-svg", "interactive-svg")} viewBox={viewBox} {...canvas.canvasProps}>
+    <text x="470" y="28" textAnchor="middle" className="svg-title">{status}</text>
+    <line x1="220" y1="85" x2="820" y2="85" stroke="#8874e8" strokeDasharray="5 5" />
+    {phase === 1 && <polygon data-testid="area-clone" points={`${x + 370},90 590,290 950,290`} transform="translate(-35 0)" fill="#58c9d4" fillOpacity=".75" stroke="#159aaa" strokeWidth="2" />}
+    {phase >= 2 && <polygon data-testid="area-clone" points={`580,290 ${x},90 ${x + 360},90`} fill="#58c9d4" stroke="#159aaa" strokeWidth="2" />}
+    <polygon data-testid="area-original" points={`220,290 ${x},90 580,290`} fill="#ff8b87" stroke="#ec5557" strokeWidth="2" />
+    <line x1={x} y1="90" x2={x} y2="290" stroke="#6741dd" strokeDasharray="5 5" strokeWidth="2" />
+    <path d={`M${x},275 h15 v15`} fill="none" stroke="#6741dd" />
+    <text x={x + 16} y="195" className="svg-math">h = 6</text>
+    <text x="400" y="325" textAnchor="middle" className="svg-math">b = 8</text>
+    <text x="380" y="245" textAnchor="middle" fontSize="20" fill="#79313a">24 units²</text>
+    {phase >= 2 && <text x={x + 230} y="140" textAnchor="middle" fontSize="20" fill="#146d79">24 units²</text>}
+    <circle data-testid="area-apex-handle" data-value={apex} className="drag-handle" cx={x} cy="90" r="12" fill="#ff625c" stroke="white" strokeWidth="3"
+      onPointerDown={(e) => { if (phase !== 3) canvas.beginDrag("apex", e); }} tabIndex={0} role="slider" aria-label="Drag triangle apex" aria-valuemin={0} aria-valuemax={120} aria-valuenow={Math.round(apex)} aria-disabled={phase === 3}
+      onKeyDown={(e) => { if (phase === 3) return; if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); onApex(Math.max(0, Math.min(120, apex + (e.key === "ArrowRight" ? 5 : -5)))); } }} />
+    <text x="470" y="370" textAnchor="middle" fontSize="22" fill="#5432c7">{phase >= 2 ? "2 × triangle area = 8 × 6 = 48 ⇒ triangle area = 24" : "Triangle area = ½ × 8 × 6 = 24 square units"}</text>
+  </svg>;
 }
 function AnglesSvg({
   lift,
@@ -870,8 +751,10 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
   const doAction = (x: string) => {
     setAction(x);
     if (kind === "area") {
+      if (x === "Move apex") setPhase(0);
       if (x === "Clone") setPhase(1);
       if (x === "Flip 180°") setPhase(2);
+      if (x === "Shear") setPhase(3);
       if (x === "Snap") {
         setApex(50);
         setPhase(2);
@@ -934,7 +817,7 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
               kind === "angles"
                 ? () => setLift((v) => (v > 190 ? 0 : 220))
                 : kind === "area"
-                  ? () => setPhase((v) => (v >= 2 ? 0 : v + 1))
+                  ? () => setPhase((v) => (v >= 3 ? 0 : v + 1))
                   : undefined
             }
             items={[
@@ -1003,7 +886,7 @@ export default function GeometryProof({ kind }: { kind: Kind }) {
                 <input
                   type="range"
                   min="0"
-                  max="2"
+                max="3"
                   value={phase}
                   onChange={(e) => setPhase(+e.target.value)}
                 />

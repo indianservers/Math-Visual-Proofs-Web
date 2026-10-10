@@ -38,6 +38,14 @@ export function clientToCanvasPoint(
   width: number,
   height: number,
 ): CanvasPoint {
+  const matrix = svg.getScreenCTM();
+  if (matrix) {
+    const point = svg.createSVGPoint();
+    point.x = clientX;
+    point.y = clientY;
+    const local = point.matrixTransform(matrix.inverse());
+    return { x: local.x, y: local.y };
+  }
   const rect = svg.getBoundingClientRect();
   return {
     x: ((clientX - rect.left) * width) / rect.width,

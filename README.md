@@ -4,6 +4,14 @@ A clean full-stack starter running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
 Drizzle support.
 
+## Vercel deployment
+
+Import this repository with the root directory set to the repository root.
+`vercel.json` selects the Next.js framework, runs `npm run build:vercel`, and
+uses `.next` as its output directory. Keep Node.js at version 22 or newer.
+The default `npm run build` remains the Cloudflare/Sites build.
+After changing deployment settings, redeploy the latest `main` commit.
+
 ## Prerequisites
 
 - Node.js `>=22.13.0`

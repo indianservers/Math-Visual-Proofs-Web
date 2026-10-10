@@ -331,7 +331,7 @@ function UnitCircle({
   cosTheta: number;
   sinTheta: number;
   options: DisplayOptions;
-  pointRef: RefObject<SVGGElement>;
+  pointRef: RefObject<SVGGElement | null>;
   onThetaChange: (theta: number) => void;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);

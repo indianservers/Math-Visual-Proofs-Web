@@ -15,6 +15,7 @@ import type {
   ProofObjectState,
   SnapTarget,
   Transform,
+  ValidationResult,
 } from "./types";
 
 export type CanvasDirection = "left" | "right" | "up" | "down";

@@ -362,7 +362,7 @@ export default function PythagoreanProof() {
           occupied: "That slot is already occupied.",
           valid: "",
         };
-        setMessage(snap ? result.message : reasons[result.reason]);
+        setMessage(snap || result.kind === "free" ? result.message : reasons[result.reason]);
       }
       setPreviewValue(null);
     },

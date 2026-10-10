@@ -179,11 +179,6 @@ body > aside.app-sidebar {
   font-size: clamp(1.4rem, 2.2vw, 1.7rem);
 }
 
-body {
-  display: flex !important;
-  flex-direction: row !important;
-}
-
 .app-main,
 main.app-main,
 .main-wrapper {

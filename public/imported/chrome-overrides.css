@@ -160,3 +160,28 @@ main.app-main,
   width: 100% !important;
   max-width: none !important;
 }
+
+/* The parent proof page already provides navigation and the title. */
+.app-sidebar,
+aside.sidebar.brand-sidebar,
+.header-bar {
+  display: none !important;
+}
+
+.app-main,
+main.app-main,
+.main-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 8px 12px 20px !important;
+  gap: 8px !important;
+}
+
+.stage-canvas-row {
+  min-height: clamp(360px, 60vh, 900px) !important;
+}
+
+.canvas-wrap {
+  height: clamp(360px, 60vh, 900px) !important;
+}

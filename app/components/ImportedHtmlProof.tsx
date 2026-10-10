@@ -68,6 +68,10 @@ export default function ImportedHtmlProof({ src, title, autoHeightOnMobile = fal
       link.id = "maths-universe-chrome-overrides";
       link.rel = "stylesheet";
       link.href = CHROME_OVERRIDE_HREF;
+      link.onload = () => {
+        // Canvas imports measure their container before this stylesheet loads.
+        frame.contentWindow?.dispatchEvent(new Event("resize"));
+      };
       doc.head.appendChild(link);
     };
 

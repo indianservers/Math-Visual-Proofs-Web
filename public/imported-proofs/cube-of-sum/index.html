@@ -2435,9 +2435,10 @@
 
           drawText(ctx, 'Binomial Cube: (a + b)³ = a³ + 3a²b + 3ab² + b³', W/2, 38, '#38bdf8', '16px bold sans-serif');
 
-          const explode = 42 * t;
-          const scaleA = Math.min(48, a * 0.85);
-          const scaleB = Math.min(32, b * 0.85);
+          const unit = Math.min(W * 0.55, H * 0.48) / (a + b + 84);
+          const explode = 42 * t * unit;
+          const scaleA = a * unit;
+          const scaleB = b * unit;
 
           // 8 blocks isometric rendering
           drawIsoBox(ctx, cx - explode - scaleA/2, cy - explode - scaleA/2, scaleA, scaleA, '#06b6d4', 'a³');
@@ -2445,7 +2446,7 @@
           drawIsoBox(ctx, cx - explode - scaleA/2, cy + explode + scaleB/2, scaleA, scaleB, '#3b82f6', 'ab²');
           drawIsoBox(ctx, cx + explode + scaleB/2, cy + explode + scaleB/2, scaleB, scaleB, '#f43f5e', 'b³');
 
-          drawText(ctx, 'a = ' + a + ',  b = ' + b + '  ⟹  (a + b)³ = ' + Math.round(Math.pow(a+b, 3)), W/2, cy + scaleA + 38, '#fbbf24', '13px bold sans-serif');
+          drawText(ctx, 'a = ' + a + ',  b = ' + b + '  ⟹  (a + b)³ = ' + Math.round(Math.pow(a+b, 3)), W/2, H - 54, '#fbbf24', '13px bold sans-serif');
           drawText(ctx, '8 3D geometric sub-blocks assemble into one unified cube (a + b)³', W/2, H - 24, '#34d399', '15px bold sans-serif');
         }
         function drawIsoBox(ctx, x, y, w, h, col, label) {

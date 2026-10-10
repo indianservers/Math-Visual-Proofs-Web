@@ -163,10 +163,17 @@ main.app-main,
 
 /* The parent proof page already provides navigation and the title. */
 .app-sidebar,
+aside.app-sidebar,
 aside.sidebar.brand-sidebar,
+.proof-document-body > aside.sidebar,
+.app > .side,
+.main-content > .page-header,
 .header-bar {
   display: none !important;
 }
+
+.app:has(> .side) { grid-template-columns: minmax(0, 1fr) !important; }
+.main-content { margin-left: 0 !important; width: 100% !important; max-width: none !important; }
 
 .app-main,
 main.app-main,

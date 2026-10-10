@@ -4,5 +4,5 @@ export const proofConfig = {
   "category": "algebraic-identities",
   "difficulty": "Intermediate",
   "estimatedTime": "11 minutes",
-  "description": "Use an isometric SVG volume model to decompose (a + b)^3."
+  "description": "Rotate and separate a 3D cube into eight solid blocks to prove (a + b)³ = a³ + 3a²b + 3ab² + b³."
 } as const;
